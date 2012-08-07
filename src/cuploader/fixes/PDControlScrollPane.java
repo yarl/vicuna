@@ -3,7 +3,7 @@
  * JScrollPane if one exists when this scrollpane either tops out or bottoms out.
  * from: http://stackoverflow.com/questions/1377887/jtextpane-prevents-scrolling-in-the-parent-jscrollpane
  */
-package cuploader;
+package cuploader.fixes;
 
 import java.awt.Component;
 import java.awt.event.MouseWheelEvent;

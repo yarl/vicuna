@@ -1,13 +1,10 @@
 package cuploader;
 
 import cuploader.frames.Main;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.GridBagConstraints;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public class Data implements Serializable {
@@ -28,7 +25,6 @@ public class Data implements Serializable {
     
     public static Coordinate coor = null;
     public static int coorZoom = 0;
-    
     
     //storage info
     private static ArrayList<PFile> files = new ArrayList<PFile>();       //stores all images
@@ -60,8 +56,18 @@ public class Data implements Serializable {
     }
     
     public static void addPanel(PFile p) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        //ogranicznik.insets = new Insets(5, 10, 5, 5);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridx = 0; //files.size()%2;
+        gbc.gridy = files.size();///2;
+
         files.add(p);
-        Main.pFiles.add(p);
+        Main.pFiles.add(p, gbc);
+        updateFileCounter();
     }
     
     //get
@@ -77,44 +83,4 @@ public class Data implements Serializable {
         }
         return -1;
     }
-
-    //[shift] and [ctrl] detect
-    public static KeyListener kssl = new KeyListener() {
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == 16 && !shiftPress) {
-                shiftPress = true;
-            }
-            if (e.getKeyCode() == 17 && !ctrlPress) {
-                ctrlPress = true;
-            }
-            //System.out.print("(pressed): " + e.getKeyCode() + "... ");
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            if (e.getKeyCode() == 16) {
-                shiftPress = false;
-            }
-            if (e.getKeyCode() == 17) {
-                ctrlPress = false;
-            }
-            //System.out.print("(rel): " + e.getKeyChar() + "... ");
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-            //System.out.print(number + " (type): " + e.getKeyChar() + "... ");
-        }
-    };
-    
-    public HyperlinkListener hl = new HyperlinkListener() {  
-        @Override
-        public void hyperlinkUpdate(HyperlinkEvent hle) {  
-            if (HyperlinkEvent.EventType.ACTIVATED.equals(hle.getEventType())) {  
-                System.out.println(hle.getURL());  
-            }  
-        }  
-    };
 }

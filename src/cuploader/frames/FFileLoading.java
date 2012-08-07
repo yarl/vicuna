@@ -88,14 +88,15 @@ public final class FFileLoading extends javax.swing.JFrame {
                         lName.setText(bundle.getString("loading") + " " + (int)(i+1) + " / " + files.size() + ": " + file.getName() + 
                                 " (" + df.format(9.5367e-7*file.length()) + " MiB)");
                         lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
+                        
                         PFile f;
-                        if(isLoadingSession) {
+                        if(isLoadingSession)
                             f = new PFile(file, Data.getFiles().size(), fUpload.get(i), fEdit.get(i), fName.get(i), fDesc.get(i),
                                                   fDate.get(i), fCats.get(i), fCoor.get(i));
-                        } else
+                        else
                             f = new PFile(file, Data.getFiles().size());
+                        
                         Data.addPanel(f);
-                        Data.updateFileCounter();
                         Progress.setValue(i+1);
                         ++i;
                         double end = ((System.nanoTime()-start)/1000.0/1000.0/1000.0);

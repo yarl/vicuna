@@ -2,6 +2,11 @@ package cuploader;
 
 import java.text.DecimalFormat;
 
+/**
+ * TODO: merge with org.openstreetmap.gui.jmapviewer.Coordinate;
+ * @author Pawel
+ */
+
 public class Coord {
     private double lat, lon;
     

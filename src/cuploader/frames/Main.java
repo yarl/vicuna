@@ -60,7 +60,6 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         
         addWindowListener(exit);
         boolean hello = false;
-        //mMenu.setVisible(false);
         
         try {
             FileInputStream f = new FileInputStream(".vicuna-settings");
@@ -81,9 +80,6 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         
         initComponents();
         setLocationRelativeTo(null);
-        
-        //setLocation(Settings.position);
-        //setSize(Settings.size.width, Settings.size.height);
         
         if(Settings.position != null && Settings.size!= null)
             setBounds(Settings.position.x, Settings.position.y, Settings.size.width, Settings.size.height);
@@ -106,6 +102,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         mShow = new javax.swing.JPopupMenu();
@@ -316,12 +313,17 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         pFilesScroll.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("files"))); // NOI18N
         pFilesScroll.setAutoscrolls(true);
 
-        pFiles.setLayout(new javax.swing.BoxLayout(pFiles, javax.swing.BoxLayout.PAGE_AXIS));
+        pFiles.setLayout(new java.awt.GridBagLayout());
 
         lStartInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
         lStartInfo.setText(bundle.getString("start-info")); // NOI18N
         lStartInfo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        pFiles.add(lStartInfo);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        pFiles.add(lStartInfo, gridBagConstraints);
 
         pFilesScroll.setViewportView(pFiles);
 
@@ -402,7 +404,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pHelp.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help"))); // NOI18N
@@ -782,7 +784,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                             array.add(f);
                     }
                 }
-                LoadDirectory(array);
+                LoadFiles(array);
                 directory = ch.getCurrentDirectory();
             }
     }//GEN-LAST:event_mLoadFilesActionPerformed
@@ -932,10 +934,6 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mAboutActionPerformed(evt);
     }//GEN-LAST:event_bAboutActionPerformed
 
-    private void bUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUploadActionPerformed
-        mUploadActionPerformed(evt);
-    }//GEN-LAST:event_bUploadActionPerformed
-
     private void bViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bViewActionPerformed
         mShow.show(bView, 0, 25);
     }//GEN-LAST:event_bViewActionPerformed
@@ -951,7 +949,16 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private void mViewNotUpload1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mViewNotUpload1ActionPerformed
         mViewNotUploadActionPerformed(evt);
     }//GEN-LAST:event_mViewNotUpload1ActionPerformed
+
+    private void bUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUploadActionPerformed
+        mUploadActionPerformed(evt);
+    }//GEN-LAST:event_bUploadActionPerformed
     
+    /***
+     * Saves session into XML file.
+     * @param f destination file
+     * @return true if OK
+     */
     public boolean SaveXML(File f) {
        	  try {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -1079,6 +1086,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 	  }
     }
     
+    /***
+     * Reads session from XML file.
+     * @param f source file
+     * @return 
+     */
     public void LoadXML(File f) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -1168,145 +1180,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
     }
     
-    public boolean qSaveSession(File file) {
-        String string = null;
-        if(Settings.extratext!=null) 
-            string = Settings.extratext.replaceAll("\n", "[nl]");
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        BufferedWriter out = null;
-        try {
-            out = new BufferedWriter(new FileWriter(file));
-
-            out.write("*** cUploader Session File ***\r\ngenerated " + dateFormat.format(calendar.getTime()) + "\r\n\r\n");
-            out.write("server\t"+Settings.server+
-                    "\r\nuser\t"+Settings.username+
-                    "\r\nauthor\t"+Settings.author+
-                    "\r\nlicense\t"+Settings.license+
-                    "\r\ncustomlicense\t"+Data.licensesTemplates.get(Data.licensesTemplates.size()-1)+
-                    "\r\nattrib\t"+Settings.attrib+
-                    "\r\nreadExifHour\t"+Settings.readExifHour+
-                    "\r\nrenameAfterUpload\t"+Settings.renameAfterUpload+
-                    "\r\ncreateGallery\t"+Settings.createGallery+
-                    "\r\ngalleryPage\t"+Settings.galleryPage+
-                    "\r\ngalleryHeader\t"+Settings.galleryHeader+
-                    "\r\ngalleryWidth\t"+Settings.galleryWidth+
-                    "\r\nextratext\t"+string+
-                    "\r\n\r\n"+Data.getFiles().size()+
-                    "\r\n");
-
-            for(PFile f : Data.getFiles()) {
-                out.write(f.file.getAbsolutePath()+"\t");      //path
-                out.write(Boolean.toString(f.toUpload)+"\t");     //to upload (bool)
-                out.write(Boolean.toString(f.toEdit)+"\t");       //to edit (bool)
-
-                //name
-                string = f.getComponent(Elem.NAME).equals("") ? "null" : f.getComponent(Elem.NAME);
-                out.write(string+"\t");
-                //desc
-                string = f.getComponent(Elem.DESC).equals("") ? "null" : f.getComponent(Elem.DESC).replaceAll("\n", "[nl]");
-                out.write(string+"\t");
-                //date
-                string = f.getComponent(Elem.DATE).equals("") ? "null" : f.getComponent(Elem.DATE);
-                out.write(string+"\t");
-                //cats
-                string = f.getComponent(Elem.CATS).equals("") ? "null" : f.getComponent(Elem.CATS);
-                out.write(string+"\t");
-                //coor
-                string = f.getComponent(Elem.COOR).equals("") ? "null" : f.coor.getDecimal();//f.getValue(Elem.COOR);
-                out.write(string+"\r\n");         
-            }
-        } catch (FileNotFoundException ex) {
-            return false;
-        } catch (IOException ex) {
-            return false;
-        } finally {
-            //Close the BufferedWriter
-            try {
-                if (out != null) {
-                    out.flush();
-                    out.close();
-                }
-            } catch (IOException ex) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    public void qLoadSession(File file) {
-        try {
-            //try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            BufferedReader in = new BufferedReader(new FileReader(file));                    
-                //infotrash
-                for(int i=0;i<3;++i) in.readLine();
-                
-                //settings
-                String[] values;
-                String string;
-                while(!"".equals(string=in.readLine())) {
-                    values = string.split("\t");
-                    if(!values[1].equals("null")) {
-                        if("server".equals(values[0])) 
-                            Settings.server=values[1];
-                        if("user".equals(values[0])) 
-                            Settings.username=values[1];
-                        if("author".equals(values[0])) 
-                            Settings.author=values[1];
-                        if("license".equals(values[0])) 
-                            Settings.license=Integer.parseInt(values[1]);
-                        if("customlicense".equals(values[0])) 
-                            Data.licensesTemplates.set(Data.licensesTemplates.size()-1, values[1]);
-                        if("attrib".equals(values[0])) 
-                            Settings.attrib=values[1];
-                        if("extratext".equals(values[0]))
-                            Settings.extratext = values[1].replace("[nl]", "\n");
-                        
-                        if("readExifHour".equals(values[0])) 
-                            Settings.readExifHour=Boolean.parseBoolean(values[1]);
-                        if("renameAfterUpload".equals(values[0])) 
-                            Settings.renameAfterUpload=Boolean.parseBoolean(values[1]);
-                         if("createGallery".equals(values[0])) 
-                            Settings.createGallery=Boolean.parseBoolean(values[1]);                       
-                        if("galleryPage".equals(values[0])) 
-                            Settings.galleryPage=values[1];                      
-                        if("galleryHeader".equals(values[0])) 
-                            Settings.galleryHeader=Integer.parseInt(values[1]);
-                        if("galleryWidth".equals(values[0])) 
-                            Settings.galleryWidth=Integer.parseInt(values[1]);
-                    }
-                }
-                
-                //'n' of images
-                final int n = Integer.parseInt(in.readLine());
-                Data.loadSessionData = new String[n][8];
-                
-                //read images
-                for(int i=0;;++i) {
-                    string = in.readLine();
-                    if(string!=null)
-                        Data.loadSessionData[i] = string.split("\t");
-                    else break;
-                }
-                
-                final File[] images = new File[n];
-                for(int i=0;i<n;++i)
-                    images[i] = new File(Data.loadSessionData[i][0]);
-                
-                Data.isLoadSession=true;
-                //LoadDirectory(images);
-            //}
-        } catch (IOException e) {
-            System.out.print("Błąd: " + e.toString());
-        }
-    }
-    
-    /**
-     * read directory, send list of files to 'loading frame'
+    /***
+     * Reads directory and/or files to upload, send list of files to 'loading frame'.
+     * @param files array of selected directories/files
+     * @return true if ok
      */
-    public synchronized boolean LoadDirectory(ArrayList<File> files) {
+    public synchronized boolean LoadFiles(ArrayList<File> files) {
         
         if(files.size()>0) {
             ArrayList<File> vector = new ArrayList<File>();
@@ -1336,7 +1215,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             return false;
         }
     }
-        
+
+    /***
+     * Shows 'are you sure' window
+     * @param 
+     * @return 
+     */
     public void ConfirmClose() {
         Object[] options = { bundle.getString("button-close"), bundle.getString("button-save&close"), bundle.getString("button-cancel")};
         int n = JOptionPane.showOptionDialog(rootPane, bundle.getString("quit-confirm"), bundle.getString("end"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -1465,7 +1349,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private javax.swing.JPanel pUserInfo;
     // End of variables declaration//GEN-END:variables
 
-    //escape to exit
+    //ESCAPE TO EXIT
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
@@ -1473,9 +1357,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
     }; 
     
-/***************************************
- *  DROP
- ***************************************/
+    /**
+    * DRAG & DROP
+    * from: http://www.java-tips.org/java-se-tips/javax.swing/how-to-implement-drag-drop-functionality-in-your-applic.html
+    */
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {}
 
@@ -1524,16 +1409,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                                array.add(f);
                         }
                     }
-                    LoadDirectory(array);
+                    LoadFiles(array);
                     dtde.dropComplete(true);
                     return;
                 } else if (flavors[i].isRepresentationClassInputStream()) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-                    //ta.setText("Successful text drop.\n\n");
-                    //ta.read(new InputStreamReader(
-                    //            (InputStream)tr.getTransferData(flavors[i])),
-                    //"from system clipboard");
-                    //JOptionPane.showMessageDialog(rootPane, "Input stream");
                     dtde.dropComplete(true);
                     return;
                 }
@@ -1545,11 +1425,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     }
 }
 
-/***************************************
- *  FILTERS
- ***************************************/
+/**
+*  FILTERS
+*/
 //png, gif, jpg, jpeg, xcf, mid, ogg, ogv, svg, djvu, tiff, tif, oga
-
 
 class XMLFilter extends FileFilter {
     ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");

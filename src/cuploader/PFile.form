@@ -228,8 +228,8 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="cUpload" pref="198" max="32767" attributes="0"/>
-          <Component id="Panel" alignment="0" pref="198" max="32767" attributes="0"/>
+          <Component id="cUpload" pref="219" max="32767" attributes="0"/>
+          <Component id="Panel" alignment="0" pref="219" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -285,9 +285,9 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="lFilename" pref="117" max="32767" attributes="0"/>
+                                  <Component id="lFilename" pref="116" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="lDirectory" pref="103" max="32767" attributes="0"/>
+                                  <Component id="lDirectory" pref="104" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Component id="bOpenDir" min="-2" pref="25" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -394,7 +394,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new cuploader.PDControlScrollPane()"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new cuploader.fixes.PDControlScrollPane()"/>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>
 

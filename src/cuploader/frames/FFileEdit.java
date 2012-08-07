@@ -1,7 +1,11 @@
 package cuploader.frames;
 
+import cuploader.Coord;
+import cuploader.Data;
 import cuploader.Data.Elem;
-import cuploader.*;
+import cuploader.PFile;
+import cuploader.Settings;
+import cuploader.fixes.TransferFocus;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
@@ -36,7 +40,7 @@ public class FFileEdit extends javax.swing.JFrame {
         tDate = new javax.swing.JTextField();
         lCoor = new javax.swing.JLabel();
         tCoor = new javax.swing.JLabel();
-        jScrollPane1 = new cuploader.PDControlScrollPane();
+        jScrollPane1 = new cuploader.fixes.PDControlScrollPane();
         tDesc = new javax.swing.JTextArea();
         lDesc = new javax.swing.JLabel();
         lCategories = new javax.swing.JLabel();

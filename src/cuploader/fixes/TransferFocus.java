@@ -1,4 +1,4 @@
-package cuploader;
+package cuploader.fixes;
 
 import java.awt.Component;
 import java.awt.KeyboardFocusManager;
@@ -7,10 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.swing.KeyStroke;
 
-/**
- *
- * @author Pawel
- */
 /**
  * Some components treat tabulator (TAB key) in their own way.
  * Sometimes the tabulator is supposed to simply transfer the focus

@@ -7,6 +7,7 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import cuploader.Data.Elem;
+import cuploader.fixes.TransferFocus;
 import cuploader.frames.FCoord;
 import cuploader.frames.FExif;
 import cuploader.frames.FFileEdit;
@@ -61,11 +62,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         
         tName.setText(file.getName().substring(0, file.getName().lastIndexOf('.')));
 
-        //lFilename.setMaximumSize(new Dimension((int)(Panel.getWidth()*0.3), 16));
-        
         readEXIF();   
         generateThumbnail();
-        
     }
     
     public PFile(File file, int number, boolean toUpload, boolean toEdit, String name, String desc, String date, String cats, String coor) {  
@@ -94,7 +92,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         }
         
         generateThumbnail();
-        //Data.addPanel(this);
     }
   
     @SuppressWarnings("unchecked")
@@ -122,7 +119,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         Panel = new javax.swing.JPanel();
         tThumb = new javax.swing.JLabel();
         tName = new javax.swing.JTextField();
-        jScrollPane1 = new cuploader.PDControlScrollPane();
+        jScrollPane1 = new cuploader.fixes.PDControlScrollPane();
         tDesc = new javax.swing.JTextArea();
         tDate = new javax.swing.JTextField();
         lDate = new javax.swing.JLabel();
@@ -487,9 +484,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(PanelLayout.createSequentialGroup()
-                                .addComponent(lFilename, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                                .addComponent(lFilename, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                                .addComponent(lDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bOpenDir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -566,8 +563,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-            .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+            .addComponent(cUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+            .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -775,64 +772,12 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private void mAddCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAddCoorActionPerformed
         if(fCoord==null) fCoord = new FCoord(number, false);
         else fCoord.setVisible(true);
-        /*
-        String input = JOptionPane.showInputDialog(this, "<html><body>"+bundle.getString("fileedit-coor-info")+"&nbsp;&nbsp;<br></body></html>", bundle.getString("file-coor"), JOptionPane.INFORMATION_MESSAGE);
-          
-        if(input != null) {
-            //52.2299;21.0628
-            if(input.matches("[-.0-9]*;[-.0-9]*")) {
-                String[] s = input.split(";");
-                coor = new Coordinate(s[0], s[1]);
-                setComponent(Elem.COOR, coor.getDMSformated());
-            }
-            
-            //www.openstreetmap.org/?lat=52.4075&lon=16.9315&zoom=13&layers=M
-            if(input.matches(".*lat=[-.0-9]*&lon=[-.0-9]*.*")) {
-                String[] s = input.split("[#?&]");
-                //JOptionPane.showMessageDialog(bSetCoor, s[1] + "----" + s[2]);
-                String lat="0", lon="0";
-                for(String i : s) {
-                    if(i.contains("lat"))
-                        lat=i.substring(4);
-                    if(i.contains("lon"))
-                        lon=i.substring(4);
-                }
-                coor = new Coordinate(lat, lon);
-                setComponent(Elem.COOR, coor.getDMSformated());
-            }
-            
-            //{{Koordynaty|52|14|5.15|N|21|7|51.91|E|region:PL}}
-            if(input.matches(".*[Kk]oordynaty|.*")) {
-                String[] s = input.split("\\|");
-                if(s.length>8) {    //długi
-                    String lat[] = {s[1],s[2],s[3]};
-                    String lon[] = {s[5],s[6],s[7]};
-                    coor = new Coordinate(lat, s[4], lon, s[8]);
-                    setComponent(Elem.COOR, coor.getDMSformated());
-                }
-            }
-        }
-        */
     }//GEN-LAST:event_mAddCoorActionPerformed
 
     private void tThumbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tThumbMouseClicked
-        System.out.println(evt.getPoint());
-        
-        //if() {
-            try {
-                Desktop.getDesktop().open(file);
-            } catch (IOException e){ }
-        //}
-        //else
-        //    PanelMouseClicked(evt);
-        
-//        int x = evt.getClickCount();
-//        if (x == 2) {
-//            try {
-//                Desktop.getDesktop().open(file);
-//            } catch (IOException e){ }
-//        } else
-//            PanelMouseClicked(evt);
+        try {
+            Desktop.getDesktop().open(file);
+        } catch (IOException e){ }
     }//GEN-LAST:event_tThumbMouseClicked
 
     private void mDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mDeleteActionPerformed
