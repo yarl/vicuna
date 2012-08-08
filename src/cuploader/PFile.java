@@ -832,8 +832,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     /**
      * Thumbnail rotator
      * from: http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0
-     * @param bi
-     * @return rotated thumbnail
+     * @param  imageToRotate original thumbnail
+     * @param  angle         angle to rotate it
+     * @return BufferedImage rotated thumbnail
      */
     public BufferedImage rotateThumbnail(BufferedImage imageToRotate, int angle) {
 	Image rotatedImage = new BufferedImage(imageToRotate.getHeight(null), imageToRotate.getWidth(null), BufferedImage.TYPE_INT_ARGB);

@@ -34,14 +34,12 @@ import javax.security.auth.login.*; // useful exception types
  *  It is recommended that the server runs the latest version of MediaWiki
  *  (1.18), otherwise some functions may not work.
  *  <p>
- *  Extended documentation is available at {@link
- *  http://code.google.com/p/wiki-java/wiki/ExtendedDocumentation }. All
- *  wikilinks are relative to the English Wikipedia and all timestamps are in
+ *  All wikilinks are relative to the English Wikipedia and all timestamps are in
  *  your wiki's time zone.
  *  <p>
  *  Please file bug reports at [[User talk:MER-C]] (fast) or the Google
  *  code bug tracker (slow).
- *
+ *  @see <a href="http://code.google.com/p/wiki-java/wiki/ExtendedDocumentation">A lightweight Java wiki bot framework: Extended documentation</a>
  *  @author MER-C and contributors
  *  @version 0.25
  */
