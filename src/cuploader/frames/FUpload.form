@@ -71,11 +71,11 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="Progress" pref="347" max="32767" attributes="0"/>
+                      <Component id="Progress" pref="451" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="lName" pref="322" max="32767" attributes="0"/>
-                              <Component id="lGallery" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lGallery" min="-2" pref="322" max="-2" attributes="0"/>
+                              <Component id="lName" min="-2" pref="421" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>

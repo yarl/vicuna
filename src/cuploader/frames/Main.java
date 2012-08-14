@@ -11,7 +11,6 @@ import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -406,7 +405,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pHelp.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help"))); // NOI18N
@@ -869,11 +868,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 Data.getFiles().clear();
                 pFiles.removeAll();
                 pFiles.repaint();
-                //lFileUpload.setText("0 / 0 (" + data.sizeToUpload + " MiB)");
 
                 mEdit.setEnabled(false);
                 mFileUploadSelect.setEnabled(false);
                 mUpload.setEnabled(false);
+                
                 Data.updateFileCounter();
                 break;
             }
@@ -1274,8 +1273,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
         //</editor-fold>
         
-        String version = "0.992";
-        String date = "2012-08-06 2:00";
+        String version = "0.993";
+        String date = "2012-08-14 14:00";
 
         final JFrame frame = new Main(version, date);
             //frame.pack();

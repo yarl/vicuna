@@ -61,9 +61,10 @@ public class FUpload extends javax.swing.JFrame {
         username = Settings.username;
         source = Settings.source;
         license = Data.licensesTemplates.get(Settings.license);
-        attrib = Settings.attrib;
-        extratext = Settings.extratext;
-        categories = Settings.categories;
+        
+        attrib = Settings.attrib.equals("") ? null : Settings.attrib;
+        extratext = Settings.extratext.equals("") ? null : Settings.extratext;
+        categories = Settings.categories.equals("") ? null : Settings.categories;
         
         if(fileDescSource==1)
             f = new File(Settings.fileDescPath);
@@ -107,11 +108,11 @@ public class FUpload extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Progress, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                    .addComponent(Progress, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lName, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
-                            .addComponent(lGallery, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lGallery, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lName, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -274,12 +275,13 @@ public class FUpload extends javax.swing.JFrame {
                                 desc += "\n* Source: " + source + "\n* Author: " + author;
                             desc += "\n* Date: " + file.getComponent(Elem.DATE);
                             desc += "\n* License: " + license;
-                            desc += "\n" + extratext;
+                            if(extratext != null) 
+                                desc += "\n" + extratext;
                         }
 
                         //CATEGORIES (FOR BOTH)
                         String c = "";
-                        if(!categories.equals(""))
+                        if(categories!=null)
                             c += categories + ";";
                         if(!file.getComponent(Elem.CATS).equals(""))
                             c += file.getComponent(Elem.CATS);
@@ -309,11 +311,15 @@ public class FUpload extends javax.swing.JFrame {
                         desc = text;
 
                         desc = desc.replace("%ATTRIB%", attrib);
+                        
+                        
                         desc = desc.replace("%AUTHOR%", author);
 
                         //CATEGORIES (FOR ALL)
-                        String[] c2 = categories.split(";");
                         String out = "";
+                        if(categories==null) categories="";
+                        String[] c2 = categories.split(";");
+                        
                         boolean b;
                         for(int j=0;j<c2.length;++j) {
                             b = true;
@@ -327,7 +333,7 @@ public class FUpload extends javax.swing.JFrame {
                                 out += "[[Category:" + c2[j] + "]]\n";
                         }
                         desc = desc.replace("%CATEGORIES%", out);
-
+                        
                         desc = desc.replace("%EXTRA%", extratext);
                         desc = desc.replace("%SOURCE%", source);
                         desc = desc.replace("%USER%", username);
