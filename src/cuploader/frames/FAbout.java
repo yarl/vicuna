@@ -138,7 +138,7 @@ public class FAbout extends javax.swing.JFrame {
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
                 if(n==0) {
                     try {
-                        Desktop.getDesktop().browse(new URI("http://code.google.com/p/vicuna-uploader/downloads/list"));
+                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/downloads"));
                     } catch (URISyntaxException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
