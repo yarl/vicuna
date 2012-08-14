@@ -310,36 +310,36 @@ public class FUpload extends javax.swing.JFrame {
                     if(fileDescSource==1 && f!= null) {          
                         desc = text;
 
-                        desc = desc.replace("%ATTRIB%", attrib);
-                        
-                        
+                        desc = (attrib==null) ? desc.replace("%ATTRIB%", "") : desc.replace("%ATTRIB%", attrib);
                         desc = desc.replace("%AUTHOR%", author);
 
                         //CATEGORIES (FOR ALL)
                         String out = "";
-                        if(categories==null) categories="";
-                        String[] c2 = categories.split(";");
-                        
-                        boolean b;
-                        for(int j=0;j<c2.length;++j) {
-                            b = true;
-                            for(int k=0; k<j; ++k) {
-                                if(c2[j].equals(c2[k])) {
-                                    b = false;
-                                    break;
+                        if(categories!=null) {
+                            String[] c2 = categories.split(";");
+
+                            boolean b;
+                            for(int j=0;j<c2.length;++j) {
+                                b = true;
+                                for(int k=0; k<j; ++k) {
+                                    if(c2[j].equals(c2[k])) {
+                                        b = false;
+                                        break;
+                                    }
                                 }
+                                if(b && !c2[j].equals(""))
+                                    out += "[[Category:" + c2[j] + "]]\n";
                             }
-                            if(b && !c2[j].equals(""))
-                                out += "[[Category:" + c2[j] + "]]\n";
                         }
                         desc = desc.replace("%CATEGORIES%", out);
                         
-                        desc = desc.replace("%EXTRA%", extratext);
+                        desc = (extratext==null) ? desc.replace("%EXTRA%", "") : desc.replace("%EXTRA%", extratext);
                         desc = desc.replace("%SOURCE%", source);
                         desc = desc.replace("%USER%", username);
 
                         //CATEGORIES (FOR IMAGE)
-                        c2 = file.getComponent(Elem.CATS).split(";");
+                        boolean b;
+                        String[] c2 = file.getComponent(Elem.CATS).split(";");
                         out = "";
                         for(int j=0;j<c2.length;++j) {
                             b = true;
