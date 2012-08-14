@@ -64,7 +64,7 @@ public class FAbout extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("about-used"))); // NOI18N
 
-        jLabel3.setText("<html><body>&bull;  wiki-java (GNU GPL)<br>&bull;  metadata-extractor (Apache 2.0)<br>&bull; Icons  by Yusuke Kamiyamane</body></html>");
+        jLabel3.setText("<html><body>&bull;  wiki-java (GNU GPL)<br>&bull;  metadata-extractor (Apache 2.0)<br>&bull; JMapViewer (GNU GPL)<br>&bull; Icons  by Yusuke Kamiyamane</body></html>");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -155,7 +155,7 @@ public class FAbout extends javax.swing.JFrame {
 
     private void bProgramSiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bProgramSiteActionPerformed
         try {
-            Desktop.getDesktop().browse(new URI("http://code.google.com/p/vicuna-uploader/"));
+            Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna"));
         } catch (URISyntaxException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
