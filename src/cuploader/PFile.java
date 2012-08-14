@@ -484,9 +484,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(PanelLayout.createSequentialGroup()
-                                .addComponent(lFilename, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                                .addComponent(lFilename, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                                .addComponent(lDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bOpenDir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -559,7 +559,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(cUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE))
+                .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -784,6 +784,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         deleteItems();
     }//GEN-LAST:event_mDeleteActionPerformed
 
+    /**
+     * Reads info from file EXIF (date, gps, rotation)
+     */
     private void readEXIF() {
         try {
             Directory directory = ImageMetadataReader.readMetadata(file).getDirectory(ExifIFD0Directory.class);
@@ -831,10 +834,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     
     /**
      * Thumbnail rotator
-     * from: http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0
      * @param  imageToRotate original thumbnail
      * @param  angle         angle to rotate it
      * @return BufferedImage rotated thumbnail
+     * @see http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0
      */
     public BufferedImage rotateThumbnail(BufferedImage imageToRotate, int angle) {
 	Image rotatedImage = new BufferedImage(imageToRotate.getHeight(null), imageToRotate.getWidth(null), BufferedImage.TYPE_INT_ARGB);
@@ -965,23 +968,13 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     public void selectToUpload(boolean mode) {
         if(mode!=toUpload) {
             toUpload = mode;
+            cUpload.setSelected(mode);
+            
             if(mode)
                 cUpload.setBackground(new Color(200,228,169));
             else
                 cUpload.setBackground(new Color(255,204,153));
             
-            cUpload.setSelected(mode);
-            cUpload.setSelectedIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-check-box.png")));
-            
-            DecimalFormat df = new DecimalFormat("#.##");
-            if(mode) {
-                ++Data.filesUpload;
-                Data.sizeToUpload += 9.5367e-7*file.length();
-            }
-            else {
-                --Data.filesUpload;
-                Data.sizeToUpload -= 9.5367e-7*file.length();
-            }
             Data.updateFileCounter();
         }
     }
@@ -998,7 +991,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                 Panel.setBackground(null);
                 --Data.filesEdit;
             }
-            //data.lFileEdit.setText(Integer.toString(data.filesEdit));
         }
     }
     

@@ -35,26 +35,41 @@ public class Data implements Serializable {
     public static ArrayList<String> licenses = new ArrayList<String>();
     public static ArrayList<String> licensesTemplates = new ArrayList<String>();
 
-    
-    //public ResourceBundle text;
-    
     public Data(String version, String date) {
         Data.version = version;
         Data.date = date;
         
-        //text = ResourceBundle.getBundle("messages", locale);
-
         licenses.add("Creative Commons BY-SA 3.0");             licensesTemplates.add("cc-by-sa 3.0");
         licenses.add("Creative Commons BY 3.0");                licensesTemplates.add("cc-by 3.0");
+        licenses.add("Creative Commons Zero 1.0");              licensesTemplates.add("cc-zero");
         licenses.add("GNU Free Documentation License (GFDL)");  licensesTemplates.add("GFDL");
-        licenses.add("Inna...");                                licensesTemplates.add(null);
+        licenses.add("...");                                    licensesTemplates.add(null);
     }
 
+    /***
+     * Updates upload counter in bottom right corner
+     */
     public static void updateFileCounter() {
         DecimalFormat df = new DecimalFormat("##.##");
-        Main.lFileUpload.setText(filesUpload + " / " + files.size() + " (" + df.format(sizeToUpload) + " MiB)");
+        
+        int toUpload = 0;
+        float toUploadSize = 0;
+        
+        for(PFile f : files) {
+            if(f.toUpload) {
+                ++toUpload;
+                toUploadSize += 9.5367e-7*f.file.length();
+            }
+        }
+        filesUpload = toUpload;
+        Main.lFileUpload.setText(toUpload + " / " + files.size() + " (" + df.format(toUploadSize) + " MiB)");
+        //Main.lFileUpload.setText(filesUpload + " / " + files.size() + " (" + df.format(sizeToUpload) + " MiB)");
     }
     
+    /***
+     * Adds file panel to main window
+     * @param p file panel
+     */
     public static void addPanel(PFile p) {
         GridBagConstraints gbc = new GridBagConstraints();
         //ogranicznik.insets = new Insets(5, 10, 5, 5);

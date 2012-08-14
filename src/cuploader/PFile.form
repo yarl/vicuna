@@ -222,7 +222,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="cUpload" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="Panel" pref="539" max="32767" attributes="0"/>
+              <Component id="Panel" pref="521" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -285,9 +285,9 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="lFilename" pref="125" max="32767" attributes="0"/>
+                                  <Component id="lFilename" pref="116" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="lDirectory" pref="113" max="32767" attributes="0"/>
+                                  <Component id="lDirectory" pref="104" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Component id="bOpenDir" min="-2" pref="25" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
