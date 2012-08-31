@@ -91,6 +91,7 @@ public class FAbout extends javax.swing.JFrame {
         });
 
         bCheckUpdate.setText(bundle.getString("about-checkupdate")); // NOI18N
+        bCheckUpdate.setEnabled(false);
         bCheckUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bCheckUpdateActionPerformed(evt);

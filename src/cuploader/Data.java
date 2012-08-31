@@ -39,10 +39,10 @@ public class Data implements Serializable {
         Data.version = version;
         Data.date = date;
         
-        licenses.add("Creative Commons BY-SA 3.0");             licensesTemplates.add("cc-by-sa 3.0");
-        licenses.add("Creative Commons BY 3.0");                licensesTemplates.add("cc-by 3.0");
-        licenses.add("Creative Commons Zero 1.0");              licensesTemplates.add("cc-zero");
-        licenses.add("GNU Free Documentation License (GFDL)");  licensesTemplates.add("GFDL");
+        licenses.add("Creative Commons BY-SA 3.0 Polska");             licensesTemplates.add("cc-by-sa-3.0-pl");
+        //licenses.add("Creative Commons BY 3.0");                licensesTemplates.add("cc-by-3.0");
+        //licenses.add("Creative Commons Zero 1.0");              licensesTemplates.add("cc-zero");
+        //licenses.add("GNU Free Documentation License (GFDL)");  licensesTemplates.add("GFDL");
         licenses.add("...");                                    licensesTemplates.add(null);
     }
 
