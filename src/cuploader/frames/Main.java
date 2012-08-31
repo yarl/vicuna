@@ -1303,7 +1303,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         //</editor-fold>
         
         String version = "1.00";
-        String date = "2012-08-31 22:00";
+        String date = "2012-08-31 23:00";
 
         final JFrame frame = new Main(version, date);
             //frame.pack();

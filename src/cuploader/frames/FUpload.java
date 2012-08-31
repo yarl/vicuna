@@ -285,10 +285,9 @@ public class FUpload extends javax.swing.JFrame {
                             c += categories + ";";
                         if(!file.getComponent(Elem.CATS).equals(""))
                             c += file.getComponent(Elem.CATS);
-                        c += ";Uploaded with VicuñaUploader";
 
+                        desc += "\n\n";
                         if(!c.equals("")) {
-                            desc += "\n\n";
                             //String categories = Settings.categories + ";" + file.getComponent(Elem.CATS);
 
                             String[] c2 = c.split(";");
@@ -305,6 +304,7 @@ public class FUpload extends javax.swing.JFrame {
                                     desc += "[[Category:" + c2[j] + "]]\n";
                             }
                         }
+                        desc += "[[Category:Uploaded with VicuñaUploader]]";
                     }
 
                     // DESC FROM EXTERNAL FILE
