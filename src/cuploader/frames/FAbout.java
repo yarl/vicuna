@@ -91,7 +91,6 @@ public class FAbout extends javax.swing.JFrame {
         });
 
         bCheckUpdate.setText(bundle.getString("about-checkupdate")); // NOI18N
-        bCheckUpdate.setEnabled(false);
         bCheckUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bCheckUpdateActionPerformed(evt);
@@ -132,7 +131,7 @@ public class FAbout extends javax.swing.JFrame {
 
     private void bCheckUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCheckUpdateActionPerformed
         try {
-            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version-wlm").trim();
             if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
                 Object[] o = {bundle.getString("button-download"), bundle.getString("button-cancel")};
                 int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + bundle.getString("about-checkupdate-text") + " (<b>" + v + "</b>). " + bundle.getString("about-checkupdate-download") + "</body></html>", bundle.getString("about-checkupdate"), 

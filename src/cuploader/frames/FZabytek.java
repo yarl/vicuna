@@ -18,7 +18,7 @@ import javax.swing.KeyStroke;
 
 public class FZabytek extends javax.swing.JFrame {
 
-    public FZabytek(int number) {
+    public FZabytek() {
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -224,9 +224,12 @@ public class FZabytek extends javax.swing.JFrame {
 
         text += "{{zabytek|" + codes[cVoivodeship.getSelectedIndex()] + "|" + tNumber.getText() + "|" + tGmina.getText() + "}}";
         
-        for(PFile file : Data.getFiles())
-            if(file.toEdit && file.editable)
-                file.addToComponent(Data.Elem.DESC, text);
+        Main.fFileEdit.tDesc.setText(text);
+        
+        //for(PFile file : Data.getFiles())
+        //    if(file.toEdit && file.editable)
+        //        file.addToComponent(Data.Elem.DESC, text);
+        
         dispose();
     }//GEN-LAST:event_bApplyActionPerformed
 

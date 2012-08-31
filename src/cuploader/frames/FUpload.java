@@ -285,6 +285,7 @@ public class FUpload extends javax.swing.JFrame {
                             c += categories + ";";
                         if(!file.getComponent(Elem.CATS).equals(""))
                             c += file.getComponent(Elem.CATS);
+                        c += ";Uploaded with VicuñaUploader";
 
                         if(!c.equals("")) {
                             desc += "\n\n";

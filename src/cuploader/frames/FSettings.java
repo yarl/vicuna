@@ -165,7 +165,6 @@ public class FSettings extends javax.swing.JFrame {
         tExtraText.setColumns(20);
         tExtraText.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         tExtraText.setRows(5);
-        tExtraText.setText("{{Wiki Loves Monuments 2012|pl}}");
         tExtraTextScroll.setViewportView(tExtraText);
 
         tSource.setEnabled(false);

@@ -28,7 +28,7 @@ public class Settings implements Serializable {
     public static String licenseCustom = null;
     public static String attrib = null;
     public static String categories = null;
-    public static String extratext = null;
+    public static String extratext = "{{Wiki Loves Monuments 2012|pl}}";
 
     //GALLERY
     public static boolean createGallery = true;

@@ -15,6 +15,7 @@ import javax.swing.*;
 public class FFileEdit extends javax.swing.JFrame {
     public Coord coor;
     public FCoord fCoord;
+    FZabytek fZabytek;
     
     public FFileEdit() {
         initComponents();
@@ -57,6 +58,7 @@ public class FFileEdit extends javax.swing.JFrame {
         tDigits = new javax.swing.JSpinner();
         lDigits = new javax.swing.JLabel();
         cUpload = new javax.swing.JCheckBox();
+        bZabytek = new javax.swing.JButton();
         bSave = new javax.swing.JButton();
         bCancel = new javax.swing.JButton();
         bApply = new javax.swing.JButton();
@@ -152,6 +154,14 @@ public class FFileEdit extends javax.swing.JFrame {
         cUpload.setSelected(true);
         cUpload.setText(bundle.getString("edit-select")); // NOI18N
 
+        bZabytek.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/bank.png"))); // NOI18N
+        bZabytek.setText("Zabytek");
+        bZabytek.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bZabytekActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
         Panel.setLayout(PanelLayout);
         PanelLayout.setHorizontalGroup(
@@ -195,7 +205,8 @@ public class FFileEdit extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lCategories, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bZabytek, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelLayout.createSequentialGroup()
@@ -248,10 +259,10 @@ public class FFileEdit extends javax.swing.JFrame {
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(PanelLayout.createSequentialGroup()
                         .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89))
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bZabytek))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -338,44 +349,6 @@ public class FFileEdit extends javax.swing.JFrame {
     private void bSetCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSetCoorActionPerformed
         if(fCoord==null) fCoord = new FCoord(0, true);
         else fCoord.setVisible(true);
-        //String input = JOptionPane.showInputDialog("<html><body>Podaj współrzędne do wstawienia. Akceptowalne przykłady:<br>&bull; 52.2299;21.0628<br>&bull; permalink OpenStreetMap<br>&bull; {{Koordynaty|52|14|5.15|N|21|7|51.91|E|region:PL}}</body></html>");
-        /*
-        String input = JOptionPane.showInputDialog(rootPane, "<html><body>"+bundle.getString("fileedit-coor-info")+"&nbsp;&nbsp;<br></body></html>", bundle.getString("file-coor"), JOptionPane.INFORMATION_MESSAGE);
-          
-        if(input != null) {
-            //52.2299;21.0628
-            if(input.matches("[-.0-9]*;[-.0-9]*")) {
-                String[] s = input.split(";");
-                coor = new Coord(s[0], s[1]);
-                tCoor.setText(coor.getDMSformated());
-            }
-            
-            //www.openstreetmap.org/?lat=52.4075&lon=16.9315&zoom=13&layers=M
-            if(input.matches(".*lat=[-.0-9]*&lon=[-.0-9]*.*")) {
-                String[] s = input.split("[#?&]");
-                //JOptionPane.showMessageDialog(bSetCoor, s[1] + "----" + s[2]);
-                String lat="0", lon="0";
-                for(String i : s) {
-                    if(i.contains("lat"))
-                        lat=i.substring(4);
-                    if(i.contains("lon"))
-                        lon=i.substring(4);
-                }
-                coor = new Coord(lat, lon);
-                tCoor.setText(coor.getDMSformated());
-            }
-            
-            //{{Koordynaty|52|14|5.15|N|21|7|51.91|E|region:PL}}
-            if(input.matches(".*[Kk]oordynaty|.*")) {
-                String[] s = input.split("\\|");
-                if(s.length>8) {    //długi
-                    String lat[] = {s[1],s[2],s[3]};
-                    String lon[] = {s[5],s[6],s[7]};
-                    coor = new Coord(lat, s[4], lon, s[8]);
-                    tCoor.setText(coor.getDMSformated());
-                }
-            }
-        }*/
     }//GEN-LAST:event_bSetCoorActionPerformed
 
     private void cNameMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cNameMethodActionPerformed
@@ -401,6 +374,11 @@ public class FFileEdit extends javax.swing.JFrame {
     private void cCategoriesMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cCategoriesMethodActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cCategoriesMethodActionPerformed
+
+    private void bZabytekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bZabytekActionPerformed
+        if(fZabytek==null) fZabytek = new FZabytek();
+        else fZabytek.setVisible(true);
+    }//GEN-LAST:event_bZabytekActionPerformed
 
     private void Replace() {
         int nr = 1;
@@ -510,6 +488,7 @@ public class FFileEdit extends javax.swing.JFrame {
     private javax.swing.JButton bCancel;
     private javax.swing.JButton bSave;
     private javax.swing.JButton bSetCoor;
+    private javax.swing.JButton bZabytek;
     private javax.swing.JComboBox cCategoriesMethod;
     private javax.swing.JComboBox cNameMethod;
     private javax.swing.JCheckBox cNum;
@@ -527,7 +506,7 @@ public class FFileEdit extends javax.swing.JFrame {
     private javax.swing.JTextField tCategories;
     public javax.swing.JLabel tCoor;
     private javax.swing.JTextField tDate;
-    private javax.swing.JTextArea tDesc;
+    public static javax.swing.JTextArea tDesc;
     private javax.swing.JSpinner tDigits;
     private javax.swing.JTextField tName;
     private javax.swing.JTextField tNumFormat;

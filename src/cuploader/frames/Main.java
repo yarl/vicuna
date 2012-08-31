@@ -98,8 +98,9 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
         setVisible(true);
-        if(hello) 
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("hello"));
+        //if(hello) 
+        //    JOptionPane.showMessageDialog(rootPane, bundle.getString("hello"));
+        
         try {
             checkVersion();
         } catch (IOException ex) {
@@ -209,7 +210,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mShow.add(mViewNotUpload1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("VicuñaUploader " + version);
+        setTitle("VicuñaUploader " + version + " – Wiki Loves Monuments 2012");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/color-swatch-lama.png")));
         setMinimumSize(new java.awt.Dimension(860, 550));
         setPreferredSize(new java.awt.Dimension(860, 550));
@@ -1275,7 +1276,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     
     private void checkVersion() throws IOException {
 
-        String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+        String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version-wlm").trim();
         if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
             Object[] o = {bundle.getString("button-download"), bundle.getString("button-cancel")};
             int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + bundle.getString("about-checkupdate-text") + " (<b>" + v + "</b>). " + bundle.getString("about-checkupdate-download") + "</body></html>", bundle.getString("about-checkupdate"), 
@@ -1301,7 +1302,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
         //</editor-fold>
         
-        String version = "1.00 WLM";
+        String version = "1.00";
         String date = "2012-08-31 22:00";
 
         final JFrame frame = new Main(version, date);

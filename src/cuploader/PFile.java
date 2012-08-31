@@ -101,7 +101,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         mDeselectToUpload = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mEdit = new javax.swing.JMenuItem();
-        mZabytek = new javax.swing.JMenuItem();
         mDelete = new javax.swing.JMenuItem();
         mTools = new javax.swing.JPopupMenu();
         mRefreshThumb = new javax.swing.JMenuItem();
@@ -111,7 +110,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         mWiki = new javax.swing.JPopupMenu();
         mAddEngDesc = new javax.swing.JMenuItem();
         mAddPlDesc = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mGeoloc = new javax.swing.JPopupMenu();
         mAddCoor = new javax.swing.JMenuItem();
         mGoogle = new javax.swing.JMenuItem();
@@ -168,15 +166,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         });
         mContext.add(mEdit);
 
-        mZabytek.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/bank.png"))); // NOI18N
-        mZabytek.setText(bundle.getString("file-context-zabytek")); // NOI18N
-        mZabytek.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mZabytekActionPerformed(evt);
-            }
-        });
-        mContext.add(mZabytek);
-
         mDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/cross.png"))); // NOI18N
         mDelete.setText(bundle.getString("button-delete")); // NOI18N
         mDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -231,7 +220,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             }
         });
         mWiki.add(mAddPlDesc);
-        mWiki.add(jSeparator3);
 
         mAddCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png"))); // NOI18N
         mAddCoor.setText(bundle.getString("fileedit-insert")); // NOI18N
@@ -794,11 +782,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         deleteItems();
     }//GEN-LAST:event_mDeleteActionPerformed
 
-    private void mZabytekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mZabytekActionPerformed
-        if(fZabytek==null) fZabytek = new FZabytek(number);
-        else fZabytek.setVisible(true);
-    }//GEN-LAST:event_mZabytekActionPerformed
-
     /**
      * Reads info from file EXIF (date, gps, rotation)
      */
@@ -1046,7 +1029,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lCategories;
     private javax.swing.JLabel lDate;
     private javax.swing.JLabel lDesc;
@@ -1070,7 +1052,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private javax.swing.JMenuItem mShowEXIF;
     private javax.swing.JPopupMenu mTools;
     private javax.swing.JPopupMenu mWiki;
-    private javax.swing.JMenuItem mZabytek;
     private javax.swing.JTextField tCategories;
     private javax.swing.JLabel tCoor;
     private javax.swing.JTextField tDate;

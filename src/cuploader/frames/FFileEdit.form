@@ -122,9 +122,10 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="lDesc" max="32767" attributes="0"/>
-                              <Component id="lCategories" min="-2" pref="83" max="-2" attributes="0"/>
+                              <Component id="lCategories" max="32767" attributes="0"/>
+                              <Component id="bZabytek" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="tCategories" max="32767" attributes="0"/>
@@ -192,13 +193,12 @@
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="lDesc" min="-2" pref="20" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="jScrollPane1" pref="110" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
+                          <Component id="bZabytek" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <Component id="jScrollPane1" pref="110" max="32767" attributes="0"/>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="tCategories" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lCategories" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
@@ -265,6 +265,9 @@
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -396,6 +399,17 @@
               <ResourceString bundle="cuploader/text/messages.properties" key="edit-select" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="bZabytek">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/cuploader/resources/bank.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Zabytek"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bZabytekActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
