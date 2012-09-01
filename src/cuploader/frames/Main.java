@@ -5,12 +5,15 @@ import cuploader.Data.Elem;
 import cuploader.PFile;
 import cuploader.Settings;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +28,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.wikipedia.Wiki;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -96,6 +100,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         setVisible(true);
         if(hello) 
             JOptionPane.showMessageDialog(rootPane, bundle.getString("hello"));
+        checkVersion();
     }
       
     @SuppressWarnings("unchecked")
@@ -1250,6 +1255,28 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         System.exit(0);
     }
     
+    private void checkVersion() {
+     try {
+            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+            if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
+                Object[] o = {bundle.getString("button-download"), bundle.getString("button-cancel")};
+                int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + bundle.getString("about-checkupdate-text") + " (<b>" + v + "</b>). " + bundle.getString("about-checkupdate-download") + "</body></html>", bundle.getString("about-checkupdate"), 
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
+                if(n==0) {
+                    try {
+                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/downloads"));
+                    } catch (URISyntaxException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } 
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void setLogged(boolean mode) {
         if(mode) {
             Data.isLogged = true;
@@ -1273,8 +1300,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
         //</editor-fold>
         
-        String version = "0.993";
-        String date = "2012-08-14 14:00";
+        String version = "1.00";
+        String date = "2012-09-01 14:00";
 
         final JFrame frame = new Main(version, date);
             //frame.pack();

@@ -26,9 +26,9 @@ public class Settings implements Serializable {
     public static String source = null;
     public static int license = 0;
     public static String licenseCustom = null;
-    public static String attrib = null;
-    public static String categories = null;
-    public static String extratext = null;
+    public static String attrib = "";
+    public static String categories = "";
+    public static String extratext = "";
 
     //GALLERY
     public static boolean createGallery = true;
