@@ -825,7 +825,13 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             ch.setSelectedFile(new File(directory, "session"));
             
             if (ch.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                File file = new File(ch.getSelectedFile().getAbsolutePath()+".xml");
+                File file;
+                
+                if(ch.getSelectedFile().getAbsolutePath().endsWith(".xml"))
+                    file = new File(ch.getSelectedFile().getAbsolutePath());
+                else    
+                    file = new File(ch.getSelectedFile().getAbsolutePath()+".xml");
+
                 if(!file.exists()) {
                     try {
                         file = new File(file.getAbsoluteFile()+"");
