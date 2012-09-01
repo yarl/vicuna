@@ -820,7 +820,14 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             ch.setSelectedFile(new File(directory, "session"));
             
             if (ch.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                File file = new File(ch.getSelectedFile().getAbsolutePath()+".xml");
+                File file;
+                
+                if(ch.getSelectedFile().getAbsolutePath().endsWith(".xml"))
+                    file = new File(ch.getSelectedFile().getAbsolutePath());
+                else    
+                    file = new File(ch.getSelectedFile().getAbsolutePath()+".xml");
+                
+                //System.out.println(file);
                 if(!file.exists()) {
                     try {
                         file = new File(file.getAbsoluteFile()+"");
@@ -1083,11 +1090,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 		// StreamResult result = new StreamResult(System.out);
 		transformer.transform(source, result);
 		return true;
-	  } catch (ParserConfigurationException e) {
-              System.out.print("Błąd: " + e.toString());
+	  } catch (ParserConfigurationException ex) {
+              Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
               return false;
-	  } catch (TransformerException e) {
-              System.out.print("Błąd: " + e.toString());
+	  } catch (TransformerException ex) {
+              Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
               return false;
 	  }
     }

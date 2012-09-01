@@ -19,13 +19,13 @@ public class Settings implements Serializable {
     public static Wiki wiki;// = new Wiki(server);
     
     public static String server = "commons.wikimedia.org";
-    public static String username = null;
+    public static String username = "";
     
     //FILE
     public static String author = "own";
-    public static String source = null;
+    public static String source = "";
     public static int license = 0;
-    public static String licenseCustom = null;
+    public static String licenseCustom = "";
     public static String attrib = "";
     public static String categories = "";
     public static String extratext = "";
@@ -44,7 +44,7 @@ public class Settings implements Serializable {
     public static boolean askQuit = true;
 
     public static int fileDescSource = 0;
-    public static String fileDescPath = null;
+    public static String fileDescPath = "";
     
     public static Dimension size;
     public static Point position;
