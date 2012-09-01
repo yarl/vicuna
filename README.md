@@ -1,6 +1,6 @@
 _VicunaUploader is a free tool written in Java designed to upload files to Wikimedia Commons and other Wikimedia projects._
 
-![Screen](http://i.imgur.com/IcwoS.png)
+![Screen](http://i.imgur.com/jl3va.png)
 ###Features
 * Save & load session using XML file,
 * Edit multiple files description at once,
