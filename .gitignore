@@ -2,4 +2,5 @@ build
 dist
 store
 .vicuna-settings
+vicuna.jar
 nbproject\private
