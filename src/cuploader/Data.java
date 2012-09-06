@@ -5,9 +5,12 @@ import java.awt.GridBagConstraints;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public class Data implements Serializable {
+    private static ResourceBundle text = java.util.ResourceBundle.getBundle("cuploader/text/messages");
+    
     public static String version;
     public static String date;
     
@@ -64,6 +67,10 @@ public class Data implements Serializable {
         filesUpload = toUpload;
         Main.lFileUpload.setText(toUpload + " / " + files.size() + " (" + df.format(toUploadSize) + " MiB)");
         //Main.lFileUpload.setText(filesUpload + " / " + files.size() + " (" + df.format(sizeToUpload) + " MiB)");
+    }
+    
+    public static String text(String s){
+        return text.getString(s);
     }
     
     /***

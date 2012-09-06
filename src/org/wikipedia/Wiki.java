@@ -2012,7 +2012,9 @@ public class Wiki implements Serializable
         {
             int a = line.indexOf("title=\"Category:") + 7;
             int b = line.indexOf('\"', a);
-            categories.add(line.substring(a, b));
+            String s = line.substring(a, b);
+            if(!s.equals(title))
+                categories.add(s);
             line = line.substring(b);
         }
         log(Level.INFO, "Successfully retrieved categories of " + title + " (" + categories.size() + " categories)", "getCategories");
@@ -4859,11 +4861,11 @@ public class Wiki implements Serializable
     {
         // @revised 0.15 to add short/long pages
         StringBuilder url = new StringBuilder(query);
-        url.append("action=query&list=allpages&aplimit=max");
+        url.append("action=query&list=allpages&aplimit=10"); //url.append("action=query&list=allpages&aplimit=max");
         if (!prefix.isEmpty()) // prefix
         {
             // cull the namespace prefix
-            namespace = namespace(prefix);
+            namespace = 14;//namespace(prefix);
             if (prefix.contains(":") && namespace != MAIN_NAMESPACE)
                 prefix = prefix.substring(prefix.indexOf(':') + 1);
             url.append("&apprefix=");
@@ -4871,6 +4873,7 @@ public class Wiki implements Serializable
         }
         else if (namespace == ALL_NAMESPACES) // check for namespace
             throw new UnsupportedOperationException("ALL_NAMESPACES not supported in MediaWiki API.");
+
         url.append("&apnamespace=");
         url.append(namespace);
         switch (level) // protection level
@@ -4904,7 +4907,7 @@ public class Wiki implements Serializable
         }
 
         // parse
-        ArrayList<String> pages = new ArrayList<String>(6667);
+        ArrayList<String> pages = new ArrayList<String>(15);//(6667);
         String next = "";
         do
         {
@@ -4930,10 +4933,10 @@ public class Wiki implements Serializable
             // find the pages
             while (line.contains("<p "))
             {
-                int a = line.indexOf("title=\"") + 7;
-                int b = line.indexOf("\" />", a);
-                pages.add(decode(line.substring(a, b)));
-                line = line.substring(b);
+                    int a = line.indexOf("title=\"") + 7;
+                    int b = line.indexOf("\" />", a);
+                    pages.add(decode(line.substring(a, b)));
+                    line = line.substring(b);
             }
         }
         while (!next.equals("done"));
@@ -4942,7 +4945,7 @@ public class Wiki implements Serializable
         log(Level.INFO, "Successfully retrieved page list (" + pages.size() + " pages)", "listPages");
         return pages.toArray(new String[0]);
     }
-
+    
     /**
      *  Fetches the <tt>amount</tt> most recently created pages in the main
      *  namespace. WARNING: The recent changes table only stores new pages
@@ -6131,7 +6134,7 @@ public class Wiki implements Serializable
     {
         // connect
         logurl(url, caller);
-        System.out.println(url);
+        //System.out.println(url);
         URLConnection connection = new URL(url).openConnection();
         connection.setConnectTimeout(CONNECTION_CONNECT_TIMEOUT_MSEC);
         connection.setReadTimeout(CONNECTION_READ_TIMEOUT_MSEC);

@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public final class PFile extends javax.swing.JPanel implements KeyListener {
@@ -38,12 +39,13 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     public int uploadStatus = 0; //0 - not uploaded; 1 - uploaded; 2 - upload error
     public boolean editable = true;
     
-    //rotate thumbnail
-    int rotateThumb = 0;
+    //category hints
+    CategoryHint ch;
+    String prevCategory = "";
     
-    //subwindows
-    FExif fExif;
-    public FCoord fCoord;
+    int rotateThumb = 0;    //rotate thumbnail
+    FExif fExif;            // subwindow exif
+    public FCoord fCoord;   // subwindow coordinates
     
     //info
     public File file;
@@ -56,25 +58,24 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
-        //addKeyListener(Data.kl);
         addKeyListener(this);
         TransferFocus.patch(tDesc);
         
-        tName.setText(file.getName().substring(0, file.getName().lastIndexOf('.')));
-
-        readEXIF();   
+        String name = file.getName();
+        tName.setText(name.substring(0, name.lastIndexOf('.')));
+        readEXIF();
         generateThumbnail();
     }
     
     public PFile(File file, int number, boolean toUpload, boolean toEdit, String name, String desc, String date, String cats, String coor) {  
         this.file = file;
         this.number = number;
-             
+        
         initComponents();
-        //addKeyListener(Data.kl);
         addKeyListener(this);
         TransferFocus.patch(tDesc);
         
+        //reading session
         if(!name.equals("null")) tName.setText(name);
         if(!desc.equals("null")) tDesc.setText(desc);
         if(!date.equals("null")) tDate.setText(date);
@@ -116,6 +117,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         mAddCoor = new javax.swing.JMenuItem();
         mGoogle = new javax.swing.JMenuItem();
         mOSM = new javax.swing.JMenuItem();
+        mCatHint = new javax.swing.JPopupMenu();
         Panel = new javax.swing.JPanel();
         tThumb = new javax.swing.JLabel();
         tName = new javax.swing.JTextField();
@@ -283,11 +285,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             }
         });
 
-        tName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tNameActionPerformed(evt);
-            }
-        });
         tName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tNameFocusGained(evt);
@@ -313,9 +310,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tDateFocusGained(evt);
             }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tDateFocusLost(evt);
-            }
         });
 
         lDate.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -327,12 +321,14 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         lCategories.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lCategories.setText(bundle.getString("file-cats")); // NOI18N
 
+        tCategories.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                tCategoriesCaretUpdate(evt);
+            }
+        });
         tCategories.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tCategoriesFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tCategoriesFocusLost(evt);
             }
         });
 
@@ -546,11 +542,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                 cUploadActionPerformed(evt);
             }
         });
-        cUpload.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                cUploadFocusGained(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -567,7 +558,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void cUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cUploadActionPerformed
         selectToUpload(cUpload.isSelected());
         Main.lHelp.setText("<html>" + bundle.getString("help-select") + "</html>");
@@ -639,15 +630,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         Main.lHelp.setText("<html>" + bundle.getString("help-date") + "</html>");
     }//GEN-LAST:event_tDateFocusGained
 
-    private void tDateFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tDateFocusLost
-    }//GEN-LAST:event_tDateFocusLost
-
     private void tCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCategoriesFocusGained
         Main.lHelp.setText("<html>" + bundle.getString("help-categories") + "</html>");
     }//GEN-LAST:event_tCategoriesFocusGained
-
-    private void tCategoriesFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCategoriesFocusLost
-    }//GEN-LAST:event_tCategoriesFocusLost
 
     private void bOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bOpenMapActionPerformed
         mGeoloc.show(bOpenMap, 0, 25);
@@ -743,12 +728,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         Main.lHelp.setText("<html>" + bundle.getString("help-desc") + "</html>");
     }//GEN-LAST:event_tDescFocusGained
 
-    private void cUploadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cUploadFocusGained
-    }//GEN-LAST:event_cUploadFocusGained
-
-    private void tNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tNameActionPerformed
-    }//GEN-LAST:event_tNameActionPerformed
-
     private void mGoogleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGoogleActionPerformed
         try {
             Desktop.getDesktop().browse(new URI("https://maps.google.com/maps?q=" +coor.getLat()+ "+" +coor.getLon()+ "&t=h&z=16"));
@@ -783,6 +762,23 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private void mDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mDeleteActionPerformed
         deleteItems();
     }//GEN-LAST:event_mDeleteActionPerformed
+
+    private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
+        String cat = CategoryHint.getCategory(tCategories);
+        if(!prevCategory.equals(cat)) {
+            if(ch==null) {
+                ch = new CategoryHint(mCatHint, tCategories);
+                ch.start();
+            } else if(ch!=null && ch.isEnd()) {
+                ch.stop = true;
+                ch = new CategoryHint(mCatHint, tCategories);
+                ch.start();
+            } else {
+                ch.restart();
+            }
+            prevCategory = cat;
+        }
+    }//GEN-LAST:event_tCategoriesCaretUpdate
 
     /**
      * Reads info from file EXIF (date, gps, rotation)
@@ -1030,6 +1026,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private javax.swing.JMenuItem mAddCoor;
     private javax.swing.JMenuItem mAddEngDesc;
     private javax.swing.JMenuItem mAddPlDesc;
+    private javax.swing.JPopupMenu mCatHint;
     private javax.swing.JPopupMenu mContext;
     private javax.swing.JMenuItem mDelete;
     private javax.swing.JMenuItem mDeselectToUpload;
@@ -1079,8 +1076,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                                            int targetWidth,
                                            int targetHeight,
                                            Object hint,
-                                           boolean higherQuality)
-    {
+                                           boolean higherQuality) {
         int type = (img.getTransparency() == Transparency.OPAQUE) ?
             BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
         BufferedImage ret = (BufferedImage)img;
@@ -1131,17 +1127,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         return ret;
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SHIFT && !Data.shiftPress) {
-            Data.shiftPress = true;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_CONTROL && !Data.ctrlPress) {
-            Data.ctrlPress = true;
-        }
-        //System.out.print("Key: " + e.getKeyCode() + "... ");
-    }
-
     private void deleteItems() {
         ArrayList<Integer> del = new ArrayList<Integer>();
 
@@ -1167,6 +1152,17 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         }
     }
     
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT && !Data.shiftPress) {
+            Data.shiftPress = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_CONTROL && !Data.ctrlPress) {
+            Data.ctrlPress = true;
+        }
+        //System.out.print("Key: " + e.getKeyCode() + "... ");
+    }
+   
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {

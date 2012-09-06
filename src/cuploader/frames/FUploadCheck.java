@@ -129,8 +129,6 @@ public class FUploadCheck extends javax.swing.JFrame {
                    //System.out.print("Dodane: " + file.getComponent(Elem.NAME));
                 }
             new FUpload(list);
-            dispose();
-            Main.fUploadCheck = null;
         } 
     }
     
@@ -248,6 +246,8 @@ public class FUploadCheck extends javax.swing.JFrame {
 
     private void bUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUploadActionPerformed
         startUpload();
+        dispose();
+        Main.fUploadCheck = null;
     }//GEN-LAST:event_bUploadActionPerformed
 
     private void bFixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bFixActionPerformed

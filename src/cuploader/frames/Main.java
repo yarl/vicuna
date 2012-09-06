@@ -2,6 +2,7 @@ package cuploader.frames;
 
 import cuploader.Data;
 import cuploader.Data.Elem;
+import cuploader.FileFilters;
 import cuploader.PFile;
 import cuploader.Settings;
 import java.awt.Color;
@@ -14,11 +15,13 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -37,69 +40,37 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     String version, date;
     Data data;
     File directory = null;
-    DropTarget dt;
-    static ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");
 
+    //windows
     FSettings fSettings;
     FAbout fAbout;
     public static FLogin fLogin;
     public static FUploadCheck fUploadCheck;
     public static FFileEdit fFileEdit;
-    
-    WindowListener exit = new WindowAdapter() {
-        @Override
-        public void windowClosing(WindowEvent evt) {
-            if(Settings.askQuit) 
-                ConfirmClose();
-            else {
-                Close();
-            }
-        }
-    };
-     
+        
     public Main(String version, String date) {
         this.version = version;
         this.date = date;
-        
-        addWindowListener(exit);
-        boolean hello = false;
-        
-        try {
-            FileInputStream f = new FileInputStream(".vicuna-settings");
-            if(f!=null) {
-                ObjectInputStream in = new ObjectInputStream(f);
-                Settings s = (Settings) in.readObject();
-                in.close();
-            }
-        } catch (FileNotFoundException ex) {
-            hello = true;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         data = new Data(version, date);
         
+        addWindowListener(exit);
         initComponents();
         setLocationRelativeTo(null);
         
-        if(Settings.position != null && Settings.size!= null)
-            setBounds(Settings.position.x, Settings.position.y, Settings.size.width, Settings.size.height);
+        boolean hello = readSettings();
+        new DropTarget(pFiles, this);
         
-        dt = new DropTarget(pFiles, this);
         pFilesScroll.getVerticalScrollBar().setUnitIncrement(16);
         mEdit.setEnabled(false);
         mFileUploadSelect.setEnabled(false);
         mUpload.setEnabled(false);
-        //pFiles.setLayout(new BoxLayout(pFiles, BoxLayout.PAGE_AXIS));
-        Data.updateFileCounter();
-        
+
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        
         setVisible(true);
-        if(hello) 
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("hello"));
+        if(!hello) 
+            JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
         checkVersion();
     }
       
@@ -561,7 +532,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mFile.add(jSeparator1);
 
         mEnd.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
-        mEnd.setText("Koniec");
+        mEnd.setText(bundle.getString("button-close")); // NOI18N
         mEnd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mEndActionPerformed(evt);
@@ -731,7 +702,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 
     private void mUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mUploadActionPerformed
         if(Data.filesUpload==0)
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("upload-selectfiles"), bundle.getString("uploading"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, Data.text("upload-selectfiles"), Data.text("uploading"), JOptionPane.ERROR_MESSAGE);
         else {
             if(Settings.wiki==null) {
                 if(fLogin==null) fLogin = new FLogin(data);
@@ -760,19 +731,19 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             else fFileEdit.setVisible(true);
         }
         else
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("edit-selectfiles"), bundle.getString("editing"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, Data.text("edit-selectfiles"), Data.text("editing"), JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_mFileEditSelectedActionPerformed
 
     private void mLoadFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLoadFilesActionPerformed
         //@TODO: translate: http://www.java-forums.org/new-java/13699-filechooser-ui.html
         JFileChooser ch = new JFileChooser();
             ch.setCurrentDirectory(directory);
-            ch.setDialogTitle(bundle.getString("files-load"));
+            ch.setDialogTitle(Data.text("files-load"));
             ch.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             ch.setMultiSelectionEnabled(true);
             ch.setAcceptAllFileFilterUsed(false);
-            ch.addChoosableFileFilter(new ImgFilter());
-            ch.addChoosableFileFilter(new DocsFilter());
+            ch.addChoosableFileFilter(FileFilters.images);
+            ch.addChoosableFileFilter(FileFilters.documents);
             
             if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File[] selected = ch.getSelectedFiles();
@@ -790,7 +761,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                             array.add(f);
                     }
                 }
-                LoadFiles(array);
+                addImages(array);
                 directory = ch.getCurrentDirectory();
             }
     }//GEN-LAST:event_mLoadFilesActionPerformed
@@ -812,58 +783,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     }//GEN-LAST:event_mFileSelectedToUploadActionPerformed
 
     private void mSaveSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSaveSessionActionPerformed
-        JFileChooser ch = new JFileChooser();
-            ch.setCurrentDirectory(directory);
-            ch.setDialogTitle(bundle.getString("session-save"));
-            ch.setAcceptAllFileFilterUsed(false);
-            ch.addChoosableFileFilter(new XMLFilter());
-            ch.setSelectedFile(new File(directory, "session"));
-            
-            if (ch.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                File file;
-                
-                if(ch.getSelectedFile().getAbsolutePath().endsWith(".xml"))
-                    file = new File(ch.getSelectedFile().getAbsolutePath());
-                else    
-                    file = new File(ch.getSelectedFile().getAbsolutePath()+".xml");
-                
-                //System.out.println(file);
-                if(!file.exists()) {
-                    try {
-                        file = new File(file.getAbsoluteFile()+"");
-                        file.createNewFile();
-                        //boolean result = SaveSession(file);
-                        boolean result = SaveXML(file);
-                        if(result) JOptionPane.showMessageDialog(rootPane, bundle.getString("session-save-success"), bundle.getString("session-save"), JOptionPane.INFORMATION_MESSAGE);
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(rootPane, bundle.getString("error") + ": " + ex.toString());
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    int dialog = JOptionPane.showConfirmDialog(rootPane, bundle.getString("session-save-exist"));
-                    if(dialog==0) {
-                        boolean result = SaveXML(file);
-                        if(result) JOptionPane.showMessageDialog(rootPane, bundle.getString("session-save-success"));
-                    }
-                }
-            }
+        saveSession();
     }//GEN-LAST:event_mSaveSessionActionPerformed
 
     private void mLoadSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLoadSessionActionPerformed
-        JFileChooser ch = new JFileChooser();
-            ch.setCurrentDirectory(directory);
-            ch.setDialogTitle(bundle.getString("session-load"));
-            ch.setAcceptAllFileFilterUsed(false);
-            ch.setMultiSelectionEnabled(false);
-            ch.addChoosableFileFilter(new XMLFilter());
-
-            if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                if(ch.getSelectedFile().isFile())
-                    LoadXML(ch.getSelectedFile());
-                else
-                    JOptionPane.showMessageDialog(rootPane, bundle.getString("session-load-error"), bundle.getString("session-load"), JOptionPane.WARNING_MESSAGE, null);
-            }
-                
+        loadSession();
     }//GEN-LAST:event_mLoadSessionActionPerformed
 
     private void mAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAboutActionPerformed
@@ -872,8 +796,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     }//GEN-LAST:event_mAboutActionPerformed
 
     private void mCleanSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCleanSessionActionPerformed
-        Object[] o = {bundle.getString("button-clear"), bundle.getString("button-cancel")};
-        int n = JOptionPane.showOptionDialog(rootPane, bundle.getString("session-clear-q"), bundle.getString("session"), 
+        Object[] o = {Data.text("button-clear"), Data.text("button-cancel")};
+        int n = JOptionPane.showOptionDialog(rootPane, Data.text("session-clear-q"), Data.text("session"), 
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
         switch(n) {
             case 0: {
@@ -888,9 +812,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 Data.updateFileCounter();
                 break;
             }
-            case 1: {
+            case 1:
                 break;
-            }
             default: break;
         }
     }//GEN-LAST:event_mCleanSessionActionPerformed
@@ -902,21 +825,19 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 
     private void mViewAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mViewAllActionPerformed
         for(PFile f : Data.getFiles())
-            /*if(!f.isDeleted)*/ f.setVisible(true);
+            f.setVisible(true);
     }//GEN-LAST:event_mViewAllActionPerformed
 
     private void mViewToUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mViewToUploadActionPerformed
         for(PFile f : Data.getFiles())
             if(f.toUpload) f.setVisible(true);
-                else 
-                    /*if(!f.isDeleted)*/ f.setVisible(false);
+            else f.setVisible(false);
     }//GEN-LAST:event_mViewToUploadActionPerformed
 
     private void mViewNotUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mViewNotUploadActionPerformed
         for(PFile f : Data.getFiles())
             if(f.toUpload) f.setVisible(false);
-                else 
-                    /*if(!f.isDeleted)*/ f.setVisible(true);
+                else f.setVisible(true);
     }//GEN-LAST:event_mViewNotUploadActionPerformed
 
     private void bLoadFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLoadFilesActionPerformed
@@ -967,144 +888,263 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mUploadActionPerformed(evt);
     }//GEN-LAST:event_bUploadActionPerformed
     
+    /**
+     * Init
+     **/
+    //<editor-fold defaultstate="collapsed" desc=" Init ">
+    
+    /**
+     * Checks if settings file exist
+     * @return true if exist
+     */
+    private boolean readSettings() {
+        boolean b = false;
+        try {
+            FileInputStream f = new FileInputStream(".vicuna-settings");
+            if(f!=null) {
+                ObjectInputStream in = new ObjectInputStream(f);
+                Settings s = (Settings) in.readObject();
+                in.close();
+                b = true;
+            }
+        } catch (FileNotFoundException ex) {
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if(Settings.position != null && Settings.size!= null)
+            setBounds(Settings.position.x, Settings.position.y, Settings.size.width, Settings.size.height);
+        return b;
+    }
+    
+    private void checkVersion() {
+        try {
+            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+            if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
+                Object[] o = {Data.text("button-download"), Data.text("button-cancel")};
+                int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>). " + Data.text("about-checkupdate-download") + "</body></html>", 
+                        Data.text("about-checkupdate"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
+                if(n==0) {
+                    try {
+                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/downloads"));
+                    } catch (URISyntaxException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } 
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    //</editor-fold>
+    
+    /**
+     * Saving session
+     **/
+    //<editor-fold defaultstate="collapsed" desc=" Saving session ">
+    private void saveSession() {
+        JFileChooser ch = new JFileChooser();
+        ch.setCurrentDirectory(directory);
+        ch.setDialogTitle(Data.text("session-save"));
+        ch.setAcceptAllFileFilterUsed(false);
+        ch.addChoosableFileFilter(FileFilters.session);
+        ch.setSelectedFile(new File(directory, "session"));
+
+        if (ch.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file;
+
+            if(ch.getSelectedFile().getAbsolutePath().endsWith(".xml"))
+                file = new File(ch.getSelectedFile().getAbsolutePath());
+            else    
+                file = new File(ch.getSelectedFile().getAbsolutePath()+".xml");
+
+            //System.out.println(file);
+            if(!file.exists()) {
+                try {
+                    file = new File(file.getAbsoluteFile()+"");
+                    file.createNewFile();
+                    //boolean result = SaveSession(file);
+                    boolean result = saveSessionFile(file);
+                    if(result) JOptionPane.showMessageDialog(rootPane, Data.text("session-save-success"), Data.text("session-save"), JOptionPane.INFORMATION_MESSAGE);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(rootPane, Data.text("error") + ": " + ex.toString());
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                int dialog = JOptionPane.showConfirmDialog(rootPane, Data.text("session-save-exist"));
+                if(dialog==0) {
+                    boolean result = saveSessionFile(file);
+                    if(result) JOptionPane.showMessageDialog(rootPane, Data.text("session-save-success"));
+                }
+            }
+        }
+    }
+    
     /***
      * Saves session into XML file.
      * @param f destination file
      * @return true if OK
      */
-    public boolean SaveXML(File f) {
-       	  try {
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
- 
-		// SETTINGS
-		Document doc = docBuilder.newDocument();
-		Element root = doc.createElement("session");
-                    doc.appendChild(root);
-                
-                Element server = doc.createElement("server");
-                    server.appendChild(doc.createTextNode(Settings.server));
-                    root.appendChild(server);
-                Element user = doc.createElement("user");
-                    user.appendChild(doc.createTextNode(Settings.username));
-                    root.appendChild(user);
-                Element author = doc.createElement("author");
-                    author.appendChild(doc.createTextNode(Settings.author));
-                    root.appendChild(author);
-                Element license = doc.createElement("license");
-                    root.appendChild(license);
-                    
-                    Attr id = doc.createAttribute("id");
-                        id.setValue(Settings.license+"");
-                        license.setAttributeNode(id);
-                    Attr custom = doc.createAttribute("custom");
-                        custom.setValue(Data.licensesTemplates.get(Data.licensesTemplates.size()-1));
-                        license.setAttributeNode(custom);
-                    Attr attributon = doc.createAttribute("attribution");
-                        attributon.setValue(Settings.attrib);
-                        license.setAttributeNode(attributon);
-                  
-                Element gallery = doc.createElement("gallery");
-                    root.appendChild(gallery);
-                    
-                    Attr create = doc.createAttribute("create");
-                        create.setValue(Settings.createGallery+"");
-                        gallery.setAttributeNode(create);
-                    Attr page = doc.createAttribute("page");
-                        page.setValue(Settings.galleryPage);
-                        gallery.setAttributeNode(page);
-                    Attr header = doc.createAttribute("header");
-                        header.setValue(Settings.galleryHeader+"");
-                        gallery.setAttributeNode(header);
-                    Attr width = doc.createAttribute("width");
-                        width.setValue(Settings.galleryWidth+"");
-                        gallery.setAttributeNode(width);
-              
-                Element other = doc.createElement("other");
-                    root.appendChild(other);
-                        
-                    Attr read_exif_hour = doc.createAttribute("read_exif_hour");
-                        read_exif_hour.setValue(Settings.readExifHour+"");
-                        other.setAttributeNode(read_exif_hour);
-                    Attr rename_after_upload = doc.createAttribute("rename_after_upload");
-                        rename_after_upload.setValue(Settings.renameAfterUpload+"");
-                        other.setAttributeNode(rename_after_upload);
-                      
-                Element extra_text = doc.createElement("extra_text");
-                    extra_text.appendChild(doc.createTextNode(Settings.extratext+""));
-                    root.appendChild(extra_text);
-             
-                // FILES
-                for(PFile i : Data.getFiles()) {
-                    Element file = doc.createElement("file");
-                        //server.appendChild(doc.createTextNode(Settings.server));
-                        root.appendChild(file);
+    public boolean saveSessionFile(File f) {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-                        Attr path = doc.createAttribute("path");
-                            path.setValue(i.file.getAbsolutePath());
-                            file.setAttributeNode(path);
-                        Attr upload = doc.createAttribute("upload");
-                            upload.setValue(i.toUpload+"");
-                            file.setAttributeNode(upload);
-                        Attr edit = doc.createAttribute("edit");
-                            edit.setValue(i.toEdit+"");
-                            file.setAttributeNode(edit);
+            // SETTINGS
+            Document doc = docBuilder.newDocument();
+            Element root = doc.createElement("session");
+                doc.appendChild(root);
 
-                    String text;
-                    
-                    Element name = doc.createElement("name");
-                    if(i.getComponent(Elem.NAME).equals("")) text="null";
-                    else text = i.getComponent(Elem.NAME);
-                        name.appendChild(doc.createTextNode(text));
-                        file.appendChild(name);
-                        
-                    Element date2 = doc.createElement("date");
-                    if(i.getComponent(Elem.DATE).equals("")) text="null";
-                    else text = i.getComponent(Elem.DATE);
-                        date2.appendChild(doc.createTextNode(text));
-                        file.appendChild(date2);
-                        
-                    Element desc = doc.createElement("desc");
-                    if(i.getComponent(Elem.DESC).equals("")) text="null";
-                    else text = i.getComponent(Elem.DESC);
-                        desc.appendChild(doc.createTextNode(text));
-                        file.appendChild(desc);
-                        
-                    Element coor = doc.createElement("coor");
-                    if(i.getComponent(Elem.COOR).equals("")) text="null";
-                    else text = i.getComponent(Elem.COOR);
-                        coor.appendChild(doc.createTextNode(text));
-                        file.appendChild(coor);
-                        
-                    Element cats = doc.createElement("cats");
-                    if(i.getComponent(Elem.CATS).equals("")) text="null";
-                    else text = i.getComponent(Elem.CATS);
-                        cats.appendChild(doc.createTextNode(text));
-                        file.appendChild(cats);
-                }
+            Element server = doc.createElement("server");
+                server.appendChild(doc.createTextNode(Settings.server));
+                root.appendChild(server);
+            Element user = doc.createElement("user");
+                user.appendChild(doc.createTextNode(Settings.username));
+                root.appendChild(user);
+            Element author = doc.createElement("author");
+                author.appendChild(doc.createTextNode(Settings.author));
+                root.appendChild(author);
+            Element license = doc.createElement("license");
+                root.appendChild(license);
 
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(f);
-		// StreamResult result = new StreamResult(System.out);
-		transformer.transform(source, result);
-		return true;
-	  } catch (ParserConfigurationException ex) {
-              Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-              return false;
-	  } catch (TransformerException ex) {
-              Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-              return false;
-	  }
+                Attr id = doc.createAttribute("id");
+                    id.setValue(Settings.license+"");
+                    license.setAttributeNode(id);
+                Attr custom = doc.createAttribute("custom");
+                    custom.setValue(Data.licensesTemplates.get(Data.licensesTemplates.size()-1));
+                    license.setAttributeNode(custom);
+                Attr attributon = doc.createAttribute("attribution");
+                    attributon.setValue(Settings.attrib);
+                    license.setAttributeNode(attributon);
+
+            Element gallery = doc.createElement("gallery");
+                root.appendChild(gallery);
+
+                Attr create = doc.createAttribute("create");
+                    create.setValue(Settings.createGallery+"");
+                    gallery.setAttributeNode(create);
+                Attr page = doc.createAttribute("page");
+                    page.setValue(Settings.galleryPage);
+                    gallery.setAttributeNode(page);
+                Attr header = doc.createAttribute("header");
+                    header.setValue(Settings.galleryHeader+"");
+                    gallery.setAttributeNode(header);
+                Attr width = doc.createAttribute("width");
+                    width.setValue(Settings.galleryWidth+"");
+                    gallery.setAttributeNode(width);
+
+            Element other = doc.createElement("other");
+                root.appendChild(other);
+
+                Attr read_exif_hour = doc.createAttribute("read_exif_hour");
+                    read_exif_hour.setValue(Settings.readExifHour+"");
+                    other.setAttributeNode(read_exif_hour);
+                Attr rename_after_upload = doc.createAttribute("rename_after_upload");
+                    rename_after_upload.setValue(Settings.renameAfterUpload+"");
+                    other.setAttributeNode(rename_after_upload);
+
+            Element extra_text = doc.createElement("extra_text");
+                extra_text.appendChild(doc.createTextNode(Settings.extratext+""));
+                root.appendChild(extra_text);
+
+            // FILES
+            for(PFile i : Data.getFiles()) {
+                Element file = doc.createElement("file");
+                    //server.appendChild(doc.createTextNode(Settings.server));
+                    root.appendChild(file);
+
+                    Attr path = doc.createAttribute("path");
+                        path.setValue(i.file.getAbsolutePath());
+                        file.setAttributeNode(path);
+                    Attr upload = doc.createAttribute("upload");
+                        upload.setValue(i.toUpload+"");
+                        file.setAttributeNode(upload);
+                    Attr edit = doc.createAttribute("edit");
+                        edit.setValue(i.toEdit+"");
+                        file.setAttributeNode(edit);
+
+                String text;
+
+                Element name = doc.createElement("name");
+                if(i.getComponent(Elem.NAME).equals("")) text="null";
+                else text = i.getComponent(Elem.NAME);
+                    name.appendChild(doc.createTextNode(text));
+                    file.appendChild(name);
+
+                Element date2 = doc.createElement("date");
+                if(i.getComponent(Elem.DATE).equals("")) text="null";
+                else text = i.getComponent(Elem.DATE);
+                    date2.appendChild(doc.createTextNode(text));
+                    file.appendChild(date2);
+
+                Element desc = doc.createElement("desc");
+                if(i.getComponent(Elem.DESC).equals("")) text="null";
+                else text = i.getComponent(Elem.DESC);
+                    desc.appendChild(doc.createTextNode(text));
+                    file.appendChild(desc);
+
+                Element coor = doc.createElement("coor");
+                if(i.getComponent(Elem.COOR).equals("")) text="null";
+                else text = i.getComponent(Elem.COOR);
+                    coor.appendChild(doc.createTextNode(text));
+                    file.appendChild(coor);
+
+                Element cats = doc.createElement("cats");
+                if(i.getComponent(Elem.CATS).equals("")) text="null";
+                else text = i.getComponent(Elem.CATS);
+                    cats.appendChild(doc.createTextNode(text));
+                    file.appendChild(cats);
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(f);
+            // StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+            return true;
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (TransformerException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    //</editor-fold>
+    
+    /**
+     * Loading session
+     **/
+    //<editor-fold defaultstate="collapsed" desc=" Loading session ">
+    /**
+     * Reads session
+     */
+    private void loadSession() {
+        JFileChooser ch = new JFileChooser();
+        ch.setCurrentDirectory(directory);
+        ch.setDialogTitle(Data.text("session-load"));
+        ch.setAcceptAllFileFilterUsed(false);
+        ch.setMultiSelectionEnabled(false);
+        ch.addChoosableFileFilter(FileFilters.session);
+
+        if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            if(ch.getSelectedFile().isFile())
+                loadSessionFile(ch.getSelectedFile());
+            else
+                JOptionPane.showMessageDialog(rootPane, Data.text("session-load-error"), Data.text("session-load"), JOptionPane.WARNING_MESSAGE, null);
+        }
     }
     
-    /***
+    /**
      * Reads session from XML file.
      * @param f source file
-     * @return 
      */
-    public void LoadXML(File f) {
+    public void loadSessionFile(File f) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
@@ -1192,13 +1232,18 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             System.out.print("Błąd: " + e.toString());
         }
     }
+    //</editor-fold>
     
+    /**
+     * Adding files
+     **/
+    //<editor-fold defaultstate="collapsed" desc=" Adding files ">
     /***
      * Reads directory and/or files to upload, send list of files to 'loading frame'.
      * @param files array of selected directories/files
      * @return true if ok
      */
-    public synchronized boolean LoadFiles(ArrayList<File> files) {
+    public synchronized boolean addImages(ArrayList<File> files) {
         
         if(files.size()>0) {
             ArrayList<File> vector = new ArrayList<File>();
@@ -1212,7 +1257,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 }
             }
             if(vector.isEmpty()) {
-                JOptionPane.showMessageDialog(rootPane, bundle.getString("loading-nofiles"), bundle.getString("loading") , JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, Data.text("loading-nofiles"), Data.text("loading"), 
+                        JOptionPane.INFORMATION_MESSAGE);
                 return false;
             }
             else {
@@ -1224,33 +1270,51 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 return true;
             }
         } else {
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("loading-nofiles"), bundle.getString("loading") , JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, Data.text("loading-nofiles"), Data.text("loading"), 
+                    JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
     }
-
-    /***
-     * Shows 'are you sure' window
-     * @param 
-     * @return 
+    //</editor-fold>
+    
+    /**
+     * Closing
+     **/
+    //<editor-fold defaultstate="collapsed" desc=" Closing ">
+    KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+    Action escapeAction = new AbstractAction() {
+        public void actionPerformed(ActionEvent e) {
+            exit.windowClosing(null);
+        }
+    }; 
+    
+    WindowListener exit = new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent evt) {
+            if(Settings.askQuit) 
+                ConfirmClose();
+            else Close();
+        }
+    };
+       
+    /*
+     * 'Are you sure' window
      */
     public void ConfirmClose() {
-        Object[] options = { bundle.getString("button-close"), bundle.getString("button-save&close"), bundle.getString("button-cancel")};
-        int n = JOptionPane.showOptionDialog(rootPane, bundle.getString("quit-confirm"), bundle.getString("end"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        Object[] options = { Data.text("button-close"), Data.text("button-save&close"), Data.text("button-cancel")};
+        int n = JOptionPane.showOptionDialog(rootPane, Data.text("quit-confirm"), Data.text("end"), 
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
           
         switch(n) {
             case 0: {
                 Close();
                 break;
-            }
-            case 1: {
+            } case 1: {
                 mSaveSessionActionPerformed(new ActionEvent(mFile, 0, null));
                 Close();
                 break;
-            }
-            case 2 : {
+            } case 2 : 
                 break;
-            }
             default: break;
         }
     }
@@ -1261,45 +1325,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         Settings.Serialize();
         System.exit(0);
     }
+    //</editor-fold>
     
-    private void checkVersion() {
-     try {
-            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
-            if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
-                Object[] o = {bundle.getString("button-download"), bundle.getString("button-cancel")};
-                int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + bundle.getString("about-checkupdate-text") + " (<b>" + v + "</b>). " + bundle.getString("about-checkupdate-download") + "</body></html>", bundle.getString("about-checkupdate"), 
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
-                if(n==0) {
-                    try {
-                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/downloads"));
-                    } catch (URISyntaxException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            } 
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public static void setLogged(boolean mode) {
-        if(mode) {
-            Data.isLogged = true;
-            lUserInfo.setText("<html>" + bundle.getString("status-hello") + ", <b>" + Settings.username + "</b>!</html>");
-            lUserInfo.setForeground(Color.BLACK);
-            mLogin.setText(bundle.getString("logoff")); 
-            lServer.setText(Settings.server);
-        } else {
-            lUserInfo.setText(bundle.getString("status-unlogged"));
-            lUserInfo.setForeground(new Color(102,102,102));
-            mLogin.setText("Zaloguj");
-        }
-    }
-
     public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code ">
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
@@ -1307,12 +1336,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
         //</editor-fold>
         
-        String version = "1.00";
-        String date = "2012-09-01 14:00";
+        String version = "1.01";
+        String date = "2012-09-06 22:00";
 
         final JFrame frame = new Main(version, date);
-            //frame.pack();
-            //frame.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1384,17 +1411,23 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private javax.swing.JPanel pUserInfo;
     // End of variables declaration//GEN-END:variables
 
-    //ESCAPE TO EXIT
-    KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
-    Action escapeAction = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            exit.windowClosing(null);
+    public static void setLogged(boolean mode) {
+        if(mode) {
+            Data.isLogged = true;
+            lUserInfo.setText("<html>" + Data.text("status-hello") + ", <b>" + Settings.username + "</b>!</html>");
+            lUserInfo.setForeground(Color.BLACK);
+            mLogin.setText(Data.text("logoff")); 
+            lServer.setText(Settings.server);
+        } else {
+            lUserInfo.setText(Data.text("status-unlogged"));
+            lUserInfo.setForeground(new Color(102,102,102));
+            mLogin.setText(Data.text("login")); 
         }
-    }; 
+    }
     
     /**
-    * DRAG & DROP
-    * from: http://www.java-tips.org/java-se-tips/javax.swing/how-to-implement-drag-drop-functionality-in-your-applic.html
+    * Drag & drop
+    * @see http://www.java-tips.org/java-se-tips/javax.swing/how-to-implement-drag-drop-functionality-in-your-applic.html
     */
     @Override
     public void dragEnter(DropTargetDragEvent dtde) {}
@@ -1444,7 +1477,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                                array.add(f);
                         }
                     }
-                    LoadFiles(array);
+                    addImages(array);
                     dtde.dropComplete(true);
                     return;
                 } else if (flavors[i].isRepresentationClassInputStream()) {
@@ -1457,102 +1490,5 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         } catch (Exception e) {
             dtde.rejectDrop();
         }
-    }
-}
-
-/**
-*  FILTERS
-*/
-//png, gif, jpg, jpeg, xcf, mid, ogg, ogv, svg, djvu, tiff, tif, oga
-
-class XMLFilter extends FileFilter {
-    ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");
-    
-    @Override
-    public boolean accept(File f) {
-        if (f.isDirectory())
-            return true;
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
-
-        if (i > 0 && i < s.length() - 1)
-            if (s.substring(i + 1).toLowerCase().equals("xml"))
-                return true;
-        return false;
-    }
-
-    @Override
-    public String getDescription() {
-        return bundle.getString("session-file") + " (*.xml)";
-    }
-}
-
-class ImgFilter extends FileFilter {
-    ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");
-    
-    @Override
-    public boolean accept(File f) {
-        if (f.isDirectory())
-            return true;
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
-
-        if (i > 0 && i < s.length() - 1) {
-            s = s.substring(i + 1).toLowerCase();
-            if (s.equals("jpg") || s.equals("png") || s.equals("gif"))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public String getDescription() {
-        return bundle.getString("loading-filter-img") + " (*.jpg, *.png, *.gif)";
-    }
-}
-
-class DocsFilter extends FileFilter {
-    ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");
-        
-    @Override
-    public boolean accept(File f) {
-        if (f.isDirectory())
-            return true;
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
-
-        if (i > 0 && i < s.length() - 1) {
-            s = s.substring(i + 1).toLowerCase();
-            if (s.equals("jpg") || s.equals("pdf") || s.equals("djvu"))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public String getDescription() {
-        return bundle.getString("loading-filter-scan") + " (*.jpg, *.pdf, *.djvu)";
-    }
-}
-
-class TxtFilter extends FileFilter {
-    ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");
-    
-    @Override
-    public boolean accept(File f) {
-        if (f.isDirectory())
-            return true;
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
-
-        if (i > 0 && i < s.length() - 1)
-            if (s.substring(i + 1).toLowerCase().equals("txt"))
-                return true;
-        return false;
-    }
-
-    @Override
-    public String getDescription() {
-        return bundle.getString("settings-program-descfile-file") + " (*.txt)";
     }
 }

@@ -1,11 +1,12 @@
 package cuploader.frames;
 
 import cuploader.Data;
+import cuploader.FileFilters;
+import cuploader.FileFilters.TxtFilter;
 import cuploader.Settings;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.ResourceBundle;
 import javax.swing.*;
 
 public class FSettings extends javax.swing.JFrame {
@@ -57,7 +58,7 @@ public class FSettings extends javax.swing.JFrame {
         
         cFileDescSource.setSelectedIndex(Settings.fileDescSource);
         if(Settings.fileDescPath==null)
-            tFileDesc.setText(bundle.getString("settings-program-descfile-noselected"));
+            tFileDesc.setText(Data.text("settings-program-descfile-noselected"));
         else
             tFileDesc.setText(Settings.fileDescPath);
 
@@ -542,10 +543,10 @@ public class FSettings extends javax.swing.JFrame {
     private void bSetFileDescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSetFileDescActionPerformed
         JFileChooser ch = new JFileChooser();
             ch.setCurrentDirectory(null);
-            ch.setDialogTitle(bundle.getString("session-load"));
+            ch.setDialogTitle(Data.text("session-load"));
             ch.setAcceptAllFileFilterUsed(false);
             ch.setMultiSelectionEnabled(false);
-            ch.addChoosableFileFilter(new TxtFilter());
+            ch.addChoosableFileFilter(FileFilters.text);
 
             if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File f = ch.getSelectedFile();
@@ -554,7 +555,7 @@ public class FSettings extends javax.swing.JFrame {
                     tFileDesc.setText(f.getPath());
                 }
 //                else
-//                    JOptionPane.showMessageDialog(rootPane, bundle.getString("session-load-error"), bundle.getString("session-load"), JOptionPane.WARNING_MESSAGE, null);
+//                    JOptionPane.showMessageDialog(rootPane, Data.text("session-load-error"), Data.text("session-load"), JOptionPane.WARNING_MESSAGE, null);
             }
     }//GEN-LAST:event_bSetFileDescActionPerformed
 
@@ -601,7 +602,6 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JTextField tSource;
     // End of variables declaration//GEN-END:variables
 
-    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {

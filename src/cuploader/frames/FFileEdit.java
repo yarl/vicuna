@@ -1,10 +1,7 @@
 package cuploader.frames;
 
-import cuploader.Coord;
-import cuploader.Data;
+import cuploader.*;
 import cuploader.Data.Elem;
-import cuploader.PFile;
-import cuploader.Settings;
 import cuploader.fixes.TransferFocus;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -15,6 +12,10 @@ import javax.swing.*;
 public class FFileEdit extends javax.swing.JFrame {
     public Coord coor;
     public FCoord fCoord;
+    
+    //category hints
+    CategoryHint ch;
+    String prevCategory = "";
     
     public FFileEdit() {
         initComponents();
@@ -33,6 +34,7 @@ public class FFileEdit extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mCatHint = new javax.swing.JPopupMenu();
         Panel = new javax.swing.JPanel();
         lName = new javax.swing.JLabel();
         tName = new javax.swing.JTextField();
@@ -94,6 +96,11 @@ public class FFileEdit extends javax.swing.JFrame {
         lCategories.setToolTipText("");
 
         tCategories.setToolTipText("Kategorie dla pliku, oddziel średnikiem");
+        tCategories.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                tCategoriesCaretUpdate(evt);
+            }
+        });
         tCategories.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tCategoriesActionPerformed(evt);
@@ -402,6 +409,19 @@ public class FFileEdit extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cCategoriesMethodActionPerformed
 
+    private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
+        String cat = CategoryHint.getCategory(tCategories);
+        if(!prevCategory.equals(cat)) {
+            if (ch == null || ch.isEnd()) {
+                ch = new CategoryHint(mCatHint, tCategories);
+                ch.start();
+            } else {
+                ch.restart();
+            }
+            prevCategory = cat;
+        }
+    }//GEN-LAST:event_tCategoriesCaretUpdate
+
     private void Replace() {
         int nr = 1;
         Integer n = Integer.parseInt(tNumStart.getValue().toString());
@@ -524,6 +544,7 @@ public class FFileEdit extends javax.swing.JFrame {
     private javax.swing.JLabel lName;
     private javax.swing.JLabel lNumFormat;
     private javax.swing.JLabel lNumStart;
+    private javax.swing.JPopupMenu mCatHint;
     private javax.swing.JTextField tCategories;
     public javax.swing.JLabel tCoor;
     private javax.swing.JTextField tDate;

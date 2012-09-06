@@ -12,8 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.security.auth.login.CredentialException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.security.auth.login.LoginException;
@@ -88,7 +86,7 @@ public class FUpload extends javax.swing.JFrame {
         bCancel = new javax.swing.JButton();
         bHide = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
         setTitle(bundle.getString("upload-uploading")); // NOI18N
         setResizable(false);
