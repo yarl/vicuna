@@ -2013,6 +2013,8 @@ public class Wiki implements Serializable
             int a = line.indexOf("title=\"Category:") + 7;
             int b = line.indexOf('\"', a);
             String s = line.substring(a, b);
+            s = s.replace("&quot;", "\"");
+            s = s.replace("&#039;", "'");
             if(!s.equals(title))
                 categories.add(s);
             line = line.substring(b);
