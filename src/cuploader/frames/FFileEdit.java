@@ -1,7 +1,7 @@
 package cuploader.frames;
 
-import cuploader.*;
 import cuploader.Data.Elem;
+import cuploader.*;
 import cuploader.fixes.TransferFocus;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -59,6 +59,8 @@ public class FFileEdit extends javax.swing.JFrame {
         tDigits = new javax.swing.JSpinner();
         lDigits = new javax.swing.JLabel();
         cUpload = new javax.swing.JCheckBox();
+        jSeparator1 = new javax.swing.JSeparator();
+        bClearCoor = new javax.swing.JButton();
         bSave = new javax.swing.JButton();
         bCancel = new javax.swing.JButton();
         bApply = new javax.swing.JButton();
@@ -73,12 +75,6 @@ public class FFileEdit extends javax.swing.JFrame {
         lName.setText(bundle.getString("file-name")); // NOI18N
 
         lDate.setText(bundle.getString("file-date")); // NOI18N
-
-        tDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tDateActionPerformed(evt);
-            }
-        });
 
         lCoor.setText(bundle.getString("file-coor")); // NOI18N
 
@@ -101,9 +97,9 @@ public class FFileEdit extends javax.swing.JFrame {
                 tCategoriesCaretUpdate(evt);
             }
         });
-        tCategories.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tCategoriesActionPerformed(evt);
+        tCategories.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tCategoriesFocusGained(evt);
             }
         });
 
@@ -119,11 +115,6 @@ public class FFileEdit extends javax.swing.JFrame {
 
         cCategoriesMethod.setModel(new javax.swing.DefaultComboBoxModel(new String[] { bundle.getString("fileedit-append"), bundle.getString("fileedit-prepend"), bundle.getString("fileedit-overwrite")}));
         cCategoriesMethod.setToolTipText("Metoda wstawienia kategorii");
-        cCategoriesMethod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cCategoriesMethodActionPerformed(evt);
-            }
-        });
 
         cNameMethod.setModel(new javax.swing.DefaultComboBoxModel(new String[] { bundle.getString("fileedit-append"), bundle.getString("fileedit-prepend"), bundle.getString("fileedit-overwrite")}));
         cNameMethod.addActionListener(new java.awt.event.ActionListener() {
@@ -159,6 +150,15 @@ public class FFileEdit extends javax.swing.JFrame {
         cUpload.setSelected(true);
         cUpload.setText(bundle.getString("edit-select")); // NOI18N
 
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        bClearCoor.setText(bundle.getString("button-clear")); // NOI18N
+        bClearCoor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bClearCoorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
         Panel.setLayout(PanelLayout);
         PanelLayout.setHorizontalGroup(
@@ -168,48 +168,59 @@ public class FFileEdit extends javax.swing.JFrame {
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cUpload)
                     .addGroup(PanelLayout.createSequentialGroup()
-                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelLayout.createSequentialGroup()
-                                .addComponent(lName, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tName, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelLayout.createSequentialGroup()
+                                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cNum, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(PanelLayout.createSequentialGroup()
-                                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(lNumFormat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(lNumStart, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(100, 100, 100)
                                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(PanelLayout.createSequentialGroup()
                                                 .addComponent(tNumStart, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                                                 .addComponent(lDigits, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(tDigits, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addComponent(tNumFormat)))
-                                    .addComponent(cNum, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(cNameMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lCoor, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
+                                    .addGroup(PanelLayout.createSequentialGroup()
+                                        .addGap(19, 19, 19)
+                                        .addComponent(tName))))
+                            .addGroup(PanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(cNameMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tDate)
-                            .addComponent(bSetCoor, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-                            .addComponent(tCoor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(lInfo)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
+                            .addComponent(lDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lCoor, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
+                                .addComponent(bClearCoor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bSetCoor, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tDate)
+                            .addComponent(tCoor, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)))
+                    .addComponent(lInfo)
+                    .addGroup(PanelLayout.createSequentialGroup()
+                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelLayout.createSequentialGroup()
                                 .addComponent(tCategories)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cCategoriesMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1))))
+                            .addComponent(jScrollPane1)
+                            .addGroup(PanelLayout.createSequentialGroup()
+                                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lNumFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lNumStart, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         PanelLayout.setVerticalGroup(
@@ -221,44 +232,49 @@ public class FFileEdit extends javax.swing.JFrame {
                 .addComponent(cUpload)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(lName, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lDate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(cNum, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lNumFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tNumFormat))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(tNumStart)
-                                .addComponent(tDigits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lDigits, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lNumStart, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cNameMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lCoor, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bSetCoor))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tCoor, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(tName)
+                            .addComponent(lDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tDate)
+                            .addGroup(PanelLayout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(lName, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelLayout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(cNum, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(PanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(PanelLayout.createSequentialGroup()
+                                        .addComponent(tCoor, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(bSetCoor)
+                                            .addComponent(bClearCoor))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(PanelLayout.createSequentialGroup()
+                                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lCoor, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cNameMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(lNumFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tNumFormat))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(tNumStart)
+                                                .addComponent(tDigits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lDigits, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(lNumStart, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                    .addComponent(jSeparator1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89))
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                    .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,8 +326,8 @@ public class FFileEdit extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bSave)
@@ -336,53 +352,9 @@ public class FFileEdit extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_bCancelActionPerformed
 
-    private void tDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tDateActionPerformed
-    }//GEN-LAST:event_tDateActionPerformed
-
-    private void tCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCategoriesActionPerformed
-    }//GEN-LAST:event_tCategoriesActionPerformed
-
     private void bSetCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSetCoorActionPerformed
         if(fCoord==null) fCoord = new FCoord(0, true);
         else fCoord.setVisible(true);
-        //String input = JOptionPane.showInputDialog("<html><body>Podaj współrzędne do wstawienia. Akceptowalne przykłady:<br>&bull; 52.2299;21.0628<br>&bull; permalink OpenStreetMap<br>&bull; {{Koordynaty|52|14|5.15|N|21|7|51.91|E|region:PL}}</body></html>");
-        /*
-        String input = JOptionPane.showInputDialog(rootPane, "<html><body>"+bundle.getString("fileedit-coor-info")+"&nbsp;&nbsp;<br></body></html>", bundle.getString("file-coor"), JOptionPane.INFORMATION_MESSAGE);
-          
-        if(input != null) {
-            //52.2299;21.0628
-            if(input.matches("[-.0-9]*;[-.0-9]*")) {
-                String[] s = input.split(";");
-                coor = new Coord(s[0], s[1]);
-                tCoor.setText(coor.getDMSformated());
-            }
-            
-            //www.openstreetmap.org/?lat=52.4075&lon=16.9315&zoom=13&layers=M
-            if(input.matches(".*lat=[-.0-9]*&lon=[-.0-9]*.*")) {
-                String[] s = input.split("[#?&]");
-                //JOptionPane.showMessageDialog(bSetCoor, s[1] + "----" + s[2]);
-                String lat="0", lon="0";
-                for(String i : s) {
-                    if(i.contains("lat"))
-                        lat=i.substring(4);
-                    if(i.contains("lon"))
-                        lon=i.substring(4);
-                }
-                coor = new Coord(lat, lon);
-                tCoor.setText(coor.getDMSformated());
-            }
-            
-            //{{Koordynaty|52|14|5.15|N|21|7|51.91|E|region:PL}}
-            if(input.matches(".*[Kk]oordynaty|.*")) {
-                String[] s = input.split("\\|");
-                if(s.length>8) {    //długi
-                    String lat[] = {s[1],s[2],s[3]};
-                    String lon[] = {s[5],s[6],s[7]};
-                    coor = new Coord(lat, s[4], lon, s[8]);
-                    tCoor.setText(coor.getDMSformated());
-                }
-            }
-        }*/
     }//GEN-LAST:event_bSetCoorActionPerformed
 
     private void cNameMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cNameMethodActionPerformed
@@ -405,23 +377,42 @@ public class FFileEdit extends javax.swing.JFrame {
         tDigits.setEnabled(b);
     }//GEN-LAST:event_cNumActionPerformed
 
-    private void cCategoriesMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cCategoriesMethodActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cCategoriesMethodActionPerformed
-
     private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
+        showCategoryHints(false);
+    }//GEN-LAST:event_tCategoriesCaretUpdate
+
+    private void tCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCategoriesFocusGained
+        showCategoryHints(true);
+    }//GEN-LAST:event_tCategoriesFocusGained
+
+    private void bClearCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bClearCoorActionPerformed
+        fCoord = null;
+        coor = null;
+        tCoor.setText("");
+    }//GEN-LAST:event_bClearCoorActionPerformed
+    
+    private void showCategoryHints(boolean b) {
         String cat = CategoryHint.getCategory(tCategories);
         if(!prevCategory.equals(cat)) {
-            if (ch == null || ch.isEnd()) {
+            if(ch==null) {
+                ch = new CategoryHint(mCatHint, tCategories);
+                ch.start();
+            } else if(ch!=null && ch.isEnd()) {
+                ch.stop = true;
                 ch = new CategoryHint(mCatHint, tCategories);
                 ch.start();
             } else {
                 ch.restart();
             }
             prevCategory = cat;
+        } else {
+            if(b) {
+                mCatHint.show(tCategories, 0, tCategories.getHeight());
+                tCategories.requestFocus();
+            }
         }
-    }//GEN-LAST:event_tCategoriesCaretUpdate
-
+    }
+    
     private void Replace() {
         int nr = 1;
         Integer n = Integer.parseInt(tNumStart.getValue().toString());
@@ -431,7 +422,7 @@ public class FFileEdit extends javax.swing.JFrame {
                 if(cUpload.isSelected()) file.selectToUpload(true);
                 
                 //name
-                if(tName.getText().length()>0) {
+                if(!tName.getText().isEmpty()) {
                     switch(cNameMethod.getSelectedIndex()) {
                         case 0: //append
                             if(!file.getComponent(Elem.NAME).matches(".*"+tName.getText()))
@@ -465,18 +456,18 @@ public class FFileEdit extends javax.swing.JFrame {
                     //++nr;
                 }
                 //date
-                if(tDate.getText().length()>0) 
+                if(!tDate.getText().isEmpty()) 
                     file.setComponent(Elem.DATE, tDate.getText());
                 //coor
-                if(tCoor.getText().length()>0) {
+                if(coor!=null) {
                     file.coor = coor;
                     file.setComponent(Elem.COOR, coor.getDMSformated());
                 }
                 //desc
-                if(tDesc.getText().length()>0) 
+                if(!tDesc.getText().isEmpty()) 
                     file.setComponent(Elem.DESC, tDesc.getText());
                 //cats
-                if(tCategories.getText().length()>0) {
+                if(!tCategories.getText().isEmpty()) {
                     switch(cCategoriesMethod.getSelectedIndex()) {
                         case 0: //append
                             if(!file.getComponent(Elem.CATS).equals("")) {
@@ -528,6 +519,7 @@ public class FFileEdit extends javax.swing.JFrame {
     private javax.swing.JPanel Panel;
     private javax.swing.JButton bApply;
     private javax.swing.JButton bCancel;
+    private javax.swing.JButton bClearCoor;
     private javax.swing.JButton bSave;
     private javax.swing.JButton bSetCoor;
     private javax.swing.JComboBox cCategoriesMethod;
@@ -535,6 +527,7 @@ public class FFileEdit extends javax.swing.JFrame {
     private javax.swing.JCheckBox cNum;
     private javax.swing.JCheckBox cUpload;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lCategories;
     private javax.swing.JLabel lCoor;
     private javax.swing.JLabel lDate;

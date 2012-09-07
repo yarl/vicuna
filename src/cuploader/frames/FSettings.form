@@ -30,11 +30,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jTabbedPane1" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jTabbedPane1" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       <Component id="bSave" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -47,10 +47,10 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" min="-2" pref="308" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jTabbedPane1" min="-2" pref="335" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="bSave" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -96,11 +96,6 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="lExtraText" min="-2" pref="108" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="tExtraTextScroll" max="32767" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lAuthor" min="-2" pref="108" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -115,21 +110,27 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="lAttrib" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="lLicense" alignment="1" pref="108" max="32767" attributes="0"/>
-                                  <Component id="lSource" max="32767" attributes="0"/>
+                                  <Component id="lExtraText" pref="108" max="32767" attributes="0"/>
+                                  <Component id="jLabel2" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="tCategories" max="32767" attributes="0"/>
+                                  <Component id="tExtraTextScroll" pref="440" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="lAttrib" max="32767" attributes="0"/>
+                                  <Component id="lLicense" alignment="1" pref="108" max="32767" attributes="0"/>
+                                  <Component id="lSource" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="tLicense" alignment="1" max="32767" attributes="0"/>
                                   <Component id="tSource" alignment="1" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="cLicense" pref="243" max="32767" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="tLicense" min="-2" pref="191" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="tAttrib" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="tCategories" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cLicense" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="tAttrib" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -157,10 +158,11 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="tLicense" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cLicense" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lLicense" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="tLicense" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="tAttrib" alignment="3" max="32767" attributes="0"/>
@@ -176,7 +178,7 @@
                           <Component id="lExtraText" min="-2" max="-2" attributes="0"/>
                           <Component id="tExtraTextScroll" min="-2" pref="98" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -361,7 +363,7 @@
                           <Component id="tGalleryWidth" max="32767" attributes="0"/>
                           <Component id="lGalleryWidth" min="-2" pref="20" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="169" max="32767" attributes="0"/>
+                      <EmptySpace pref="196" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -466,7 +468,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="90" max="32767" attributes="0"/>
+                      <EmptySpace pref="111" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -596,14 +598,14 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="lFileDescSource" min="-2" pref="169" max="-2" attributes="0"/>
+                                  <Component id="lFileDescSource" min="-2" pref="305" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="cFileDescSource" min="-2" pref="177" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
-                                  <Component id="tFileDesc" max="32767" attributes="0"/>
+                                  <Component id="tFileDesc" min="-2" pref="420" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="bSetFileDesc" min="-2" max="-2" attributes="0"/>
+                                  <Component id="bSetFileDesc" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -621,6 +623,7 @@
                               </Group>
                               <Component id="cFileDescSource" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="bSetFileDesc" max="32767" attributes="0"/>
                               <Component id="tFileDesc" max="32767" attributes="0"/>

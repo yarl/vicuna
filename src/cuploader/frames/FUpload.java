@@ -60,11 +60,11 @@ public class FUpload extends javax.swing.JFrame {
         source = Settings.source;
         license = Data.licensesTemplates.get(Settings.license);
         
-        attrib = Settings.attrib.equals("") ? null : Settings.attrib;
-        extratext = Settings.extratext.equals("") ? null : Settings.extratext;
-        categories = Settings.categories.equals("") ? null : Settings.categories;
+        attrib = Settings.attrib;
+        extratext = Settings.extratext;
+        categories = Settings.categories;
         
-        if(fileDescSource==1)
+        if(fileDescSource==1 && !Settings.fileDescPath.isEmpty())
             f = new File(Settings.fileDescPath);
         wiki = Settings.wiki;
         renameAfterUpload = Settings.renameAfterUpload;
@@ -243,45 +243,44 @@ public class FUpload extends javax.swing.JFrame {
                         
                         //COMMONS
                         if(server.equals("commons.wikimedia.org")) {
-                            desc = "=={{int:filedesc}}==\n{{Information";
-                            desc += "\n|description = " + file.getComponent(Elem.DESC);
-                            desc += "\n|date = " + file.getComponent(Elem.DATE);
-                            if(author.equals("own"))
-                                desc += "\n|source = {{own}}\n|author = [[user:" + username + "|" + username + "]]";
-                            else
-                                desc += "\n|source = " + source + "\n|author = " + author;
+                            desc = "=={{int:filedesc}}==\n{{Information"
+                            + "\n|description = " + file.getComponent(Elem.DESC)
+                            + "\n|date = " + file.getComponent(Elem.DATE);
+                            
+                            if(author.equals("own")) desc += "\n|source = {{own}}\n|author = [[user:" + username + "|]]";
+                            else desc += "\n|source = " + source + "\n|author = " + author;
+                            
                             desc += "\n|permission = \n|other_versions = \n}}";
                             if(file.coor != null)
                                 desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon() + "}}";
 
                             desc += "\n\n=={{int:license-header}}==\n";
-                            desc += "{{" + license;
-                            if(attrib != null)
-                                desc += "|" + attrib;
-                            desc += "}}";
+                            
+                            if(attrib.isEmpty()) license.replace("|%ATTRIB%", "%ATTRIB%");  //delete pipe
+                            desc += license.replace("%ATTRIB%", attrib);
 
-                            if(extratext != null)
+                            if(!extratext.isEmpty())
                                 desc += "\n" + extratext;
 
                         //EVERYTHING ELSE
                         } else {
-                            desc = "==Summary==";
-                            desc += "\n* Description: " + file.getComponent(Elem.DESC);
-                            if(author.equals("own"))
-                                desc += "\n* Source: own work\n* Author: [[user:" + username + "|" + username + "]]";
-                            else
-                                desc += "\n* Source: " + source + "\n* Author: " + author;
-                            desc += "\n* Date: " + file.getComponent(Elem.DATE);
-                            desc += "\n* License: " + license;
-                            if(extratext != null) 
+                            desc = "==Summary=="
+                            + "\n* Description: " + file.getComponent(Elem.DESC);
+                            
+                            if(author.equals("own")) desc += "\n* Source: own work\n* Author: [[user:" + username + "|]]";
+                            else desc += "\n* Source: " + source + "\n* Author: " + author;
+                            
+                            desc += "\n* Date: " + file.getComponent(Elem.DATE)
+                            + "\n* License: " + license;
+                            if(!extratext.isEmpty()) 
                                 desc += "\n" + extratext;
                         }
 
                         //CATEGORIES (FOR BOTH)
                         String c = "";
-                        if(categories!=null)
+                        if(!categories.isEmpty())
                             c += categories + ";";
-                        if(!file.getComponent(Elem.CATS).equals(""))
+                        if(!file.getComponent(Elem.CATS).isEmpty())
                             c += file.getComponent(Elem.CATS);
 
                         desc += "\n\n";
@@ -309,12 +308,12 @@ public class FUpload extends javax.swing.JFrame {
                     if(fileDescSource==1 && f!= null) {          
                         desc = text;
 
-                        desc = (attrib==null) ? desc.replace("%ATTRIB%", "") : desc.replace("%ATTRIB%", attrib);
+                        desc = (attrib.isEmpty()) ? desc.replace("%ATTRIB%", "") : desc.replace("%ATTRIB%", attrib);
                         desc = desc.replace("%AUTHOR%", author);
 
                         //CATEGORIES (FOR ALL)
                         String out = "";
-                        if(categories!=null) {
+                        if(!categories.isEmpty()) {
                             String[] c2 = categories.split(";");
 
                             boolean b;
@@ -332,7 +331,7 @@ public class FUpload extends javax.swing.JFrame {
                         }
                         desc = desc.replace("%CATEGORIES%", out);
                         
-                        desc = (extratext==null) ? desc.replace("%EXTRA%", "") : desc.replace("%EXTRA%", extratext);
+                        desc = (!extratext.isEmpty()) ? desc.replace("%EXTRA%", "") : desc.replace("%EXTRA%", extratext);
                         desc = desc.replace("%SOURCE%", source);
                         desc = desc.replace("%USER%", username);
 
@@ -382,6 +381,7 @@ public class FUpload extends javax.swing.JFrame {
                         lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
 
                         //upload
+                        //System.out.println(desc);
                         //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                         boolean upload = wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
                         if(upload) {
@@ -394,28 +394,19 @@ public class FUpload extends javax.swing.JFrame {
                             file.setAsUploaded();
                             ++uploaded;
                         }
-                        //file.lockPanel(false);
                         Progress.setValue(i+1);
                         ++i;
-                        } catch (UnknownError ex) {
+                    } catch (UnknownError ex) {
                         file.setAsFailed(bundle.getString("upload-error-file") + ": " + ex.getLocalizedMessage());
-                        //file.lockPanel(false);
                     } catch (CredentialNotFoundException ex) {
                         JOptionPane.showMessageDialog(rootPane, bundle.getString("upload-error-account"), bundle.getString("upload-uploading"), JOptionPane.ERROR_MESSAGE);
                         break;
                     } catch (CredentialException ex) {
                         file.setAsFailed(bundle.getString("upload-error-file-protected"));
-                        //file.lockPanel(false);
-                        //JOptionPane.showMessageDialog(rootPane, "Strona zablokowana");
                     } catch (LoginException ex) {
                         file.setAsFailed(ex.getLocalizedMessage());
-                        //file.lockPanel(false);
-                        //JOptionPane.showMessageDialog(rootPane, "Wystąpił błąd: " + ex.toString());
-                        //Logger.getLogger(F_Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
                         file.setAsFailed(ex.getLocalizedMessage());
-                        //file.lockPanel(false);
-                        //JOptionPane.showMessageDialog(rootPane, "Wystąpił błąd: " + ex.toString());
                     }
                 }
             }
@@ -427,7 +418,6 @@ public class FUpload extends javax.swing.JFrame {
                 lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
 
             if(Settings.createGallery) gallery += "</gallery>";
-            //System.out.println(gallery);
             if(Settings.createGallery && uploaded>0) {
                 Progress.setIndeterminate(true);
                 lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));

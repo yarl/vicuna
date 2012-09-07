@@ -54,10 +54,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         data = new Data(version, date);
         
         addWindowListener(exit);
+        boolean hello = readSettings();
         initComponents();
         setLocationRelativeTo(null);
+        readPosition();
         
-        boolean hello = readSettings();
         new DropTarget(pFiles, this);
         
         pFilesScroll.getVerticalScrollBar().setUnitIncrement(16);
@@ -913,10 +914,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return b;
+    }
+    
+    private void readPosition() {
         if(Settings.position != null && Settings.size!= null)
             setBounds(Settings.position.x, Settings.position.y, Settings.size.width, Settings.size.height);
-        return b;
     }
     
     private void checkVersion() {
@@ -1336,8 +1339,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
         //</editor-fold>
         
-        String version = "1.01";
-        String date = "2012-09-06 22:00";
+        String version = "1.10";
+        String date = "2012-09-07 23:00";
 
         final JFrame frame = new Main(version, date);
     }

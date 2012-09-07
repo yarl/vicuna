@@ -42,13 +42,15 @@ public class Data implements Serializable {
         Data.version = version;
         Data.date = date;
         
-        licenses.add("Creative Commons BY-SA 3.0");             licensesTemplates.add("cc-by-sa 3.0");
-        licenses.add("Creative Commons BY 3.0");                licensesTemplates.add("cc-by 3.0");
-        licenses.add("Creative Commons Zero 1.0");              licensesTemplates.add("cc-zero");
-        licenses.add("GNU Free Documentation License (GFDL)");  licensesTemplates.add("GFDL");
-        licenses.add("...");                                    licensesTemplates.add(null);
+        licenses.add("Creative Commons BY-SA 3.0");         licensesTemplates.add("{{cc-by-sa 3.0|%ATTRIB%}}");
+        licenses.add("Creative Commons BY 3.0");            licensesTemplates.add("{{cc-by 3.0|%ATTRIB%}}");
+        licenses.add("Creative Commons Zero 1.0");          licensesTemplates.add("{{cc-zero}}");
+        licenses.add(text("license-gfdl-cc-by-sa-all"));    licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by-sa-all|%ATTRIB%}}");
+        licenses.add(text("license-gfdl-cc-by-sa-3"));      licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by-sa 3.0|%ATTRIB%}}");
+        licenses.add(text("license-gfdl-cc-by-3"));         licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by 3.0|%ATTRIB%}}");
+        licenses.add(text("license-other"));                licensesTemplates.add("");
     }
-
+    
     /***
      * Updates upload counter in bottom right corner
      */

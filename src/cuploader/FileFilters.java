@@ -5,9 +5,9 @@ import javax.swing.filechooser.FileFilter;
 
 public class FileFilters {
     public static XMLFilter session = new XMLFilter();
-    public static XMLFilter images = new XMLFilter();
-    public static XMLFilter documents = new XMLFilter();
-    public static XMLFilter text = new XMLFilter();
+    public static ImgFilter images = new ImgFilter();
+    public static DocsFilter documents = new DocsFilter();
+    public static TxtFilter text = new TxtFilter();
     
     public static class XMLFilter extends FileFilter {
         @Override

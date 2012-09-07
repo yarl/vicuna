@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public final class PFile extends javax.swing.JPanel implements KeyListener {
@@ -632,6 +631,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 
     private void tCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCategoriesFocusGained
         Main.lHelp.setText("<html>" + bundle.getString("help-categories") + "</html>");
+        showCategoryHints(true);
     }//GEN-LAST:event_tCategoriesFocusGained
 
     private void bOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bOpenMapActionPerformed
@@ -764,6 +764,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_mDeleteActionPerformed
 
     private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
+        showCategoryHints(false);
+    }//GEN-LAST:event_tCategoriesCaretUpdate
+
+    private void showCategoryHints(boolean b) {
         String cat = CategoryHint.getCategory(tCategories);
         if(!prevCategory.equals(cat)) {
             if(ch==null) {
@@ -777,9 +781,14 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                 ch.restart();
             }
             prevCategory = cat;
+        } else {
+            if(b) {
+                mCatHint.show(tCategories, 0, tCategories.getHeight());
+                tCategories.requestFocus();
+            }
         }
-    }//GEN-LAST:event_tCategoriesCaretUpdate
-
+    }
+    
     /**
      * Reads info from file EXIF (date, gps, rotation)
      */

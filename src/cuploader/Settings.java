@@ -31,7 +31,7 @@ public class Settings implements Serializable {
     public static String extratext = "";
 
     //GALLERY
-    public static boolean createGallery = true;
+    public static boolean createGallery = false;//true;
     public static String galleryPage = "gallery";
     public static int galleryHeader = 0;
     public static int galleryWidth = 200;

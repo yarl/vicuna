@@ -30,7 +30,7 @@ public class CategoryHint extends Thread {
     
     volatile int count = 0;
     volatile boolean end = false;
-    volatile boolean stop = false;
+    public volatile boolean stop = false;
     
     public CategoryHint(JPopupMenu mCatHint, JTextField tCategories) {
         this.mCatHint = mCatHint;
@@ -89,7 +89,7 @@ public class CategoryHint extends Thread {
         String text = getCategory(tCategories);
         mCatHint.removeAll();
         
-        if(!text.equals("")) {
+        if(!text.isEmpty()) {
             //loading...
             JMenuItem item = new JMenuItem("<html><i>"+Data.text("fileedit-cat-load")+" \""+text+"\"</i></html>");
             item.setEnabled(false);
@@ -97,7 +97,7 @@ public class CategoryHint extends Thread {
             mCatHint.show(tCategories, 0, tCategories.getHeight());
             tCategories.requestFocus();
             
-            try { 
+            try {
                 //get list
                 String[] listPages = wiki.listPages("Category:"+text, Wiki.NO_PROTECTION, Wiki.USER_NAMESPACE);
 
@@ -108,7 +108,7 @@ public class CategoryHint extends Thread {
                 if(listPages.length>0) {
                     //create menu items
                     for(String s : listPages) {
-                        list.add(new JMenu(s.substring(9)));
+                        list.add(new JMenu(s.substring(s.indexOf(":")+1)));
                         listBool.add(false);
                     }
                     for(final JMenu category : list) {
@@ -145,15 +145,17 @@ public class CategoryHint extends Thread {
 
                 //show
                 mCatHint.show(tCategories, 0, tCategories.getHeight());
+                mCatHint.repaint();
                 tCategories.requestFocus();
 
                 //download subcats
                 for(JMenu category : list) {
-                    if(!stop) 
-                        loadSubcategories(category);
+                    if(!stop) loadSubcategories(category);
                     else break;
                 }
-                tCategories.requestFocus();
+//                tCategories.requestFocus();
+//                if(!tCategories.hasFocus())
+//                    mCatHint.setVisible(false);
 
             } catch (UnknownHostException ex) {
             } catch (IOException ex) {
@@ -217,8 +219,8 @@ public class CategoryHint extends Thread {
 
                 //add
                 for(String s : categoryMembers)
-                    if(s.contains("Category:")) {
-                        final JMenuItem item = new JMenuItem(s.substring(9));
+                    if(s.contains(":")) {
+                        final JMenuItem item = new JMenuItem(s.substring(s.indexOf(":")+1));
                         item.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                                 setCategory(item.getText());
@@ -245,8 +247,8 @@ public class CategoryHint extends Thread {
 
                 //add
                 for(String s : categoryMembers)
-                    if(s.contains("Category:")) {
-                        final JMenuItem item = new JMenuItem(s.substring(9));
+                    if(s.contains(":")) {
+                        final JMenuItem item = new JMenuItem(s.substring(s.indexOf(":")+1));
                         item.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
                                 setCategory(item.getText());
