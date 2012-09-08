@@ -58,6 +58,14 @@ public class CategoryHint extends Thread {
         return end;
     }
     
+    public void forceStop() {
+        stop = true;
+        end = true;
+        count = 100;
+        mCatHint.removeAll();
+        mCatHint.setVisible(false);
+    }
+    
     /**
      * Returns category to download from string separated with semicolon according to caret position.<br /><br />
      * Eg.: "Paris;Lon|don;Berlin" returns London.

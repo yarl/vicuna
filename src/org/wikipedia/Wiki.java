@@ -1,5 +1,5 @@
 /**
- *  @(#)Wiki.java 0.25 17/12/2011
+ *  @(#)Wiki.java 0.26 24/04/2012
  *  Copyright (C) 2007 - 2012 MER-C and contributors
  *
  *  This program is free software; you can redistribute it and/or
@@ -34,14 +34,16 @@ import javax.security.auth.login.*; // useful exception types
  *  It is recommended that the server runs the latest version of MediaWiki
  *  (1.18), otherwise some functions may not work.
  *  <p>
- *  All wikilinks are relative to the English Wikipedia and all timestamps are in
+ *  Extended documentation is available at {@link
+ *  http://code.google.com/p/wiki-java/wiki/ExtendedDocumentation }. All
+ *  wikilinks are relative to the English Wikipedia and all timestamps are in
  *  your wiki's time zone.
  *  <p>
  *  Please file bug reports at [[User talk:MER-C]] (fast) or the Google
  *  code bug tracker (slow).
- *  @see <a href="http://code.google.com/p/wiki-java/wiki/ExtendedDocumentation">A lightweight Java wiki bot framework: Extended documentation</a>
+ *
  *  @author MER-C and contributors
- *  @version 0.25
+ *  @version 0.26
  */
 public class Wiki implements Serializable
 {
@@ -442,7 +444,7 @@ public class Wiki implements Serializable
         unknown;
     }
 
-    private static final String version = "0.25";
+    private static final String version = "0.26";
 
     // the domain of the wiki
     protected String domain, query, base, apiUrl;
@@ -891,7 +893,7 @@ public class Wiki implements Serializable
             log(Level.WARNING, "Failed to log in as " + username, "login");
             try
             {
-                Thread.sleep(200); // to prevent brute force
+                Thread.sleep(20000); // to prevent brute force
             }
             catch (InterruptedException e)
             {
@@ -916,7 +918,7 @@ public class Wiki implements Serializable
     public synchronized void logout()
     {
         cookies.clear();
-        //user = null;
+        user = null;
         max = 500;
         log(Level.INFO, "Logged out", "logout");
     }
@@ -1262,7 +1264,8 @@ public class Wiki implements Serializable
      *      "size"         => 5000           , // the size of the page (Integer), -1 if the page does
      *                                         // not exist
      *      "cascade"      => false          , // whether this page is cascade protected (Boolean)
-     *      "timestamp"    => makeCalendar()   // when this method was called (Calendar)
+     *      "timestamp"    => makeCalendar() , // when this method was called (Calendar)
+     *      "watchtoken"   => "\+"             // watchlist token (String)
      *  }
      *  </pre>
      *  @param page the page to get info for
@@ -1270,26 +1273,12 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    
-    public boolean isPageExist(String page) throws IOException {
-        StringBuilder url = new StringBuilder(query);
-        url.append("action=query&prop=info&intoken=edit&inprop=protection%7Cdisplaytitle&titles=File:");
-        url.append(URLEncoder.encode(page, "UTF-8"));
-        //url.append(page);
-        String line = fetch(url.toString(), "getPageInfo");
-        boolean exists = !line.contains("missing=\"\"");
-        log(Level.INFO, "Status for File:" + page + ": " + exists, "isPageExist");
-        return exists;
-    }
-    
     public HashMap<String, Object> getPageInfo(String page) throws IOException
     {
         // fetch
-        // As we are going to call this from edit() and friends, we need to populate cookies2
         StringBuilder url = new StringBuilder(query);
-        url.append("action=query&prop=info&intoken=edit&inprop=protection%7Cdisplaytitle&titles=");
+        url.append("action=query&prop=info&intoken=edit|watch&inprop=protection%7Cdisplaytitle&titles=");
         url.append(URLEncoder.encode(page, "UTF-8"));
-        //url.append(page);
         String line = fetch(url.toString(), "getPageInfo");
         HashMap<String, Object> info = new HashMap<String, Object>(15);
 
@@ -1348,9 +1337,14 @@ public class Wiki implements Serializable
         info.put("displaytitle", line.substring(a, b));
 
         // edit/move/upload/protect/delete token
-        a = line.indexOf("token=\"") + 7;
+        a = line.indexOf("edittoken=\"") + 11;
         b = line.indexOf('\"', a);
         info.put("token", line.substring(a, b));
+        
+        // watchlist token
+        a = line.indexOf("watchtoken=\"") + 12;
+        b = line.indexOf('\"', a);
+        info.put("watchtoken", line.substring(a, b));
 
         // timestamp
         info.put("timestamp", makeCalendar());
@@ -1359,6 +1353,17 @@ public class Wiki implements Serializable
         return info;
     }
 
+    public boolean isPageExist(String page) throws IOException {
+        StringBuilder url = new StringBuilder(query);
+        url.append("action=query&prop=info&intoken=edit&inprop=protection%7Cdisplaytitle&titles=File:");
+        url.append(URLEncoder.encode(page, "UTF-8"));
+        //url.append(page);
+        String line = fetch(url.toString(), "getPageInfo");
+        boolean exists = !line.contains("missing=\"\"");
+        log(Level.INFO, "Status for File:" + page + ": " + exists, "isPageExist");
+        return exists;
+    }
+	
     /**
      *  Gets the protection status of a page.
      *
@@ -2017,6 +2022,7 @@ public class Wiki implements Serializable
             s = s.replace("&#039;", "'");
             if(!s.equals(title))
                 categories.add(s);
+            //categories.add(line.substring(a, b));
             line = line.substring(b);
         }
         log(Level.INFO, "Successfully retrieved categories of " + title + " (" + categories.size() + " categories)", "getCategories");
@@ -2544,8 +2550,6 @@ public class Wiki implements Serializable
 
         // check whether we are "on top".
         Revision top = getTopRevision(revision.getPage());
-        System.out.println(top);
-        System.out.println(revision);
         if (!top.equals(revision))
         {
             log(Level.INFO, "Rollback failed: revision is not the most recent", "rollback");
@@ -3161,7 +3165,7 @@ public class Wiki implements Serializable
      *  @throws AccountLockedException if user is blocked
      *  @since 0.21
      */
-    public synchronized boolean upload(File file, String filename, String contents, String reason) throws IOException, LoginException
+    public synchronized void upload(File file, String filename, String contents, String reason) throws IOException, LoginException
     {
         // TODO: upload via URL
 
@@ -3212,7 +3216,7 @@ public class Wiki implements Serializable
         // filename
         out.writeBytes("Content-Disposition: form-data; name=\"filename\"\r\n");
         out.writeBytes("Content-Type: text/plain; charset=UTF-8\r\n\r\n");
-        out.write(filename.getBytes("UTF-8"));
+        out.write(filename.getBytes("UTF-8"));//out.writeBytes(filename);
         out.writeBytes("\r\n");
         out.writeBytes(boundary);
         // edit token
@@ -3225,15 +3229,14 @@ public class Wiki implements Serializable
         {
             out.writeBytes("Content-Disposition: form-data; name=\"comment\"\r\n");
             out.writeBytes("Content-Type: text/plain; charset=UTF-8\r\n\r\n");
-            out.write(reason.getBytes("UTF-8"));
+            out.write(reason.getBytes("UTF-8"));//out.writeBytes(reason);
             out.writeBytes("\r\n");
             out.writeBytes(boundary);
         }
         // description page
         out.writeBytes("Content-Disposition: form-data; name=\"text\"\r\n");
         out.writeBytes("Content-Type: text/plain; charset=UTF-8\r\n\r\n");
-        out.write(contents.getBytes("UTF-8"));
-        //out.writeBytes(contents);
+        out.write(contents.getBytes("UTF-8"));//out.writeBytes(contents);
         out.writeBytes("\r\n");
         out.writeBytes(boundary);
         // the actual file
@@ -3241,32 +3244,11 @@ public class Wiki implements Serializable
         out.writeBytes(file.getName());
         out.writeBytes("\"\r\n");
         out.writeBytes("Content-Type: application/octet-stream\r\n\r\n");
-        
-//        FileInputStream fi = new FileInputStream(file);
-//        byte[] by = new byte[fi.available()];
-//        int read = fi.read(by);
-//        out.write(by);
-//        fi.close();
-
         FileInputStream fi = new FileInputStream(file);
-        int totalRead = 0;
-        int bytesAvailable = fi.available();
-        int maxBufferSize = 102400;
-        int bufferSize = Math.min(bytesAvailable, maxBufferSize);
-        byte[] buffer = new byte[bufferSize];
-        int bytesRead = fi.read(buffer, 0, bufferSize);
-
-        while (bytesRead > 0) {
-            out.write(buffer, 0, bufferSize);
-            totalRead += bytesRead;
-            //logger.log(Level.SEVERE, "Uploaded: {0}", totalRead);
-
-            bytesAvailable = fi.available();
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            bytesRead = fi.read(buffer, 0, bufferSize);
-        }
+        byte[] by = new byte[fi.available()];
+        fi.read(by);
+        out.write(by);
         fi.close();
-
         out.writeBytes("\r\n");
         out.writeBytes(boundary);
         // ignore warnings
@@ -3275,6 +3257,7 @@ public class Wiki implements Serializable
         out.writeBytes(boundary);
         out.writeBytes("--\r\n");
         out.close();
+
         // done
         try
         {
@@ -3284,7 +3267,7 @@ public class Wiki implements Serializable
             checkErrors(in.readLine(), "upload");
 
             // TODO: check for specific errors here
-            in.close(); 
+            in.close();
         }
         catch (IOException e)
         {
@@ -3292,20 +3275,19 @@ public class Wiki implements Serializable
             logger.logp(Level.SEVERE, "Wiki", "upload()", "[" + domain + "] EXCEPTION:  ", e);
             throw e;
         }
+
         // throttle
         try
         {
             long time = throttle - System.currentTimeMillis() + start;
-            if (time > 0) {
+            if (time > 0)
                 Thread.sleep(time);
-            }
         }
         catch (InterruptedException e)
         {
             // nobody cares
         }
         log(Level.INFO, "Successfully uploaded to File:" + filename + ".", "upload");
-        return true;
     }
 
     // USER METHODS
@@ -3658,10 +3640,14 @@ public class Wiki implements Serializable
         String state = unwatch ? "unwatch" : "watch";
         if (watchlist == null)
             getRawWatchlist();
-        String url = query + "action=watch&title=" + URLEncoder.encode(title, "UTF-8");
+        StringBuilder data = new StringBuilder("title=");
+        data.append(URLEncoder.encode(title, "UTF-8"));
         if (unwatch)
-            url += "&unwatch";
-        fetch(url, state);
+            data.append("&unwatch");
+        String watchToken = (String)getPageInfo(title).get("watchtoken");
+        data.append("&token=");
+        data.append(URLEncoder.encode(watchToken, "UTF-8"));
+        post(query + "action=watch", data.toString(), state);
         log(Level.INFO, "Successfully " + state + "ed " + title, state);
     }
 
@@ -4863,11 +4849,11 @@ public class Wiki implements Serializable
     {
         // @revised 0.15 to add short/long pages
         StringBuilder url = new StringBuilder(query);
-        url.append("action=query&list=allpages&aplimit=10"); //url.append("action=query&list=allpages&aplimit=max");
+        url.append("action=query&list=allpages&aplimit=10"); //aplimit=max
         if (!prefix.isEmpty()) // prefix
         {
             // cull the namespace prefix
-            namespace = 14;//namespace(prefix);
+            namespace = namespace(prefix);
             if (prefix.contains(":") && namespace != MAIN_NAMESPACE)
                 prefix = prefix.substring(prefix.indexOf(':') + 1);
             url.append("&apprefix=");
@@ -4875,7 +4861,6 @@ public class Wiki implements Serializable
         }
         else if (namespace == ALL_NAMESPACES) // check for namespace
             throw new UnsupportedOperationException("ALL_NAMESPACES not supported in MediaWiki API.");
-
         url.append("&apnamespace=");
         url.append(namespace);
         switch (level) // protection level
@@ -4909,7 +4894,7 @@ public class Wiki implements Serializable
         }
 
         // parse
-        ArrayList<String> pages = new ArrayList<String>(15);//(6667);
+        ArrayList<String> pages = new ArrayList<String>(6667);
         String next = "";
         do
         {
@@ -4935,10 +4920,10 @@ public class Wiki implements Serializable
             // find the pages
             while (line.contains("<p "))
             {
-                    int a = line.indexOf("title=\"") + 7;
-                    int b = line.indexOf("\" />", a);
-                    pages.add(decode(line.substring(a, b)));
-                    line = line.substring(b);
+                int a = line.indexOf("title=\"") + 7;
+                int b = line.indexOf("\" />", a);
+                pages.add(decode(line.substring(a, b)));
+                line = line.substring(b);
             }
         }
         while (!next.equals("done"));
@@ -4947,7 +4932,7 @@ public class Wiki implements Serializable
         log(Level.INFO, "Successfully retrieved page list (" + pages.size() + " pages)", "listPages");
         return pages.toArray(new String[0]);
     }
-    
+
     /**
      *  Fetches the <tt>amount</tt> most recently created pages in the main
      *  namespace. WARNING: The recent changes table only stores new pages
@@ -6136,7 +6121,6 @@ public class Wiki implements Serializable
     {
         // connect
         logurl(url, caller);
-        //System.out.println(url);
         URLConnection connection = new URL(url).openConnection();
         connection.setConnectTimeout(CONNECTION_CONNECT_TIMEOUT_MSEC);
         connection.setReadTimeout(CONNECTION_READ_TIMEOUT_MSEC);
@@ -6253,16 +6237,6 @@ public class Wiki implements Serializable
             log(Level.WARNING, "Database locked!", caller);
             throw new HttpRetryException("Database locked!", 503);
         }
-        // name at Commons
-        if (line.contains("fileexists-shared-forbidden"))
-        {
-            throw new UnknownError("This name in already used in Wikimedia Commons");
-        }
-        // wrong name
-        if (line.contains("illegal-filename"))
-        {
-            throw new UnknownError("The filename is not allowed. Details: " + line);
-        }
         // unknown error
         if (line.contains("error code=\"unknownerror\""))
             throw new UnknownError("Unknown MediaWiki API error, response was " + line);
@@ -6305,7 +6279,11 @@ public class Wiki implements Serializable
     protected boolean checkRights(int level, boolean move) throws IOException, CredentialException
     {
         // check if we are logged out
-        if (!cookies.containsValue(user.getUsername()))
+        String s = user.getUsername();
+        s = s.substring(0,1).toUpperCase() + s.substring(1); //first to upper
+        s = s.replace(" ", "+").replace("_", "+");         //spc to plus
+
+        if (!cookies.containsValue(s))
         {
             logger.log(Level.SEVERE, "Cookies have expired");
             logout();
@@ -6569,22 +6547,5 @@ public class Wiki implements Serializable
 
         // force a status check on next edit
         statuscounter = statusinterval;
-    }
-}
-
-class UploadThread extends Thread {
-    File file;
-    String filename;
-    String contents;
-    String reason;
-    UploadThread(File file, String filename, String contents, String reason) {
-        this.file = file;
-        this.filename = filename;
-        this.contents = contents;
-        this.reason = reason;
-    }
-
-    @Override
-    public void run() { 
     }
 }

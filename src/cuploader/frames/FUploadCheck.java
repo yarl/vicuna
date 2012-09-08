@@ -30,6 +30,7 @@ public class FUploadCheck extends javax.swing.JFrame {
     }
     
     private void startCheck() {
+        System.out.println(Settings.wiki.toString());
         Runnable run = new Runnable() {
             @Override
             public void run() {

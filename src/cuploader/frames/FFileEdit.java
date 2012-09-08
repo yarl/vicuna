@@ -425,12 +425,18 @@ public class FFileEdit extends javax.swing.JFrame {
                 if(!tName.getText().isEmpty()) {
                     switch(cNameMethod.getSelectedIndex()) {
                         case 0: //append
-                            if(!file.getComponent(Elem.NAME).matches(".*"+tName.getText()))
-                                file.setComponent(Elem.NAME, file.getComponent(Elem.NAME)+tName.getText());
+                            if(!file.getComponent(Elem.NAME).matches(".*"+tName.getText())) {
+                                String s = file.getComponent(Elem.NAME)+tName.getText();
+                                s.replace(";;", ";");
+                                file.setComponent(Elem.NAME, s);
+                            }
                             break;
                         case 1: //prepend
-                            if(!file.getComponent(Elem.NAME).startsWith(tName.getText()))
-                                file.setComponent(Elem.NAME, tName.getText()+file.getComponent(Elem.NAME));
+                            if(!file.getComponent(Elem.NAME).startsWith(tName.getText())) {
+                                String s = tName.getText()+file.getComponent(Elem.NAME);
+                                s.replace(";;", ";");
+                                file.setComponent(Elem.NAME, s);
+                            }
                             break;
                         case 2: //overwrite
                             if(cNum.isSelected()) {

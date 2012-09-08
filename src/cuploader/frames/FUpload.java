@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import javax.security.auth.login.CredentialException;
+import javax.security.auth.login.CredentialExpiredException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.security.auth.login.LoginException;
 import javax.swing.*;
@@ -367,35 +368,34 @@ public class FUpload extends javax.swing.JFrame {
                         break;
                     }
 
-                    try {
-                        String name = file.getComponent(Elem.NAME);
+                    String name = file.getComponent(Elem.NAME);
+
+                    //FIXES
+                    if(name.endsWith(" "))
+                        name = name.substring(0, name.length()-1);
+                    name = name.replace("  ", " ");
+                    name += "." + file.getComponent(Elem.EXT);
+
+                    lName.setText(bundle.getString("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
+                    lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
+
+                    //upload
+                    //System.out.println(desc);
+                    //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
+                     
+                    try { 
+                        boolean fileExist = Settings.wiki.isPageExist(name);
                         
-                        //FIXES
-                        if(name.endsWith(" "))
-                            name = name.substring(0, name.length()-1);
-                        name = name.replace("  ", " ");
-
-                        name += "." + file.getComponent(Elem.EXT);
-
-                        lName.setText(bundle.getString("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
-                        lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-
-                        //upload
-                        //System.out.println(desc);
-                        //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
-                        boolean upload = wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
-                        if(upload) {
-                            if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
-                            if(renameAfterUpload) {
-                                File f = new File(file.file.getParentFile()+"\\"+name);
-                                file.file.renameTo(f);
-                                file.file = f;
-                            }
-                            file.setAsUploaded();
-                            ++uploaded;
+                        if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
+                        
+                        if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
+                        if(renameAfterUpload) {
+                            File f = new File(file.file.getParentFile()+"\\"+name);
+                            file.file.renameTo(f);
+                            file.file = f;
                         }
-                        Progress.setValue(i+1);
-                        ++i;
+                        file.setAsUploaded();
+                        ++uploaded;
                     } catch (UnknownError ex) {
                         file.setAsFailed(bundle.getString("upload-error-file") + ": " + ex.getLocalizedMessage());
                     } catch (CredentialNotFoundException ex) {
@@ -408,6 +408,8 @@ public class FUpload extends javax.swing.JFrame {
                     } catch (IOException ex) {
                         file.setAsFailed(ex.getLocalizedMessage());
                     }
+                    Progress.setValue(i+1);
+                    ++i;
                 }
             }
                 

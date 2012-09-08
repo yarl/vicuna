@@ -30,6 +30,8 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public final class PFile extends javax.swing.JPanel implements KeyListener {
     public boolean toUpload = false;
@@ -41,6 +43,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     //category hints
     CategoryHint ch;
     String prevCategory = "";
+    boolean cathintStop = false;
     
     int rotateThumb = 0;    //rotate thumbnail
     FExif fExif;            // subwindow exif
@@ -766,25 +769,28 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
         showCategoryHints(false);
     }//GEN-LAST:event_tCategoriesCaretUpdate
-
+   
     private void showCategoryHints(boolean b) {
-        String cat = CategoryHint.getCategory(tCategories);
-        if(!prevCategory.equals(cat)) {
-            if(ch==null) {
-                ch = new CategoryHint(mCatHint, tCategories);
-                ch.start();
-            } else if(ch!=null && ch.isEnd()) {
-                ch.stop = true;
-                ch = new CategoryHint(mCatHint, tCategories);
-                ch.start();
+        System.out.println(cathintStop);
+        if(!cathintStop) {
+            String cat = CategoryHint.getCategory(tCategories);
+            if(!prevCategory.equals(cat)) {
+                if(ch==null) {
+                    ch = new CategoryHint(mCatHint, tCategories);
+                    ch.start();
+                } else if(ch!=null && ch.isEnd()) {
+                    ch.stop = true;
+                    ch = new CategoryHint(mCatHint, tCategories);
+                    ch.start();
+                } else {
+                    ch.restart();
+                }
+                prevCategory = cat;
             } else {
-                ch.restart();
-            }
-            prevCategory = cat;
-        } else {
-            if(b) {
-                mCatHint.show(tCategories, 0, tCategories.getHeight());
-                tCategories.requestFocus();
+                if(b) {
+                    mCatHint.show(tCategories, 0, tCategories.getHeight());
+                    tCategories.requestFocus();
+                }
             }
         }
     }
@@ -931,7 +937,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                 tDesc.setText(text); break;
             }
             case CATS: {
-                tCategories.setText(text); break;
+                cathintStop = true;
+                tCategories.setText(text);
+                cathintStop = false;
+                break;
             }
             default: {
                 break;
