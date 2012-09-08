@@ -652,8 +652,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             --nr;
             //tName.setText(Data.getFiles().get(nr).getComponent(Elem.NAME));
             //tDate.setText(Data.getFiles().get(nr).getComponent(Elem.DATE));
-            tDesc.setText(Data.getFiles().get(nr).getComponent(Elem.DESC));
-            tCategories.setText(Data.getFiles().get(nr).getComponent(Elem.CATS));
+            setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
+            setComponent(Elem.CATS, Data.getFiles().get(nr).getComponent(Elem.CATS));
         }
     }//GEN-LAST:event_bCopyDescUpActionPerformed
 
@@ -668,8 +668,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             ++nr;
             //tName.setText(Data.getFiles().get(nr).getComponent(Elem.NAME));
             //tDate.setText(Data.getFiles().get(nr).getComponent(Elem.DATE));
-            tDesc.setText(Data.getFiles().get(nr).getComponent(Elem.DESC));
-            tCategories.setText(Data.getFiles().get(nr).getComponent(Elem.CATS));
+            setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
+            setComponent(Elem.CATS, Data.getFiles().get(nr).getComponent(Elem.CATS));
         }
     }//GEN-LAST:event_bCopyDescDownActionPerformed
 
@@ -771,7 +771,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_tCategoriesCaretUpdate
    
     private void showCategoryHints(boolean b) {
-        System.out.println(cathintStop);
         if(!cathintStop) {
             String cat = CategoryHint.getCategory(tCategories);
             if(!prevCategory.equals(cat)) {
