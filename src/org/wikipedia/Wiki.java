@@ -1,5 +1,5 @@
 /**
- *  @(#)Wiki.java 0.25 17/12/2011
+ *  @(#)Wiki.java 0.26 24/04/2012
  *  Copyright (C) 2007 - 2012 MER-C and contributors
  *
  *  This program is free software; you can redistribute it and/or
@@ -34,14 +34,16 @@ import javax.security.auth.login.*; // useful exception types
  *  It is recommended that the server runs the latest version of MediaWiki
  *  (1.18), otherwise some functions may not work.
  *  <p>
- *  All wikilinks are relative to the English Wikipedia and all timestamps are in
+ *  Extended documentation is available at {@link
+ *  http://code.google.com/p/wiki-java/wiki/ExtendedDocumentation }. All
+ *  wikilinks are relative to the English Wikipedia and all timestamps are in
  *  your wiki's time zone.
  *  <p>
  *  Please file bug reports at [[User talk:MER-C]] (fast) or the Google
  *  code bug tracker (slow).
- *  @see <a href="http://code.google.com/p/wiki-java/wiki/ExtendedDocumentation">A lightweight Java wiki bot framework: Extended documentation</a>
+ *
  *  @author MER-C and contributors
- *  @version 0.25
+ *  @version 0.26
  */
 public class Wiki implements Serializable
 {
@@ -442,7 +444,7 @@ public class Wiki implements Serializable
         unknown;
     }
 
-    private static final String version = "0.25";
+    private static final String version = "0.26";
 
     // the domain of the wiki
     protected String domain, query, base, apiUrl;
@@ -450,7 +452,7 @@ public class Wiki implements Serializable
 
     // user management
     private HashMap<String, String> cookies = new HashMap<String, String>(12);
-    private User user;
+    private Wiki.User user;
     private int statuscounter = 0;
 
     // various caches
@@ -881,7 +883,7 @@ public class Wiki implements Serializable
         // check for success
         if (line.contains("result=\"Success\""))
         {
-            user = new User(username);
+            user = new Wiki.User(username);
             boolean apihighlimit = user.isAllowedTo("apihighlimits");
             max = apihighlimit ? 5000 : 500;
             log(Level.INFO, "Successfully logged in as " + username + ", highLimit = " + apihighlimit, "login");
@@ -891,7 +893,7 @@ public class Wiki implements Serializable
             log(Level.WARNING, "Failed to log in as " + username, "login");
             try
             {
-                Thread.sleep(200); // to prevent brute force
+                Thread.sleep(2000); // to prevent brute force
             }
             catch (InterruptedException e)
             {
@@ -1262,7 +1264,8 @@ public class Wiki implements Serializable
      *      "size"         => 5000           , // the size of the page (Integer), -1 if the page does
      *                                         // not exist
      *      "cascade"      => false          , // whether this page is cascade protected (Boolean)
-     *      "timestamp"    => makeCalendar()   // when this method was called (Calendar)
+     *      "timestamp"    => makeCalendar() , // when this method was called (Calendar)
+     *      "watchtoken"   => "\+"             // watchlist token (String)
      *  }
      *  </pre>
      *  @param page the page to get info for
@@ -1270,26 +1273,12 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    
-    public boolean isPageExist(String page) throws IOException {
-        StringBuilder url = new StringBuilder(query);
-        url.append("action=query&prop=info&intoken=edit&inprop=protection%7Cdisplaytitle&titles=File:");
-        url.append(URLEncoder.encode(page, "UTF-8"));
-        //url.append(page);
-        String line = fetch(url.toString(), "getPageInfo");
-        boolean exists = !line.contains("missing=\"\"");
-        log(Level.INFO, "Status for File:" + page + ": " + exists, "isPageExist");
-        return exists;
-    }
-    
     public HashMap<String, Object> getPageInfo(String page) throws IOException
     {
         // fetch
-        // As we are going to call this from edit() and friends, we need to populate cookies2
         StringBuilder url = new StringBuilder(query);
-        url.append("action=query&prop=info&intoken=edit&inprop=protection%7Cdisplaytitle&titles=");
+        url.append("action=query&prop=info&intoken=edit|watch&inprop=protection%7Cdisplaytitle&titles=");
         url.append(URLEncoder.encode(page, "UTF-8"));
-        //url.append(page);
         String line = fetch(url.toString(), "getPageInfo");
         HashMap<String, Object> info = new HashMap<String, Object>(15);
 
@@ -1348,9 +1337,14 @@ public class Wiki implements Serializable
         info.put("displaytitle", line.substring(a, b));
 
         // edit/move/upload/protect/delete token
-        a = line.indexOf("token=\"") + 7;
+        a = line.indexOf("edittoken=\"") + 11;
         b = line.indexOf('\"', a);
         info.put("token", line.substring(a, b));
+        
+        // watchlist token
+        a = line.indexOf("watchtoken=\"") + 12;
+        b = line.indexOf('\"', a);
+        info.put("watchtoken", line.substring(a, b));
 
         // timestamp
         info.put("timestamp", makeCalendar());
@@ -1359,6 +1353,17 @@ public class Wiki implements Serializable
         return info;
     }
 
+    public boolean isPageExist(String page) throws IOException {
+        StringBuilder url = new StringBuilder(query);
+        url.append("action=query&prop=info&intoken=edit&inprop=protection%7Cdisplaytitle&titles=File:");
+        url.append(URLEncoder.encode(page, "UTF-8"));
+        //url.append(page);
+        String line = fetch(url.toString(), "getPageInfo");
+        boolean exists = !line.contains("missing=\"\"");
+        log(Level.INFO, "Status for File:" + page + ": " + exists, "isPageExist");
+        return exists;
+    }
+	
     /**
      *  Gets the protection status of a page.
      *
@@ -2012,7 +2017,12 @@ public class Wiki implements Serializable
         {
             int a = line.indexOf("title=\"Category:") + 7;
             int b = line.indexOf('\"', a);
-            categories.add(line.substring(a, b));
+            String s = line.substring(a, b);
+            s = s.replace("&quot;", "\"");
+            s = s.replace("&#039;", "'");
+            if(!s.equals(title))
+                categories.add(s);
+            //categories.add(line.substring(a, b));
             line = line.substring(b);
         }
         log(Level.INFO, "Successfully retrieved categories of " + title + " (" + categories.size() + " categories)", "getCategories");
@@ -2201,7 +2211,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.24
      */
-    public Revision getTopRevision(String title) throws IOException
+    public Wiki.Revision getTopRevision(String title) throws IOException
     {
         StringBuilder url = new StringBuilder(query);
         url.append("action=query&prop=revisions&rvlimit=1&rvtoken=rollback&titles=");
@@ -2222,7 +2232,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.24
      */
-    public Revision getFirstRevision(String title) throws IOException
+    public Wiki.Revision getFirstRevision(String title) throws IOException
     {
         StringBuilder url = new StringBuilder(query);
         url.append("action=query&prop=revisions&rvlimit=1&rvdir=newer&titles=");
@@ -2246,7 +2256,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.19
      */
-    public Revision[] getPageHistory(String title) throws IOException
+    public Wiki.Revision[] getPageHistory(String title) throws IOException
     {
         return getPageHistory(title, null, null);
     }
@@ -2260,7 +2270,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.19
      */
-    public Revision[] getPageHistory(String title, Calendar start, Calendar end) throws IOException
+    public Wiki.Revision[] getPageHistory(String title, Calendar start, Calendar end) throws IOException
     {
         // set up the url
         StringBuilder url = new StringBuilder(query);
@@ -2277,7 +2287,7 @@ public class Wiki implements Serializable
         // Hack time: since we cannot use rvstart (a timestamp) and rvstartid
         // (an oldid) together, let's make them the same thing.
         String rvstart = "=" + calendarToTimestamp(start == null ? makeCalendar() : start);
-        ArrayList<Revision> revisions = new ArrayList<Revision>(1500);
+        ArrayList<Wiki.Revision> revisions = new ArrayList<Wiki.Revision>(1500);
 
         // main loop
         do
@@ -2310,7 +2320,7 @@ public class Wiki implements Serializable
         }
         while (!rvstart.equals("done"));
         log(Level.INFO, "Successfully retrieved page history of " + title + " (" + revisions.size() + " revisions)", "getPageHistory");
-        return revisions.toArray(new Revision[0]);
+        return revisions.toArray(new Wiki.Revision[0]);
     }
 
     /**
@@ -2473,7 +2483,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.17
      */
-    public Revision getRevision(long oldid) throws IOException
+    public Wiki.Revision getRevision(long oldid) throws IOException
     {
         // build url and connect
         String url = query + "action=query&prop=revisions&rvprop=ids%7Ctimestamp%7Cuser%7Ccomment%7Cflags%7Csize&revids=" + oldid;
@@ -2500,7 +2510,7 @@ public class Wiki implements Serializable
      *  @throws AccountLockedException if the user is blocked
      *  @since 0.19
      */
-    public void rollback(Revision revision) throws IOException, LoginException
+    public void rollback(Wiki.Revision revision) throws IOException, LoginException
     {
         rollback(revision, markbot, "");
     }
@@ -2524,7 +2534,7 @@ public class Wiki implements Serializable
      *  @throws AccountLockedException if the user is blocked
      *  @since 0.19
      */
-    public synchronized void rollback(Revision revision, boolean bot, String reason) throws IOException, LoginException
+    public synchronized void rollback(Wiki.Revision revision, boolean bot, String reason) throws IOException, LoginException
     {
         // check rights
         if (user == null || !user.isAllowedTo("rollback"))
@@ -2539,9 +2549,7 @@ public class Wiki implements Serializable
         }
 
         // check whether we are "on top".
-        Revision top = getTopRevision(revision.getPage());
-        System.out.println(top);
-        System.out.println(revision);
+        Wiki.Revision top = getTopRevision(revision.getPage());
         if (!top.equals(revision))
         {
             log(Level.INFO, "Rollback failed: revision is not the most recent", "rollback");
@@ -2637,7 +2645,7 @@ public class Wiki implements Serializable
      *  page.
      *  @since 0.20
      */
-    public synchronized void undo(Revision rev, Revision to, String reason, boolean minor,
+    public synchronized void undo(Wiki.Revision rev, Wiki.Revision to, String reason, boolean minor,
         boolean bot) throws IOException, LoginException
     {
         // throttle
@@ -2740,7 +2748,7 @@ public class Wiki implements Serializable
      *  @return the Revision encoded in the XML
      *  @since 0.17
      */
-    protected Revision parseRevision(String xml, String title)
+    protected Wiki.Revision parseRevision(String xml, String title)
     {
         // oldid
         int a = xml.indexOf(" revid=\"") + 8;
@@ -2799,7 +2807,7 @@ public class Wiki implements Serializable
         else // MW bug 32414/32415? Also, may help for revdeled revisions.
             size = 0;
 
-        Revision revision = new Revision(oldid, timestamp, title, summary, user2, minor, bot, size);
+        Wiki.Revision revision = new Wiki.Revision(oldid, timestamp, title, summary, user2, minor, bot, size);
         if (xml.contains("rcid=\""))
         {
             // set rcid
@@ -2828,7 +2836,7 @@ public class Wiki implements Serializable
      *  @return those revisions as wikitext
      *  @since 0.20
      */
-    public String revisionsToWikitext(Revision[] revisions)
+    public String revisionsToWikitext(Wiki.Revision[] revisions)
     {
         StringBuilder sb = new StringBuilder(revisions.length * 100);
         for (int i = 0; i < revisions.length; i++)
@@ -3058,26 +3066,26 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.20
      */
-    public LogEntry[] getImageHistory(String title) throws IOException
+    public Wiki.LogEntry[] getImageHistory(String title) throws IOException
     {
         String url = query + "action=query&prop=imageinfo&iiprop=timestamp%7Cuser%7Ccomment&iilimit=max&titles=File:" + URLEncoder.encode(title, "UTF-8");
         String line = fetch(url, "getImageHistory");
-        ArrayList<LogEntry> history = new ArrayList<LogEntry>(40);
+        ArrayList<Wiki.LogEntry> history = new ArrayList<Wiki.LogEntry>(40);
         while (line.contains("<ii "))
         {
             int a = line.indexOf("<ii");
             int b = line.indexOf('>', a);
-            LogEntry entry = parseLogEntry(line.substring(a, b), 2);
+            Wiki.LogEntry entry = parseLogEntry(line.substring(a, b), 2);
             entry.target = title;
             history.add(entry);
             line = line.substring(b);
         }
 
         // crude hack: action adjusting for first image (in the history, not our list)
-        LogEntry last = history.get(history.size() - 1);
+        Wiki.LogEntry last = history.get(history.size() - 1);
         last.action = "upload";
         history.set(history.size() - 1, last);
-        return history.toArray(new LogEntry[0]);
+        return history.toArray(new Wiki.LogEntry[0]);
     }
 
     /**
@@ -3091,7 +3099,7 @@ public class Wiki implements Serializable
      *  @throws IllegalArgumentException if the entry is not in the upload log
      *  @since 0.20
      */
-    public byte[] getOldImage(LogEntry entry) throws IOException
+    public byte[] getOldImage(Wiki.LogEntry entry) throws IOException
     {
         // @revised 0.24 BufferedImage => byte[]
 
@@ -3157,7 +3165,7 @@ public class Wiki implements Serializable
      *  @throws AccountLockedException if user is blocked
      *  @since 0.21
      */
-    public synchronized boolean upload(File file, String filename, String contents, String reason) throws IOException, LoginException
+    public synchronized void upload(File file, String filename, String contents, String reason) throws IOException, LoginException
     {
         // TODO: upload via URL
 
@@ -3208,7 +3216,7 @@ public class Wiki implements Serializable
         // filename
         out.writeBytes("Content-Disposition: form-data; name=\"filename\"\r\n");
         out.writeBytes("Content-Type: text/plain; charset=UTF-8\r\n\r\n");
-        out.write(filename.getBytes("UTF-8"));
+        out.write(filename.getBytes("UTF-8"));//out.writeBytes(filename);
         out.writeBytes("\r\n");
         out.writeBytes(boundary);
         // edit token
@@ -3221,15 +3229,14 @@ public class Wiki implements Serializable
         {
             out.writeBytes("Content-Disposition: form-data; name=\"comment\"\r\n");
             out.writeBytes("Content-Type: text/plain; charset=UTF-8\r\n\r\n");
-            out.write(reason.getBytes("UTF-8"));
+            out.write(reason.getBytes("UTF-8"));//out.writeBytes(reason);
             out.writeBytes("\r\n");
             out.writeBytes(boundary);
         }
         // description page
         out.writeBytes("Content-Disposition: form-data; name=\"text\"\r\n");
         out.writeBytes("Content-Type: text/plain; charset=UTF-8\r\n\r\n");
-        out.write(contents.getBytes("UTF-8"));
-        //out.writeBytes(contents);
+        out.write(contents.getBytes("UTF-8"));//out.writeBytes(contents);
         out.writeBytes("\r\n");
         out.writeBytes(boundary);
         // the actual file
@@ -3237,32 +3244,11 @@ public class Wiki implements Serializable
         out.writeBytes(file.getName());
         out.writeBytes("\"\r\n");
         out.writeBytes("Content-Type: application/octet-stream\r\n\r\n");
-        
-//        FileInputStream fi = new FileInputStream(file);
-//        byte[] by = new byte[fi.available()];
-//        int read = fi.read(by);
-//        out.write(by);
-//        fi.close();
-
         FileInputStream fi = new FileInputStream(file);
-        int totalRead = 0;
-        int bytesAvailable = fi.available();
-        int maxBufferSize = 102400;
-        int bufferSize = Math.min(bytesAvailable, maxBufferSize);
-        byte[] buffer = new byte[bufferSize];
-        int bytesRead = fi.read(buffer, 0, bufferSize);
-
-        while (bytesRead > 0) {
-            out.write(buffer, 0, bufferSize);
-            totalRead += bytesRead;
-            //logger.log(Level.SEVERE, "Uploaded: {0}", totalRead);
-
-            bytesAvailable = fi.available();
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            bytesRead = fi.read(buffer, 0, bufferSize);
-        }
+        byte[] by = new byte[fi.available()];
+        fi.read(by);
+        out.write(by);
         fi.close();
-
         out.writeBytes("\r\n");
         out.writeBytes(boundary);
         // ignore warnings
@@ -3271,6 +3257,7 @@ public class Wiki implements Serializable
         out.writeBytes(boundary);
         out.writeBytes("--\r\n");
         out.close();
+
         // done
         try
         {
@@ -3280,7 +3267,7 @@ public class Wiki implements Serializable
             checkErrors(in.readLine(), "upload");
 
             // TODO: check for specific errors here
-            in.close(); 
+            in.close();
         }
         catch (IOException e)
         {
@@ -3288,20 +3275,19 @@ public class Wiki implements Serializable
             logger.logp(Level.SEVERE, "Wiki", "upload()", "[" + domain + "] EXCEPTION:  ", e);
             throw e;
         }
+
         // throttle
         try
         {
             long time = throttle - System.currentTimeMillis() + start;
-            if (time > 0) {
+            if (time > 0)
                 Thread.sleep(time);
-            }
         }
         catch (InterruptedException e)
         {
             // nobody cares
         }
         log(Level.INFO, "Successfully uploaded to File:" + filename + ".", "upload");
-        return true;
     }
 
     // USER METHODS
@@ -3370,9 +3356,9 @@ public class Wiki implements Serializable
      *  @since 0.05
      *  @throws IOException if a network error occurs
      */
-    public User getUser(String username) throws IOException
+    public Wiki.User getUser(String username) throws IOException
     {
-        return userExists(username) ? new User(username) : null;
+        return userExists(username) ? new Wiki.User(username) : null;
     }
 
     /**
@@ -3381,7 +3367,7 @@ public class Wiki implements Serializable
      *  @return the current logged in user
      *  @since 0.05
      */
-    public User getCurrentUser()
+    public Wiki.User getCurrentUser()
     {
         return user;
     }
@@ -3397,7 +3383,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.17
      */
-    public Revision[] contribs(String user) throws IOException
+    public Wiki.Revision[] contribs(String user) throws IOException
     {
         return contribs(user, "", null, ALL_NAMESPACES);
     }
@@ -3413,7 +3399,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.17
      */
-    public Revision[] contribs(String user, int namespace) throws IOException
+    public Wiki.Revision[] contribs(String user, int namespace) throws IOException
     {
         return contribs(user, "", null, namespace);
     }
@@ -3430,7 +3416,7 @@ public class Wiki implements Serializable
      *  @throws NumberFormatException if we aren't able to parse the range
      *  @since 0.17
      */
-    public Revision[] rangeContribs(String range) throws IOException
+    public Wiki.Revision[] rangeContribs(String range) throws IOException
     {
         // sanitize range
         int a = range.indexOf('/');
@@ -3467,7 +3453,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.17
      */
-    public Revision[] contribs(String user, String prefix, Calendar offset, int namespace) throws IOException
+    public Wiki.Revision[] contribs(String user, String prefix, Calendar offset, int namespace) throws IOException
     {
         // prepare the url
         StringBuilder temp = new StringBuilder(query);
@@ -3489,7 +3475,7 @@ public class Wiki implements Serializable
             temp.append(namespace);
         }
         temp.append("&ucstart=");
-        ArrayList<Revision> revisions = new ArrayList<Revision>(7500);
+        ArrayList<Wiki.Revision> revisions = new ArrayList<Wiki.Revision>(7500);
         String ucstart = calendarToTimestamp(offset == null ? makeCalendar() : offset);
 
         // fetch data
@@ -3519,7 +3505,7 @@ public class Wiki implements Serializable
 
         // clean up
         log(Level.INFO, "Successfully retrived contributions for " + (prefix.isEmpty() ? user : prefix) + " (" + revisions.size() + " edits)", "contribs");
-        return revisions.toArray(new Revision[0]);
+        return revisions.toArray(new Wiki.Revision[0]);
     }
 
     /**
@@ -3539,7 +3525,7 @@ public class Wiki implements Serializable
      *  not have a verified email address
      *  @since 0.24
      */
-    public synchronized void emailUser(User user, String message, String subject, boolean emailme) throws IOException, LoginException
+    public synchronized void emailUser(Wiki.User user, String message, String subject, boolean emailme) throws IOException, LoginException
     {
         long start = System.currentTimeMillis();
 
@@ -3654,10 +3640,14 @@ public class Wiki implements Serializable
         String state = unwatch ? "unwatch" : "watch";
         if (watchlist == null)
             getRawWatchlist();
-        String url = query + "action=watch&title=" + URLEncoder.encode(title, "UTF-8");
+        StringBuilder data = new StringBuilder("title=");
+        data.append(URLEncoder.encode(title, "UTF-8"));
         if (unwatch)
-            url += "&unwatch";
-        fetch(url, state);
+            data.append("&unwatch");
+        String watchToken = (String)getPageInfo(title).get("watchtoken");
+        data.append("&token=");
+        data.append(URLEncoder.encode(watchToken, "UTF-8"));
+        post(query + "action=watch", data.toString(), state);
         log(Level.INFO, "Successfully " + state + "ed " + title, state);
     }
 
@@ -4225,7 +4215,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.12
      */
-    public LogEntry[] getIPBlockList(String user) throws IOException
+    public Wiki.LogEntry[] getIPBlockList(String user) throws IOException
     {
         return getIPBlockList(user, null, null, 1);
     }
@@ -4240,7 +4230,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.12
      */
-    public LogEntry[] getIPBlockList(Calendar start, Calendar end) throws IOException
+    public Wiki.LogEntry[] getIPBlockList(Calendar start, Calendar end) throws IOException
     {
         return getIPBlockList("", start, end, Integer.MAX_VALUE);
     }
@@ -4264,7 +4254,7 @@ public class Wiki implements Serializable
      *  @throws IllegalArgumentException if start date is before end date
      *  @since 0.12
      */
-    protected LogEntry[] getIPBlockList(String user, Calendar start, Calendar end, int amount) throws IOException
+    protected Wiki.LogEntry[] getIPBlockList(String user, Calendar start, Calendar end, int amount) throws IOException
     {
         // quick param check
         if (start != null && end != null)
@@ -4290,7 +4280,7 @@ public class Wiki implements Serializable
         urlBase.append("&bkstart=");
 
         // connection
-        ArrayList<LogEntry> entries = new ArrayList<LogEntry>(1333);
+        ArrayList<Wiki.LogEntry> entries = new ArrayList<Wiki.LogEntry>(1333);
         do
         {
             String line = fetch(urlBase.toString() + bkstart, "getIPBlockList");
@@ -4337,7 +4327,7 @@ public class Wiki implements Serializable
         logRecord.append(entries.size());
         logRecord.append(" entries)");
         log(Level.INFO, logRecord.toString(), "getIPBlockList");
-        return entries.toArray(new LogEntry[0]);
+        return entries.toArray(new Wiki.LogEntry[0]);
      }
 
     /**
@@ -4350,7 +4340,7 @@ public class Wiki implements Serializable
      *  @throws IllegalArgumentException if amount < 1
      *  @since 0.08
      */
-    public LogEntry[] getLogEntries(int amount) throws IOException
+    public Wiki.LogEntry[] getLogEntries(int amount) throws IOException
     {
         return getLogEntries(null, null, amount, ALL_LOGS, null, "", ALL_NAMESPACES);
     }
@@ -4362,7 +4352,7 @@ public class Wiki implements Serializable
      *  @return the set of log entries created by that user
      *  @since 0.08
      */
-    public LogEntry[] getLogEntries(User user) throws IOException
+    public Wiki.LogEntry[] getLogEntries(Wiki.User user) throws IOException
     {
         return getLogEntries(null, null, Integer.MAX_VALUE, ALL_LOGS, user, "", ALL_NAMESPACES);
     }
@@ -4376,7 +4366,7 @@ public class Wiki implements Serializable
      *  @return the specified log entries
      *  @since 0.08
      */
-    public LogEntry[] getLogEntries(String target) throws IOException
+    public Wiki.LogEntry[] getLogEntries(String target) throws IOException
     {
         return getLogEntries(null, null, Integer.MAX_VALUE, ALL_LOGS, null, target, ALL_NAMESPACES);
     }
@@ -4394,7 +4384,7 @@ public class Wiki implements Serializable
      *  @return the specified log entries
      *  @since 0.08
      */
-    public LogEntry[] getLogEntries(Calendar start, Calendar end) throws IOException
+    public Wiki.LogEntry[] getLogEntries(Calendar start, Calendar end) throws IOException
     {
         return getLogEntries(start, end, Integer.MAX_VALUE, ALL_LOGS, null, "", ALL_NAMESPACES);
     }
@@ -4410,7 +4400,7 @@ public class Wiki implements Serializable
      *  @throws IllegalArgumentException if the log type doesn't exist
      *  @return the specified log entries
      */
-    public LogEntry[] getLogEntries(int amount, String type) throws IOException
+    public Wiki.LogEntry[] getLogEntries(int amount, String type) throws IOException
     {
         return getLogEntries(null, null, amount, type, null, "", ALL_NAMESPACES);
     }
@@ -4437,7 +4427,7 @@ public class Wiki implements Serializable
      *  @return the specified log entries
      *  @since 0.08
      */
-    public LogEntry[] getLogEntries(Calendar start, Calendar end, int amount, String log, User user, String target, int namespace) throws IOException
+    public Wiki.LogEntry[] getLogEntries(Calendar start, Calendar end, int amount, String log, Wiki.User user, String target, int namespace) throws IOException
     {
         // construct the query url from the parameters given
         StringBuilder url = new StringBuilder(query);
@@ -4518,7 +4508,7 @@ public class Wiki implements Serializable
         }
 
         // only now we can actually start to retrieve the logs
-        ArrayList<LogEntry> entries = new ArrayList<LogEntry>(6667); // should be enough
+        ArrayList<Wiki.LogEntry> entries = new ArrayList<Wiki.LogEntry>(6667); // should be enough
         do
         {
             String line = fetch(url.toString() + "&lestart=" + lestart, "getLogEntries");
@@ -4541,7 +4531,7 @@ public class Wiki implements Serializable
                 int b = line.indexOf("><item", a);
                 if (b < 0) // last entry
                     b = line.length();
-                LogEntry entry = parseLogEntry(line.substring(a, b), 0);
+                Wiki.LogEntry entry = parseLogEntry(line.substring(a, b), 0);
                 line = line.substring(b);
 
                 // namespace processing
@@ -4556,7 +4546,7 @@ public class Wiki implements Serializable
         console.append(entries.size());
         console.append(" entries)");
         log(Level.INFO, console.toString(), "getLogEntries");
-        return entries.toArray(new LogEntry[0]);
+        return entries.toArray(new Wiki.LogEntry[0]);
     }
 
     /**
@@ -4571,7 +4561,7 @@ public class Wiki implements Serializable
      *  @return the parsed log entry
      *  @since 0.18
      */
-    protected LogEntry parseLogEntry(String xml, int caller)
+    protected Wiki.LogEntry parseLogEntry(String xml, int caller)
     {
         // if the caller is not getLogEntries(), we can take a shortcut.
         String type, action = null;
@@ -4616,13 +4606,13 @@ public class Wiki implements Serializable
 
         // target, performer
         String target = null;
-        User performer = null;
+        Wiki.User performer = null;
         if (caller == 1) // RevisionDeleted entries don't appear in ipblocklist
         {
             // performer
             int a = xml.indexOf("by=\"") + 4;
             int b = xml.indexOf('\"', a);
-            performer = new User(decode(xml.substring(a, b)));
+            performer = new Wiki.User(decode(xml.substring(a, b)));
 
             // target
             a = xml.indexOf("user=\"") + 6;
@@ -4644,7 +4634,7 @@ public class Wiki implements Serializable
             // performer
             int a = xml.indexOf("user=\"") + 6;
             int b = xml.indexOf("\" ", a);
-            performer = new User(decode(xml.substring(a, b)));
+            performer = new Wiki.User(decode(xml.substring(a, b)));
 
             // target
             a = xml.indexOf("title=\"") + 7;
@@ -4656,7 +4646,7 @@ public class Wiki implements Serializable
            // no title here, we can set that in getImageHistory
             int a = xml.indexOf("user=\"") + 6;
             int b = xml.indexOf("\" ", a);
-            performer = new User(decode(xml.substring(a, b)));
+            performer = new Wiki.User(decode(xml.substring(a, b)));
         }
 
         // timestamp
@@ -4738,7 +4728,7 @@ public class Wiki implements Serializable
             details = temp.toArray(new String[0]);
         }
 
-        return new LogEntry(type, action, reason, performer, target, timestamp, details);
+        return new Wiki.LogEntry(type, action, reason, performer, target, timestamp, details);
     }
 
     /**
@@ -4859,7 +4849,7 @@ public class Wiki implements Serializable
     {
         // @revised 0.15 to add short/long pages
         StringBuilder url = new StringBuilder(query);
-        url.append("action=query&list=allpages&aplimit=max");
+        url.append("action=query&list=allpages&aplimit=10"); //aplimit=max
         if (!prefix.isEmpty()) // prefix
         {
             // cull the namespace prefix
@@ -4954,7 +4944,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.20
      */
-    public Revision[] newPages(int amount) throws IOException
+    public Wiki.Revision[] newPages(int amount) throws IOException
     {
         return recentChanges(amount, MAIN_NAMESPACE, 0, true);
     }
@@ -4974,7 +4964,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.20
      */
-    public Revision[] newPages(int amount, int rcoptions) throws IOException
+    public Wiki.Revision[] newPages(int amount, int rcoptions) throws IOException
     {
         return recentChanges(amount, MAIN_NAMESPACE, rcoptions, true);
     }
@@ -4995,7 +4985,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.20
      */
-    public Revision[] newPages(int amount, int namespace, int rcoptions) throws IOException
+    public Wiki.Revision[] newPages(int amount, int namespace, int rcoptions) throws IOException
     {
         // @revised 0.23 move code to recent changes
         return recentChanges(amount, namespace, rcoptions, true);
@@ -5014,7 +5004,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    public Revision[] recentChanges(int amount) throws IOException
+    public Wiki.Revision[] recentChanges(int amount) throws IOException
     {
         return recentChanges(amount, MAIN_NAMESPACE, 0, false);
     }
@@ -5033,7 +5023,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    public Revision[] recentChanges(int amount, int namespace) throws IOException
+    public Wiki.Revision[] recentChanges(int amount, int namespace) throws IOException
     {
         return recentChanges(amount, namespace, 0, false);
     }
@@ -5055,7 +5045,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    public Revision[] recentChanges(int amount, int namespace, int rcoptions) throws IOException
+    public Wiki.Revision[] recentChanges(int amount, int namespace, int rcoptions) throws IOException
     {
         return recentChanges(amount, namespace, rcoptions, false);
     }
@@ -5078,7 +5068,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    protected Revision[] recentChanges(int amount, int namespace, int rcoptions, boolean newpages) throws IOException
+    protected Wiki.Revision[] recentChanges(int amount, int namespace, int rcoptions, boolean newpages) throws IOException
     {
         StringBuilder url = new StringBuilder(query);
         url.append("action=query&list=recentchanges&rcprop=title%7Cids%7Cuser%7Ctimestamp%7Cflags%7Ccomment%7Csizes&rclimit=max");
@@ -5110,7 +5100,7 @@ public class Wiki implements Serializable
         // fetch, parse
         url.append("&rcstart=");
         String rcstart = calendarToTimestamp(makeCalendar());
-        ArrayList<Revision> revisions = new ArrayList<Revision>(750);
+        ArrayList<Wiki.Revision> revisions = new ArrayList<Wiki.Revision>(750);
         do
         {
             String temp = url.toString();
@@ -5132,7 +5122,7 @@ public class Wiki implements Serializable
             }
         }
         while (revisions.size() < amount);
-        return revisions.toArray(new Revision[0]);
+        return revisions.toArray(new Wiki.Revision[0]);
     }
 
     /**
@@ -5330,7 +5320,7 @@ public class Wiki implements Serializable
             // gender
             a = info.indexOf("gender=\"") + 8;
             b = info.indexOf('\"', a);
-            ret.put("gender", Gender.valueOf(info.substring(a, b)));
+            ret.put("gender", Wiki.Gender.valueOf(info.substring(a, b)));
 
             // groups
             ArrayList<String> temp = new ArrayList<String>(50);
@@ -5407,7 +5397,7 @@ public class Wiki implements Serializable
          *  @throws IOException if something goes wrong
          *  @since 0.08
          */
-        public LogEntry[] blockLog() throws IOException
+        public Wiki.LogEntry[] blockLog() throws IOException
         {
             return getLogEntries(null, null, Integer.MAX_VALUE, BLOCK_LOG, null, "User:" + username, USER_NAMESPACE);
         }
@@ -5445,7 +5435,7 @@ public class Wiki implements Serializable
          *  @return a revision array of contributions
          *  @since 0.17
          */
-        public Revision[] contribs() throws IOException
+        public Wiki.Revision[] contribs() throws IOException
         {
             return Wiki.this.contribs(username);
         }
@@ -5456,7 +5446,7 @@ public class Wiki implements Serializable
          *  @return a revision array of contributions
          *  @since 0.17
         */
-        public Revision[] contribs(int namespace) throws IOException
+        public Wiki.Revision[] contribs(int namespace) throws IOException
         {
             return Wiki.this.contribs(username, namespace);
         }
@@ -5467,11 +5457,11 @@ public class Wiki implements Serializable
          *  @since 0.08
          */
         @Override
-        public User clone()
+        public Wiki.User clone()
         {
             try
             {
-                return (User)super.clone();
+                return (Wiki.User)super.clone();
             }
             catch (CloneNotSupportedException e)
             {
@@ -5487,7 +5477,7 @@ public class Wiki implements Serializable
         @Override
         public boolean equals(Object x)
         {
-            return x instanceof User && username.equals(((User)x).username);
+            return x instanceof Wiki.User && username.equals(((Wiki.User)x).username);
         }
 
         /**
@@ -5525,13 +5515,13 @@ public class Wiki implements Serializable
      *  @see #getLogEntries
      *  @since 0.08
      */
-    public class LogEntry implements Comparable<LogEntry>
+    public class LogEntry implements Comparable<Wiki.LogEntry>
     {
         // internal data storage
         private String type;
         private String action;
         private String reason;
-        private User user;
+        private Wiki.User user;
         private String target;
         private Calendar timestamp;
         private Object details;
@@ -5553,7 +5543,7 @@ public class Wiki implements Serializable
          *  the page after a move was performed).
          *  @since 0.08
          */
-        protected LogEntry(String type, String action, String reason, User user, String target, String timestamp, Object details)
+        protected LogEntry(String type, String action, String reason, Wiki.User user, String target, String timestamp, Object details)
         {
             this.type = type;
             this.action = action;
@@ -5604,7 +5594,7 @@ public class Wiki implements Serializable
          *  @return the user who performed the action.
          *  @since 0.08
          */
-        public User getUser()
+        public Wiki.User getUser()
         {
             return user;
         }
@@ -5711,7 +5701,7 @@ public class Wiki implements Serializable
      *  Represents a contribution and/or a revision to a page.
      *  @since 0.17
      */
-    public class Revision implements Comparable<Revision>
+    public class Revision implements Comparable<Wiki.Revision>
     {
         private boolean minor, bot;
         private String summary;
@@ -5801,7 +5791,7 @@ public class Wiki implements Serializable
          *  @throws IOException if a network error occurs
          *  @since 0.21
          */
-        public String diff(Revision other) throws IOException
+        public String diff(Wiki.Revision other) throws IOException
         {
             return diff(other.revid, "");
         }
@@ -5884,7 +5874,7 @@ public class Wiki implements Serializable
         @Override
         public boolean equals(Object o)
         {
-            if (!(o instanceof Revision))
+            if (!(o instanceof Wiki.Revision))
                 return false;
             return toString().equals(o.toString());
         }
@@ -6131,7 +6121,6 @@ public class Wiki implements Serializable
     {
         // connect
         logurl(url, caller);
-        System.out.println(url);
         URLConnection connection = new URL(url).openConnection();
         connection.setConnectTimeout(CONNECTION_CONNECT_TIMEOUT_MSEC);
         connection.setReadTimeout(CONNECTION_READ_TIMEOUT_MSEC);
@@ -6300,7 +6289,11 @@ public class Wiki implements Serializable
     protected boolean checkRights(int level, boolean move) throws IOException, CredentialException
     {
         // check if we are logged out
-        if (!cookies.containsValue(user.getUsername()))
+        String s = user.getUsername();
+        s = s.substring(0,1).toUpperCase() + s.substring(1); //first to upper
+        s = s.replace(" ", "+").replace("_", "+");         //spc to plus
+
+        if (!cookies.containsValue(s))
         {
             logger.log(Level.SEVERE, "Cookies have expired");
             logout();
@@ -6548,7 +6541,7 @@ public class Wiki implements Serializable
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
     {
         String z = (String)in.readObject();
-        user = new User(z);
+        user = new Wiki.User(z);
         cookies = (HashMap<String, String>)in.readObject();
         throttle = in.readInt();
         maxlag = in.readInt();
@@ -6564,22 +6557,5 @@ public class Wiki implements Serializable
 
         // force a status check on next edit
         statuscounter = statusinterval;
-    }
-}
-
-class UploadThread extends Thread {
-    File file;
-    String filename;
-    String contents;
-    String reason;
-    UploadThread(File file, String filename, String contents, String reason) {
-        this.file = file;
-        this.filename = filename;
-        this.contents = contents;
-        this.reason = reason;
-    }
-
-    @Override
-    public void run() { 
     }
 }

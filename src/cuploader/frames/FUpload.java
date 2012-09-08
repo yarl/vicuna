@@ -385,21 +385,17 @@ public class FUpload extends javax.swing.JFrame {
 
                         //upload
                         //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
-                        boolean upload = wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
-                        if(upload) {
-                            if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
-                            if(renameAfterUpload) {
-                                File f = new File(file.file.getParentFile()+"\\"+name);
-                                file.file.renameTo(f);
-                                file.file = f;
-                            }
-                            file.setAsUploaded();
-                            ++uploaded;
+                        wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
+                        
+                        if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
+                        if(renameAfterUpload) {
+                            File f = new File(file.file.getParentFile()+"\\"+name);
+                            file.file.renameTo(f);
+                            file.file = f;
                         }
-                        //file.lockPanel(false);
-                        Progress.setValue(i+1);
-                        ++i;
-                        } catch (UnknownError ex) {
+                        file.setAsUploaded();
+                        ++uploaded;
+                    } catch (UnknownError ex) {
                         file.setAsFailed(bundle.getString("upload-error-file") + ": " + ex.getLocalizedMessage());
                         //file.lockPanel(false);
                     } catch (CredentialNotFoundException ex) {
@@ -419,6 +415,8 @@ public class FUpload extends javax.swing.JFrame {
                         //file.lockPanel(false);
                         //JOptionPane.showMessageDialog(rootPane, "Wystąpił błąd: " + ex.toString());
                     }
+                    Progress.setValue(i+1);
+                    ++i;
                 }
             }
                 
