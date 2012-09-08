@@ -893,7 +893,7 @@ public class Wiki implements Serializable
             log(Level.WARNING, "Failed to log in as " + username, "login");
             try
             {
-                Thread.sleep(20000); // to prevent brute force
+                Thread.sleep(2000); // to prevent brute force
             }
             catch (InterruptedException e)
             {
@@ -918,7 +918,7 @@ public class Wiki implements Serializable
     public synchronized void logout()
     {
         cookies.clear();
-        user = null;
+        //user = null;
         max = 500;
         log(Level.INFO, "Logged out", "logout");
     }
@@ -6236,6 +6236,16 @@ public class Wiki implements Serializable
         {
             log(Level.WARNING, "Database locked!", caller);
             throw new HttpRetryException("Database locked!", 503);
+        }
+        // name at Commons
+        if (line.contains("fileexists-shared-forbidden"))
+        {
+            throw new UnknownError("This name in already used in Wikimedia Commons");
+        }
+        // wrong name
+        if (line.contains("illegal-filename"))
+        {
+            throw new UnknownError("The filename is not allowed. Details: " + line);
         }
         // unknown error
         if (line.contains("error code=\"unknownerror\""))
