@@ -888,7 +888,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private void bUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUploadActionPerformed
         mUploadActionPerformed(evt);
     }//GEN-LAST:event_bUploadActionPerformed
-    
+
     /**
      * Init
      **/
@@ -926,10 +926,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         try {
             String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
             if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
-                Object[] o = {Data.text("button-download"), Data.text("button-cancel")};
-                int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>). " + Data.text("about-checkupdate-download") + "</body></html>", 
-                        Data.text("about-checkupdate"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
-                if(n==0) {
+                Object[] o = {Data.text("button-autoupdate"), Data.text("button-download"), Data.text("button-cancel")};
+                int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>).</body></html>", 
+                        Data.text("about-checkupdate"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, o, o[0]);
+                if(n==0)
+                    new FDownload(this);
+                else if(n==1) {
                     try {
                         Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/downloads"));
                     } catch (URISyntaxException ex) {
@@ -1339,7 +1341,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
         //</editor-fold>
         
-        String version = "1.11";
+        String version = "1.10";
         String date = "2012-09-08 19:00";
 
         final JFrame frame = new Main(version, date);

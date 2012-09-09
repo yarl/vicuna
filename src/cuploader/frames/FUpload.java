@@ -380,7 +380,7 @@ public class FUpload extends javax.swing.JFrame {
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
 
                     //upload
-                    //System.out.println(desc);
+                    System.out.println(desc);
                     //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                      
                     try { 
