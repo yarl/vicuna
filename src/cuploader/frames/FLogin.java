@@ -49,7 +49,6 @@ public class FLogin extends javax.swing.JFrame {
             public void run() {
                 tName.setEditable(false);
                 tPassword.setEditable(false);
-                System.out.println(tPassword.getPassword());
                 Settings.username = tName.getText();
                 
                 switch(cServer.getSelectedIndex()) {

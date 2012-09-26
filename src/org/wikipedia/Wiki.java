@@ -21,11 +21,16 @@
 package org.wikipedia;
 
 import java.io.*;
-import java.net.*;
+import java.net.HttpRetryException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.*;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import javax.security.auth.login.*; // useful exception types
+import javax.security.auth.login.*;
+import javax.swing.JProgressBar;
 
 /**
  *  This is a somewhat sketchy bot framework for editing MediaWiki wikis.
@@ -3165,7 +3170,7 @@ public class Wiki implements Serializable
      *  @throws AccountLockedException if user is blocked
      *  @since 0.21
      */
-    public synchronized void upload(File file, String filename, String contents, String reason) throws IOException, LoginException
+    public synchronized void upload(File file, String filename, String contents, String reason, JProgressBar bar) throws IOException, LoginException
     {
         // TODO: upload via URL
 
@@ -3244,11 +3249,40 @@ public class Wiki implements Serializable
         out.writeBytes(file.getName());
         out.writeBytes("\"\r\n");
         out.writeBytes("Content-Type: application/octet-stream\r\n\r\n");
-        FileInputStream fi = new FileInputStream(file);
-        byte[] by = new byte[fi.available()];
-        fi.read(by);
-        out.write(by);
-        fi.close();
+        
+        int bytesRead, bytesAvailable, bufferSize,progress;
+        byte[] buffer;
+        int maxBufferSize = 20*1024*1024;
+        
+        final FileInputStream fileInputStream = new FileInputStream(file);
+        
+        bytesAvailable = fileInputStream.available();
+        bufferSize = 512;
+        buffer = new byte[bufferSize];
+        
+        // Read file
+        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+        progress=0;
+        //bar.setValue(0);
+        while (bytesRead > 0) {   
+            progress+=bytesRead;
+            out.write(buffer, 0, bytesRead);
+            bytesAvailable = fileInputStream.available(); 
+            //bar.setValue((int)((progress*100)/(file.length())));
+            //System.out.println(">>>" + (int)((progress*100)/(file.length())) + "//// progress: " + progress);
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+        }//end of while statement
+        fileInputStream.close();
+        //bar.setValue(100);
+        
+//        FileInputStream fi = new FileInputStream(file);
+//        byte[] by = new byte[fi.available()];
+//        fi.read(by);
+//        out.write(by);
+//        fi.close();
+        
         out.writeBytes("\r\n");
         out.writeBytes(boundary);
         // ignore warnings

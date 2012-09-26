@@ -3,16 +3,21 @@ package cuploader;
 import cuploader.frames.Main;
 import java.awt.GridBagConstraints;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
+import javax.swing.undo.UndoManager;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public class Data implements Serializable {
-    private static ResourceBundle text = java.util.ResourceBundle.getBundle("cuploader/text/messages");
+    public static ResourceBundle text;
     
     public static String version;
     public static String date;
+    public static UndoManager manager = new UndoManager();
     
     public enum Elem {
         NAME, EXT, DATE, COOR, DESC, CATS;
@@ -73,6 +78,11 @@ public class Data implements Serializable {
     
     public static String text(String s){
         return text.getString(s);
+    }
+    
+    public static void RefreshText() {
+        ResourceBundle.clearCache(Thread.currentThread().getContextClassLoader());
+        text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Settings.lang);
     }
     
     /***

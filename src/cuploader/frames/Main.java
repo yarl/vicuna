@@ -11,14 +11,14 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -51,11 +51,13 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     public Main(String version, String date) {
         this.version = version;
         this.date = date;
-        data = new Data(version, date);
         
-        addWindowListener(exit);
         boolean hello = readSettings();
+        data = new Data(version, date);
+        addWindowListener(exit);
+        
         initComponents();
+        readLang();
         setLocationRelativeTo(null);
         readPosition();
         
@@ -65,10 +67,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mEdit.setEnabled(false);
         mFileUploadSelect.setEnabled(false);
         mUpload.setEnabled(false);
-
-        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
         
+        checkLag();
         setVisible(true);
         if(!hello) 
             JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
@@ -80,11 +80,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        gView = new javax.swing.ButtonGroup();
         mShow = new javax.swing.JPopupMenu();
         mViewAll1 = new javax.swing.JRadioButtonMenuItem();
         mViewToUpload1 = new javax.swing.JRadioButtonMenuItem();
         mViewNotUpload1 = new javax.swing.JRadioButtonMenuItem();
+        gLang = new javax.swing.ButtonGroup();
         jToolBar1 = new javax.swing.JToolBar();
         bLoadFiles = new javax.swing.JButton();
         jSeparator6 = new javax.swing.JToolBar.Separator();
@@ -104,6 +105,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         pUserInfo = new javax.swing.JPanel();
         lUserInfo = new javax.swing.JLabel();
         lServer = new javax.swing.JLabel();
+        lServerStatus = new javax.swing.JLabel();
         pDesc = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -132,7 +134,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mFileUploadSelectInv = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mEnd = new javax.swing.JMenuItem();
+        mRestart = new javax.swing.JMenuItem();
         mEdit = new javax.swing.JMenu();
+        mUndo = new javax.swing.JMenuItem();
+        mRedo = new javax.swing.JMenuItem();
         mFileSelectAll = new javax.swing.JMenuItem();
         mFileSelectInv = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
@@ -143,11 +148,15 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mViewToUpload = new javax.swing.JRadioButtonMenuItem();
         mViewNotUpload = new javax.swing.JRadioButtonMenuItem();
         mTools = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        mLangEn = new javax.swing.JRadioButtonMenuItem();
+        mLangPl = new javax.swing.JRadioButtonMenuItem();
         mSettings = new javax.swing.JMenuItem();
         mHelp = new javax.swing.JMenu();
+        mHelpOnline = new javax.swing.JMenuItem();
         mAbout = new javax.swing.JMenuItem();
 
-        buttonGroup1.add(mViewAll1);
+        gView.add(mViewAll1);
         mViewAll1.setSelected(true);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
         mViewAll1.setText(bundle.getString("view-all")); // NOI18N
@@ -158,7 +167,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         });
         mShow.add(mViewAll1);
 
-        buttonGroup1.add(mViewToUpload1);
+        gView.add(mViewToUpload1);
         mViewToUpload1.setText(bundle.getString("view-toupload")); // NOI18N
         mViewToUpload1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,7 +176,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         });
         mShow.add(mViewToUpload1);
 
-        buttonGroup1.add(mViewNotUpload1);
+        gView.add(mViewNotUpload1);
         mViewNotUpload1.setText(bundle.getString("view-notupload")); // NOI18N
         mViewNotUpload1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -275,7 +284,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         jToolBar2.add(bSettings);
 
         bAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/color-swatch-24.png"))); // NOI18N
-        bAbout.setToolTipText(bundle.getString("about")); // NOI18N
+        bAbout.setToolTipText(bundle.getString("help-about")); // NOI18N
         bAbout.setFocusable(false);
         bAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         bAbout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -314,6 +323,9 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         lServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/server.png"))); // NOI18N
         lServer.setText(Settings.server);
 
+        lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
+        lServerStatus.setText("Status");
+
         javax.swing.GroupLayout pUserInfoLayout = new javax.swing.GroupLayout(pUserInfo);
         pUserInfo.setLayout(pUserInfoLayout);
         pUserInfoLayout.setHorizontalGroup(
@@ -323,7 +335,9 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 .addGroup(pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pUserInfoLayout.createSequentialGroup()
-                        .addComponent(lUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lServerStatus))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -331,9 +345,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pUserInfoLayout.createSequentialGroup()
                 .addComponent(lUserInfo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(lServer, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lServerStatus))
         );
 
         pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder("Opis"));
@@ -381,8 +396,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel7))
         );
 
         pHelp.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help"))); // NOI18N
@@ -403,8 +417,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         pHelpLayout.setVerticalGroup(
             pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pHelpLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -441,15 +455,14 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             pUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pUploadLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addComponent(jToolBar4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jToolBar4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         mFile.setText(bundle.getString("file")); // NOI18N
 
         mLoadFiles.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SPACE, java.awt.event.InputEvent.CTRL_MASK));
         mLoadFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-import_1.png"))); // NOI18N
-        mLoadFiles.setText(bundle.getString("folder-read")); // NOI18N
+        mLoadFiles.setText(Data.text("folder-read")); // NOI18N
         mLoadFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mLoadFilesActionPerformed(evt);
@@ -541,9 +554,37 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         });
         mFile.add(mEnd);
 
+        mRestart.setText(bundle.getString("restart")); // NOI18N
+        mRestart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mRestartActionPerformed(evt);
+            }
+        });
+        mFile.add(mRestart);
+
         mMenu.add(mFile);
 
         mEdit.setText(bundle.getString("edit")); // NOI18N
+
+        mUndo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        mUndo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-transition.png"))); // NOI18N
+        mUndo.setText(bundle.getString("undo")); // NOI18N
+        mUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mUndoActionPerformed(evt);
+            }
+        });
+        mEdit.add(mUndo);
+
+        mRedo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
+        mRedo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-transition-180.png"))); // NOI18N
+        mRedo.setText(bundle.getString("redo")); // NOI18N
+        mRedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mRedoActionPerformed(evt);
+            }
+        });
+        mEdit.add(mRedo);
 
         mFileSelectAll.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         mFileSelectAll.setText(bundle.getString("files-select-all")); // NOI18N
@@ -586,7 +627,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 
         mView.setText(bundle.getString("view")); // NOI18N
 
-        buttonGroup1.add(mViewAll);
+        gView.add(mViewAll);
         mViewAll.setText(bundle.getString("view-all")); // NOI18N
         mViewAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -595,7 +636,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         });
         mView.add(mViewAll);
 
-        buttonGroup1.add(mViewToUpload);
+        gView.add(mViewToUpload);
         mViewToUpload.setText(bundle.getString("view-toupload")); // NOI18N
         mViewToUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -604,7 +645,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         });
         mView.add(mViewToUpload);
 
-        buttonGroup1.add(mViewNotUpload);
+        gView.add(mViewNotUpload);
         mViewNotUpload.setText(bundle.getString("view-notupload")); // NOI18N
         mViewNotUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -616,6 +657,28 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mMenu.add(mView);
 
         mTools.setText(bundle.getString("tools")); // NOI18N
+
+        jMenu1.setText(bundle.getString("settings-lang")); // NOI18N
+
+        gLang.add(mLangEn);
+        mLangEn.setText("English (en)");
+        mLangEn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLangEnActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mLangEn);
+
+        gLang.add(mLangPl);
+        mLangPl.setText("Polski (pl)");
+        mLangPl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLangPlActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mLangPl);
+
+        mTools.add(jMenu1);
 
         mSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         mSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/switch.png"))); // NOI18N
@@ -631,8 +694,18 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 
         mHelp.setText(bundle.getString("help")); // NOI18N
 
+        mHelpOnline.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
+        mHelpOnline.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/lifebuoy.png"))); // NOI18N
+        mHelpOnline.setText(bundle.getString("help-help")); // NOI18N
+        mHelpOnline.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mHelpOnlineActionPerformed(evt);
+            }
+        });
+        mHelp.add(mHelpOnline);
+
         mAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/color-swatch_1.png"))); // NOI18N
-        mAbout.setText(bundle.getString("about")); // NOI18N
+        mAbout.setText(bundle.getString("help-about")); // NOI18N
         mAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mAboutActionPerformed(evt);
@@ -674,12 +747,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pFilesScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -743,8 +816,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             ch.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             ch.setMultiSelectionEnabled(true);
             ch.setAcceptAllFileFilterUsed(false);
+            ch.addChoosableFileFilter(FileFilters.all);
             ch.addChoosableFileFilter(FileFilters.images);
             ch.addChoosableFileFilter(FileFilters.documents);
+            ch.addChoosableFileFilter(FileFilters.multimedia);
             
             if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File[] selected = ch.getSelectedFiles();
@@ -889,6 +964,38 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mUploadActionPerformed(evt);
     }//GEN-LAST:event_bUploadActionPerformed
 
+    private void mUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mUndoActionPerformed
+        if(Data.manager.canUndo())
+            Data.manager.undo();
+    }//GEN-LAST:event_mUndoActionPerformed
+
+    private void mRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mRedoActionPerformed
+        if(Data.manager.canRedo())
+            Data.manager.redo();
+    }//GEN-LAST:event_mRedoActionPerformed
+
+    private void mHelpOnlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mHelpOnlineActionPerformed
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/wiki#head"));
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mHelpOnlineActionPerformed
+
+    private void mRestartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mRestartActionPerformed
+        ConfirmClose(true);
+    }//GEN-LAST:event_mRestartActionPerformed
+
+    private void mLangEnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangEnActionPerformed
+        changeLang(Locale.ENGLISH);
+    }//GEN-LAST:event_mLangEnActionPerformed
+
+    private void mLangPlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangPlActionPerformed
+        changeLang(new Locale("pl", "PL"));
+    }//GEN-LAST:event_mLangPlActionPerformed
+
     /**
      * Init
      **/
@@ -907,6 +1014,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 Settings s = (Settings) in.readObject();
                 in.close();
                 b = true;
+                
+                if(Settings.lang==null) Settings.lang = getLocale();
+                Locale.setDefault(Settings.lang);
+                Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Settings.lang);
             }
         } catch (FileNotFoundException ex) {
         } catch (ClassNotFoundException ex) {
@@ -915,6 +1026,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         return b;
+    }
+    
+    private void readLang() {
+        if(Settings.lang.equals(Locale.ENGLISH)) mLangEn.setSelected(true);
+        if(Settings.lang.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
     }
     
     private void readPosition() {
@@ -945,6 +1061,36 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void checkLag() {
+        Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                for(;;) {
+                    try {
+                        int lag = new Wiki(Settings.server).getCurrentDatabaseLag();
+                        if(lag==0) {
+                            lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status.png")));
+                            lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-ok"));
+                        } else if(lag>0 && lag<=5) {
+                            lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-away.png")));
+                            lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-lag") + " " + lag + " s");
+                        } else {
+                            lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-busy.png")));
+                            lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-lag") + " " + lag + " s");
+                        }
+                    } catch (IOException ex) {
+                        lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-offline"));
+                        lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png")));
+                    }
+                    try { Thread.sleep(5000); } catch (InterruptedException ex) {}
+                }
+            }
+        };
+        Thread t = new Thread(run);
+        t.start();
+    }
+    
     //</editor-fold>
     
     /**
@@ -1077,19 +1223,19 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 Element name = doc.createElement("name");
                 if(i.getComponent(Elem.NAME).equals("")) text="null";
                 else text = i.getComponent(Elem.NAME);
-                    name.appendChild(doc.createTextNode(text));
+                    name.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                     file.appendChild(name);
 
                 Element date2 = doc.createElement("date");
                 if(i.getComponent(Elem.DATE).equals("")) text="null";
                 else text = i.getComponent(Elem.DATE);
-                    date2.appendChild(doc.createTextNode(text));
+                    date2.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                     file.appendChild(date2);
 
                 Element desc = doc.createElement("desc");
                 if(i.getComponent(Elem.DESC).equals("")) text="null";
                 else text = i.getComponent(Elem.DESC);
-                    desc.appendChild(doc.createTextNode(text));
+                    desc.appendChild(doc.createTextNode(text.replace("&", "amp;").replace("\n", "\\n")));
                     file.appendChild(desc);
 
                 Element coor = doc.createElement("coor");
@@ -1101,7 +1247,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 Element cats = doc.createElement("cats");
                 if(i.getComponent(Elem.CATS).equals("")) text="null";
                 else text = i.getComponent(Elem.CATS);
-                    cats.appendChild(doc.createTextNode(text));
+                    cats.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                     file.appendChild(cats);
             }
 
@@ -1216,11 +1362,11 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                     else if(tag.equals("extra_text"))
                         Settings.extratext = text;
                     
-                    else if(tag.equals("name")) fName.add(text);
-                    else if(tag.equals("date")) fDate.add(text);
-                    else if(tag.equals("desc")) fDesc.add(text);
-                    else if(tag.equals("coor")) fCoor.add(text);
-                    else if(tag.equals("cats")) fCats.add(text);
+                    else if(tag.equals("name")) fName.add(text.replace("amp;", "&"));
+                    else if(tag.equals("date")) fDate.add(text.replace("amp;", "&"));
+                    else if(tag.equals("desc")) fDesc.add(text.replace("amp;", "&").replace("\\n", "\n"));
+                    else if(tag.equals("coor")) fCoor.add(text.replace("amp;", "&"));
+                    else if(tag.equals("cats")) fCats.add(text.replace("amp;", "&"));
                 }
 
             };
@@ -1250,17 +1396,31 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
      */
     public synchronized boolean addImages(ArrayList<File> files) {
         
-        if(files.size()>0) {
+        if(!files.isEmpty()) {
             ArrayList<File> vector = new ArrayList<File>();
             
             for(File f : files) { 
                 if(f.isFile()) {
                     String name = f.getName();
                     String ext = name.substring(name.lastIndexOf('.')+1).toLowerCase();
-                    if(ext.matches("jpg") || ext.matches("png") || ext.matches("gif") || ext.matches("pdf") || ext.matches("djvu"))
-                        vector.add(f);
+                    if(ext.matches("jpg") || ext.matches("png") || ext.matches("svg") || ext.matches("gif") || 
+                            ext.matches("pdf") || ext.matches("djvu") || ext.matches("ogg") || 
+                            ext.matches("ogv")) {
+
+                        boolean dupe = false;
+                        for(PFile ff : Data.getFiles()) {
+                            if(ff.file.equals(f)) {
+                                dupe = true;
+                                break;
+                            }
+                        }
+                        if(!dupe) {
+                            vector.add(f);
+                        }
+                    }
                 }
             }
+
             if(vector.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, Data.text("loading-nofiles"), Data.text("loading"), 
                         JOptionPane.INFORMATION_MESSAGE);
@@ -1286,18 +1446,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
      * Closing
      **/
     //<editor-fold defaultstate="collapsed" desc=" Closing ">
-    KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
-    Action escapeAction = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            exit.windowClosing(null);
-        }
-    }; 
-    
+   
     WindowListener exit = new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent evt) {
             if(Settings.askQuit) 
-                ConfirmClose();
+                ConfirmClose(false);
             else Close();
         }
     };
@@ -1305,17 +1459,19 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     /*
      * 'Are you sure' window
      */
-    public void ConfirmClose() {
+    public void ConfirmClose(boolean restart) {
         Object[] options = { Data.text("button-close"), Data.text("button-save&close"), Data.text("button-cancel")};
         int n = JOptionPane.showOptionDialog(rootPane, Data.text("quit-confirm"), Data.text("end"), 
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
           
         switch(n) {
             case 0: {
+                if(restart) Restart();
                 Close();
                 break;
             } case 1: {
                 mSaveSessionActionPerformed(new ActionEvent(mFile, 0, null));
+                if(restart) Restart();
                 Close();
                 break;
             } case 2 : 
@@ -1324,25 +1480,68 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
     }
     
-    public void Close() {
+    void Close() {
         Settings.position = getLocation();
         Settings.size = getSize();
         Settings.Serialize();
         System.exit(0);
     }
+    
+    void Restart() {
+        try {
+            final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+            final File currentJar = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+            /* is it a jar file? */
+            if(!currentJar.getName().endsWith(".jar"))
+                return;
+
+            /* Build command: java -jar application.jar */
+            final ArrayList<String> command = new ArrayList<String>();
+            command.add(javaBin);
+            command.add("-jar");
+            command.add(currentJar.getPath());
+
+            final ProcessBuilder builder = new ProcessBuilder(command);
+            builder.start();
+            //Close();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     //</editor-fold>
     
-    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    /**
+     * Changes language
+     * @TODO: needs restart now
+     * @param lang target locale
+     */
+    void changeLang(Locale lang) {
+        Settings.lang = lang;
+        JOptionPane.showMessageDialog(rootPane, "Needs restart");
+    }
+    
+    public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code ">
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         
-        String version = "1.10";
-        String date = "2012-09-08 19:00";
+        String version = "1.13";
+        String date = "2012-09-17";
 
         final JFrame frame = new Main(version, date);
     }
@@ -1357,12 +1556,14 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private javax.swing.JButton bSettings;
     private javax.swing.JButton bUpload;
     private javax.swing.JButton bView;
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup gLang;
+    private javax.swing.ButtonGroup gView;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -1377,6 +1578,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     public static javax.swing.JLabel lFileUpload;
     public static javax.swing.JLabel lHelp;
     public static javax.swing.JLabel lServer;
+    private javax.swing.JLabel lServerStatus;
     private javax.swing.JLabel lStartInfo;
     public static javax.swing.JLabel lUserInfo;
     private javax.swing.JMenuItem mAbout;
@@ -1392,14 +1594,20 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private javax.swing.JMenuItem mFileUploadSelectAll;
     private javax.swing.JMenuItem mFileUploadSelectInv;
     private javax.swing.JMenu mHelp;
+    private javax.swing.JMenuItem mHelpOnline;
+    private javax.swing.JRadioButtonMenuItem mLangEn;
+    private javax.swing.JRadioButtonMenuItem mLangPl;
     private javax.swing.JMenuItem mLoadFiles;
     private javax.swing.JMenuItem mLoadSession;
     public static javax.swing.JMenuItem mLogin;
     private javax.swing.JMenuBar mMenu;
+    private javax.swing.JMenuItem mRedo;
+    private javax.swing.JMenuItem mRestart;
     private javax.swing.JMenuItem mSaveSession;
     private javax.swing.JMenuItem mSettings;
     private javax.swing.JPopupMenu mShow;
     private javax.swing.JMenu mTools;
+    private javax.swing.JMenuItem mUndo;
     private javax.swing.JMenuItem mUpload;
     private javax.swing.JMenu mView;
     private javax.swing.JRadioButtonMenuItem mViewAll;

@@ -4,6 +4,7 @@ import cuploader.frames.Main;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.*;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -51,8 +52,10 @@ public class Settings implements Serializable {
     
     //FILE EDIT
     public static String numFormat = "%NAME% (%N%)";
+    public static int numDigits = 3;
     
-    
+    public static Locale lang;
+            
     private void writeObject(ObjectOutputStream oos) throws IOException 
     {
         oos.defaultWriteObject();
@@ -86,6 +89,9 @@ public class Settings implements Serializable {
         oos.writeObject(position);
         
         oos.writeObject(numFormat);
+        oos.writeObject(numDigits);
+        
+        oos.writeObject(lang);
     }
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException 
@@ -121,6 +127,9 @@ public class Settings implements Serializable {
         position = (Point)ois.readObject();
         
         numFormat = (String)ois.readObject();
+        numDigits = (Integer)ois.readObject();
+        
+        lang = (Locale)ois.readObject();
     }
     
     public static void Serialize() {

@@ -8,13 +8,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class FUploadCheck extends javax.swing.JFrame {
     Data data;
+    int problems = 0;
     
-    private volatile boolean stopRq = false;
+    volatile boolean stopRq = false;
+    ArrayList<String> files;
+    DefaultTableModel model = new DefaultTableModel();
+    
     boolean locNames = true;
     boolean locNamesDupe = true;
             
@@ -23,88 +27,95 @@ public class FUploadCheck extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         
+        model.addColumn(Data.text("file-name"));
+        model.addColumn(Data.text("uploadcheck-error"));
+        
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        
+        files = loadFiles();
         startCheck();
     }
     
+    private ArrayList<String> loadFiles() {
+        ArrayList<String> list = new ArrayList<String>();
+        String name, ext;
+        
+        for(PFile file : Data.getFiles()) {
+            if(file.toUpload) {
+                name = file.getComponent(Elem.NAME);
+                ext = file.getComponent(Elem.EXT);
+                
+                //cleaning
+                if(name.endsWith(" ")) 
+                    name = name.substring(0, name.length()-1);
+                file.setComponent(Elem.NAME, name.replace("  ", " "));
+                
+                
+                //extra ext
+                if(name.endsWith(".jpg")||name.endsWith(".png")||name.endsWith(".gif")||name.endsWith(".pdf")||name.endsWith(".djvu")) {
+                    name = name.substring(0, name.lastIndexOf('.'));
+                    file.setComponent(Elem.NAME, name);
+                }
+                
+                //add
+                name += "." + ext;
+                list.add(name);
+            }
+        }
+        return list;
+    }
+    
     private void startCheck() {
-        System.out.println(Settings.wiki.toString());
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                //clear extra extention
-                for(PFile file : Data.getFiles()) {
-                    if(file.toUpload) {
-                        String text = file.getComponent(Elem.NAME);
-                        if(text.endsWith(".jpg")||text.endsWith(".png")||text.endsWith(".gif")||text.endsWith(".pdf")||text.endsWith(".djvu"))
-                            file.setComponent(Elem.NAME, text.substring(0, text.lastIndexOf('.')));
-                    }   
+                String raport = "";
+                
+                //check IMG* / DSCF* names
+                tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
+                for(String name : files) {
+                    if(name.matches("(DSCF).*||(IMG).*")) {
+                        ++problems;
+                        model.addRow(new Object[]{name, Data.text("uploadcheck-error-dscf")});
+                    }
                 }
                 
-                jLabel1.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-                int i = 0;
-                //check IMG* / DSCF* names
-                for(PFile file : Data.getFiles()) {
-                    if(file.toUpload && file.getComponent(Elem.NAME).matches("(DSCF).*||(IMG).*")) {
-                        locNames = false;
-                        jLabel1.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
-                        tResults.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
-                        tResults.setText(bundle.getString("uploadcheck-error-dscf"));
-                        break;
-                    }
-                        
-                }
                 //check unique names at PC
-                if(locNames) {
-                    for(i=0; i<Data.getFiles().size(); ++i) {
-                        for(int j=0; j<i; ++j) {
-                            if(Data.getFiles().get(i).toUpload && Data.getFiles().get(j).toUpload && Data.getFiles().get(j).getComponent(Elem.NAME).equals(Data.getFiles().get(i).getComponent(Elem.NAME))) {
-                                locNames = false;
-                                jLabel1.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
-                                tResults.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
-                                tResults.setText(bundle.getString("uploadcheck-error-dupe"));
-                                break;
-                            }
+                int i = 0;
+                for(i=0; i<files.size(); ++i) {
+                    for(int j=0; j<i; ++j) {
+                        if(files.get(j).equals(files.get(i))) {
+                            ++problems;
+                            model.addRow(new Object[]{files.get(i), Data.text("uploadcheck-error-dupe")});
                         }
                     }
                 }
 
                 //check unique names on internet
-                if(locNames && locNamesDupe) {
-                    jLabel1.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
-                    jLabel2.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-                    ArrayList<String> cont = new ArrayList<String>();
-                    for(PFile file : Data.getFiles()) {
-                        if(file.toUpload) {
-                            String name = file.getComponent(Elem.NAME);
-                            if(name.endsWith(" "))
-                                name = name.substring(0, name.length()-1);
-                            name = name.replace("  ", " ");
-                            name += "." + file.getComponent(Elem.EXT);
-                    
-                            cont.add(name);
+                tProgress.setText(Data.text("uploadcheck-check-server") + "...");
+                //tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
+                //tServer.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
+                try {
+                    for(String name : files) {
+                        boolean info = Settings.wiki.isPageExist(name);
+                        if(info) {
+                            ++problems;
+                            model.addRow(new Object[]{name, Data.text("uploadcheck-error-exists")});
                         }
                     }
-                    String dupes = "";
-                    try {
-                        for(String file : cont) {
-                            boolean info = Settings.wiki.isPageExist(file);
-                            if(info) dupes += file+", ";
-                        }
-                    } catch (IOException ex) {}
-                    
-                    if(!dupes.equals("")) {
-                        jLabel2.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
-                        tResults.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
-                        tResults.setText(bundle.getString("uploadcheck-error-exists") + ": " + dupes);
-                    } else {                     
-                        jLabel2.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
-                        tResults.setText(bundle.getString("uploadcheck-ok"));
-                        bUpload.setEnabled(true);
-                        bUpload.requestFocus();  
-                    }
+                } catch (IOException ex) {}
+
+                //summary
+                if(problems>0) {
+                    tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
+                    tProgress.setText(Data.text("uploadcheck-errors") + ": " + problems);
+                } else {
+                    tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
+                    tProgress.setText(Data.text("uploadcheck-ok"));
+                    bUpload.setEnabled(true);
+                    bUpload.requestFocus();  
                 }
                 stopCheck();
             }
@@ -139,10 +150,9 @@ public class FUploadCheck extends javax.swing.JFrame {
 
         bUpload = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        tResults = new javax.swing.JLabel();
+        tProgress = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         bFix = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -161,11 +171,11 @@ public class FUploadCheck extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
-        jLabel1.setText(bundle.getString("uploadcheck-check-names") + "...");
+        tProgress.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
+        tProgress.setText(bundle.getString("uploadcheck-check-names") + "...");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
-        jLabel2.setText(bundle.getString("uploadcheck-check-server") + "...");
+        jTable1.setModel(model);
+        jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -173,35 +183,21 @@ public class FUploadCheck extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(tProgress)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(tProgress)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tResults, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tResults, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         bFix.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-circle-135-left.png"))); // NOI18N
@@ -219,13 +215,12 @@ public class FUploadCheck extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(bFix)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bUpload))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(bUpload)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -235,9 +230,7 @@ public class FUploadCheck extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(bUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(bUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bFix, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -259,14 +252,12 @@ public class FUploadCheck extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bFix;
     private javax.swing.JButton bUpload;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel tResults;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel tProgress;
     // End of variables declaration//GEN-END:variables
 
-    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {

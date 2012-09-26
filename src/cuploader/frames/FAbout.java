@@ -37,10 +37,10 @@ public class FAbout extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
-        setTitle(bundle.getString("about")); // NOI18N
+        setTitle(bundle.getString("help-about")); // NOI18N
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("about"))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help-about"))); // NOI18N
 
         lInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/color-swatch-lama.png"))); // NOI18N
         lInfo.setText("<html><body>VicuñaUploader " + Data.version + "<br>Build  " + Data.date + "</body></html>");

@@ -67,7 +67,7 @@ public class FFileEdit extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
-        setTitle(bundle.getString("editing")); // NOI18N
+        setTitle(bundle.getString("fileedit")); // NOI18N
         setResizable(false);
 
         Panel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.white));
@@ -133,6 +133,7 @@ public class FFileEdit extends javax.swing.JFrame {
         });
 
         lNumFormat.setText(bundle.getString("fileedit-num-format")); // NOI18N
+        lNumFormat.setToolTipText("<html>" + java.util.ResourceBundle.getBundle("cuploader/text/messages").getString("fileedit-num-format-tooltip") + "</html>");
 
         tNumFormat.setText(Settings.numFormat);
         tNumFormat.setEnabled(false);
@@ -142,8 +143,9 @@ public class FFileEdit extends javax.swing.JFrame {
         tNumStart.setEnabled(false);
         tNumStart.setValue(1);
 
-        tDigits.setModel(new SpinnerNumberModel(1, 1, 5, 1));
+        tDigits.setModel(new SpinnerNumberModel(Settings.numDigits, 1, 5, 1));
         tDigits.setEnabled(false);
+        tDigits.setValue(Settings.numDigits);
 
         lDigits.setText(bundle.getString("fileedit-num-digits")); // NOI18N
 
@@ -339,12 +341,13 @@ public class FFileEdit extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
-        Replace();
-        Settings.numFormat = tNumFormat.getText();
+        bApplyActionPerformed(evt);
         dispose();
     }//GEN-LAST:event_bSaveActionPerformed
 
     private void bApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApplyActionPerformed
+        Settings.numFormat = tNumFormat.getText();
+        Settings.numDigits = Integer.parseInt(tDigits.getValue().toString());
         Replace();
     }//GEN-LAST:event_bApplyActionPerformed
 

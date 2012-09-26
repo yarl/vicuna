@@ -6,6 +6,9 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
+import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGException;
+import com.kitfox.svg.SVGUniverse;
 import cuploader.Data.Elem;
 import cuploader.fixes.TransferFocus;
 import cuploader.frames.FCoord;
@@ -19,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
@@ -27,11 +31,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 
 public final class PFile extends javax.swing.JPanel implements KeyListener {
     public boolean toUpload = false;
@@ -44,6 +54,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     CategoryHint ch;
     String prevCategory = "";
     boolean cathintStop = false;
+    
+    int nameHelp = 2;
     
     int rotateThumb = 0;    //rotate thumbnail
     FExif fExif;            // subwindow exif
@@ -60,6 +72,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
+        addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
         
@@ -74,6 +87,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
+        addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
         
@@ -117,8 +131,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         mAddPlDesc = new javax.swing.JMenuItem();
         mGeoloc = new javax.swing.JPopupMenu();
         mAddCoor = new javax.swing.JMenuItem();
-        mGoogle = new javax.swing.JMenuItem();
+        mDelCoor = new javax.swing.JMenuItem();
+        mMaps = new javax.swing.JMenu();
         mOSM = new javax.swing.JMenuItem();
+        mGoogle = new javax.swing.JMenuItem();
+        mGeoHack = new javax.swing.JMenuItem();
         mCatHint = new javax.swing.JPopupMenu();
         Panel = new javax.swing.JPanel();
         tThumb = new javax.swing.JLabel();
@@ -236,14 +253,16 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         });
         mGeoloc.add(mAddCoor);
 
-        mGoogle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
-        mGoogle.setText("Google Maps");
-        mGoogle.addActionListener(new java.awt.event.ActionListener() {
+        mDelCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png"))); // NOI18N
+        mDelCoor.setText(bundle.getString("button-clear")); // NOI18N
+        mDelCoor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mGoogleActionPerformed(evt);
+                mDelCoorActionPerformed(evt);
             }
         });
-        mGeoloc.add(mGoogle);
+        mGeoloc.add(mDelCoor);
+
+        mMaps.setText(bundle.getString("file-coor-show")); // NOI18N
 
         mOSM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
         mOSM.setText("OpenStreetMap");
@@ -252,7 +271,27 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                 mOSMActionPerformed(evt);
             }
         });
-        mGeoloc.add(mOSM);
+        mMaps.add(mOSM);
+
+        mGoogle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
+        mGoogle.setText("Google Maps");
+        mGoogle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mGoogleActionPerformed(evt);
+            }
+        });
+        mMaps.add(mGoogle);
+
+        mGeoHack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
+        mGeoHack.setText("GeoHack");
+        mGeoHack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mGeoHackActionPerformed(evt);
+            }
+        });
+        mMaps.add(mGeoHack);
+
+        mGeoloc.add(mMaps);
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         setMaximumSize(new java.awt.Dimension(6400, 200));
@@ -371,7 +410,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                 .addComponent(tCoor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        bCopyDescUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-curve-270.png"))); // NOI18N
+        bCopyDescUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-turn-180.png"))); // NOI18N
         bCopyDescUp.setToolTipText(bundle.getString("file-copyabove")); // NOI18N
         bCopyDescUp.setFocusable(false);
         bCopyDescUp.setOpaque(false);
@@ -381,7 +420,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             }
         });
 
-        bCopyDescDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-curve-090-left.png"))); // NOI18N
+        bCopyDescDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-turn-180-left.png"))); // NOI18N
         bCopyDescDown.setToolTipText(bundle.getString("file-copybelow")); // NOI18N
         bCopyDescDown.setFocusable(false);
         bCopyDescDown.setOpaque(false);
@@ -516,9 +555,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                     .addComponent(lDesc)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(bCopyDescDown)
+                        .addComponent(bCopyDescUp)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bCopyDescUp)))
+                        .addComponent(bCopyDescDown)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -531,7 +570,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                     .addComponent(bTools, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(1, 1, 1)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
         cUpload.setBackground(new java.awt.Color(255, 204, 153));
@@ -650,13 +689,42 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         
         if(nr>0) {
             --nr;
-            //tName.setText(Data.getFiles().get(nr).getComponent(Elem.NAME));
-            //tDate.setText(Data.getFiles().get(nr).getComponent(Elem.DATE));
+            
+            String name = Data.getFiles().get(nr).getComponent(Elem.NAME);
+            Pattern pattern = Pattern.compile(Settings.numFormat.replace("(", "\\(").replace(")", "\\)")
+                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)"));
+            Matcher match = pattern.matcher(name);
+            
+            String zeros = "";
+            for(int i=0; i<Settings.numDigits; ++i) zeros += "0";
+            DecimalFormat df = new DecimalFormat(zeros);
+            
+            //there is number
+            if(match.find()) {
+                tName.setText(retNumber(match, df));
+            //nope
+            } else {
+                tName.setText(Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2)));
+            }
+
             setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
             setComponent(Elem.CATS, Data.getFiles().get(nr).getComponent(Elem.CATS));
         }
     }//GEN-LAST:event_bCopyDescUpActionPerformed
 
+    String retNumber(Matcher match, DecimalFormat df) {
+        String text = match.group(0).replace(match.group(2), df.format(nameHelp));
+        for(PFile f : Data.getFiles()) {
+            if(f.getComponent(Elem.NAME).equals(text)) {
+                ++nameHelp;
+                return retNumber(match, df);
+            }
+        }
+        
+        nameHelp = 2;
+        return text;
+    }
+    
     private void bCopyDescDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCopyDescDownActionPerformed
         int nr = number;
         while(true) {
@@ -666,8 +734,23 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         
         if(nr<Data.getFiles().size()-1) {
             ++nr;
-            //tName.setText(Data.getFiles().get(nr).getComponent(Elem.NAME));
-            //tDate.setText(Data.getFiles().get(nr).getComponent(Elem.DATE));
+                      
+            String name = Data.getFiles().get(nr).getComponent(Elem.NAME);
+            Pattern pattern = Pattern.compile(Settings.numFormat.replace("(", "\\(").replace(")", "\\)")
+                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)"));
+            Matcher match = pattern.matcher(name);
+            
+            String zeros = "";
+            for(int i=0; i<Settings.numDigits; ++i) zeros += "0";
+            DecimalFormat df = new DecimalFormat(zeros);
+            
+            if(match.find()) {
+                tName.setText(retNumber(match, df));
+            //nope
+            } else {
+                tName.setText(Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2)));
+            }
+            
             setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
             setComponent(Elem.CATS, Data.getFiles().get(nr).getComponent(Elem.CATS));
         }
@@ -759,7 +842,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private void tThumbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tThumbMouseClicked
         try {
             Desktop.getDesktop().open(file);
-        } catch (IOException e){ }
+        } catch (IOException ex){
+        }
     }//GEN-LAST:event_tThumbMouseClicked
 
     private void mDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mDeleteActionPerformed
@@ -769,7 +853,45 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
         showCategoryHints(false);
     }//GEN-LAST:event_tCategoriesCaretUpdate
+
+    private void mDelCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mDelCoorActionPerformed
+        coor = null;
+        setComponent(Elem.COOR, "");
+    }//GEN-LAST:event_mDelCoorActionPerformed
+
+    private void mGeoHackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGeoHackActionPerformed
+        try {
+            Desktop.getDesktop().browse(new URI("http://toolserver.org/~geohack/geohack.php?params=" + coor.getDecimal()));
+        } catch (URISyntaxException ex) {
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IOException ex){ 
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mGeoHackActionPerformed
    
+    private void addUndo() {
+        tName.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+                Data.manager.addEdit(e.getEdit());
+            }
+        });
+        tDate.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+                Data.manager.addEdit(e.getEdit());
+            }
+        });
+        tDesc.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+                Data.manager.addEdit(e.getEdit());
+            }
+        });
+        tCategories.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+                Data.manager.addEdit(e.getEdit());
+            }
+        });
+    }
+    
     private void showCategoryHints(boolean b) {
         if(!cathintStop) {
             String cat = CategoryHint.getCategory(tCategories);
@@ -866,44 +988,46 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }
 
     private void generateThumbnail() {
-        int width=0, height=0;
+        ext = file.getName().substring(file.getName().lastIndexOf('.')+1).toLowerCase();
+        
         double size = 9.5367e-7*file.length();
         DecimalFormat df = new DecimalFormat("#.##");
-        try {
-            BufferedImage image = ImageIO.read(file);
-            if(image!=null) {
-                
-                if(rotateThumb!=0) image = rotateThumbnail(image, rotateThumb);
-                width = image.getWidth();
-                height = image.getHeight();
-                float ratio = (float)width/(float)height;
-                
-                int theight = 100;
-                int twidth = (int)(100.0*(ratio));
-                if(twidth>150) {
-                    theight = (int)(theight*(150.0/twidth));
-                    twidth = 150;
-                }
-                image = getScaledInstance(image, twidth, theight, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
-                tThumb.setIcon(new ImageIcon(image));
-                
-                //size
-                tSize.setText("<html><body>" + width + " x " + height + " (" + df.format((width*height)/1000000.0) + " Mpix)<br>" +
-                    df.format(size) + " MiB");
-            } else throw new IOException();
-        } catch (IOException ex) {
-            tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-text.png")));
-            tSize.setText(df.format(size) + " MiB");
-        }
-        //ext icon
-        ext = file.getName().substring(file.getName().lastIndexOf('.')+1).toLowerCase();
+        tSize.setText(df.format(size) + " MiB");
+        
+        //IMAGES
         if(ext.equals("jpg") || ext.equals("png") || ext.equals("gif")) {
+            int width=0, height=0;
+            try {
+                BufferedImage image = ImageIO.read(file);
+                if(image!=null) {
+
+                    if(rotateThumb!=0) image = rotateThumbnail(image, rotateThumb);
+                    width = image.getWidth();
+                    height = image.getHeight();
+                    float ratio = (float)width/(float)height;
+
+                    int theight = 100;
+                    int twidth = (int)(100.0*(ratio));
+                    if(twidth>150) {
+                        theight = (int)(theight*(150.0/twidth));
+                        twidth = 150;
+                    }
+                    image = getScaledInstance(image, twidth, theight, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
+                    tThumb.setIcon(new ImageIcon(image));
+
+                    //size
+                    tSize.setText("<html><body>" + width + " x " + height + " (" + df.format((width*height)/1000000.0) + " Mpix)<br>" +
+                        df.format(size) + " MiB");
+                } else throw new IOException();
+            } catch (IOException ex) {
+                tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-32.png")));
+            }
             lFilename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-image.png")));
             lFilename.setToolTipText(bundle.getString("file-image") + " (." + ext + ")");
-        } 
-        else {
-            //lExt.setIcon("");
-            //lExt.setToolTipText("");
+        } else if(ext.equals("svg")) {
+
+        } else {
+            tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-32.png")));
         }
     }
     
@@ -917,18 +1041,19 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             }
             case COOR: {
                 tCoor.setText(text);
-                //tCoor.setForeground(Color.black);
-                if(!text.equals("")) {
+                if(!text.isEmpty()) {
                     tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png")));
-                    mGoogle.setEnabled(true);
-                    mOSM.setEnabled(true);
-                    //bOpenMap.setEnabled(true);
+                    mMaps.setEnabled(true);
+                    //mGoogle.setEnabled(true);
+                    //mOSM.setEnabled(true);
+                    mDelCoor.setEnabled(true);
                 }
                 else {
                     tCoor.setIcon(null);
-                    mGoogle.setEnabled(false);
-                    mOSM.setEnabled(false);
-                    //bOpenMap.setEnabled(false);
+                    mMaps.setEnabled(false);
+                    //mGoogle.setEnabled(false);
+                    //mOSM.setEnabled(false);
+                    mDelCoor.setEnabled(false);
                 }
                 break;
             }
@@ -1045,11 +1170,14 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private javax.swing.JMenuItem mAddPlDesc;
     private javax.swing.JPopupMenu mCatHint;
     private javax.swing.JPopupMenu mContext;
+    private javax.swing.JMenuItem mDelCoor;
     private javax.swing.JMenuItem mDelete;
     private javax.swing.JMenuItem mDeselectToUpload;
     private javax.swing.JMenuItem mEdit;
+    private javax.swing.JMenuItem mGeoHack;
     private javax.swing.JPopupMenu mGeoloc;
     private javax.swing.JMenuItem mGoogle;
+    private javax.swing.JMenu mMaps;
     private javax.swing.JMenuItem mOSM;
     private javax.swing.JMenuItem mRefreshThumb;
     private javax.swing.JMenuItem mReloadEXIF;

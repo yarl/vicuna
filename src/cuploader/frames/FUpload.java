@@ -380,13 +380,12 @@ public class FUpload extends javax.swing.JFrame {
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
 
                     //upload
-                    System.out.println(desc);
+                    //System.out.println(desc);
                     //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                      
                     try { 
                         boolean fileExist = Settings.wiki.isPageExist(name);
-                        
-                        if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
+                        if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version, Progress);
                         
                         if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
                         if(renameAfterUpload) {
