@@ -16,14 +16,16 @@ public class Coord {
     }
     
     public Coord(String[] lat, String NS, String[] lon, String EW) {
+        System.out.println(NS + " / " + EW);
         if(NS.equals("N"))
             this.lat = Double.parseDouble(lat[0]) + (Double.parseDouble(lat[1])/60.0) + (Double.parseDouble(lat[2])/3600.0);
-        else
+        if(NS.equals("S"))
             this.lat = -1 * (Double.parseDouble(lat[0]) + (Double.parseDouble(lat[1])/60.0) + (Double.parseDouble(lat[2])/3600.0));
         if(EW.equals("E"))
             this.lon = Double.parseDouble(lon[0]) + (Double.parseDouble(lon[1])/60.0) + (Double.parseDouble(lon[2])/3600.0);
-        else
+        if(EW.equals("W")) {
             this.lon = -1 * (Double.parseDouble(lon[0]) + (Double.parseDouble(lon[1])/60.0) + (Double.parseDouble(lon[2])/3600.0));
+        }
     }
     
     public Coord(String lat, String lon) {
@@ -70,7 +72,7 @@ public class Coord {
         S = (((Math.abs(lon)-D)*60.0)-M)*60.0;
         
         text[1] = D + "° " + M + "\' " + df.format(S) + "\" ";
-        text[1] += (lat<0) ? "W" : "E";
+        text[1] += (lon<0) ? "W" : "E";
         
         return text;       
     }

@@ -39,7 +39,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="bCancel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="446" max="32767" attributes="0"/>
+                      <EmptySpace pref="422" max="32767" attributes="0"/>
                       <Component id="bApply" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="bSave" min="-2" max="-2" attributes="0"/>
@@ -88,28 +88,32 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="cNum" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="cNum" pref="100" max="32767" attributes="0"/>
                                       <Component id="lName" max="32767" attributes="0"/>
                                   </Group>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="lNumStart" pref="80" max="32767" attributes="0"/>
+                                              <Component id="lNumFormat" max="32767" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="tNumStart" min="-2" pref="38" max="-2" attributes="0"/>
-                                                  <EmptySpace pref="48" max="32767" attributes="0"/>
-                                                  <Component id="lDigits" min="-2" pref="80" max="-2" attributes="0"/>
-                                                  <EmptySpace max="-2" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="tNumStart" min="-2" pref="59" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Component id="lDigits" max="32767" attributes="0"/>
+                                                  <EmptySpace min="-2" max="-2" attributes="0"/>
                                                   <Component id="tDigits" min="-2" pref="46" max="-2" attributes="0"/>
+                                                  <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
                                               </Group>
                                               <Component id="tNumFormat" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                                          <Component id="tName" max="32767" attributes="0"/>
-                                      </Group>
+                                      <Component id="tName" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
@@ -138,24 +142,18 @@
                       <Component id="lInfo" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lCategories" min="-2" pref="83" max="-2" attributes="0"/>
-                              <Component id="lDesc" min="-2" pref="74" max="-2" attributes="0"/>
+                              <Component id="lCategories" min="-2" pref="99" max="-2" attributes="0"/>
+                              <Component id="lDesc" min="-2" pref="99" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" attributes="0">
                                   <Component id="tCategories" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Component id="cCategoriesMethod" min="-2" pref="172" max="-2" attributes="0"/>
+                                  <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane1" max="32767" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lNumFormat" alignment="0" min="-2" pref="78" max="-2" attributes="0"/>
-                                      <Component id="lNumStart" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -172,56 +170,50 @@
                   <Component id="cUpload" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="tName" alignment="0" max="32767" attributes="0"/>
-                              <Component id="lDate" alignment="0" max="32767" attributes="0"/>
-                              <Component id="tDate" alignment="0" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="tName" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="lDate" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="tDate" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                                   <Component id="lName" min="-2" pref="17" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Component id="cNum" min="-2" pref="23" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="tCoor" min="-2" pref="43" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="bSetCoor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="bClearCoor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="tCoor" min="-2" pref="43" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="bSetCoor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="bClearCoor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="lCoor" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="cNameMethod" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="lNumFormat" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                                      <Component id="tNumFormat" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cNum" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                          <Component id="tNumStart" alignment="3" max="32767" attributes="0"/>
+                                          <Component id="tDigits" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lDigits" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="lCoor" min="-2" pref="22" max="-2" attributes="0"/>
-                                              <Component id="cNameMethod" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="lNumFormat" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                                              <Component id="tNumFormat" alignment="3" max="32767" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                                  <Component id="tNumStart" alignment="3" max="32767" attributes="0"/>
-                                                  <Component id="tDigits" alignment="3" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="lDigits" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Component id="lNumStart" min="-2" pref="18" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                      <Component id="lNumStart" min="-2" pref="18" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jSeparator1" max="32767" attributes="0"/>
                   </Group>
@@ -247,6 +239,9 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cuploader/text/messages.properties" key="file-name" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="cuploader/text/messages.properties" key="help-filename" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="tName">
@@ -255,6 +250,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cuploader/text/messages.properties" key="file-date" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="cuploader/text/messages.properties" key="help-date" replaceFormat="Data.text(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
         </Component>
@@ -293,6 +291,9 @@
                 </Property>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
+                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="Data.mQuickTemplates" type="code"/>
+                </Property>
               </Properties>
             </Component>
           </SubComponents>
@@ -302,6 +303,9 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cuploader/text/messages.properties" key="file-desc" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="cuploader/text/messages.properties" key="help-desc" replaceFormat="Data.text(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lCategories">
@@ -309,13 +313,12 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="cuploader/text/messages.properties" key="file-cats" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="cuploader/text/messages.properties" key="help-categories" replaceFormat="Data.text(&quot;{key}&quot;)"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="tCategories">
-          <Properties>
-            <Property name="toolTipText" type="java.lang.String" value="Kategorie dla pliku, oddziel &#x15b;rednikiem"/>
-          </Properties>
           <Events>
             <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="tCategoriesCaretUpdate"/>
             <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tCategoriesFocusGained"/>
@@ -346,7 +349,6 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new javax.swing.DefaultComboBoxModel(new String[] { bundle.getString(&quot;fileedit-append&quot;), bundle.getString(&quot;fileedit-prepend&quot;), bundle.getString(&quot;fileedit-overwrite&quot;)})" type="code"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Metoda wstawienia kategorii"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="cNameMethod">

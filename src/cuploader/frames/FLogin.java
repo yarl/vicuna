@@ -29,7 +29,7 @@ public class FLogin extends javax.swing.JFrame {
         else if (Settings.server.endsWith(".wikipedia.org")) {
             cServer.setSelectedIndex(1);
             
-            String prefix = Settings.server.substring(0, Settings.server.lastIndexOf(".wiki"));
+            String prefix = Settings.server.substring(0, Settings.server.lastIndexOf(".wikipedia.org"));
             tPrefix.setEnabled(true);
             tPrefix.setText(prefix);
         } else {
@@ -74,7 +74,7 @@ public class FLogin extends javax.swing.JFrame {
                         Main.setLogged(true);
                         
                         dispose();
-                        Main.fLogin = null;
+                        Data.fLogin = null;
                 } catch (IOException ex) {
                     //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));

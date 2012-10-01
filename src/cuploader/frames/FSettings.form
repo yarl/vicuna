@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    <Component class="javax.swing.ButtonGroup" name="gAuthor">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="gGallery">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -79,12 +81,12 @@
         <Container class="javax.swing.JPanel" name="pFile">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="File">
+              <JTabbedPaneConstraints tabName="General">
                 <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="cuploader/text/messages.properties" key="settings-files" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                  <ResourceString bundle="cuploader/text/messages.properties" key="settings-general" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                 </Property>
                 <Property name="tabIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/cuploader/resources/image---small.png"/>
+                  <Image iconType="3" name="/cuploader/resources/gear.png"/>
                 </Property>
               </JTabbedPaneConstraints>
             </Constraint>
@@ -194,7 +196,7 @@
             <Component class="javax.swing.JRadioButton" name="rOwnWork">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroup1"/>
+                  <ComponentRef name="gAuthor"/>
                 </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -208,7 +210,7 @@
             <Component class="javax.swing.JRadioButton" name="rOtherAuthor">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroup1"/>
+                  <ComponentRef name="gAuthor"/>
                 </Property>
               </Properties>
               <Events>
@@ -281,6 +283,9 @@
                       <Font name="Courier New" size="12" style="0"/>
                     </Property>
                     <Property name="rows" type="int" value="5"/>
+                    <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="Data.mQuickTemplates" type="code"/>
+                    </Property>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -297,6 +302,144 @@
                 </Property>
               </Properties>
             </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="pFileDetails">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="File">
+                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cuploader/text/messages.properties" key="settings-files" replaceFormat="Data.text(&quot;{key}&quot;)"/>
+                </Property>
+                <Property name="tabIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/cuploader/resources/image---small.png"/>
+                </Property>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="jPanel4" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel4" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Container class="javax.swing.JPanel" name="jPanel4">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Quick templates">
+                      <ResourceString PropertyName="titleX" bundle="cuploader/text/messages.properties" key="settings-templates" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lQuickTemplatesHint" max="32767" attributes="0"/>
+                              <Component id="jScrollPane2" pref="530" max="32767" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="bAdd" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="bDelete" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="lQuickTemplatesHint" min="-2" pref="22" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" pref="192" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="bDelete" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="bAdd" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="lQuickTemplatesHint">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/cuploader/resources/light-bulb.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cuploader/text/messages.properties" key="settings-templates-hint" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="javax.swing.JTable" name="tQuickTemplatesTable">
+                      <Properties>
+                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="model" type="code"/>
+                        </Property>
+                        <Property name="autoResizeMode" type="int" value="4"/>
+                        <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                          <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tQuickTemplatesTableKeyTyped"/>
+                      </Events>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Component class="javax.swing.JButton" name="bDelete">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cuploader/text/messages.properties" key="button-delete" replaceFormat=" Data.text(&quot;{key}&quot;)"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bDeleteActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="bAdd">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                      <ResourceString bundle="cuploader/text/messages.properties" key="button-add" replaceFormat="Data.text(&quot;{key}&quot;)"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bAddActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pGallery">
@@ -316,9 +459,9 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="lGalleryPage" max="32767" attributes="0"/>
@@ -327,19 +470,28 @@
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="tGalleryHeader" max="32767" attributes="0"/>
-                                          <Component id="tGalleryWidth" pref="254" max="32767" attributes="0"/>
+                                  <Component id="tGalleryWidth" max="32767" attributes="0"/>
+                                  <Component id="tGalleryHeader" max="32767" attributes="0"/>
+                                  <Component id="tGalleryPage" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="18" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="lSectionPosition" min="-2" pref="186" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="tPositionTop" max="32767" attributes="0"/>
+                                          <Component id="tPositionBottom" max="32767" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="tGalleryPage" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="cCreateGallery" pref="533" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="cCreateGallery" min="-2" pref="533" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="29" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -351,17 +503,20 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="tGalleryPage" max="32767" attributes="0"/>
-                          <Component id="lGalleryPage" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Component id="lGalleryPage" max="32767" attributes="0"/>
+                          <Component id="lSectionPosition" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="tGalleryHeader" max="32767" attributes="0"/>
-                          <Component id="lGalleryHeader" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Component id="lGalleryHeader" max="32767" attributes="0"/>
+                          <Component id="tPositionTop" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="tGalleryWidth" max="32767" attributes="0"/>
-                          <Component id="lGalleryWidth" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Component id="lGalleryWidth" max="32767" attributes="0"/>
+                          <Component id="tPositionBottom" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="196" max="32767" attributes="0"/>
                   </Group>
@@ -425,6 +580,33 @@
                 </Property>
               </Properties>
             </Component>
+            <Component class="javax.swing.JLabel" name="lSectionPosition">
+              <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cuploader/text/messages.properties" key="settings-gallery-position" replaceFormat=" Data.text(&quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="tPositionTop">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="gGallery"/>
+                </Property>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cuploader/text/messages.properties" key="settings-gallery-prepend" replaceFormat=" Data.text(&quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="tPositionBottom">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="gGallery"/>
+                </Property>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                  <ResourceString bundle="cuploader/text/messages.properties" key="settings-gallery-append" replaceFormat=" Data.text(&quot;{key}&quot;)"/>
+                </Property>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pProgram">
@@ -468,7 +650,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="111" max="32767" attributes="0"/>
+                      <EmptySpace pref="117" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -623,7 +805,6 @@
                               </Group>
                               <Component id="cFileDescSource" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="bSetFileDesc" max="32767" attributes="0"/>
                               <Component id="tFileDesc" max="32767" attributes="0"/>

@@ -6,9 +6,6 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGException;
-import com.kitfox.svg.SVGUniverse;
 import cuploader.Data.Elem;
 import cuploader.fixes.TransferFocus;
 import cuploader.frames.FCoord;
@@ -22,7 +19,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
@@ -31,15 +27,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 
@@ -100,7 +92,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         selectToEdit(toEdit);
         selectToUpload(toUpload);
         
-        if(coor.equals("null"))
+        if(!coor.contains(";"))
             setComponent(Elem.COOR, "");
         else {
             String[] s = coor.split(";");
@@ -339,7 +331,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         tDesc.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         tDesc.setLineWrap(true);
         tDesc.setRows(3);
-        tDesc.setComponentPopupMenu(mWiki);
+        tDesc.setComponentPopupMenu(Data.mQuickTemplates);
         tDesc.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 tDescFocusGained(evt);
@@ -470,7 +462,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         });
 
         bOpenMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
-        bOpenMap.setToolTipText("Otwiera mapę z geolokolizacją zdjęcia");
+        bOpenMap.setToolTipText(Data.text("file-coord")); // NOI18N
         bOpenMap.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map-bw.png"))); // NOI18N
         bOpenMap.setFocusable(false);
         bOpenMap.setOpaque(false);
@@ -570,7 +562,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                     .addComponent(bTools, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(1, 1, 1)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         cUpload.setBackground(new java.awt.Color(255, 204, 153));
@@ -691,8 +683,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             --nr;
             
             String name = Data.getFiles().get(nr).getComponent(Elem.NAME);
-            Pattern pattern = Pattern.compile(Settings.numFormat.replace("(", "\\(").replace(")", "\\)")
-                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)"));
+            Pattern pattern = Pattern.compile("^" + Settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
+                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
             Matcher match = pattern.matcher(name);
             
             String zeros = "";
@@ -700,11 +692,14 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             DecimalFormat df = new DecimalFormat(zeros);
             
             //there is number
-            if(match.find()) {
+            if(match.find())
                 tName.setText(retNumber(match, df));
             //nope
-            } else {
-                tName.setText(Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2)));
+            else {
+                String name2 = Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
+                match = pattern.matcher(name2);
+                if(match.find()) tName.setText(retNumber(match, df));
+                else tName.setText(name2);
             }
 
             setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
@@ -736,8 +731,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             ++nr;
                       
             String name = Data.getFiles().get(nr).getComponent(Elem.NAME);
-            Pattern pattern = Pattern.compile(Settings.numFormat.replace("(", "\\(").replace(")", "\\)")
-                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)"));
+            Pattern pattern = Pattern.compile("^" + Settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
+                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
             Matcher match = pattern.matcher(name);
             
             String zeros = "";
@@ -748,7 +743,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                 tName.setText(retNumber(match, df));
             //nope
             } else {
-                tName.setText(Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2)));
+                String name2 = Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
+                match = pattern.matcher(name2);
+                if(match.find()) tName.setText(retNumber(match, df));
+                else tName.setText(name2);
             }
             
             setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
@@ -789,8 +787,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_mAddPlDescActionPerformed
 
     private void mEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mEditActionPerformed
-        if(Main.fFileEdit==null) Main.fFileEdit = new FFileEdit();
-        else Main.fFileEdit.setVisible(true);
+        if(Data.fFileEdit==null) Data.fFileEdit = new FFileEdit();
+        else Data.fFileEdit.setVisible(true);
     }//GEN-LAST:event_mEditActionPerformed
 
     private void mRefreshThumbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mRefreshThumbActionPerformed
@@ -1138,6 +1136,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         tDesc.setEnabled(!mode);
         tDesc.setOpaque(!mode);
         tCategories.setEnabled(!mode);
+        bCopyDescDown.setEnabled(!mode);
+        bCopyDescUp.setEnabled(!mode);
+        
         editable = !mode;
         if(mode) 
             lStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/navigation-090-button.png")));

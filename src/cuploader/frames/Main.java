@@ -36,23 +36,16 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class Main extends javax.swing.JFrame implements DropTargetListener {
+public final class Main extends javax.swing.JFrame implements DropTargetListener {
     String version, date;
     Data data;
     File directory = null;
 
-    //windows
-    FSettings fSettings;
-    FAbout fAbout;
-    public static FLogin fLogin;
-    public static FUploadCheck fUploadCheck;
-    public static FFileEdit fFileEdit;
-        
     public Main(String version, String date) {
         this.version = version;
         this.date = date;
         
-        boolean hello = readSettings();
+        int hello = readSettings();
         data = new Data(version, date);
         addWindowListener(exit);
         
@@ -70,8 +63,18 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         
         checkLag();
         setVisible(true);
-        if(!hello) 
+        
+        if(hello==1) 
             JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
+        else if(hello==2) {
+            File f = new File("autoupdate-session.xml");
+            if(f.exists()) {
+                loadSessionFile(f);
+                JOptionPane.showMessageDialog(rootPane, Data.text("hello-loadsession"));
+                f.delete();
+            } else
+                JOptionPane.showMessageDialog(rootPane, Data.text("hello-newsession"));
+        }
         checkVersion();
     }
       
@@ -149,6 +152,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         mViewNotUpload = new javax.swing.JRadioButtonMenuItem();
         mTools = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
+        mLangDe = new javax.swing.JRadioButtonMenuItem();
         mLangEn = new javax.swing.JRadioButtonMenuItem();
         mLangPl = new javax.swing.JRadioButtonMenuItem();
         mSettings = new javax.swing.JMenuItem();
@@ -188,7 +192,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("VicuñaUploader " + version);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/color-swatch-lama.png")));
-        setMinimumSize(new java.awt.Dimension(860, 550));
+        setMinimumSize(new java.awt.Dimension(900, 600));
         setPreferredSize(new java.awt.Dimension(860, 550));
 
         jToolBar1.setFloatable(false);
@@ -300,6 +304,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         pFilesScroll.setMinimumSize(new java.awt.Dimension(100, 100));
         pFilesScroll.setPreferredSize(new java.awt.Dimension(100, 100));
 
+        pFiles.setMinimumSize(new java.awt.Dimension(300, 56));
         pFiles.setLayout(new java.awt.GridBagLayout());
 
         lStartInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
@@ -333,13 +338,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             .addGroup(pUserInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pUserInfoLayout.createSequentialGroup()
-                        .addGroup(pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lServerStatus))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(lUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lServerStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lServer, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pUserInfoLayout.setVerticalGroup(
             pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,7 +353,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 .addComponent(lServerStatus))
         );
 
-        pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder("Opis"));
+        pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder("<html>" + Data.text("manual") + "</html>")); // NOI18N
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter.png"))); // NOI18N
         jLabel1.setText(bundle.getString("manual-1")); // NOI18N
@@ -418,7 +420,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pHelpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -660,6 +662,15 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 
         jMenu1.setText(bundle.getString("settings-lang")); // NOI18N
 
+        gLang.add(mLangDe);
+        mLangDe.setText("Deutsch (de)");
+        mLangDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLangDeActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mLangDe);
+
         gLang.add(mLangEn);
         mLangEn.setText("English (en)");
         mLangEn.addActionListener(new java.awt.event.ActionListener() {
@@ -726,7 +737,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -752,7 +763,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                         .addComponent(pHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pFilesScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -765,8 +776,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             Data.isLogged = false;
             setLogged(false);
         } else {
-            if(fLogin==null) fLogin = new FLogin(data);
-            else fLogin.setVisible(true);
+            if(Data.fLogin==null) Data.fLogin = new FLogin(data);
+            else Data.fLogin.setVisible(true);
         }
     }//GEN-LAST:event_mLoginActionPerformed
 
@@ -779,12 +790,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             JOptionPane.showMessageDialog(rootPane, Data.text("upload-selectfiles"), Data.text("uploading"), JOptionPane.ERROR_MESSAGE);
         else {
             if(Settings.wiki==null) {
-                if(fLogin==null) fLogin = new FLogin(data);
-                else fLogin.setVisible(true);
+                if(Data.fLogin==null) Data.fLogin = new FLogin(data);
+                else Data.fLogin.setVisible(true);
             }
             else {
-                if(fUploadCheck==null) fUploadCheck = new FUploadCheck(data);
-                else fUploadCheck.setVisible(true);
+                if(Data.fUploadCheck==null) Data.fUploadCheck = new FUploadCheck(data);
+                else Data.fUploadCheck.setVisible(true);
             }
         }
     }//GEN-LAST:event_mUploadActionPerformed
@@ -801,8 +812,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 
     private void mFileEditSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mFileEditSelectedActionPerformed
         if(Data.filesEdit>0) {
-            if(fFileEdit==null) fFileEdit = new FFileEdit();
-            else fFileEdit.setVisible(true);
+            if(Data.fFileEdit==null) Data.fFileEdit = new FFileEdit();
+            else Data.fFileEdit.setVisible(true);
         }
         else
             JOptionPane.showMessageDialog(rootPane, Data.text("edit-selectfiles"), Data.text("editing"), JOptionPane.ERROR_MESSAGE);
@@ -867,8 +878,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     }//GEN-LAST:event_mLoadSessionActionPerformed
 
     private void mAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAboutActionPerformed
-        if(fAbout==null) fAbout = new FAbout();
-        else fAbout.setVisible(true);
+        if(Data.fAbout==null) Data.fAbout = new FAbout();
+        else Data.fAbout.setVisible(true);
     }//GEN-LAST:event_mAboutActionPerformed
 
     private void mCleanSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCleanSessionActionPerformed
@@ -895,8 +906,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     }//GEN-LAST:event_mCleanSessionActionPerformed
 
     private void mSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSettingsActionPerformed
-        if(fSettings==null) fSettings = new FSettings(); 
-        else fSettings.setVisible(true);
+        if(Data.fSettings==null) Data.fSettings = new FSettings(); 
+        else Data.fSettings.setVisible(true);
     }//GEN-LAST:event_mSettingsActionPerformed
 
     private void mViewAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mViewAllActionPerformed
@@ -996,6 +1007,10 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         changeLang(new Locale("pl", "PL"));
     }//GEN-LAST:event_mLangPlActionPerformed
 
+    private void mLangDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangDeActionPerformed
+        changeLang(Locale.GERMAN);
+    }//GEN-LAST:event_mLangDeActionPerformed
+
     /**
      * Init
      **/
@@ -1005,30 +1020,32 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
      * Checks if settings file exist
      * @return true if exist
      */
-    private boolean readSettings() {
-        boolean b = false;
+    private int readSettings() {
+        int i = 0;
         try {
             FileInputStream f = new FileInputStream(".vicuna-settings");
             if(f!=null) {
                 ObjectInputStream in = new ObjectInputStream(f);
                 Settings s = (Settings) in.readObject();
                 in.close();
-                b = true;
-                
                 if(Settings.lang==null) Settings.lang = getLocale();
-                Locale.setDefault(Settings.lang);
-                Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Settings.lang);
             }
         } catch (FileNotFoundException ex) {
+                Settings.lang = getLocale();
+                i = 1;
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                Settings.lang = getLocale();
+                i = 2;
         }
-        return b;
+        
+        Locale.setDefault(Settings.lang);
+        Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Settings.lang);
+        return i;
     }
     
     private void readLang() {
+        if(Settings.lang.equals(Locale.GERMAN)) mLangDe.setSelected(true);
         if(Settings.lang.equals(Locale.ENGLISH)) mLangEn.setSelected(true);
         if(Settings.lang.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
     }
@@ -1145,20 +1162,29 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
+            String text;
+            
             // SETTINGS
             Document doc = docBuilder.newDocument();
             Element root = doc.createElement("session");
                 doc.appendChild(root);
 
-            Element server = doc.createElement("server");
-                server.appendChild(doc.createTextNode(Settings.server));
-                root.appendChild(server);
-            Element user = doc.createElement("user");
-                user.appendChild(doc.createTextNode(Settings.username));
-                root.appendChild(user);
-            Element author = doc.createElement("author");
-                author.appendChild(doc.createTextNode(Settings.author));
-                root.appendChild(author);
+            Element elem = doc.createElement("server");
+                elem.appendChild(doc.createTextNode(Settings.server));
+                root.appendChild(elem);
+            elem = doc.createElement("user");
+                text = Settings.username.isEmpty() ? "null" : Settings.username;
+                elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
+                root.appendChild(elem);
+            elem = doc.createElement("author");
+                text = Settings.author.isEmpty() ? "null" : Settings.author;
+                elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
+                root.appendChild(elem);
+            elem = doc.createElement("source");
+                text = Settings.source.isEmpty() ? "null" : Settings.source;
+                elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
+                root.appendChild(elem);
+                
             Element license = doc.createElement("license");
                 root.appendChild(license);
 
@@ -1166,10 +1192,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                     id.setValue(Settings.license+"");
                     license.setAttributeNode(id);
                 Attr custom = doc.createAttribute("custom");
-                    custom.setValue(Data.licensesTemplates.get(Data.licensesTemplates.size()-1));
+                    text = Data.licensesTemplates.get(Data.licensesTemplates.size()-1).isEmpty() ? "null" : Data.licensesTemplates.get(Data.licensesTemplates.size()-1);
+                    custom.setValue(text);
                     license.setAttributeNode(custom);
                 Attr attributon = doc.createAttribute("attribution");
-                    attributon.setValue(Settings.attrib);
+                    text = Settings.attrib.isEmpty() ? "null" : Settings.attrib;
+                    attributon.setValue(text.replace("&", "amp;"));
                     license.setAttributeNode(attributon);
 
             Element gallery = doc.createElement("gallery");
@@ -1179,7 +1207,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                     create.setValue(Settings.createGallery+"");
                     gallery.setAttributeNode(create);
                 Attr page = doc.createAttribute("page");
-                    page.setValue(Settings.galleryPage);
+                    text = Settings.galleryPage.isEmpty() ? "null" : Settings.galleryPage;
+                    page.setValue(text.replace("&", "amp;"));
                     gallery.setAttributeNode(page);
                 Attr header = doc.createAttribute("header");
                     header.setValue(Settings.galleryHeader+"");
@@ -1187,19 +1216,41 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 Attr width = doc.createAttribute("width");
                     width.setValue(Settings.galleryWidth+"");
                     gallery.setAttributeNode(width);
+                Attr ontop = doc.createAttribute("ontop");
+                    ontop.setValue(Settings.galleryOnTop+"");
+                    gallery.setAttributeNode(ontop);   
 
             Element other = doc.createElement("other");
                 root.appendChild(other);
 
-                Attr read_exif_hour = doc.createAttribute("read_exif_hour");
-                    read_exif_hour.setValue(Settings.readExifHour+"");
-                    other.setAttributeNode(read_exif_hour);
-                Attr rename_after_upload = doc.createAttribute("rename_after_upload");
-                    rename_after_upload.setValue(Settings.renameAfterUpload+"");
-                    other.setAttributeNode(rename_after_upload);
+                Attr attr = doc.createAttribute("read_exif_hour");
+                    attr.setValue(Settings.readExifHour+"");
+                    other.setAttributeNode(attr);
+                attr = doc.createAttribute("rename_after_upload");
+                    attr.setValue(Settings.renameAfterUpload+"");
+                    other.setAttributeNode(attr);
+                attr = doc.createAttribute("load_subdirectory");
+                    attr.setValue(Settings.loadSubdirectory+"");
+                    other.setAttributeNode(attr);
+                attr = doc.createAttribute("ask_quit");
+                    attr.setValue(Settings.askQuit+"");
+                    other.setAttributeNode(attr);
+                attr = doc.createAttribute("file_desc_dource");
+                    attr.setValue(Settings.fileDescSource+"");
+                    other.setAttributeNode(attr);
+                attr = doc.createAttribute("file_desc_path");
+                    text = Settings.fileDescPath.isEmpty() ? "null" : Settings.fileDescPath;
+                    attr.setValue(text.replace("&", "amp;"));
+                    other.setAttributeNode(attr);
 
+            Element categories = doc.createElement("categories");
+                text = Settings.categories.isEmpty() ? "null" : Settings.categories;
+                categories.appendChild(doc.createTextNode(text.replace("&", "amp;")));
+                root.appendChild(categories);
+                    
             Element extra_text = doc.createElement("extra_text");
-                extra_text.appendChild(doc.createTextNode(Settings.extratext+""));
+                text = Settings.extratext.isEmpty() ? "null" : Settings.extratext;
+                extra_text.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                 root.appendChild(extra_text);
 
             // FILES
@@ -1209,7 +1260,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                     root.appendChild(file);
 
                     Attr path = doc.createAttribute("path");
-                        path.setValue(i.file.getAbsolutePath());
+                        path.setValue(i.file.getAbsolutePath().replace("&", "amp;"));
                         file.setAttributeNode(path);
                     Attr upload = doc.createAttribute("upload");
                         upload.setValue(i.toUpload+"");
@@ -1218,35 +1269,28 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                         edit.setValue(i.toEdit+"");
                         file.setAttributeNode(edit);
 
-                String text;
-
                 Element name = doc.createElement("name");
-                if(i.getComponent(Elem.NAME).equals("")) text="null";
-                else text = i.getComponent(Elem.NAME);
+                text = i.getComponent(Elem.NAME).isEmpty() ? "null" : i.getComponent(Elem.NAME);
                     name.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                     file.appendChild(name);
 
                 Element date2 = doc.createElement("date");
-                if(i.getComponent(Elem.DATE).equals("")) text="null";
-                else text = i.getComponent(Elem.DATE);
+                text = i.getComponent(Elem.DATE).isEmpty() ? "null" : i.getComponent(Elem.DATE);
                     date2.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                     file.appendChild(date2);
 
                 Element desc = doc.createElement("desc");
-                if(i.getComponent(Elem.DESC).equals("")) text="null";
-                else text = i.getComponent(Elem.DESC);
+                text = i.getComponent(Elem.DESC).isEmpty() ? "null" : i.getComponent(Elem.DESC);
                     desc.appendChild(doc.createTextNode(text.replace("&", "amp;").replace("\n", "\\n")));
                     file.appendChild(desc);
 
                 Element coor = doc.createElement("coor");
-                if(i.getComponent(Elem.COOR).equals("")) text="null";
-                else text = i.getComponent(Elem.COOR);
+                text = i.getComponent(Elem.COOR).isEmpty() ? "null" : i.getComponent(Elem.COOR);
                     coor.appendChild(doc.createTextNode(text));
                     file.appendChild(coor);
 
                 Element cats = doc.createElement("cats");
-                if(i.getComponent(Elem.CATS).equals("")) text="null";
-                else text = i.getComponent(Elem.CATS);
+                text = i.getComponent(Elem.CATS).isEmpty() ? "null" : i.getComponent(Elem.CATS);
                     cats.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                     file.appendChild(cats);
             }
@@ -1287,7 +1331,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             if(ch.getSelectedFile().isFile())
                 loadSessionFile(ch.getSelectedFile());
             else
-                JOptionPane.showMessageDialog(rootPane, Data.text("session-load-error"), Data.text("session-load"), JOptionPane.WARNING_MESSAGE, null);
+                JOptionPane.showMessageDialog(rootPane, Data.text("session-load-error"), Data.text("session-load"), JOptionPane.ERROR_MESSAGE, null);
         }
     }
     
@@ -1315,6 +1359,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 
                 @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    String text;
                     tag = qName;
                     attr = new TreeMap<String, String>();
 
@@ -1324,21 +1369,31 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                         
                         if(tag.equals("license")) {
                             Settings.license = Integer.parseInt(attr.get("id"));
-                            Data.licensesTemplates.set(Data.licensesTemplates.size()-1, attr.get("custom"));
-                            Settings.attrib = attr.get("attribution");
+                            text = attr.get("custom").equals("null") ? "" : attr.get("custom");
+                            Data.licensesTemplates.set(Data.licensesTemplates.size()-1, text.replace("amp;", "&"));
+                            
+                            text = attr.get("attribution").equals("null") ? "" : attr.get("attribution");
+                            Settings.attrib = text.replace("amp;", "&");
                         } 
                         else if(tag.equals("gallery")) {
                             Settings.createGallery = Boolean.parseBoolean(attr.get("create"));
                             Settings.galleryHeader = Integer.parseInt(attr.get("header"));
-                            Settings.galleryPage = attr.get("page");
+                            text = attr.get("page").equals("null") ? "" : attr.get("page");
+                            Settings.galleryPage = text.replace("amp;", "&");
                             Settings.galleryWidth = Integer.parseInt(attr.get("width"));
+                            Settings.galleryOnTop = Boolean.parseBoolean(attr.get("ontop"));
                         } 
                         else if(tag.equals("other")) {
-                            Settings.readExifHour = Boolean.parseBoolean("read_exif_hour");
-                            Settings.renameAfterUpload = Boolean.parseBoolean("rename_after_upload");
+                            Settings.readExifHour = Boolean.parseBoolean(attr.get("read_exif_hour"));
+                            Settings.renameAfterUpload = Boolean.parseBoolean(attr.get("rename_after_upload"));
+                            Settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
+                            Settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));
+                            Settings.fileDescSource = Integer.parseInt(attr.get("file_desc_dource"));
+                            text = attr.get("file_desc_path").equals("null") ? "" : attr.get("file_desc_path");
+                            Settings.fileDescPath = text.replace("amp;", "&");     
                         }
                         else if(tag.equals("file")) {
-                            fPath.add(new File(attr.get("path")));
+                            fPath.add(new File(attr.get("path").replace("amp;", "&")));
                             fEdit.add(Boolean.parseBoolean(attr.get("edit")));
                             fUpload.add(Boolean.parseBoolean(attr.get("upload")));
                         }
@@ -1352,27 +1407,30 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
                 @Override
                 public void characters(char ch[], int start, int length) throws SAXException {
                     String text = new String(ch, start, length);
+                    text = text.equals("null") ? "" : text;
                     //System.out.println("\tTag: " + tag + ", wartość: " + text);
                     if(tag.equals("server"))
                         Settings.server = text;
                     else if(tag.equals("user"))
-                        Settings.username = text;
+                        Settings.username = text.replace("amp;", "&");
                     else if(tag.equals("author"))
-                        Settings.author = text;
+                        Settings.author = text.replace("amp;", "&");
+                    else if(tag.equals("source"))
+                        Settings.source = text.replace("amp;", "&");
                     else if(tag.equals("extra_text"))
-                        Settings.extratext = text;
+                        Settings.extratext = text.replace("amp;", "&");
+                    else if(tag.equals("categories"))
+                        Settings.categories = text.replace("amp;", "&");
                     
                     else if(tag.equals("name")) fName.add(text.replace("amp;", "&"));
                     else if(tag.equals("date")) fDate.add(text.replace("amp;", "&"));
                     else if(tag.equals("desc")) fDesc.add(text.replace("amp;", "&").replace("\\n", "\n"));
-                    else if(tag.equals("coor")) fCoor.add(text.replace("amp;", "&"));
+                    else if(tag.equals("coor")) fCoor.add(text);
                     else if(tag.equals("cats")) fCats.add(text.replace("amp;", "&"));
                 }
 
             };
             saxParser.parse(f, handler);
-            //System.out.println(fPath.size()+"/"+fEdit.size()+"/"+fUpload.size()+"/"+fName.size()+"/"+fDate.size()+"/"+
-            //        fDesc.size()+"/"+fCoor.size()+"/"+fCats.size());
             new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
             lStartInfo.setVisible(false);
             mEdit.setEnabled(true);
@@ -1380,7 +1438,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
             mUpload.setEnabled(true);
             
         } catch (Exception e) {
-            System.out.print("Błąd: " + e.toString());
+            JOptionPane.showMessageDialog(rootPane, Data.text("session-error") + " " + e.getLocalizedMessage(), Data.text("session-load"), JOptionPane.ERROR_MESSAGE, null);
         }
     }
     //</editor-fold>
@@ -1504,7 +1562,6 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
 
             final ProcessBuilder builder = new ProcessBuilder(command);
             builder.start();
-            //Close();
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
@@ -1520,7 +1577,12 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
      */
     void changeLang(Locale lang) {
         Settings.lang = lang;
-        JOptionPane.showMessageDialog(rootPane, "Needs restart");
+        
+        Object[] o = {Data.text("button-restart"), Data.text("server-ok")};
+        int n = JOptionPane.showOptionDialog(rootPane, Data.text("settings-lang-info"), 
+                Data.text("settings-lang"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, o, o[0]);
+        if(n==0)
+            ConfirmClose(true);
     }
     
     public static void main(String args[]) {
@@ -1540,8 +1602,8 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
         }
         //</editor-fold>
         
-        String version = "1.13";
-        String date = "2012-09-17";
+        String version = "1.14";
+        String date = "2012-10-01";
 
         final JFrame frame = new Main(version, date);
     }
@@ -1595,6 +1657,7 @@ public class Main extends javax.swing.JFrame implements DropTargetListener {
     private javax.swing.JMenuItem mFileUploadSelectInv;
     private javax.swing.JMenu mHelp;
     private javax.swing.JMenuItem mHelpOnline;
+    private javax.swing.JRadioButtonMenuItem mLangDe;
     private javax.swing.JRadioButtonMenuItem mLangEn;
     private javax.swing.JRadioButtonMenuItem mLangPl;
     private javax.swing.JMenuItem mLoadFiles;

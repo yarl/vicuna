@@ -384,6 +384,17 @@
                 </Property>
               </Properties>
               <SubComponents>
+                <MenuItem class="javax.swing.JRadioButtonMenuItem" name="mLangDe">
+                  <Properties>
+                    <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                      <ComponentRef name="gLang"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Deutsch (de)"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mLangDeActionPerformed"/>
+                  </Events>
+                </MenuItem>
                 <MenuItem class="javax.swing.JRadioButtonMenuItem" name="mLangEn">
                   <Properties>
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
@@ -476,7 +487,7 @@
       <Connection code="Toolkit.getDefaultToolkit().getImage(getClass().getResource(&quot;/cuploader/resources/color-swatch-lama.png&quot;))" type="code"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[860, 550]"/>
+      <Dimension value="[900, 600]"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[860, 550]"/>
@@ -507,7 +518,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pFilesScroll" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jToolBar1" pref="611" max="32767" attributes="0"/>
+                  <Component id="jToolBar1" pref="621" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -539,9 +550,9 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pUpload" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="pFilesScroll" alignment="1" max="32767" attributes="0"/>
+                  <Component id="pFilesScroll" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -722,6 +733,9 @@
       <SubComponents>
         <Container class="javax.swing.JPanel" name="pFiles">
           <Properties>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[300, 56]"/>
+            </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <SerializedValue value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,0,100,0,0,0,100"/>
             </Property>
@@ -773,16 +787,11 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lServer" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lUserInfo" min="-2" pref="192" max="-2" attributes="0"/>
-                              <Component id="lServerStatus" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="lUserInfo" min="-2" pref="192" max="-2" attributes="0"/>
+                      <Component id="lServerStatus" min="-2" pref="191" max="-2" attributes="0"/>
+                      <Component id="lServer" min="-2" pref="191" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -842,7 +851,9 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Opis"/>
+            <TitledBorder title="Desc">
+              <ResourceString PropertyName="titleX" bundle="cuploader/text/messages.properties" key="manual" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
+            </TitledBorder>
           </Border>
         </Property>
       </Properties>
@@ -961,7 +972,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lHelp" pref="70" max="32767" attributes="0"/>
+                  <Component id="lHelp" pref="121" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

@@ -4,10 +4,11 @@ import cuploader.Data;
 import cuploader.Data.Elem;
 import cuploader.PFile;
 import cuploader.Settings;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +25,8 @@ public class FUploadCheck extends javax.swing.JFrame {
             
     public FUploadCheck(Data data) {
         this.data = data;
+        
+        addWindowListener(exit);
         initComponents();
         setLocationRelativeTo(null);
         
@@ -52,7 +55,6 @@ public class FUploadCheck extends javax.swing.JFrame {
                     name = name.substring(0, name.length()-1);
                 file.setComponent(Elem.NAME, name.replace("  ", " "));
                 
-                
                 //extra ext
                 if(name.endsWith(".jpg")||name.endsWith(".png")||name.endsWith(".gif")||name.endsWith(".pdf")||name.endsWith(".djvu")) {
                     name = name.substring(0, name.lastIndexOf('.'));
@@ -75,8 +77,13 @@ public class FUploadCheck extends javax.swing.JFrame {
                 
                 //check IMG* / DSCF* names
                 tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
+
+                Pattern pattern = Pattern.compile("^(DSCF|IMG|P|)[0-9 _-]*\\..{3,4}$");
+                Matcher match;
+
                 for(String name : files) {
-                    if(name.matches("(DSCF).*||(IMG).*")) {
+                    match = pattern.matcher(name.intern());
+                    if(match.matches()) {
                         ++problems;
                         model.addRow(new Object[]{name, Data.text("uploadcheck-error-dscf")});
                     }
@@ -187,7 +194,7 @@ public class FUploadCheck extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(tProgress)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -241,12 +248,12 @@ public class FUploadCheck extends javax.swing.JFrame {
     private void bUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUploadActionPerformed
         startUpload();
         dispose();
-        Main.fUploadCheck = null;
+        Data.fUploadCheck = null;
     }//GEN-LAST:event_bUploadActionPerformed
 
     private void bFixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bFixActionPerformed
         dispose();
-        Main.fUploadCheck = null;
+        Data.fUploadCheck = null;
     }//GEN-LAST:event_bFixActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -262,7 +269,15 @@ public class FUploadCheck extends javax.swing.JFrame {
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             dispose();
-            Main.fUploadCheck = null;
+            Data.fUploadCheck = null;
         }
     }; 
+    
+    WindowListener exit = new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent evt) {
+            dispose();
+            Data.fUploadCheck = null;
+        }
+    };
 }

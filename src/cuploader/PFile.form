@@ -387,7 +387,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                   <Component id="jPanel1" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="3" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -446,8 +446,8 @@
                 </Property>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="3"/>
-                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="mWiki"/>
+                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="Data.mQuickTemplates" type="code"/>
                 </Property>
               </Properties>
               <Events>
@@ -658,7 +658,9 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/cuploader/resources/map.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Otwiera map&#x119; z geolokolizacj&#x105; zdj&#x119;cia"/>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="cuploader/text/messages.properties" key="file-coord" replaceFormat="Data.text(&quot;{key}&quot;)"/>
+            </Property>
             <Property name="disabledIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/cuploader/resources/map-bw.png"/>
             </Property>

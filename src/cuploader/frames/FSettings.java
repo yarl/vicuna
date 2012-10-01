@@ -2,20 +2,25 @@ package cuploader.frames;
 
 import cuploader.Data;
 import cuploader.FileFilters;
+import cuploader.QuickTemplate;
 import cuploader.Settings;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 public class FSettings extends javax.swing.JFrame {
-
+    private QuickTemplatesModel model = new QuickTemplatesModel();
+    
     public FSettings() {
+        
         initComponents();
+        addWindowListener(exit);
         setResizable(false);
         setLocationRelativeTo(null);
         
-        //FILE
+        //GENERAL
         if(!Settings.author.equals("own")) {
             rOtherAuthor.setSelected(true);
             tOtherAuthor.setText(Settings.author);
@@ -41,12 +46,17 @@ public class FSettings extends javax.swing.JFrame {
         tCategories.setText(Settings.categories);
         tExtraText.setText(Settings.extratext);
         
+        //FILE
+        tQuickTemplatesTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+        
         //GALLERY
         cCreateGallery.setSelected(Settings.createGallery);
         cCreateGalleryActionPerformed(new ActionEvent(this, 0, null));
         tGalleryPage.setText(Settings.galleryPage);
         tGalleryHeader.setSelectedIndex(Settings.galleryHeader);
         tGalleryWidth.setValue(Settings.galleryWidth);
+        tPositionTop.setSelected(Settings.galleryOnTop);
+        tPositionBottom.setSelected(!Settings.galleryOnTop);
         
         //PROGRAM
         cReadHour.setSelected(Settings.readExifHour);
@@ -70,7 +80,8 @@ public class FSettings extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        gAuthor = new javax.swing.ButtonGroup();
+        gGallery = new javax.swing.ButtonGroup();
         bSave = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pFile = new javax.swing.JPanel();
@@ -90,6 +101,13 @@ public class FSettings extends javax.swing.JFrame {
         tExtraText = new javax.swing.JTextArea();
         tSource = new javax.swing.JTextField();
         lSource = new javax.swing.JLabel();
+        pFileDetails = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        lQuickTemplatesHint = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tQuickTemplatesTable = new javax.swing.JTable();
+        bDelete = new javax.swing.JButton();
+        bAdd = new javax.swing.JButton();
         pGallery = new javax.swing.JPanel();
         cCreateGallery = new javax.swing.JCheckBox();
         lGalleryPage = new javax.swing.JLabel();
@@ -98,6 +116,9 @@ public class FSettings extends javax.swing.JFrame {
         tGalleryHeader = new javax.swing.JComboBox();
         lGalleryWidth = new javax.swing.JLabel();
         tGalleryWidth = new javax.swing.JSpinner();
+        lSectionPosition = new javax.swing.JLabel();
+        tPositionTop = new javax.swing.JRadioButton();
+        tPositionBottom = new javax.swing.JRadioButton();
         pProgram = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         cReadHour = new javax.swing.JCheckBox();
@@ -128,7 +149,7 @@ public class FSettings extends javax.swing.JFrame {
 
         lAuthor.setText(bundle.getString("settings-author")); // NOI18N
 
-        buttonGroup1.add(rOwnWork);
+        gAuthor.add(rOwnWork);
         rOwnWork.setSelected(true);
         rOwnWork.setText(bundle.getString("settings-own")); // NOI18N
         rOwnWork.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +158,7 @@ public class FSettings extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup1.add(rOtherAuthor);
+        gAuthor.add(rOtherAuthor);
         rOtherAuthor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rOtherAuthorActionPerformed(evt);
@@ -165,6 +186,7 @@ public class FSettings extends javax.swing.JFrame {
         tExtraText.setColumns(20);
         tExtraText.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         tExtraText.setRows(5);
+        tExtraText.setComponentPopupMenu(Data.mQuickTemplates);
         tExtraTextScroll.setViewportView(tExtraText);
 
         tSource.setEnabled(false);
@@ -244,7 +266,83 @@ public class FSettings extends javax.swing.JFrame {
                 .addGap(45, 45, 45))
         );
 
-        jTabbedPane1.addTab(bundle.getString("settings-files"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image---small.png")), pFile); // NOI18N
+        jTabbedPane1.addTab(bundle.getString("settings-general"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/gear.png")), pFile); // NOI18N
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("<html>" + Data.text("settings-templates") + "</html>")); // NOI18N
+
+        lQuickTemplatesHint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
+        lQuickTemplatesHint.setText("<html>" + Data.text("settings-templates-hint") + "</html>"); // NOI18N
+
+        tQuickTemplatesTable.setModel(model);
+        tQuickTemplatesTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tQuickTemplatesTable.getTableHeader().setReorderingAllowed(false);
+        tQuickTemplatesTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tQuickTemplatesTableKeyTyped(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tQuickTemplatesTable);
+
+        bDelete.setText( Data.text("button-delete")); // NOI18N
+        bDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDeleteActionPerformed(evt);
+            }
+        });
+
+        bAdd.setText(Data.text("button-add")); // NOI18N
+        bAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAddActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lQuickTemplatesHint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(bAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bDelete)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(lQuickTemplatesHint, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bDelete)
+                    .addComponent(bAdd))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout pFileDetailsLayout = new javax.swing.GroupLayout(pFileDetails);
+        pFileDetails.setLayout(pFileDetailsLayout);
+        pFileDetailsLayout.setHorizontalGroup(
+            pFileDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pFileDetailsLayout.createSequentialGroup()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        pFileDetailsLayout.setVerticalGroup(
+            pFileDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pFileDetailsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(Data.text("settings-files"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image---small.png")), pFileDetails); // NOI18N
 
         cCreateGallery.setText(bundle.getString("settings-gallery-create")); // NOI18N
         cCreateGallery.addActionListener(new java.awt.event.ActionListener() {
@@ -266,13 +364,21 @@ public class FSettings extends javax.swing.JFrame {
 
         tGalleryWidth.setValue(200);
 
+        lSectionPosition.setText( Data.text("settings-gallery-position")); // NOI18N
+
+        gGallery.add(tPositionTop);
+        tPositionTop.setText( Data.text("settings-gallery-prepend")); // NOI18N
+
+        gGallery.add(tPositionBottom);
+        tPositionBottom.setText( Data.text("settings-gallery-append")); // NOI18N
+
         javax.swing.GroupLayout pGalleryLayout = new javax.swing.GroupLayout(pGallery);
         pGallery.setLayout(pGalleryLayout);
         pGalleryLayout.setHorizontalGroup(
             pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pGalleryLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pGalleryLayout.createSequentialGroup()
                         .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lGalleryPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -280,14 +386,21 @@ public class FSettings extends javax.swing.JFrame {
                             .addComponent(lGalleryWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tGalleryWidth)
+                            .addComponent(tGalleryHeader, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tGalleryPage))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lSectionPosition, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pGalleryLayout.createSequentialGroup()
-                                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tGalleryHeader, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(tGalleryWidth, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(tGalleryPage)))
-                    .addComponent(cCreateGallery, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                                .addGap(10, 10, 10)
+                                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tPositionTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tPositionBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(pGalleryLayout.createSequentialGroup()
+                        .addComponent(cCreateGallery, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 19, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         pGalleryLayout.setVerticalGroup(
             pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,15 +410,18 @@ public class FSettings extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(tGalleryPage)
-                    .addComponent(lGalleryPage, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(lGalleryPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lSectionPosition, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
                 .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(tGalleryHeader)
-                    .addComponent(lGalleryHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lGalleryHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tPositionTop, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(tGalleryWidth)
-                    .addComponent(lGalleryWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lGalleryWidth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tPositionBottom, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(196, Short.MAX_VALUE))
         );
 
@@ -406,7 +522,6 @@ public class FSettings extends javax.swing.JFrame {
                         .addComponent(lFileDescSource, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(3, 3, 3))
                     .addComponent(cFileDescSource, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(bSetFileDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(tFileDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -436,7 +551,7 @@ public class FSettings extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("settings-program"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/application.png")), pProgram); // NOI18N
@@ -471,7 +586,7 @@ public class FSettings extends javax.swing.JFrame {
         if(cFileDescSource.getSelectedIndex()==1 && Settings.fileDescPath==null)
             JOptionPane.showMessageDialog(rootPane, "Select file");
         else {
-            //FILE
+            //GENERAL
             //author
             if(rOtherAuthor.isSelected() && !"".equals(tOtherAuthor.getText())) Settings.author = tOtherAuthor.getText();
                 else Settings.author = "own";
@@ -495,13 +610,17 @@ public class FSettings extends javax.swing.JFrame {
             if(Settings.extratext == null ? tExtraText.getText() != null : !Settings.extratext.equals(tExtraText.getText())) 
                 Settings.extratext = tExtraText.getText();
 
+            //FILE
+            Data.refreshQuickTemplates();
+            
             //GALLERY
             Settings.createGallery = cCreateGallery.isSelected();
                 if(!tGalleryPage.getText().equals(""))
             Settings.galleryPage = tGalleryPage.getText();
             Settings.galleryHeader = tGalleryHeader.getSelectedIndex();
             Settings.galleryWidth = Integer.parseInt(tGalleryWidth.getValue().toString());
-
+            Settings.galleryOnTop = tPositionTop.isSelected();
+            
             //PROGRAM
             Settings.readExifHour = cReadHour.isSelected();
             Settings.loadSubdirectory = cLoadSubdirectory.isSelected();
@@ -513,6 +632,7 @@ public class FSettings extends javax.swing.JFrame {
 
             Settings.Serialize();
             dispose();
+            Data.fSettings = null;
         }
     }//GEN-LAST:event_bSaveActionPerformed
 
@@ -521,6 +641,8 @@ public class FSettings extends javax.swing.JFrame {
         tGalleryHeader.setEnabled(b);
         tGalleryPage.setEnabled(b);
         tGalleryWidth.setEnabled(b);
+        tPositionBottom.setEnabled(b);
+        tPositionTop.setEnabled(b);
     }//GEN-LAST:event_cCreateGalleryActionPerformed
 
     private void rOwnWorkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rOwnWorkActionPerformed
@@ -563,10 +685,31 @@ public class FSettings extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_bSetFileDescActionPerformed
 
+    private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
+        Settings.quickTemplates.add(new QuickTemplate(Data.text("settings-templates-name"), "{{" + Data.text("settings-templates-template") + "}}", false));
+        ((AbstractTableModel)tQuickTemplatesTable.getModel()).fireTableDataChanged();
+    }//GEN-LAST:event_bAddActionPerformed
+
+    private void bDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteActionPerformed
+        int row = tQuickTemplatesTable.getSelectedRow();
+        if(row>-1){
+            Settings.quickTemplates.remove(row);
+            ((AbstractTableModel)tQuickTemplatesTable.getModel()).fireTableDataChanged();
+        }
+    }//GEN-LAST:event_bDeleteActionPerformed
+
+    private void tQuickTemplatesTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tQuickTemplatesTableKeyTyped
+        if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            System.out.println("DELETE");
+            bDeleteActionPerformed(new ActionEvent(this, 0, ""));
+        }
+    }//GEN-LAST:event_tQuickTemplatesTableKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAdd;
+    private javax.swing.JButton bDelete;
     private javax.swing.JButton bSave;
     private javax.swing.JButton bSetFileDesc;
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox cAskQuit;
     private javax.swing.JCheckBox cCreateGallery;
     private javax.swing.JComboBox cFileDescSource;
@@ -574,10 +717,14 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JCheckBox cLoadSubdirectory;
     private javax.swing.JCheckBox cReadHour;
     private javax.swing.JCheckBox cRenameAfterUpload;
+    private javax.swing.ButtonGroup gAuthor;
+    private javax.swing.ButtonGroup gGallery;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lAttrib;
     private javax.swing.JLabel lAuthor;
@@ -587,8 +734,11 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JLabel lGalleryPage;
     private javax.swing.JLabel lGalleryWidth;
     private javax.swing.JLabel lLicense;
+    private javax.swing.JLabel lQuickTemplatesHint;
+    private javax.swing.JLabel lSectionPosition;
     private javax.swing.JLabel lSource;
     private javax.swing.JPanel pFile;
+    private javax.swing.JPanel pFileDetails;
     private javax.swing.JPanel pGallery;
     private javax.swing.JPanel pProgram;
     private javax.swing.JRadioButton rOtherAuthor;
@@ -603,6 +753,9 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JSpinner tGalleryWidth;
     private javax.swing.JTextField tLicense;
     private javax.swing.JTextField tOtherAuthor;
+    private javax.swing.JRadioButton tPositionBottom;
+    private javax.swing.JRadioButton tPositionTop;
+    private javax.swing.JTable tQuickTemplatesTable;
     private javax.swing.JTextField tSource;
     // End of variables declaration//GEN-END:variables
 
@@ -610,6 +763,73 @@ public class FSettings extends javax.swing.JFrame {
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             dispose();
+            Data.fSettings = null;
         }
     }; 
+    
+    WindowListener exit = new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent evt) {
+            dispose();
+            Data.fSettings = null;
+        }
+    };
+}
+
+class QuickTemplatesModel extends DefaultTableModel {
+    public QuickTemplatesModel() {}
+    JCheckBox box = new JCheckBox();
+         
+    @Override
+    public int getRowCount() {
+        return Settings.quickTemplates.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return 3;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        switch(columnIndex) {
+            case 0: return Settings.quickTemplates.get(rowIndex).active;
+            case 1: return Settings.quickTemplates.get(rowIndex).name;
+            case 2: return Settings.quickTemplates.get(rowIndex).template;
+            default: return 0;
+        }
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        switch(columnIndex) {
+            case 0: Settings.quickTemplates.get(rowIndex).active = Boolean.parseBoolean(value.toString()); break;
+            case 1: Settings.quickTemplates.get(rowIndex).name = value.toString(); break;
+            case 2: Settings.quickTemplates.get(rowIndex).template = value.toString(); break;
+        }
+    }
+
+    @Override
+    public String getColumnName(int col) {
+        switch(col) {
+            case 0: return Data.text("settings-templates-active");
+            case 1: return Data.text("settings-templates-name");
+            case 2: return Data.text("settings-templates-template");
+            default: return "?";
+        }
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if(columnIndex==0) return Boolean.class;
+        else return super.getColumnClass(columnIndex);
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        /*if(columnIndex==1 && rowIndex<5) return false;  //i18n
+        else*/ return true;
+    }
+    
+    
 }

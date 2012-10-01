@@ -26,6 +26,7 @@ public class FUpload extends javax.swing.JFrame {
     boolean createGallery;
     int galleryHeader;
     int galleryWidth;
+    boolean galleryOnTop;
     
     int fileDescSource;
     String server;
@@ -54,6 +55,7 @@ public class FUpload extends javax.swing.JFrame {
         galleryHeader = Settings.galleryHeader;
         galleryWidth = Settings.galleryWidth;
         fileDescSource = Settings.fileDescSource;
+        galleryOnTop = Settings.galleryOnTop;
         
         server = Settings.server;
         author = Settings.author;
@@ -216,7 +218,7 @@ public class FUpload extends javax.swing.JFrame {
             //GALLERY HEADER
             if(createGallery && !stopRq) {
                 if(galleryHeader==1)
-                    header = JOptionPane.showInputDialog(rootPane, bundle.getString("upload-gallery-name"), bundle.getString("upload-uploading"), JOptionPane.INFORMATION_MESSAGE);
+                    header = JOptionPane.showInputDialog(rootPane, Data.text("upload-gallery-name"), Data.text("upload-uploading"), JOptionPane.INFORMATION_MESSAGE);
                 else if(galleryHeader==0){
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Calendar cal = Calendar.getInstance();
@@ -376,7 +378,7 @@ public class FUpload extends javax.swing.JFrame {
                     name = name.replace("  ", " ");
                     name += "." + file.getComponent(Elem.EXT);
 
-                    lName.setText(bundle.getString("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
+                    lName.setText(Data.text("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
 
                     //upload
@@ -385,7 +387,7 @@ public class FUpload extends javax.swing.JFrame {
                      
                     try { 
                         boolean fileExist = Settings.wiki.isPageExist(name);
-                        if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version, Progress);
+                        if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
                         
                         if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
                         if(renameAfterUpload) {
@@ -396,12 +398,12 @@ public class FUpload extends javax.swing.JFrame {
                         file.setAsUploaded();
                         ++uploaded;
                     } catch (UnknownError ex) {
-                        file.setAsFailed(bundle.getString("upload-error-file") + ": " + ex.getLocalizedMessage());
+                        file.setAsFailed(Data.text("upload-error-file") + ": " + ex.getLocalizedMessage());
                     } catch (CredentialNotFoundException ex) {
-                        JOptionPane.showMessageDialog(rootPane, bundle.getString("upload-error-account"), bundle.getString("upload-uploading"), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(rootPane, Data.text("upload-error-account"), Data.text("upload-uploading"), JOptionPane.ERROR_MESSAGE);
                         break;
                     } catch (CredentialException ex) {
-                        file.setAsFailed(bundle.getString("upload-error-file-protected"));
+                        file.setAsFailed(Data.text("upload-error-file-protected"));
                     } catch (LoginException ex) {
                         file.setAsFailed(ex.getLocalizedMessage());
                     } catch (IOException ex) {
@@ -412,37 +414,42 @@ public class FUpload extends javax.swing.JFrame {
                 }
             }
                 
-            lName.setText(bundle.getString("upload-file-uploaded") + ": " + uploaded + " / " + + toUpload);
+            lName.setText(Data.text("upload-file-uploaded") + ": " + uploaded + " / " + + toUpload);
             if(toUpload==uploaded)
                 lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
             else
                 lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
 
-            if(Settings.createGallery) gallery += "</gallery>";
-            if(Settings.createGallery && uploaded>0) {
+            if(createGallery) gallery += "</gallery>";
+            if(createGallery && uploaded>0) {
                 Progress.setIndeterminate(true);
                 lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
                 if(header==null)
                     header = "?";
                 try {
-                    //data.wiki.
-                    Settings.wiki.edit("User:"+Settings.username+"/"+Settings.galleryPage, gallery, header, -1);
+                    if(galleryOnTop) {
+                        String pageText = Settings.wiki.getPageText("User:"+Settings.username+"/"+Settings.galleryPage);
+                        String output = "== " + header + " ==\n\n" + gallery + "\n\n" + pageText;
+                        Settings.wiki.edit("User:"+Settings.username+"/"+Settings.galleryPage, output, header);
+                    } else
+                        Settings.wiki.edit("User:"+Settings.username+"/"+Settings.galleryPage, gallery, header, -1);
+
                     lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
-                    lGallery.setText(bundle.getString("upload-gallery-created"));
+                    lGallery.setText(Data.text("upload-gallery-created"));
                 } catch (CredentialException ex) {
                     lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
-                    lGallery.setText(bundle.getString("upload-gallery-creatingerror") + ": " + ex.getLocalizedMessage());
+                    lGallery.setText(Data.text("upload-gallery-creatingerror") + ": " + ex.getLocalizedMessage());
                 } catch (LoginException ex) { 
                 } catch (IOException ex) {
                     lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
-                    lGallery.setText(bundle.getString("upload-gallery-creatingerror") + ": " + ex.getLocalizedMessage());
+                    lGallery.setText(Data.text("upload-gallery-creatingerror") + ": " + ex.getLocalizedMessage());
                 } 
             }
             stopUpload();
             Progress.setIndeterminate(false);
             Progress.setValue(Progress.getMaximum());
             bHide.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
-            bHide.setText(bundle.getString("button-close"));
+            bHide.setText(Data.text("button-close"));
         }
     };
     
@@ -468,7 +475,6 @@ public class FUpload extends javax.swing.JFrame {
     private javax.swing.JLabel lName;
     // End of variables declaration//GEN-END:variables
 
-    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {

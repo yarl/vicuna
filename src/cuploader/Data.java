@@ -1,28 +1,40 @@
 package cuploader;
 
-import cuploader.frames.Main;
+import cuploader.frames.*;
 import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public class Data implements Serializable {
+    public enum Elem { NAME, EXT, DATE, COOR, DESC, CATS; }
+    
+    //text
     public static ResourceBundle text;
+    public static String text(String s){
+        return text.getString(s);
+    }
+    
+    public static UndoManager manager = new UndoManager();
     
     public static String version;
     public static String date;
-    public static UndoManager manager = new UndoManager();
-    
-    public enum Elem {
-        NAME, EXT, DATE, COOR, DESC, CATS;
-    }
     public static boolean isLogged = false;
+    
+    //windows
+    public static FSettings fSettings;
+    public static FAbout fAbout;
+    public static FLogin fLogin;
+    public static FUploadCheck fUploadCheck;
+    public static FFileEdit fFileEdit;
     
     //help vars
     public static double sizeToUpload = 0;
@@ -30,19 +42,21 @@ public class Data implements Serializable {
     public static boolean shiftPress = false;
     public static boolean isLoadSession = false;
     public static String[][] loadSessionData;
-    
-    public static Coordinate coor = null;
-    public static int coorZoom = 0;
-    
+      
     //storage info
     private static ArrayList<PFile> files = new ArrayList<PFile>();       //stores all images
     
+    //counters
     public static int filesUpload = 0;
     public static int filesEdit = 0;
     
+    //licenses
     public static ArrayList<String> licenses = new ArrayList<String>();
     public static ArrayList<String> licensesTemplates = new ArrayList<String>();
-
+    
+    //quick templates
+    public static JPopupMenu mQuickTemplates = new JPopupMenu();
+    
     public Data(String version, String date) {
         Data.version = version;
         Data.date = date;
@@ -54,14 +68,15 @@ public class Data implements Serializable {
         licenses.add(text("license-gfdl-cc-by-sa-3"));      licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by-sa 3.0|%ATTRIB%}}");
         licenses.add(text("license-gfdl-cc-by-3"));         licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by 3.0|%ATTRIB%}}");
         licenses.add(text("license-other"));                licensesTemplates.add("");
+        
+        refreshQuickTemplates();
     }
     
     /***
-     * Updates upload counter in bottom right corner
+     * Updates upload counter in bottom right corner on main frame
      */
     public static void updateFileCounter() {
         DecimalFormat df = new DecimalFormat("##.##");
-        
         int toUpload = 0;
         float toUploadSize = 0;
         
@@ -73,16 +88,49 @@ public class Data implements Serializable {
         }
         filesUpload = toUpload;
         Main.lFileUpload.setText(toUpload + " / " + files.size() + " (" + df.format(toUploadSize) + " MiB)");
-        //Main.lFileUpload.setText(filesUpload + " / " + files.size() + " (" + df.format(sizeToUpload) + " MiB)");
     }
     
-    public static String text(String s){
-        return text.getString(s);
+    /*
+     * Quick templates stuff
+     */
+    public static void refreshQuickTemplates() {
+        if(Settings.quickTemplates==null) {
+            Settings.quickTemplates = new ArrayList<QuickTemplate>();
+            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-de"), "{{de|%TEXT%}}", true));
+            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-en"), "{{en|%TEXT%}}", true));
+            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-fr"), "{{fr|%TEXT%}}", true));
+            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-es"), "{{es|%TEXT%}}", false));
+            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-pl"), "{{pl|%TEXT%}}", true));
+            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-ru"), "{{ru|%TEXT%}}", true));
+        }
+        
+        mQuickTemplates.removeAll();
+        for(final QuickTemplate qt : Settings.quickTemplates) {
+            if(qt.active) {
+                final JMenuItem item = new JMenuItem(qt.name);
+                item.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        insertTemplate((JTextArea)((JPopupMenu)((JMenuItem)e.getSource()).getParent()).getInvoker(), Settings.quickTemplates.indexOf(qt));
+                    }
+                });
+                mQuickTemplates.add(item);
+            }
+        }
     }
     
-    public static void RefreshText() {
-        ResourceBundle.clearCache(Thread.currentThread().getContextClassLoader());
-        text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Settings.lang);
+    static void insertTemplate(JTextArea textarea, int i) {
+        String template = Settings.quickTemplates.get(i).template;
+        String selection = textarea.getSelectedText();
+        
+        textarea.requestFocus();
+        if(template.contains("%TEXT%")) {
+            if(selection==null) {
+                textarea.append(template.replace("%TEXT%", Data.text("file-wiki-text")));
+                textarea.select(textarea.getText().indexOf(Data.text("file-wiki-text")), textarea.getText().indexOf(Data.text("file-wiki-text"))+Data.text("file-wiki-text").length());
+            } else
+                textarea.replaceSelection(template.replace("%TEXT%", selection));
+        } else
+            textarea.append(template);
     }
     
     /***

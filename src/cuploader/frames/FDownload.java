@@ -51,6 +51,8 @@ public final class FDownload extends javax.swing.JFrame {
 
                     /* is it a jar file? */
                     if(currentJar.getName().endsWith(".jar")) {
+                        frame.saveSessionFile(new File(currentJar.getParentFile() + File.separator + "autoupdate-session.xml"));
+                        
                         String path = currentJar.getAbsolutePath();
                         download(path);
 
@@ -62,7 +64,8 @@ public final class FDownload extends javax.swing.JFrame {
 
                         final ProcessBuilder builder = new ProcessBuilder(command);
                         builder.start();
-                        frame.Close();
+                        System.exit(0);
+                        
                     } else
                         dispose();
                     
@@ -86,7 +89,7 @@ public final class FDownload extends javax.swing.JFrame {
         try {
             lName.setText(Data.text("download-connect"));
 
-            URL url = new URL("http://vicuna-uploader.googlecode.com/files/vicuna.jar");
+            URL url = new URL("http://vicuna-uploader.googlecode.com/files/vicuna-test.jar");
             url.openConnection();
             InputStream reader = url.openStream();
 
