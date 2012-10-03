@@ -1049,7 +1049,6 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         Locale l = Settings.lang;
         if(l.equals(Locale.ENGLISH) || l.equals(Locale.UK) || l.equals(Locale.US)) mLangEn.setSelected(true);
         else if(l.equals(Locale.GERMAN)) mLangDe.setSelected(true);
-        else if(l.equals(Locale.ENGLISH)) mLangEn.setSelected(true);
         else if(l.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
     }
     
