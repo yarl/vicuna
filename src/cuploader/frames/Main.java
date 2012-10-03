@@ -353,7 +353,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 .addComponent(lServerStatus))
         );
 
-        pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder("<html>" + Data.text("manual") + "</html>")); // NOI18N
+        pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("manual"))); // NOI18N
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter.png"))); // NOI18N
         jLabel1.setText(bundle.getString("manual-1")); // NOI18N
@@ -1034,6 +1034,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 Settings.lang = getLocale();
                 i = 1;
         } catch (ClassNotFoundException ex) {
+                Settings.lang = getLocale();
         } catch (IOException ex) {
                 Settings.lang = getLocale();
                 i = 2;
@@ -1045,9 +1046,11 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     }
     
     private void readLang() {
-        if(Settings.lang.equals(Locale.GERMAN)) mLangDe.setSelected(true);
-        if(Settings.lang.equals(Locale.ENGLISH)) mLangEn.setSelected(true);
-        if(Settings.lang.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
+        Locale l = Settings.lang;
+        if(l.equals(Locale.ENGLISH) || l.equals(Locale.UK) || l.equals(Locale.US)) mLangEn.setSelected(true);
+        else if(l.equals(Locale.GERMAN)) mLangDe.setSelected(true);
+        else if(l.equals(Locale.ENGLISH)) mLangEn.setSelected(true);
+        else if(l.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
     }
     
     private void readPosition() {
@@ -1603,7 +1606,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         //</editor-fold>
         
         String version = "1.14";
-        String date = "2012-10-01";
+        String date = "2012-10-02";
 
         final JFrame frame = new Main(version, date);
     }

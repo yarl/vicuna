@@ -852,7 +852,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Desc">
-              <ResourceString PropertyName="titleX" bundle="cuploader/text/messages.properties" key="manual" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
+              <ResourceString PropertyName="titleX" bundle="cuploader/text/messages.properties" key="manual" replaceFormat="Data.text(&quot;{key}&quot;)"/>
             </TitledBorder>
           </Border>
         </Property>

@@ -268,7 +268,7 @@ public class FSettings extends javax.swing.JFrame {
 
         jTabbedPane1.addTab(bundle.getString("settings-general"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/gear.png")), pFile); // NOI18N
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("<html>" + Data.text("settings-templates") + "</html>")); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-templates"))); // NOI18N
 
         lQuickTemplatesHint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
         lQuickTemplatesHint.setText("<html>" + Data.text("settings-templates-hint") + "</html>"); // NOI18N
