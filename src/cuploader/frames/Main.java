@@ -1374,25 +1374,32 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                             text = attr.get("custom").equals("null") ? "" : attr.get("custom");
                             Data.licensesTemplates.set(Data.licensesTemplates.size()-1, text.replace("amp;", "&"));
                             
-                            text = attr.get("attribution").equals("null") ? "" : attr.get("attribution");
-                            Settings.attrib = text.replace("amp;", "&");
+                            if(attr.get("attribution")!=null) {
+                                text = attr.get("attribution").equals("null") ? "" : attr.get("attribution");
+                                Settings.attrib = text.replace("amp;", "&");
+                            }
                         } 
                         else if(tag.equals("gallery")) {
-                            Settings.createGallery = Boolean.parseBoolean(attr.get("create"));
-                            Settings.galleryHeader = Integer.parseInt(attr.get("header"));
-                            text = attr.get("page").equals("null") ? "" : attr.get("page");
-                            Settings.galleryPage = text.replace("amp;", "&");
-                            Settings.galleryWidth = Integer.parseInt(attr.get("width"));
-                            Settings.galleryOnTop = Boolean.parseBoolean(attr.get("ontop"));
+                            if(attr.get("create")!=null) Settings.createGallery = Boolean.parseBoolean(attr.get("create"));
+                            if(attr.get("header")!=null) Settings.galleryHeader = Integer.parseInt(attr.get("header"));
+                            
+                            if(attr.get("page")!=null) {
+                                text = attr.get("page").equals("null") ? "" : attr.get("page");
+                                Settings.galleryPage = text.replace("amp;", "&");
+                            }
+                            if(attr.get("width")!=null) Settings.galleryWidth = Integer.parseInt(attr.get("width"));
+                            if(attr.get("ontop")!=null) Settings.galleryOnTop = Boolean.parseBoolean(attr.get("ontop"));
                         } 
                         else if(tag.equals("other")) {
-                            Settings.readExifHour = Boolean.parseBoolean(attr.get("read_exif_hour"));
-                            Settings.renameAfterUpload = Boolean.parseBoolean(attr.get("rename_after_upload"));
-                            Settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
-                            Settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));
-                            Settings.fileDescSource = Integer.parseInt(attr.get("file_desc_dource"));
-                            text = attr.get("file_desc_path").equals("null") ? "" : attr.get("file_desc_path");
-                            Settings.fileDescPath = text.replace("amp;", "&");     
+                            if(attr.get("read_exif_hour")!=null) Settings.readExifHour = Boolean.parseBoolean(attr.get("read_exif_hour"));
+                            if(attr.get("rename_after_upload")!=null) Settings.renameAfterUpload = Boolean.parseBoolean(attr.get("rename_after_upload"));
+                            if(attr.get("load_subdirectory")!=null) Settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
+                            if(attr.get("ask_quit")!=null) Settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));
+                            if(attr.get("file_desc_dource")!=null) Settings.fileDescSource = Integer.parseInt(attr.get("file_desc_dource"));
+                            if(attr.get("file_desc_path")!=null) {
+                                text = attr.get("file_desc_path").equals("null") ? "" : attr.get("file_desc_path");
+                                Settings.fileDescPath = text.replace("amp;", "&");
+                            }
                         }
                         else if(tag.equals("file")) {
                             fPath.add(new File(attr.get("path").replace("amp;", "&")));
@@ -1441,6 +1448,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, Data.text("session-error") + " " + e.getLocalizedMessage(), Data.text("session-load"), JOptionPane.ERROR_MESSAGE, null);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
         }
     }
     //</editor-fold>
