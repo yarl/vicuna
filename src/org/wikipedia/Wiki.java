@@ -6388,7 +6388,7 @@ public class Wiki implements Serializable
     {
         // check if we are logged out
         // bug 18 says cookies are returned with + instead of _
-        String username = user.getUsername().replace('_', '+');
+        String username = URLEncoder.encode(user.getUsername(), "UTF-8").replace('_', '+');
         if (!cookies.containsValue(username))
         {
             logger.log(Level.SEVERE, "Cookies have expired");

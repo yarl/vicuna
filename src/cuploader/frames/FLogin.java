@@ -20,8 +20,12 @@ public class FLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(FLogin.DISPOSE_ON_CLOSE);
 
-        tName.requestFocus();  
-        tName.setText(Settings.username);
+        if(!Settings.username.isEmpty()) {
+            tName.setText(Settings.username);
+            tPassword.requestFocus();
+        } else
+            tName.requestFocus();  
+        
         tPrefix.setEnabled(false);
         
         if(Settings.server.equals("commons.wikimedia.org")) 
