@@ -1623,7 +1623,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     private javax.swing.JButton bFileEditSelected;
     private javax.swing.JButton bLoadFiles;
     private javax.swing.JButton bLoadSession;
-    private javax.swing.JButton bLogin;
+    public static javax.swing.JButton bLogin;
     private javax.swing.JButton bSaveSession;
     private javax.swing.JButton bSettings;
     private javax.swing.JButton bUpload;

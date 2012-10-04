@@ -11,9 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.ResourceBundle;
 import javax.security.auth.login.CredentialException;
-import javax.security.auth.login.CredentialExpiredException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.security.auth.login.LoginException;
 import javax.swing.*;
@@ -26,6 +24,7 @@ public class FUpload extends javax.swing.JFrame {
     boolean createGallery;
     int galleryHeader;
     int galleryWidth;
+    String galleryPage;
     boolean galleryOnTop;
     
     int fileDescSource;
@@ -55,6 +54,7 @@ public class FUpload extends javax.swing.JFrame {
         galleryHeader = Settings.galleryHeader;
         galleryWidth = Settings.galleryWidth;
         fileDescSource = Settings.fileDescSource;
+        galleryPage = Settings.galleryPage;
         galleryOnTop = Settings.galleryOnTop;
         
         server = Settings.server;
@@ -185,6 +185,8 @@ public class FUpload extends javax.swing.JFrame {
 
     private void startUpload() {
     stopRq = false;
+    lockLogout(true);
+
     Runnable run = new Runnable() {
         @Override
         public void run() {
@@ -274,7 +276,7 @@ public class FUpload extends javax.swing.JFrame {
                             else desc += "\n* Source: " + source + "\n* Author: " + author;
                             
                             desc += "\n* Date: " + file.getComponent(Elem.DATE)
-                            + "\n* License: " + license;
+                            + "\n* License: " + license.replace("%ATTRIB%", attrib);
                             if(!extratext.isEmpty()) 
                                 desc += "\n" + extratext;
                         }
@@ -386,7 +388,7 @@ public class FUpload extends javax.swing.JFrame {
                     //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
                      
                     try { 
-                        boolean fileExist = Settings.wiki.isPageExist(name);
+                        boolean fileExist = wiki.isPageExist(name);
                         if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
                         
                         if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
@@ -428,11 +430,11 @@ public class FUpload extends javax.swing.JFrame {
                     header = "?";
                 try {
                     if(galleryOnTop) {
-                        String pageText = Settings.wiki.getPageText("User:"+Settings.username+"/"+Settings.galleryPage);
+                        String pageText = wiki.getPageText("User:"+username+"/"+galleryPage);
                         String output = "== " + header + " ==\n\n" + gallery + "\n\n" + pageText;
-                        Settings.wiki.edit("User:"+Settings.username+"/"+Settings.galleryPage, output, header);
+                        wiki.edit("User:"+username+"/"+galleryPage, output, header);
                     } else
-                        Settings.wiki.edit("User:"+Settings.username+"/"+Settings.galleryPage, gallery, header, -1);
+                        wiki.edit("User:"+username+"/"+galleryPage, gallery, header, -1);
 
                     lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
                     lGallery.setText(Data.text("upload-gallery-created"));
@@ -462,7 +464,7 @@ public class FUpload extends javax.swing.JFrame {
         for(PFile file : Data.getFiles())
             if(!file.editable)
                 file.lockPanel(false);
-        
+        Main.bLogin.setEnabled(true);
         //setVisible(false);
     }
 
@@ -480,5 +482,10 @@ public class FUpload extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             stopUpload();
         }
-    }; 
+    };
+
+    private void lockLogout(boolean b) {
+        Main.bLogin.setEnabled(!b);
+        Main.mLogin.setEnabled(!b);
+    }
 }

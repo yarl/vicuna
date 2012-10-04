@@ -16,7 +16,6 @@ public class Coord {
     }
     
     public Coord(String[] lat, String NS, String[] lon, String EW) {
-        System.out.println(NS + " / " + EW);
         if(NS.equals("N"))
             this.lat = Double.parseDouble(lat[0]) + (Double.parseDouble(lat[1])/60.0) + (Double.parseDouble(lat[2])/3600.0);
         if(NS.equals("S"))
