@@ -14,10 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 public final class FDownload extends javax.swing.JFrame {
     Main frame;
@@ -54,6 +51,7 @@ public final class FDownload extends javax.swing.JFrame {
                         frame.saveSessionFile(new File(currentJar.getParentFile() + File.separator + "autoupdate-session.xml"));
                         
                         String path = currentJar.getAbsolutePath();
+                        //JOptionPane.showMessageDialog(frame, "Path: " + path);
                         download(path);
 
                         /* Build command: java -jar application.jar */

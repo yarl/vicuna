@@ -6347,11 +6347,9 @@ public class Wiki implements Serializable
      */
     public String normalize(String s)
     {
-        System.out.println(s);
         char[] temp = s.toCharArray();
         temp[0] = Character.toUpperCase(temp[0]);
-        System.out.println(temp);
-        
+
         for (int i = 0; i < temp.length; i++)
         {
             switch (temp[i])

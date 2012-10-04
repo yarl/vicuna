@@ -356,22 +356,22 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("manual"))); // NOI18N
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter.png"))); // NOI18N
-        jLabel1.setText(bundle.getString("manual-1")); // NOI18N
+        jLabel1.setText("<html>" + Data.text("manual-1") + "</html>"); // NOI18N
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-02.png"))); // NOI18N
-        jLabel2.setText(bundle.getString("manual-2")); // NOI18N
+        jLabel2.setText("<html>" + Data.text("manual-2") + "</html>"); // NOI18N
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-03.png"))); // NOI18N
-        jLabel4.setText(bundle.getString("manual-3")); // NOI18N
+        jLabel4.setText("<html>" + Data.text("manual-3") + "</html>"); // NOI18N
         jLabel4.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-04.png"))); // NOI18N
-        jLabel6.setText(bundle.getString("manual-4")); // NOI18N
+        jLabel6.setText("<html>" + Data.text("manual-4") + "</html>"); // NOI18N
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-05.png"))); // NOI18N
-        jLabel7.setText(bundle.getString("manual-5")); // NOI18N
+        jLabel7.setText("<html>" + Data.text("manual-5") + "</html>"); // NOI18N
 
         javax.swing.GroupLayout pDescLayout = new javax.swing.GroupLayout(pDesc);
         pDesc.setLayout(pDescLayout);
@@ -420,7 +420,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
             pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pHelpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1004,7 +1004,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     }//GEN-LAST:event_mLangEnActionPerformed
 
     private void mLangPlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangPlActionPerformed
-        changeLang(new Locale("pl", "PL"));
+        changeLang(new Locale("pl"));
     }//GEN-LAST:event_mLangPlActionPerformed
 
     private void mLangDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangDeActionPerformed
@@ -1049,7 +1049,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         Locale l = Settings.lang;
         if(l.equals(Locale.ENGLISH) || l.equals(Locale.UK) || l.equals(Locale.US)) mLangEn.setSelected(true);
         else if(l.equals(Locale.GERMAN)) mLangDe.setSelected(true);
-        else if(l.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
+        else if(l.equals(new Locale("pl")) || l.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
     }
     
     private void readPosition() {

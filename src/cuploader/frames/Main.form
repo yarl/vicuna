@@ -900,7 +900,7 @@
               <Image iconType="3" name="/cuploader/resources/notification-counter.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cuploader/text/messages.properties" key="manual-1" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="cuploader/text/messages.properties" key="manual-1" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
             </Property>
           </Properties>
         </Component>
@@ -910,7 +910,7 @@
               <Image iconType="3" name="/cuploader/resources/notification-counter-02.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cuploader/text/messages.properties" key="manual-2" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="cuploader/text/messages.properties" key="manual-2" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
             </Property>
             <Property name="verticalAlignment" type="int" value="1"/>
             <Property name="verticalTextPosition" type="int" value="1"/>
@@ -922,7 +922,7 @@
               <Image iconType="3" name="/cuploader/resources/notification-counter-03.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cuploader/text/messages.properties" key="manual-3" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="cuploader/text/messages.properties" key="manual-3" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
             </Property>
             <Property name="verticalTextPosition" type="int" value="1"/>
           </Properties>
@@ -933,7 +933,7 @@
               <Image iconType="3" name="/cuploader/resources/notification-counter-04.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cuploader/text/messages.properties" key="manual-4" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="cuploader/text/messages.properties" key="manual-4" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
             </Property>
           </Properties>
         </Component>
@@ -943,7 +943,7 @@
               <Image iconType="3" name="/cuploader/resources/notification-counter-05.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cuploader/text/messages.properties" key="manual-5" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="cuploader/text/messages.properties" key="manual-5" replaceFormat="&quot;&lt;html&gt;&quot; + Data.text(&quot;{key}&quot;) + &quot;&lt;/html&gt;&quot;"/>
             </Property>
           </Properties>
         </Component>
@@ -975,7 +975,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lHelp" pref="121" max="32767" attributes="0"/>
+                  <Component id="lHelp" pref="109" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
