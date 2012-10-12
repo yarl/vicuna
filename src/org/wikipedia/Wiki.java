@@ -2040,7 +2040,9 @@ public class Wiki implements Serializable
         {
             int a = line.indexOf("title=\"Category:") + 7;
             int b = line.indexOf('\"', a);
-            categories.add(line.substring(a, b));
+            String s = line.substring(a, b);
+            if(!s.equals(title))
+                categories.add(s);
             line = line.substring(b);
         }
         log(Level.INFO, "Successfully retrieved categories of " + title + " (" + categories.size() + " categories)", "getCategories");
@@ -4075,7 +4077,9 @@ public class Wiki implements Serializable
             for (int x = line.indexOf("title=\""); x >= 0; x = line.indexOf("title=\"", x))
             {
                 int y = line.indexOf("\" />", x);
-                members.add(decode(line.substring(x + 7, y)));
+                String s = decode(line.substring(x + 7, y));
+                
+                if(!s.equals(name)) members.add(s);
                 x = y;
             }
         }

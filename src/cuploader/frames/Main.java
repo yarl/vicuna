@@ -1542,16 +1542,16 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
           
         switch(n) {
-            case 0: {
+            case 0: { //close
                 if(restart) Restart();
                 Close();
                 break;
-            } case 1: {
+            } case 1: { //save 'n' close
                 mSaveSessionActionPerformed(new ActionEvent(mFile, 0, null));
                 if(restart) Restart();
                 Close();
                 break;
-            } case 2 : 
+            } case 2 : //cancel
                 break;
             default: break;
         }
@@ -1600,8 +1600,13 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         Object[] o = {Data.text("button-restart"), Data.text("server-ok")};
         int n = JOptionPane.showOptionDialog(rootPane, Data.text("settings-lang-info"), 
                 Data.text("settings-lang"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, o, o[0]);
-        if(n==0)
-            ConfirmClose(true);
+        if(n==0) {
+            if(Settings.askQuit) ConfirmClose(true);
+            else {
+                Restart();
+                Close();
+            }
+        }
     }
     
     public static void main(String args[]) {
