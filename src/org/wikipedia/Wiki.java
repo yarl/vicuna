@@ -4036,7 +4036,7 @@ public class Wiki implements Serializable
         return pages.toArray(new String[0]);
     }
 
-    /**
+        /**
      *  Gets the members of a category.
      *
      *  @param name the name of the category (e.g. Candidates for speedy
@@ -4049,7 +4049,7 @@ public class Wiki implements Serializable
     public String[] getCategoryMembers(String name, int... ns) throws IOException
     {
         StringBuilder url = new StringBuilder(query);
-        url.append("list=categorymembers&cmprop=title&cmlimit=max&cmtitle=Category:");
+        url.append("list=categorymembers&cmprop=title&cmlimit=30&cmtitle=Category:");
         url.append(URLEncoder.encode(normalize(name), "UTF-8"));
         constructNamespaceString(url, "cm", ns);
 
@@ -4817,7 +4817,7 @@ public class Wiki implements Serializable
         // No varargs namespace here because MW API only supports one namespace
         // for this module.
         StringBuilder url = new StringBuilder(query);
-        url.append("list=allpages&aplimit=max");
+        url.append("list=allpages&aplimit=15");
         if (!prefix.isEmpty()) // prefix
         {
             // cull the namespace prefix

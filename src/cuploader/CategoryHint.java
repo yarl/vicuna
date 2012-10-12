@@ -209,7 +209,7 @@ public class CategoryHint extends Thread {
         int n = list.indexOf(category);
 
         if(!listBool.get(n)) {
-            String[] categoryMembers = null;
+            String[] categoryMembers = new String[15];
 
             //subcategories
             try {
