@@ -7,22 +7,24 @@ import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
-import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.wikipedia.Wiki;
 
 public class Data implements Serializable {
     public enum Elem { NAME, EXT, DATE, COOR, DESC, CATS; }
     
     //text
-    public static ResourceBundle text;
+    public static ResourceBundle text = ResourceBundle.getBundle("cuploader/text/messages", Locale.ENGLISH);
     public static String text(String s){
         return text.getString(s);
     }
     
+    public static Wiki wiki;
     public static UndoManager manager = new UndoManager();
     
     public static String version;
@@ -57,10 +59,7 @@ public class Data implements Serializable {
     //quick templates
     public static JPopupMenu mQuickTemplates = new JPopupMenu();
     
-    public Data(String version, String date) {
-        Data.version = version;
-        Data.date = date;
-        
+    public Data() {
         licenses.add("Creative Commons BY-SA 3.0");         licensesTemplates.add("{{cc-by-sa 3.0|%ATTRIB%}}");
         licenses.add("Creative Commons BY 3.0");            licensesTemplates.add("{{cc-by 3.0|%ATTRIB%}}");
         licenses.add("Creative Commons Zero 1.0");          licensesTemplates.add("{{cc-zero}}");
@@ -69,7 +68,7 @@ public class Data implements Serializable {
         licenses.add(text("license-gfdl-cc-by-3"));         licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by 3.0|%ATTRIB%}}");
         licenses.add(text("license-other"));                licensesTemplates.add("");
         
-        refreshQuickTemplates();
+        
     }
     
     /***
@@ -94,23 +93,13 @@ public class Data implements Serializable {
      * Quick templates stuff
      */
     public static void refreshQuickTemplates() {
-        if(Settings.quickTemplates==null) {
-            Settings.quickTemplates = new ArrayList<QuickTemplate>();
-            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-de"), "{{de|%TEXT%}}", true));
-            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-en"), "{{en|%TEXT%}}", true));
-            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-fr"), "{{fr|%TEXT%}}", true));
-            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-es"), "{{es|%TEXT%}}", false));
-            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-pl"), "{{pl|%TEXT%}}", true));
-            Settings.quickTemplates.add(new QuickTemplate(text("file-wiki-ru"), "{{ru|%TEXT%}}", true));
-        }
-        
         mQuickTemplates.removeAll();
-        for(final QuickTemplate qt : Settings.quickTemplates) {
+        for(final QuickTemplate qt : Main.settings.quickTemplates) {
             if(qt.active) {
                 final JMenuItem item = new JMenuItem(qt.name);
                 item.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        insertTemplate((JTextArea)((JPopupMenu)((JMenuItem)e.getSource()).getParent()).getInvoker(), Settings.quickTemplates.indexOf(qt));
+                        insertTemplate((JTextArea)((JPopupMenu)((JMenuItem)e.getSource()).getParent()).getInvoker(), qt);
                     }
                 });
                 mQuickTemplates.add(item);
@@ -118,8 +107,8 @@ public class Data implements Serializable {
         }
     }
     
-    static void insertTemplate(JTextArea textarea, int i) {
-        String template = Settings.quickTemplates.get(i).template;
+    static void insertTemplate(JTextArea textarea, QuickTemplate i) {
+        String template = i.template;
         String selection = textarea.getSelectedText();
         
         textarea.requestFocus();

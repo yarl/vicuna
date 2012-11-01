@@ -137,7 +137,7 @@ public class FFileEdit extends javax.swing.JFrame {
         lNumFormat.setText(bundle.getString("fileedit-num-format")); // NOI18N
         lNumFormat.setToolTipText("<html>" + java.util.ResourceBundle.getBundle("cuploader/text/messages").getString("fileedit-num-format-tooltip") + "</html>");
 
-        tNumFormat.setText(Settings.numFormat);
+        tNumFormat.setText(Main.settings.numFormat);
         tNumFormat.setEnabled(false);
 
         lNumStart.setText(bundle.getString("fileedit-num-start")); // NOI18N
@@ -145,9 +145,9 @@ public class FFileEdit extends javax.swing.JFrame {
         tNumStart.setEnabled(false);
         tNumStart.setValue(1);
 
-        tDigits.setModel(new SpinnerNumberModel(Settings.numDigits, 1, 5, 1));
+        tDigits.setModel(new SpinnerNumberModel(Main.settings.numDigits, 1, 5, 1));
         tDigits.setEnabled(false);
-        tDigits.setValue(Settings.numDigits);
+        tDigits.setValue(Main.settings.numDigits);
 
         lDigits.setText(bundle.getString("fileedit-num-digits")); // NOI18N
 
@@ -344,8 +344,8 @@ public class FFileEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_bSaveActionPerformed
 
     private void bApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApplyActionPerformed
-        Settings.numFormat = tNumFormat.getText();
-        Settings.numDigits = Integer.parseInt(tDigits.getValue().toString());
+        Main.settings.numFormat = tNumFormat.getText();
+        Main.settings.numDigits = Integer.parseInt(tDigits.getValue().toString());
         Replace();
     }//GEN-LAST:event_bApplyActionPerformed
 
@@ -429,14 +429,14 @@ public class FFileEdit extends javax.swing.JFrame {
                             if(!file.getComponent(Elem.NAME).matches(".*"+tName.getText())) {
                                 String s = file.getComponent(Elem.NAME)+tName.getText();
                                 s.replace(";;", ";");
-                                file.setComponent(Elem.NAME, s);
+                                file.setName(s);
                             }
                             break;
                         case 1: //prepend
                             if(!file.getComponent(Elem.NAME).startsWith(tName.getText())) {
                                 String s = tName.getText()+file.getComponent(Elem.NAME);
                                 s.replace(";;", ";");
-                                file.setComponent(Elem.NAME, s);
+                                file.setName(s);
                             }
                             break;
                         case 2: //overwrite
@@ -452,10 +452,10 @@ public class FFileEdit extends javax.swing.JFrame {
                                 text = text.replace("%NAME%", tName.getText());
                                 
                                 text = text.replace("%N%", df.format(n));
-                                file.setComponent(Elem.NAME, text);
+                                file.setName(text);
                                 n++;
                             } else
-                                file.setComponent(Elem.NAME, tName.getText());
+                                file.setName(tName.getText());
                             break;
                         default:
                     }
@@ -464,15 +464,15 @@ public class FFileEdit extends javax.swing.JFrame {
                 }
                 //date
                 if(!tDate.getText().isEmpty()) 
-                    file.setComponent(Elem.DATE, tDate.getText());
+                    file.setDate(tDate.getText());
                 //coor
                 if(coor!=null) {
                     file.coor = coor;
-                    file.setComponent(Elem.COOR, coor.getDMSformated());
+                    file.setCoordinates(coor);
                 }
                 //desc
                 if(!tDesc.getText().isEmpty()) 
-                    file.setComponent(Elem.DESC, tDesc.getText());
+                    file.setDescription(tDesc.getText());
                 //cats
                 if(!tCategories.getText().isEmpty()) {
                     switch(cCategoriesMethod.getSelectedIndex()) {
@@ -490,9 +490,9 @@ public class FFileEdit extends javax.swing.JFrame {
                                     if(b)
                                         cats += ";" + c2[i];
                                 }
-                                file.setComponent(Elem.CATS, cats);
+                                file.setCategories(cats);
                             } else
-                               file.setComponent(Elem.CATS, tCategories.getText()); 
+                               file.setCategories(tCategories.getText()); 
                             break;
                         case 1: //prepend
                             if(!file.getComponent(Elem.CATS).equals("")) {
@@ -508,12 +508,12 @@ public class FFileEdit extends javax.swing.JFrame {
                                     if(b)
                                         cats += c2[i] + ";";
                                 }
-                                file.setComponent(Elem.CATS, cats + file.getComponent(Elem.CATS));
+                                file.setCategories(cats + file.getComponent(Elem.CATS));
                             } else
-                                file.setComponent(Elem.CATS, tCategories.getText());
+                                file.setCategories(tCategories.getText());
                             break;
                         case 2: //overwrite
-                            file.setComponent(Elem.CATS, tCategories.getText());
+                            file.setCategories(tCategories.getText());
                             break;
                         default:
                     }

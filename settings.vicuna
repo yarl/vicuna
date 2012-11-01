@@ -1,0 +1,71 @@
+<settings>
+  <server>commons.wikimedia.org</server>
+  <username></username>
+  <author>own</author>
+  <source></source>
+  <license>0</license>
+  <licenseCustom></licenseCustom>
+  <attribution></attribution>
+  <categories></categories>
+  <extraText></extraText>
+  <quickTemplates>
+    <quickTemplate>
+      <name>Dodaj niemiecki opis</name>
+      <template>{{de|%TEXT%}}</template>
+      <active>true</active>
+    </quickTemplate>
+    <quickTemplate>
+      <name>Dodaj angielski opis</name>
+      <template>{{en|%TEXT%}}</template>
+      <active>true</active>
+    </quickTemplate>
+    <quickTemplate>
+      <name>Dodaj francuski opis</name>
+      <template>{{fr|%TEXT%}}</template>
+      <active>true</active>
+    </quickTemplate>
+    <quickTemplate>
+      <name>Dodaj hiszpański opis</name>
+      <template>{{es|%TEXT%}}</template>
+      <active>false</active>
+    </quickTemplate>
+    <quickTemplate>
+      <name>Dodaj polski opis</name>
+      <template>{{pl|%TEXT%}}</template>
+      <active>true</active>
+    </quickTemplate>
+    <quickTemplate>
+      <name>Dodaj rosyjki opis</name>
+      <template>{{ru|%TEXT%}}</template>
+      <active>true</active>
+    </quickTemplate>
+  </quickTemplates>
+  <copyName>false</copyName>
+  <copyDescription>true</copyDescription>
+  <copyCategories>true</copyCategories>
+  <showCatHints>true</showCatHints>
+  <createGallery>true</createGallery>
+  <galleryPage>gallery</galleryPage>
+  <galleryHeader>0</galleryHeader>
+  <galleryWidth>200</galleryWidth>
+  <galleryOnTop>false</galleryOnTop>
+  <readExifHour>false</readExifHour>
+  <loadSubdirectory>false</loadSubdirectory>
+  <renameAfterUpload>false</renameAfterUpload>
+  <askQuit>true</askQuit>
+  <fileDescSource>0</fileDescSource>
+  <fileDescPath></fileDescPath>
+  <defaultDir>C:\Users\Pawel\Documents</defaultDir>
+  <windowSize>
+    <width>1179</width>
+    <height>679</height>
+  </windowSize>
+  <windowPosition>
+    <x>71</x>
+    <y>51</y>
+  </windowPosition>
+  <numFormat>%NAME% (%N%)</numFormat>
+  <numDigits>2</numDigits>
+  <coorZoom>0</coorZoom>
+  <lang>pl</lang>
+</settings>

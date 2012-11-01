@@ -93,11 +93,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         selectToUpload(toUpload);
         
         if(!coor.contains(";"))
-            setComponent(Elem.COOR, "");
+            resetCoordinates();
         else {
             String[] s = coor.split(";");
             this.coor = new Coord(s[0], s[1]);
-            setComponent(Elem.COOR, this.coor.getDMSformated());
+            setCoordinates(this.coor);
         }
         
         generateThumbnail();
@@ -665,7 +665,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 
     private void tCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCategoriesFocusGained
         Main.lHelp.setText("<html>" + bundle.getString("help-categories") + "</html>");
-        showCategoryHints(true);
+        if(Main.settings.showCatHints) showCategoryHints(true);
     }//GEN-LAST:event_tCategoriesFocusGained
 
     private void bOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bOpenMapActionPerformed
@@ -681,29 +681,31 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         
         if(nr>0) {
             --nr;
+            PFile f = Data.getFiles().get(nr);
             
-            String name = Data.getFiles().get(nr).getComponent(Elem.NAME);
-            Pattern pattern = Pattern.compile("^" + Settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
-                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
-            Matcher match = pattern.matcher(name);
-            
-            String zeros = "";
-            for(int i=0; i<Settings.numDigits; ++i) zeros += "0";
-            DecimalFormat df = new DecimalFormat(zeros);
-            
-            //there is number
-            if(match.find())
-                tName.setText(retNumber(match, df));
-            //nope
-            else {
-                String name2 = Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
-                match = pattern.matcher(name2);
-                if(match.find()) tName.setText(retNumber(match, df));
-                else tName.setText(name2);
-            }
+            if(Main.settings.copyName) {
+                String name = f.getComponent(Elem.NAME);
+                Pattern pattern = Pattern.compile("^" + Main.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
+                        .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
+                Matcher match = pattern.matcher(name);
 
-            setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
-            setComponent(Elem.CATS, Data.getFiles().get(nr).getComponent(Elem.CATS));
+                String zeros = "";
+                for(int i=0; i<Main.settings.numDigits; ++i) zeros += "0";
+                DecimalFormat df = new DecimalFormat(zeros);
+
+                //there is number
+                if(match.find())
+                    tName.setText(retNumber(match, df));
+                //nope
+                else {
+                    String name2 = Main.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
+                    match = pattern.matcher(name2);
+                    if(match.find()) tName.setText(retNumber(match, df));
+                    else tName.setText(name2);
+                }
+            }
+            if(Main.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
+            if(Main.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
         }
     }//GEN-LAST:event_bCopyDescUpActionPerformed
 
@@ -728,29 +730,32 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         }
         
         if(nr<Data.getFiles().size()-1) {
-            ++nr;
-                      
-            String name = Data.getFiles().get(nr).getComponent(Elem.NAME);
-            Pattern pattern = Pattern.compile("^" + Settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
-                    .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
-            Matcher match = pattern.matcher(name);
+            ++nr;     
+            PFile f = Data.getFiles().get(nr);
             
-            String zeros = "";
-            for(int i=0; i<Settings.numDigits; ++i) zeros += "0";
-            DecimalFormat df = new DecimalFormat(zeros);
-            
-            if(match.find()) {
-                tName.setText(retNumber(match, df));
-            //nope
-            } else {
-                String name2 = Settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
-                match = pattern.matcher(name2);
-                if(match.find()) tName.setText(retNumber(match, df));
-                else tName.setText(name2);
+            if(Main.settings.copyName) {
+                String name = f.getComponent(Elem.NAME);
+                Pattern pattern = Pattern.compile("^" + Main.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
+                        .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
+                Matcher match = pattern.matcher(name);
+
+                String zeros = "";
+                for(int i=0; i<Main.settings.numDigits; ++i) zeros += "0";
+                DecimalFormat df = new DecimalFormat(zeros);
+
+                if(match.find()) {
+                    tName.setText(retNumber(match, df));
+                //nope
+                } else {
+                    String name2 = Main.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
+                    match = pattern.matcher(name2);
+                    if(match.find()) tName.setText(retNumber(match, df));
+                    else tName.setText(name2);
+                }
             }
             
-            setComponent(Elem.DESC, Data.getFiles().get(nr).getComponent(Elem.DESC));
-            setComponent(Elem.CATS, Data.getFiles().get(nr).getComponent(Elem.CATS));
+            if(Main.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
+            if(Main.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
         }
     }//GEN-LAST:event_bCopyDescDownActionPerformed
 
@@ -849,12 +854,12 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_mDeleteActionPerformed
 
     private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
-        showCategoryHints(false);
+        if(Main.settings.showCatHints) showCategoryHints(false);
     }//GEN-LAST:event_tCategoriesCaretUpdate
 
     private void mDelCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mDelCoorActionPerformed
         coor = null;
-        setComponent(Elem.COOR, "");
+        resetCoordinates();
     }//GEN-LAST:event_mDelCoorActionPerformed
 
     private void mGeoHackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGeoHackActionPerformed
@@ -931,7 +936,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             if(directory != null && directory.containsTag(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL)) {
                 Date date = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
                 SimpleDateFormat sdf;
-                if(Settings.readExifHour) sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                if(Main.settings.readExifHour) sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 else sdf = new SimpleDateFormat("yyyy-MM-dd");
                 tDate.setText(sdf.format(date));
             } else 
@@ -952,13 +957,13 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                         EW[2] = EW[2].substring(0, EW[2].lastIndexOf('\"'));
                     coor = new Coord(NS, directory.getDescription(GpsDirectory.TAG_GPS_LATITUDE_REF), 
                                             EW, directory.getDescription(GpsDirectory.TAG_GPS_LONGITUDE_REF));
-                    setComponent(Elem.COOR, coor.getDMSformated());
-                } else setComponent(Elem.COOR, "");
-            } else setComponent(Elem.COOR, "");
+                    setCoordinates(coor);
+                } else resetCoordinates();
+            } else resetCoordinates();
         } catch (ImageProcessingException ex) {
-            setComponent(Elem.COOR, "");
+            resetCoordinates();
         } catch (IOException ex) {
-            setComponent(Elem.COOR, "");
+            resetCoordinates();
         }
     }
     
@@ -1029,47 +1034,43 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         }
     }
     
-    public void setComponent(Elem component, String text) {
-        switch(component) {
-            case NAME: {
-                tName.setText(text); break;
-            }
-            case DATE: {
-                tDate.setText(text); break;
-            }
-            case COOR: {
-                tCoor.setText(text);
-                if(!text.isEmpty()) {
-                    tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png")));
-                    mMaps.setEnabled(true);
-                    //mGoogle.setEnabled(true);
-                    //mOSM.setEnabled(true);
-                    mDelCoor.setEnabled(true);
-                }
-                else {
-                    tCoor.setIcon(null);
-                    mMaps.setEnabled(false);
-                    //mGoogle.setEnabled(false);
-                    //mOSM.setEnabled(false);
-                    mDelCoor.setEnabled(false);
-                }
-                break;
-            }
-            case DESC: {
-                tDesc.setText(text); break;
-            }
-            case CATS: {
-                cathintStop = true;
-                tCategories.setText(text);
-                cathintStop = false;
-                break;
-            }
-            default: {
-                break;
-            }
-        }
+    /*
+     * SET
+     */
+    
+    @Override
+    public void setName(String text) {
+        tName.setText(text);
     }
     
+    public void setDate(String text) {
+        tDate.setText(text);
+    }
+       
+    public void setCoordinates(Coord coor) {
+        this.coor = coor;
+        tCoor.setText(coor.getDMSformated());
+        tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png")));
+        mMaps.setEnabled(true);
+        mDelCoor.setEnabled(true);
+    }
+    
+    public void resetCoordinates() {
+        tCoor.setIcon(null);
+        mMaps.setEnabled(false);
+        mDelCoor.setEnabled(false);
+    }
+    
+    public void setDescription(String text) {
+        tDesc.setText(text);
+    }
+    
+    public void setCategories(String text) {
+        cathintStop = true;
+        tCategories.setText(text);
+        cathintStop = false;
+    }
+       
     public String getComponent(Elem component) {
         switch(component) {
             case NAME: return tName.getText();

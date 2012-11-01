@@ -53,12 +53,12 @@ public class FUploadCheck extends javax.swing.JFrame {
                 //cleaning
                 if(name.endsWith(" ")) 
                     name = name.substring(0, name.length()-1);
-                file.setComponent(Elem.NAME, name.replace("  ", " "));
+                file.setName(name.replace("  ", " "));
                 
                 //extra ext
                 if(name.endsWith(".jpg")||name.endsWith(".png")||name.endsWith(".gif")||name.endsWith(".pdf")||name.endsWith(".djvu")) {
                     name = name.substring(0, name.lastIndexOf('.'));
-                    file.setComponent(Elem.NAME, name);
+                    file.setName(name);
                 }
                 
                 //add
@@ -106,7 +106,7 @@ public class FUploadCheck extends javax.swing.JFrame {
                 //tServer.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
                 try {
                     for(String name : files) {
-                        boolean info = Settings.wiki.isPageExist(name);
+                        boolean info = Data.wiki.isPageExist(name);
                         if(info) {
                             ++problems;
                             model.addRow(new Object[]{name, Data.text("uploadcheck-error-exists")});

@@ -3,7 +3,6 @@ package cuploader.frames;
 import cuploader.Data;
 import cuploader.FileFilters;
 import cuploader.QuickTemplate;
-import cuploader.Settings;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
@@ -21,55 +20,62 @@ public class FSettings extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         //GENERAL
-        if(!Settings.author.equals("own")) {
+        if(!Main.settings.author.equals("own")) {
             rOtherAuthor.setSelected(true);
-            tOtherAuthor.setText(Settings.author);
+            tOtherAuthor.setText(Main.settings.author);
             tOtherAuthor.setEnabled(true);
         }
         
-        tSource.setText(Settings.source);
+        tSource.setText(Main.settings.source);
         
         String[] lic = new String[Data.licenses.size()];
         for(int i=0;i<Data.licenses.size();++i)
             lic[i] = Data.licenses.get(i);
         cLicense.setModel(new DefaultComboBoxModel(lic));
         
-        if(Settings.license == Data.licenses.size()-1) {
+        if(Main.settings.license == Data.licenses.size()-1) {
             cLicense.setSelectedIndex(Data.licenses.size()-1);
             tLicense.setEditable(true);
-            tLicense.setText(Settings.licenseCustom/*Data.licensesTemplates.get(Data.licenses.size()-1)*/);
+            tLicense.setText(Main.settings.licenseCustom/*Data.licensesTemplates.get(Data.licenses.size()-1)*/);
         } else {
-            cLicense.setSelectedIndex(Settings.license);
+            cLicense.setSelectedIndex(Main.settings.license);
         }
 
-        tAttrib.setText(Settings.attrib);
-        tCategories.setText(Settings.categories);
-        tExtraText.setText(Settings.extratext);
+        tAttrib.setText(Main.settings.attribution);
+        tCategories.setText(Main.settings.categories);
+        tExtraText.setText(Main.settings.extraText);
         
         //FILE
-        tQuickTemplatesTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+        tQuickTemplatesTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tQuickTemplatesTable.getColumnModel().getColumn(0).setMaxWidth(30);
+        
+        tCopyName.setSelected(Main.settings.copyName);
+        tCopyDesc.setSelected(Main.settings.copyDescription);
+        tCopyCats.setSelected(Main.settings.copyCategories);
+        
+        tCatHints.setSelected(Main.settings.showCatHints);
         
         //GALLERY
-        cCreateGallery.setSelected(Settings.createGallery);
+        cCreateGallery.setSelected(Main.settings.createGallery);
         cCreateGalleryActionPerformed(new ActionEvent(this, 0, null));
-        tGalleryPage.setText(Settings.galleryPage);
-        tGalleryHeader.setSelectedIndex(Settings.galleryHeader);
-        tGalleryWidth.setValue(Settings.galleryWidth);
-        tPositionTop.setSelected(Settings.galleryOnTop);
-        tPositionBottom.setSelected(!Settings.galleryOnTop);
+        tGalleryPage.setText(Main.settings.galleryPage);
+        tGalleryHeader.setSelectedIndex(Main.settings.galleryHeader);
+        tGalleryWidth.setValue(Main.settings.galleryWidth);
+        tPositionTop.setSelected(Main.settings.galleryOnTop);
+        tPositionBottom.setSelected(!Main.settings.galleryOnTop);
         
         //PROGRAM
-        cReadHour.setSelected(Settings.readExifHour);
-        cLoadSubdirectory.setSelected(Settings.loadSubdirectory);
+        cReadHour.setSelected(Main.settings.readExifHour);
+        cLoadSubdirectory.setSelected(Main.settings.loadSubdirectory);
         
-        cRenameAfterUpload.setSelected(Settings.renameAfterUpload);
-        cAskQuit.setSelected(Settings.askQuit);
+        cRenameAfterUpload.setSelected(Main.settings.renameAfterUpload);
+        cAskQuit.setSelected(Main.settings.askQuit);
         
-        cFileDescSource.setSelectedIndex(Settings.fileDescSource);
-        if(Settings.fileDescPath==null)
+        cFileDescSource.setSelectedIndex(Main.settings.fileDescSource);
+        if(Main.settings.fileDescPath==null)
             tFileDesc.setText(Data.text("settings-program-descfile-noselected"));
         else
-            tFileDesc.setText(Settings.fileDescPath);
+            tFileDesc.setText(Main.settings.fileDescPath);
 
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
@@ -85,22 +91,23 @@ public class FSettings extends javax.swing.JFrame {
         bSave = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pFile = new javax.swing.JPanel();
-        lAuthor = new javax.swing.JLabel();
-        rOwnWork = new javax.swing.JRadioButton();
-        rOtherAuthor = new javax.swing.JRadioButton();
-        tOtherAuthor = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
         cLicense = new javax.swing.JComboBox();
-        lLicense = new javax.swing.JLabel();
         tLicense = new javax.swing.JTextField();
-        tAttrib = new javax.swing.JTextField();
         lAttrib = new javax.swing.JLabel();
+        tAttrib = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
+        rOtherAuthor = new javax.swing.JRadioButton();
+        rOwnWork = new javax.swing.JRadioButton();
+        tOtherAuthor = new javax.swing.JTextField();
+        lSource = new javax.swing.JLabel();
+        tSource = new javax.swing.JTextField();
+        jPanel9 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         tCategories = new javax.swing.JTextField();
         lExtraText = new javax.swing.JLabel();
         tExtraTextScroll = new javax.swing.JScrollPane();
         tExtraText = new javax.swing.JTextArea();
-        tSource = new javax.swing.JTextField();
-        lSource = new javax.swing.JLabel();
         pFileDetails = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         lQuickTemplatesHint = new javax.swing.JLabel();
@@ -108,15 +115,23 @@ public class FSettings extends javax.swing.JFrame {
         tQuickTemplatesTable = new javax.swing.JTable();
         bDelete = new javax.swing.JButton();
         bAdd = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        lCopyInfoHint = new javax.swing.JLabel();
+        tCopyName = new javax.swing.JCheckBox();
+        tCopyDesc = new javax.swing.JCheckBox();
+        tCopyCats = new javax.swing.JCheckBox();
+        jPanel6 = new javax.swing.JPanel();
+        tCatHints = new javax.swing.JCheckBox();
         pGallery = new javax.swing.JPanel();
-        cCreateGallery = new javax.swing.JCheckBox();
-        lGalleryPage = new javax.swing.JLabel();
-        tGalleryPage = new javax.swing.JTextField();
-        lGalleryHeader = new javax.swing.JLabel();
-        tGalleryHeader = new javax.swing.JComboBox();
+        jPanel10 = new javax.swing.JPanel();
         lGalleryWidth = new javax.swing.JLabel();
         tGalleryWidth = new javax.swing.JSpinner();
-        lSectionPosition = new javax.swing.JLabel();
+        tGalleryHeader = new javax.swing.JComboBox();
+        lGalleryHeader = new javax.swing.JLabel();
+        lGalleryPage = new javax.swing.JLabel();
+        tGalleryPage = new javax.swing.JTextField();
+        cCreateGallery = new javax.swing.JCheckBox();
+        jPanel11 = new javax.swing.JPanel();
         tPositionTop = new javax.swing.JRadioButton();
         tPositionBottom = new javax.swing.JRadioButton();
         pProgram = new javax.swing.JPanel();
@@ -129,8 +144,8 @@ public class FSettings extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         cFileDescSource = new javax.swing.JComboBox();
         lFileDescSource = new javax.swing.JLabel();
-        tFileDesc = new javax.swing.JLabel();
         bSetFileDesc = new javax.swing.JButton();
+        tFileDesc = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
@@ -147,7 +162,55 @@ public class FSettings extends javax.swing.JFrame {
 
         jTabbedPane1.setOpaque(true);
 
-        lAuthor.setText(bundle.getString("settings-author")); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-license"))); // NOI18N
+
+        cLicense.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cLicenseActionPerformed(evt);
+            }
+        });
+
+        tLicense.setEnabled(false);
+
+        lAttrib.setText(bundle.getString("settings-attribution")); // NOI18N
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tLicense, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cLicense, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(lAttrib, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tAttrib)))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cLicense, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tLicense, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lAttrib, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tAttrib, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-author"))); // NOI18N
+
+        gAuthor.add(rOtherAuthor);
+        rOtherAuthor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rOtherAuthorActionPerformed(evt);
+            }
+        });
 
         gAuthor.add(rOwnWork);
         rOwnWork.setSelected(true);
@@ -158,26 +221,45 @@ public class FSettings extends javax.swing.JFrame {
             }
         });
 
-        gAuthor.add(rOtherAuthor);
-        rOtherAuthor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rOtherAuthorActionPerformed(evt);
-            }
-        });
-
         tOtherAuthor.setEnabled(false);
 
-        cLicense.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cLicenseActionPerformed(evt);
-            }
-        });
+        lSource.setText(bundle.getString("settings-source")); // NOI18N
 
-        lLicense.setText(bundle.getString("settings-license")); // NOI18N
+        tSource.setEnabled(false);
 
-        tLicense.setEnabled(false);
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(rOtherAuthor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tOtherAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rOwnWork, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tSource)
+                    .addComponent(lSource, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rOwnWork)
+                    .addComponent(lSource, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tSource, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rOtherAuthor)
+                    .addComponent(tOtherAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
 
-        lAttrib.setText(bundle.getString("settings-attribution")); // NOI18N
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-other"))); // NOI18N
 
         jLabel2.setText(bundle.getString("file-cats")); // NOI18N
 
@@ -189,9 +271,34 @@ public class FSettings extends javax.swing.JFrame {
         tExtraText.setComponentPopupMenu(Data.mQuickTemplates);
         tExtraTextScroll.setViewportView(tExtraText);
 
-        tSource.setEnabled(false);
-
-        lSource.setText(bundle.getString("settings-source")); // NOI18N
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lExtraText, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tCategories)
+                    .addComponent(tExtraTextScroll))
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lExtraText)
+                    .addComponent(tExtraTextScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout pFileLayout = new javax.swing.GroupLayout(pFile);
         pFile.setLayout(pFileLayout);
@@ -200,70 +307,21 @@ public class FSettings extends javax.swing.JFrame {
             .addGroup(pFileLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pFileLayout.createSequentialGroup()
-                        .addComponent(lAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pFileLayout.createSequentialGroup()
-                                .addComponent(rOtherAuthor)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tOtherAuthor))
-                            .addComponent(rOwnWork, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(pFileLayout.createSequentialGroup()
-                        .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lExtraText, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tCategories)
-                            .addComponent(tExtraTextScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)))
-                    .addGroup(pFileLayout.createSequentialGroup()
-                        .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lAttrib, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lLicense, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                            .addComponent(lSource, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tLicense, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tSource, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cLicense, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tAttrib))))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pFileLayout.setVerticalGroup(
             pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pFileLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lAuthor)
-                    .addComponent(rOwnWork))
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(rOtherAuthor)
-                    .addComponent(tOtherAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tSource)
-                    .addComponent(lSource, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cLicense, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lLicense))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tLicense)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tAttrib)
-                    .addComponent(lAttrib, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lExtraText)
-                    .addComponent(tExtraTextScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45))
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("settings-general"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/gear.png")), pFile); // NOI18N
@@ -304,8 +362,8 @@ public class FSettings extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lQuickTemplatesHint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                    .addComponent(lQuickTemplatesHint, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(bAdd)
@@ -318,7 +376,7 @@ public class FSettings extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addComponent(lQuickTemplatesHint, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bDelete)
@@ -326,23 +384,107 @@ public class FSettings extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-copying"))); // NOI18N
+
+        lCopyInfoHint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-turn-180-left.png"))); // NOI18N
+        lCopyInfoHint.setText("<html>" + Data.text("settings-copying-hint") + "</html>"); // NOI18N
+        lCopyInfoHint.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        tCopyName.setText(Data.text("file-name")); // NOI18N
+
+        tCopyDesc.setText(Data.text("file-desc")); // NOI18N
+
+        tCopyCats.setText(Data.text("file-cats")); // NOI18N
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tCopyCats, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                    .addComponent(tCopyDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tCopyName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lCopyInfoHint, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(lCopyInfoHint, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tCopyName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tCopyDesc)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tCopyCats)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-other"))); // NOI18N
+
+        tCatHints.setText(Data.text("settings-cathint")); // NOI18N
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tCatHints, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tCatHints)
+                .addContainerGap(161, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout pFileDetailsLayout = new javax.swing.GroupLayout(pFileDetails);
         pFileDetails.setLayout(pFileDetailsLayout);
         pFileDetailsLayout.setHorizontalGroup(
             pFileDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pFileDetailsLayout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pFileDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pFileDetailsLayout.setVerticalGroup(
             pFileDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pFileDetailsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pFileDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pFileDetailsLayout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab(Data.text("settings-files"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image---small.png")), pFileDetails); // NOI18N
+
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-gallery"))); // NOI18N
+
+        lGalleryWidth.setLabelFor(tGalleryWidth);
+        lGalleryWidth.setText(bundle.getString("settings-gallery-width")); // NOI18N
+
+        tGalleryWidth.setValue(200);
+
+        tGalleryHeader.setModel(new javax.swing.DefaultComboBoxModel(new String[] { bundle.getString("settings-gallery-uploaddate"), bundle.getString("settings-gallery-ask")}));
+
+        lGalleryHeader.setLabelFor(tGalleryHeader);
+        lGalleryHeader.setText(bundle.getString("settings-gallery-header")); // NOI18N
+
+        lGalleryPage.setLabelFor(tGalleryPage);
+        lGalleryPage.setText(bundle.getString("settings-gallery-subpage")); // NOI18N
 
         cCreateGallery.setText(bundle.getString("settings-gallery-create")); // NOI18N
         cCreateGallery.addActionListener(new java.awt.event.ActionListener() {
@@ -351,20 +493,47 @@ public class FSettings extends javax.swing.JFrame {
             }
         });
 
-        lGalleryPage.setLabelFor(tGalleryPage);
-        lGalleryPage.setText(bundle.getString("settings-gallery-subpage")); // NOI18N
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lGalleryPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lGalleryHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lGalleryWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tGalleryWidth)
+                            .addComponent(tGalleryHeader, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tGalleryPage)))
+                    .addComponent(cCreateGallery, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cCreateGallery)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tGalleryPage)
+                    .addComponent(lGalleryPage, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tGalleryHeader)
+                    .addComponent(lGalleryHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tGalleryWidth)
+                    .addComponent(lGalleryWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-        lGalleryHeader.setLabelFor(tGalleryHeader);
-        lGalleryHeader.setText(bundle.getString("settings-gallery-header")); // NOI18N
-
-        tGalleryHeader.setModel(new javax.swing.DefaultComboBoxModel(new String[] { bundle.getString("settings-gallery-uploaddate"), bundle.getString("settings-gallery-ask")}));
-
-        lGalleryWidth.setLabelFor(tGalleryWidth);
-        lGalleryWidth.setText(bundle.getString("settings-gallery-width")); // NOI18N
-
-        tGalleryWidth.setValue(200);
-
-        lSectionPosition.setText( Data.text("settings-gallery-position")); // NOI18N
+        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("settings-gallery-position"))); // NOI18N
 
         gGallery.add(tPositionTop);
         tPositionTop.setText( Data.text("settings-gallery-prepend")); // NOI18N
@@ -372,57 +541,46 @@ public class FSettings extends javax.swing.JFrame {
         gGallery.add(tPositionBottom);
         tPositionBottom.setText( Data.text("settings-gallery-append")); // NOI18N
 
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tPositionTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tPositionBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tPositionTop, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tPositionBottom, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout pGalleryLayout = new javax.swing.GroupLayout(pGallery);
         pGallery.setLayout(pGalleryLayout);
         pGalleryLayout.setHorizontalGroup(
             pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pGalleryLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pGalleryLayout.createSequentialGroup()
-                        .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lGalleryPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lGalleryHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lGalleryWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tGalleryWidth)
-                            .addComponent(tGalleryHeader, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tGalleryPage))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lSectionPosition, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pGalleryLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tPositionTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(tPositionBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(pGalleryLayout.createSequentialGroup()
-                        .addComponent(cCreateGallery, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 19, Short.MAX_VALUE)))
+                .addGap(10, 10, 10)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pGalleryLayout.setVerticalGroup(
             pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pGalleryLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cCreateGallery)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tGalleryPage)
-                    .addComponent(lGalleryPage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lSectionPosition, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(6, 6, 6)
-                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tGalleryHeader)
-                    .addComponent(lGalleryHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tPositionTop, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tGalleryWidth)
-                    .addComponent(lGalleryWidth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tPositionBottom, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(196, Short.MAX_VALUE))
+                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(230, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("settings-gallery"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/images-stack.png")), pGallery); // NOI18N
@@ -469,7 +627,7 @@ public class FSettings extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cRenameAfterUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                     .addComponent(cAskQuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -487,8 +645,6 @@ public class FSettings extends javax.swing.JFrame {
 
         lFileDescSource.setText(bundle.getString("settings-program-descfile")); // NOI18N
 
-        tFileDesc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document.png"))); // NOI18N
-
         bSetFileDesc.setText(bundle.getString("button-load")); // NOI18N
         bSetFileDesc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -503,29 +659,26 @@ public class FSettings extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(lFileDescSource, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cFileDescSource, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(tFileDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bSetFileDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(lFileDescSource, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tFileDesc))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bSetFileDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(cFileDescSource, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(lFileDescSource, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(3, 3, 3))
-                    .addComponent(cFileDescSource, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bSetFileDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tFileDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(7, 7, 7)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lFileDescSource, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cFileDescSource, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tFileDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bSetFileDesc))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pProgramLayout = new javax.swing.GroupLayout(pProgram);
@@ -537,8 +690,8 @@ public class FSettings extends javax.swing.JFrame {
                 .addGroup(pProgramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pProgramLayout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -551,7 +704,7 @@ public class FSettings extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(152, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("settings-program"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/application.png")), pProgram); // NOI18N
@@ -560,11 +713,11 @@ public class FSettings extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTabbedPane1)
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(bSave)))
                 .addContainerGap())
@@ -573,64 +726,70 @@ public class FSettings extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bSave)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
-        if(cFileDescSource.getSelectedIndex()==1 && Settings.fileDescPath==null)
+        if(cFileDescSource.getSelectedIndex()==1 && Main.settings.fileDescPath==null)
             JOptionPane.showMessageDialog(rootPane, "Select file");
         else {
             //GENERAL
             //author
-            if(rOtherAuthor.isSelected() && !"".equals(tOtherAuthor.getText())) Settings.author = tOtherAuthor.getText();
-                else Settings.author = "own";
+            if(rOtherAuthor.isSelected() && !"".equals(tOtherAuthor.getText())) Main.settings.author = tOtherAuthor.getText();
+                else Main.settings.author = "own";
             //source
-            Settings.source = tSource.getText();
+            Main.settings.source = tSource.getText();
             //license
             if(cLicense.getSelectedIndex() == Data.licenses.size()-1) {
                 if(!tLicense.getText().equals("")) {
                     Data.licensesTemplates.set(Data.licenses.size()-1, tLicense.getText());
-                    Settings.licenseCustom = tLicense.getText();
-                    Settings.license = Data.licenses.size()-1;
+                    Main.settings.licenseCustom = tLicense.getText();
+                    Main.settings.license = Data.licenses.size()-1;
                 }
             } else 
-                Settings.license = cLicense.getSelectedIndex();
+                Main.settings.license = cLicense.getSelectedIndex();
             //attrib
-            if(tAttrib.getText() == null ? Settings.attrib != null : !tAttrib.getText().equals(Settings.attrib)) 
-                Settings.attrib = tAttrib.getText();
+            if(tAttrib.getText() == null ? Main.settings.attribution != null : !tAttrib.getText().equals(Main.settings.attribution)) 
+                Main.settings.attribution = tAttrib.getText();
             //cats
-            Settings.categories = tCategories.getText();
+            Main.settings.categories = tCategories.getText();
             //extra text
-            if(Settings.extratext == null ? tExtraText.getText() != null : !Settings.extratext.equals(tExtraText.getText())) 
-                Settings.extratext = tExtraText.getText();
+            if(Main.settings.extraText == null ? tExtraText.getText() != null : !Main.settings.extraText.equals(tExtraText.getText())) 
+                Main.settings.extraText = tExtraText.getText();
 
             //FILE
             Data.refreshQuickTemplates();
             
+            Main.settings.copyName = tCopyName.isSelected();
+            Main.settings.copyDescription = tCopyDesc.isSelected();
+            Main.settings.copyCategories = tCopyCats.isSelected();
+
+            Main.settings.showCatHints = tCatHints.isSelected();
+            
             //GALLERY
-            Settings.createGallery = cCreateGallery.isSelected();
+            Main.settings.createGallery = cCreateGallery.isSelected();
                 if(!tGalleryPage.getText().equals(""))
-            Settings.galleryPage = tGalleryPage.getText();
-            Settings.galleryHeader = tGalleryHeader.getSelectedIndex();
-            Settings.galleryWidth = Integer.parseInt(tGalleryWidth.getValue().toString());
-            Settings.galleryOnTop = tPositionTop.isSelected();
+            Main.settings.galleryPage = tGalleryPage.getText();
+            Main.settings.galleryHeader = tGalleryHeader.getSelectedIndex();
+            Main.settings.galleryWidth = Integer.parseInt(tGalleryWidth.getValue().toString());
+            Main.settings.galleryOnTop = tPositionTop.isSelected();
             
             //PROGRAM
-            Settings.readExifHour = cReadHour.isSelected();
-            Settings.loadSubdirectory = cLoadSubdirectory.isSelected();
+            Main.settings.readExifHour = cReadHour.isSelected();
+            Main.settings.loadSubdirectory = cLoadSubdirectory.isSelected();
 
-            Settings.renameAfterUpload = cRenameAfterUpload.isSelected();
-            Settings.askQuit = cAskQuit.isSelected();
+            Main.settings.renameAfterUpload = cRenameAfterUpload.isSelected();
+            Main.settings.askQuit = cAskQuit.isSelected();
 
-            Settings.fileDescSource = cFileDescSource.getSelectedIndex(); 
+            Main.settings.fileDescSource = cFileDescSource.getSelectedIndex(); 
 
-            Settings.Serialize();
+            Main.Save();
             dispose();
             Data.fSettings = null;
         }
@@ -667,6 +826,8 @@ public class FSettings extends javax.swing.JFrame {
     }//GEN-LAST:event_cLicenseActionPerformed
 
     private void bSetFileDescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSetFileDescActionPerformed
+        
+        
         JFileChooser ch = new JFileChooser();
             ch.setCurrentDirectory(null);
             ch.setDialogTitle(Data.text("session-load"));
@@ -677,7 +838,7 @@ public class FSettings extends javax.swing.JFrame {
             if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File f = ch.getSelectedFile();
                 if(f.isFile()) {
-                    Settings.fileDescPath = f.getPath();
+                    Main.settings.fileDescPath = f.getPath();
                     tFileDesc.setText(f.getPath());
                 }
 //                else
@@ -686,14 +847,14 @@ public class FSettings extends javax.swing.JFrame {
     }//GEN-LAST:event_bSetFileDescActionPerformed
 
     private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
-        Settings.quickTemplates.add(new QuickTemplate(Data.text("settings-templates-name"), "{{" + Data.text("settings-templates-template") + "}}", false));
+        Main.settings.quickTemplates.add(new QuickTemplate(Data.text("settings-templates-name"), "{{" + Data.text("settings-templates-template") + "}}", false));
         ((AbstractTableModel)tQuickTemplatesTable.getModel()).fireTableDataChanged();
     }//GEN-LAST:event_bAddActionPerformed
 
     private void bDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteActionPerformed
         int row = tQuickTemplatesTable.getSelectedRow();
         if(row>-1){
-            Settings.quickTemplates.remove(row);
+            Main.settings.quickTemplates.remove(row);
             ((AbstractTableModel)tQuickTemplatesTable.getModel()).fireTableDataChanged();
         }
     }//GEN-LAST:event_bDeleteActionPerformed
@@ -721,21 +882,26 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.ButtonGroup gGallery;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lAttrib;
-    private javax.swing.JLabel lAuthor;
+    private javax.swing.JLabel lCopyInfoHint;
     private javax.swing.JLabel lExtraText;
     private javax.swing.JLabel lFileDescSource;
     private javax.swing.JLabel lGalleryHeader;
     private javax.swing.JLabel lGalleryPage;
     private javax.swing.JLabel lGalleryWidth;
-    private javax.swing.JLabel lLicense;
     private javax.swing.JLabel lQuickTemplatesHint;
-    private javax.swing.JLabel lSectionPosition;
     private javax.swing.JLabel lSource;
     private javax.swing.JPanel pFile;
     private javax.swing.JPanel pFileDetails;
@@ -744,10 +910,14 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JRadioButton rOtherAuthor;
     private javax.swing.JRadioButton rOwnWork;
     private javax.swing.JTextField tAttrib;
+    private javax.swing.JCheckBox tCatHints;
     private javax.swing.JTextField tCategories;
+    private javax.swing.JCheckBox tCopyCats;
+    private javax.swing.JCheckBox tCopyDesc;
+    private javax.swing.JCheckBox tCopyName;
     private javax.swing.JTextArea tExtraText;
     private javax.swing.JScrollPane tExtraTextScroll;
-    private javax.swing.JLabel tFileDesc;
+    private javax.swing.JTextField tFileDesc;
     private javax.swing.JComboBox tGalleryHeader;
     private javax.swing.JTextField tGalleryPage;
     private javax.swing.JSpinner tGalleryWidth;
@@ -782,7 +952,7 @@ class QuickTemplatesModel extends DefaultTableModel {
          
     @Override
     public int getRowCount() {
-        return Settings.quickTemplates.size();
+        return Main.settings.quickTemplates.size();
     }
 
     @Override
@@ -790,12 +960,16 @@ class QuickTemplatesModel extends DefaultTableModel {
         return 3;
     }
 
+    public void getColumnWidth() {
+        
+    }
+    
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch(columnIndex) {
-            case 0: return Settings.quickTemplates.get(rowIndex).active;
-            case 1: return Settings.quickTemplates.get(rowIndex).name;
-            case 2: return Settings.quickTemplates.get(rowIndex).template;
+            case 0: return Main.settings.quickTemplates.get(rowIndex).active;
+            case 1: return Main.settings.quickTemplates.get(rowIndex).name;
+            case 2: return Main.settings.quickTemplates.get(rowIndex).template;
             default: return 0;
         }
     }
@@ -803,9 +977,9 @@ class QuickTemplatesModel extends DefaultTableModel {
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
         switch(columnIndex) {
-            case 0: Settings.quickTemplates.get(rowIndex).active = Boolean.parseBoolean(value.toString()); break;
-            case 1: Settings.quickTemplates.get(rowIndex).name = value.toString(); break;
-            case 2: Settings.quickTemplates.get(rowIndex).template = value.toString(); break;
+            case 0: Main.settings.quickTemplates.get(rowIndex).active = Boolean.parseBoolean(value.toString()); break;
+            case 1: Main.settings.quickTemplates.get(rowIndex).name = value.toString(); break;
+            case 2: Main.settings.quickTemplates.get(rowIndex).template = value.toString(); break;
         }
     }
 

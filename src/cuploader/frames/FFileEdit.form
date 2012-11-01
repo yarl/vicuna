@@ -386,7 +386,7 @@
         <Component class="javax.swing.JTextField" name="tNumFormat">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Settings.numFormat" type="code"/>
+              <Connection code="Main.settings.numFormat" type="code"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
@@ -409,11 +409,11 @@
         <Component class="javax.swing.JSpinner" name="tDigits">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new SpinnerNumberModel(Settings.numDigits, 1, 5, 1)" type="code"/>
+              <Connection code="new SpinnerNumberModel(Main.settings.numDigits, 1, 5, 1)" type="code"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Settings.numDigits" type="code"/>
+              <Connection code="Main.settings.numDigits" type="code"/>
             </Property>
           </Properties>
         </Component>

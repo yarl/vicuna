@@ -36,8 +36,8 @@ public class FCoord extends javax.swing.JFrame {
         
         map.setZoomContolsVisible(false);
         
-        if(Settings.coor!=null && Settings.coorZoom!=0)
-            map.setDisplayPositionByLatLon(Settings.coor.getLat(), Settings.coor.getLon(), Settings.coorZoom);
+        if(Main.settings.coor!=null && Main.settings.coorZoom!=0)
+            map.setDisplayPositionByLatLon(Main.settings.coor.getLat(), Main.settings.coor.getLon(), Main.settings.coorZoom);
         
         setVisible(true);
         
@@ -230,8 +230,8 @@ public class FCoord extends javax.swing.JFrame {
     }
     
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
-        Settings.coor = map.getPosition();
-        Settings.coorZoom = map.getZoom();
+        Main.settings.coor = map.getPosition();
+        Main.settings.coorZoom = map.getZoom();
         
         String input = tCoor.getText();
         if(!input.isEmpty()) {
@@ -245,7 +245,7 @@ public class FCoord extends javax.swing.JFrame {
                     Data.fFileEdit.fCoord = null;
                 } else {
                     Data.getFiles().get(number).coor = coor;
-                    Data.getFiles().get(number).setComponent(Elem.COOR, coor.getDMSformated());
+                    Data.getFiles().get(number).setCoordinates(coor);
                     Data.getFiles().get(number).fCoord = null;
                 }
                 dispose();

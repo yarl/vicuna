@@ -1,5 +1,7 @@
 package cuploader.frames;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import cuploader.Data;
 import cuploader.Data.Elem;
 import cuploader.FileFilters;
@@ -18,6 +20,9 @@ import java.awt.event.WindowListener;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,33 +42,33 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public final class Main extends javax.swing.JFrame implements DropTargetListener {
-    String version, date;
+    public static Settings settings;
+    
     Data data;
     File directory = null;
 
     public Main(String version, String date) {
-        this.version = version;
-        this.date = date;
+        data = new Data();
+        Data.version = version;
+        Data.date = date;
         
         int hello = readSettings();
-        data = new Data(version, date);
         addWindowListener(exit);
-        
         initComponents();
         readLang();
-        setLocationRelativeTo(null);
-        readPosition();
         
         new DropTarget(pFiles, this);
-        
         pFilesScroll.getVerticalScrollBar().setUnitIncrement(16);
         mEdit.setEnabled(false);
         mFileUploadSelect.setEnabled(false);
         mUpload.setEnabled(false);
         
-        checkLag();
+        //show
+        setLocationRelativeTo(null);
+        readPosition();
         setVisible(true);
         
+        checkLag();
         if(hello==1) 
             JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
         else if(hello==2) {
@@ -190,7 +195,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         mShow.add(mViewNotUpload1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("VicuñaUploader " + version);
+        setTitle("VicuñaUploader " + Data.version);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/color-swatch-lama.png")));
         setMinimumSize(new java.awt.Dimension(900, 600));
         setPreferredSize(new java.awt.Dimension(860, 550));
@@ -326,7 +331,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         lUserInfo.setText(bundle.getString("status-unlogged")); // NOI18N
 
         lServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/server.png"))); // NOI18N
-        lServer.setText(Settings.server);
+        lServer.setText(Main.settings.server);
 
         lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
         lServerStatus.setText("Status");
@@ -772,7 +777,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     
     private void mLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLoginActionPerformed
         if(Data.isLogged) {
-            Settings.wiki.logout();
+            Data.wiki.logout();
             Data.isLogged = false;
             setLogged(false);
         } else {
@@ -789,7 +794,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         if(Data.filesUpload==0)
             JOptionPane.showMessageDialog(rootPane, Data.text("upload-selectfiles"), Data.text("uploading"), JOptionPane.ERROR_MESSAGE);
         else {
-            if(Settings.wiki==null) {
+            if(Data.wiki==null) {
                 if(Data.fLogin==null) Data.fLogin = new FLogin(data);
                 else Data.fLogin.setVisible(true);
             }
@@ -839,7 +844,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 array = new ArrayList<File>();
 
                 for(File f : selected) {
-                    if(Settings.loadSubdirectory)
+                    if(settings.loadSubdirectory)
                         addToArray(f);
                     else {
                         if(f.isDirectory())
@@ -1017,31 +1022,54 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     //<editor-fold defaultstate="collapsed" desc=" Init ">
     
     /**
+     * Reads session file
+     * @param stream input stream
+     * @return string containing XML
+     * @throws IOException 
+     */
+    private String readFile(FileInputStream stream) throws IOException {
+        try {
+            FileChannel fc = stream.getChannel();
+            MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+            /* Instead of using default, pass in a decoder. */
+            return Charset.defaultCharset().decode(bb).toString();
+        }
+        finally {
+            stream.close();
+        }
+    }
+    
+    /**
      * Checks if settings file exist
      * @return true if exist
      */
     private int readSettings() {
+        settings = new Settings();
+
         int i = 0;
         try {
-            FileInputStream f = new FileInputStream(".vicuna-settings");
+            FileInputStream f = new FileInputStream("settings.vicuna");
             if(f!=null) {
-                ObjectInputStream in = new ObjectInputStream(f);
-                Settings s = (Settings) in.readObject();
-                in.close();
-                if(Settings.lang==null) Settings.lang = getLocale();
+                String text = readFile(f);
+                
+                XStream xstream = new XStream(new DomDriver());
+                xstream.alias("settings", Settings.class);
+                xstream.alias("quickTemplate", cuploader.QuickTemplate.class);
+                settings = (Settings) xstream.fromXML(text);
+
+                if(Main.settings.lang == null) Main.settings.lang = getLocale();
             }
         } catch (FileNotFoundException ex) {
                 setDefaultLang();
                 i = 1;
-        } catch (ClassNotFoundException ex) {
-                setDefaultLang();
         } catch (IOException ex) {
                 setDefaultLang();
                 i = 2;
         }
         
-        Locale.setDefault(Settings.lang);
-        Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Settings.lang);
+        Locale.setDefault(Main.settings.lang);
+        Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Main.settings.lang);
+        Data.refreshQuickTemplates();
         return i;
     }
     
@@ -1049,21 +1077,24 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         Locale loc = getLocale();
         
         if(loc.equals(new Locale("pl", "PL")))
-            Settings.lang = new Locale("pl");
+            Main.settings.lang = new Locale("pl");
         else
-            Settings.lang = loc;
+            Main.settings.lang = loc;
     }
     
     private void readLang() {
-        Locale l = Settings.lang;
-        if(l.equals(Locale.ENGLISH) || l.equals(Locale.UK) || l.equals(Locale.US)) mLangEn.setSelected(true);
-        else if(l.equals(Locale.GERMAN)) mLangDe.setSelected(true);
-        else if(l.equals(new Locale("pl")) || l.equals(new Locale("pl", "PL"))) mLangPl.setSelected(true);
+        Locale l = Main.settings.lang;
+        if(l.equals(Locale.GERMAN)) 
+            mLangDe.setSelected(true);
+        else if(l.equals(new Locale("pl")) || l.equals(new Locale("pl", "PL"))) 
+            mLangPl.setSelected(true);
+        else 
+            mLangEn.setSelected(true);
     }
     
     private void readPosition() {
-        if(Settings.position != null && Settings.size!= null)
-            setBounds(Settings.position.x, Settings.position.y, Settings.size.width, Settings.size.height);
+        if(Main.settings.windowPosition != null && Main.settings.windowSize!= null)
+            setBounds(Main.settings.windowPosition.x, Main.settings.windowPosition.y, Main.settings.windowSize.width, Main.settings.windowSize.height);
     }
     
     private void checkVersion() {
@@ -1094,9 +1125,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                for(;;) {
+                while(true) {
                     try {
-                        int lag = new Wiki(Settings.server).getCurrentDatabaseLag();
+                        int lag = new Wiki(Main.settings.server).getCurrentDatabaseLag();
                         if(lag==0) {
                             lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status.png")));
                             lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-ok"));
@@ -1181,18 +1212,18 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 doc.appendChild(root);
 
             Element elem = doc.createElement("server");
-                elem.appendChild(doc.createTextNode(Settings.server));
+                elem.appendChild(doc.createTextNode(Main.settings.server));
                 root.appendChild(elem);
             elem = doc.createElement("user");
-                text = Settings.username.isEmpty() ? "null" : Settings.username;
+                text = Main.settings.username.isEmpty() ? "null" : Main.settings.username;
                 elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                 root.appendChild(elem);
             elem = doc.createElement("author");
-                text = Settings.author.isEmpty() ? "null" : Settings.author;
+                text = Main.settings.author.isEmpty() ? "null" : Main.settings.author;
                 elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                 root.appendChild(elem);
             elem = doc.createElement("source");
-                text = Settings.source.isEmpty() ? "null" : Settings.source;
+                text = Main.settings.source.isEmpty() ? "null" : Main.settings.source;
                 elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                 root.appendChild(elem);
                 
@@ -1200,14 +1231,14 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 root.appendChild(license);
 
                 Attr id = doc.createAttribute("id");
-                    id.setValue(Settings.license+"");
+                    id.setValue(Main.settings.license+"");
                     license.setAttributeNode(id);
                 Attr custom = doc.createAttribute("custom");
                     text = Data.licensesTemplates.get(Data.licensesTemplates.size()-1).isEmpty() ? "null" : Data.licensesTemplates.get(Data.licensesTemplates.size()-1);
                     custom.setValue(text);
                     license.setAttributeNode(custom);
                 Attr attributon = doc.createAttribute("attribution");
-                    text = Settings.attrib.isEmpty() ? "null" : Settings.attrib;
+                    text = Main.settings.attribution.isEmpty() ? "null" : Main.settings.attribution;
                     attributon.setValue(text.replace("&", "amp;"));
                     license.setAttributeNode(attributon);
 
@@ -1215,59 +1246,59 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 root.appendChild(gallery);
 
                 Attr create = doc.createAttribute("create");
-                    create.setValue(Settings.createGallery+"");
+                    create.setValue(Main.settings.createGallery+"");
                     gallery.setAttributeNode(create);
                 Attr page = doc.createAttribute("page");
-                    text = Settings.galleryPage.isEmpty() ? "null" : Settings.galleryPage;
+                    text = Main.settings.galleryPage.isEmpty() ? "null" : Main.settings.galleryPage;
                     page.setValue(text.replace("&", "amp;"));
                     gallery.setAttributeNode(page);
                 Attr header = doc.createAttribute("header");
-                    header.setValue(Settings.galleryHeader+"");
+                    header.setValue(Main.settings.galleryHeader+"");
                     gallery.setAttributeNode(header);
                 Attr width = doc.createAttribute("width");
-                    width.setValue(Settings.galleryWidth+"");
+                    width.setValue(Main.settings.galleryWidth+"");
                     gallery.setAttributeNode(width);
                 Attr ontop = doc.createAttribute("ontop");
-                    ontop.setValue(Settings.galleryOnTop+"");
+                    ontop.setValue(Main.settings.galleryOnTop+"");
                     gallery.setAttributeNode(ontop);   
 
             Element other = doc.createElement("other");
                 root.appendChild(other);
 
                 Attr attr = doc.createAttribute("read_exif_hour");
-                    attr.setValue(Settings.readExifHour+"");
+                    attr.setValue(Main.settings.readExifHour+"");
                     other.setAttributeNode(attr);
                 attr = doc.createAttribute("rename_after_upload");
-                    attr.setValue(Settings.renameAfterUpload+"");
+                    attr.setValue(Main.settings.renameAfterUpload+"");
                     other.setAttributeNode(attr);
                 attr = doc.createAttribute("load_subdirectory");
-                    attr.setValue(Settings.loadSubdirectory+"");
+                    attr.setValue(Main.settings.loadSubdirectory+"");
                     other.setAttributeNode(attr);
                 attr = doc.createAttribute("ask_quit");
-                    attr.setValue(Settings.askQuit+"");
+                    attr.setValue(Main.settings.askQuit+"");
                     other.setAttributeNode(attr);
                 attr = doc.createAttribute("file_desc_dource");
-                    attr.setValue(Settings.fileDescSource+"");
+                    attr.setValue(Main.settings.fileDescSource+"");
                     other.setAttributeNode(attr);
                 attr = doc.createAttribute("file_desc_path");
-                    text = Settings.fileDescPath.isEmpty() ? "null" : Settings.fileDescPath;
+                    text = Main.settings.fileDescPath.isEmpty() ? "null" : Main.settings.fileDescPath;
                     attr.setValue(text.replace("&", "amp;"));
                     other.setAttributeNode(attr);
 
             Element categories = doc.createElement("categories");
-                text = Settings.categories.isEmpty() ? "null" : Settings.categories;
+                text = Main.settings.categories.isEmpty() ? "null" : Main.settings.categories;
                 categories.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                 root.appendChild(categories);
                     
             Element extra_text = doc.createElement("extra_text");
-                text = Settings.extratext.isEmpty() ? "null" : Settings.extratext;
+                text = Main.settings.extraText.isEmpty() ? "null" : Main.settings.extraText;
                 extra_text.appendChild(doc.createTextNode(text.replace("&", "amp;")));
                 root.appendChild(extra_text);
 
             // FILES
             for(PFile i : Data.getFiles()) {
                 Element file = doc.createElement("file");
-                    //server.appendChild(doc.createTextNode(Settings.server));
+                    //server.appendChild(doc.createTextNode(Main.settings.server));
                     root.appendChild(file);
 
                     Attr path = doc.createAttribute("path");
@@ -1379,35 +1410,35 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                              attr.put(attributes.getLocalName(i), attributes.getValue(i));
                         
                         if(tag.equals("license")) {
-                            Settings.license = Integer.parseInt(attr.get("id"));
+                            Main.settings.license = Integer.parseInt(attr.get("id"));
                             text = attr.get("custom").equals("null") ? "" : attr.get("custom");
                             Data.licensesTemplates.set(Data.licensesTemplates.size()-1, text.replace("amp;", "&"));
                             
                             if(attr.get("attribution")!=null) {
                                 text = attr.get("attribution").equals("null") ? "" : attr.get("attribution");
-                                Settings.attrib = text.replace("amp;", "&");
+                                Main.settings.attribution = text.replace("amp;", "&");
                             }
                         } 
                         else if(tag.equals("gallery")) {
-                            if(attr.get("create")!=null) Settings.createGallery = Boolean.parseBoolean(attr.get("create"));
-                            if(attr.get("header")!=null) Settings.galleryHeader = Integer.parseInt(attr.get("header"));
+                            if(attr.get("create")!=null) Main.settings.createGallery = Boolean.parseBoolean(attr.get("create"));
+                            if(attr.get("header")!=null) Main.settings.galleryHeader = Integer.parseInt(attr.get("header"));
                             
                             if(attr.get("page")!=null) {
                                 text = attr.get("page").equals("null") ? "" : attr.get("page");
-                                Settings.galleryPage = text.replace("amp;", "&");
+                                Main.settings.galleryPage = text.replace("amp;", "&");
                             }
-                            if(attr.get("width")!=null) Settings.galleryWidth = Integer.parseInt(attr.get("width"));
-                            if(attr.get("ontop")!=null) Settings.galleryOnTop = Boolean.parseBoolean(attr.get("ontop"));
+                            if(attr.get("width")!=null) Main.settings.galleryWidth = Integer.parseInt(attr.get("width"));
+                            if(attr.get("ontop")!=null) Main.settings.galleryOnTop = Boolean.parseBoolean(attr.get("ontop"));
                         } 
                         else if(tag.equals("other")) {
-                            if(attr.get("read_exif_hour")!=null) Settings.readExifHour = Boolean.parseBoolean(attr.get("read_exif_hour"));
-                            if(attr.get("rename_after_upload")!=null) Settings.renameAfterUpload = Boolean.parseBoolean(attr.get("rename_after_upload"));
-                            if(attr.get("load_subdirectory")!=null) Settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
-                            if(attr.get("ask_quit")!=null) Settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));
-                            if(attr.get("file_desc_dource")!=null) Settings.fileDescSource = Integer.parseInt(attr.get("file_desc_dource"));
+                            if(attr.get("read_exif_hour")!=null) Main.settings.readExifHour = Boolean.parseBoolean(attr.get("read_exif_hour"));
+                            if(attr.get("rename_after_upload")!=null) Main.settings.renameAfterUpload = Boolean.parseBoolean(attr.get("rename_after_upload"));
+                            if(attr.get("load_subdirectory")!=null) Main.settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
+                            if(attr.get("ask_quit")!=null) Main.settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));
+                            if(attr.get("file_desc_dource")!=null) Main.settings.fileDescSource = Integer.parseInt(attr.get("file_desc_dource"));
                             if(attr.get("file_desc_path")!=null) {
                                 text = attr.get("file_desc_path").equals("null") ? "" : attr.get("file_desc_path");
-                                Settings.fileDescPath = text.replace("amp;", "&");
+                                Main.settings.fileDescPath = text.replace("amp;", "&");
                             }
                         }
                         else if(tag.equals("file")) {
@@ -1428,17 +1459,17 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                     text = text.equals("null") ? "" : text;
                     //System.out.println("\tTag: " + tag + ", wartość: " + text);
                     if(tag.equals("server"))
-                        Settings.server = text;
+                        Main.settings.server = text;
                     else if(tag.equals("user"))
-                        Settings.username = text.replace("amp;", "&");
+                        Main.settings.username = text.replace("amp;", "&");
                     else if(tag.equals("author"))
-                        Settings.author = text.replace("amp;", "&");
+                        Main.settings.author = text.replace("amp;", "&");
                     else if(tag.equals("source"))
-                        Settings.source = text.replace("amp;", "&");
+                        Main.settings.source = text.replace("amp;", "&");
                     else if(tag.equals("extra_text"))
-                        Settings.extratext = text.replace("amp;", "&");
+                        Main.settings.extraText = text.replace("amp;", "&");
                     else if(tag.equals("categories"))
-                        Settings.categories = text.replace("amp;", "&");
+                        Main.settings.categories = text.replace("amp;", "&");
                     
                     else if(tag.equals("name")) fName.add(text.replace("amp;", "&"));
                     else if(tag.equals("date")) fDate.add(text.replace("amp;", "&"));
@@ -1527,7 +1558,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     WindowListener exit = new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent evt) {
-            if(Settings.askQuit) 
+            if(Main.settings.askQuit) 
                 ConfirmClose(false);
             else Close();
         }
@@ -1557,10 +1588,31 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         }
     }
     
+    public static void Save() {
+        try {
+            XStream xstream = new XStream(new DomDriver());
+            xstream.alias("settings", Settings.class);
+            xstream.alias("quickTemplate", cuploader.QuickTemplate.class);
+            String xml = xstream.toXML(settings);
+            
+            try{
+                FileWriter fstream = new FileWriter("settings.vicuna");
+                BufferedWriter out = new BufferedWriter(fstream);
+                out.write(xml);
+                out.close();
+            } catch (Exception e){//Catch exception if any
+                System.err.println("Error: " + e.getMessage());
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     void Close() {
-        Settings.position = getLocation();
-        Settings.size = getSize();
-        Settings.Serialize();
+        Main.settings.windowPosition = getLocation();
+        Main.settings.windowSize = getSize();
+        Save();
         System.exit(0);
     }
     
@@ -1595,13 +1647,13 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
      * @param lang target locale
      */
     void changeLang(Locale lang) {
-        Settings.lang = lang;
+        Main.settings.lang = lang;
         
         Object[] o = {Data.text("button-restart"), Data.text("server-ok")};
         int n = JOptionPane.showOptionDialog(rootPane, Data.text("settings-lang-info"), 
                 Data.text("settings-lang"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, o, o[0]);
         if(n==0) {
-            if(Settings.askQuit) ConfirmClose(true);
+            if(Main.settings.askQuit) ConfirmClose(true);
             else {
                 Restart();
                 Close();
@@ -1714,10 +1766,10 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     public static void setLogged(boolean mode) {
         if(mode) {
             Data.isLogged = true;
-            lUserInfo.setText("<html>" + Data.text("status-hello") + ", <b>" + Settings.username + "</b>!</html>");
+            lUserInfo.setText("<html>" + Data.text("status-hello") + ", <b>" + Main.settings.username + "</b>!</html>");
             lUserInfo.setForeground(Color.BLACK);
             mLogin.setText(Data.text("logoff")); 
-            lServer.setText(Settings.server);
+            lServer.setText(Main.settings.server);
         } else {
             lUserInfo.setText(Data.text("status-unlogged"));
             lUserInfo.setForeground(new Color(102,102,102));
@@ -1768,7 +1820,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                     
                     for(Object o : list) {
                         File f = new File(o.toString());
-                        if(Settings.loadSubdirectory)
+                        if(Main.settings.loadSubdirectory)
                             addToArray(f);
                         else {
                             if(f.isDirectory())

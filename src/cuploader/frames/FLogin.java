@@ -20,26 +20,26 @@ public class FLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(FLogin.DISPOSE_ON_CLOSE);
 
-        if(!Settings.username.isEmpty()) {
-            tName.setText(Settings.username);
+        if(!Main.settings.username.isEmpty()) {
+            tName.setText(Main.settings.username);
             tPassword.requestFocus();
         } else
             tName.requestFocus();  
         
         tPrefix.setEnabled(false);
         
-        if(Settings.server.equals("commons.wikimedia.org")) 
+        if(Main.settings.server.equals("commons.wikimedia.org")) 
             cServer.setSelectedIndex(0);
-        else if (Settings.server.endsWith(".wikipedia.org")) {
+        else if (Main.settings.server.endsWith(".wikipedia.org")) {
             cServer.setSelectedIndex(1);
             
-            String prefix = Settings.server.substring(0, Settings.server.lastIndexOf(".wikipedia.org"));
+            String prefix = Main.settings.server.substring(0, Main.settings.server.lastIndexOf(".wikipedia.org"));
             tPrefix.setEnabled(true);
             tPrefix.setText(prefix);
         } else {
             cServer.setSelectedIndex(2);
             tServer.setEnabled(true);
-            tServer.setText(Settings.server);
+            tServer.setText(Main.settings.server);
         }
         
         setVisible(true);
@@ -53,27 +53,27 @@ public class FLogin extends javax.swing.JFrame {
             public void run() {
                 tName.setEditable(false);
                 tPassword.setEditable(false);
-                Settings.username = tName.getText();
+                Main.settings.username = tName.getText();
                 
                 switch(cServer.getSelectedIndex()) {
                     case 0:
-                        Settings.server = "commons.wikimedia.org";
+                        Main.settings.server = "commons.wikimedia.org";
                         break;
                     case 1:
                         String prefix = tPrefix.getText().toLowerCase();
                         if(prefix.equals("")) prefix="en";
-                        Settings.server = prefix + ".wikipedia.org";
+                        Main.settings.server = prefix + ".wikipedia.org";
                         break;
                     case 2:
-                        Settings.server = tServer.getText();
+                        Main.settings.server = tServer.getText();
                 }
                 lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
                 lTextInfo.setText(bundle.getString("login-loggingin"));
                 lTextInfo.setVisible(true);
                 try {
-                        Wiki w = new Wiki(Settings.server);
+                        Wiki w = new Wiki(Main.settings.server);
                         w.login(tName.getText(), tPassword.getPassword());
-                        Settings.wiki = w;
+                        Data.wiki = w;
                         //TODO: pobieranie ustawień konta
                         Main.setLogged(true);
                         

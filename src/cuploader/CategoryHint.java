@@ -23,7 +23,7 @@ import org.wikipedia.Wiki;
 public class CategoryHint extends Thread {    
     JPopupMenu mCatHint;
     JTextField tCategories;
-    Wiki wiki = new Wiki(Settings.server);
+    Wiki wiki = new Wiki(Main.settings.server);
     
     final ArrayList<JMenu> list = new ArrayList<JMenu>();
     final ArrayList<Boolean> listBool = new ArrayList<Boolean>();
@@ -135,7 +135,7 @@ public class CategoryHint extends Thread {
                         mOpen.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent evt) {
                                 try {
-                                    Desktop.getDesktop().browse(new URI("http://"+Settings.server+"/wiki/Category:"+category.getText().replace(" ", "_")));
+                                    Desktop.getDesktop().browse(new URI("http://"+Main.settings.server+"/wiki/Category:"+category.getText().replace(" ", "_")));
                                 } catch (URISyntaxException ex) {
                                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                                 } catch (IOException ex) {
