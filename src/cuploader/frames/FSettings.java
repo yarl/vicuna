@@ -1,20 +1,67 @@
 package cuploader.frames;
 
 import cuploader.Data;
+import cuploader.DescSource;
 import cuploader.FileFilters;
 import cuploader.QuickTemplate;
+import java.awt.Component;
 import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 public class FSettings extends javax.swing.JFrame {
     private QuickTemplatesModel model = new QuickTemplatesModel();
+    private DescSourceModel descSourceModel = new DescSourceModel();
+    
+    DefaultTableModel dm = new DefaultTableModel();
     
     public FSettings() {
+
+//        Vector<Object[]> array = new Vector<Object[]>();
+//        for(int i=0; i<Main.settings.descSources.size(); ++i) {
+//            Object[] o = { new JRadioButton(), Main.settings.descSources.get(0).name, "buton" };
+//            array.add(o);
+//        }
+//
+//        Vector<Object[]> desc = new Vector<Object[]>();
+//        Object[] o = { "Btn", Data.text("file-name"), "Buton" };
+//        desc.add(o);
+
         
+
+
         initComponents();
+        
+        Object[][] obj = new Object[Main.settings.descSources.size()][3];
+        
+        for(int i=0; i<Main.settings.descSources.size(); ++i) {
+            obj[i][0] = new JRadioButton();
+            obj[i][1] = Main.settings.descSources.get(i).name;
+            obj[i][2] = "buton";
+        };
+        
+        dm.setDataVector(obj, new Object[] {
+            "Btn", Data.text("file-name"), "Buton"
+        });
+               for(int i=0; i<Main.settings.descSources.size(); ++i)
+            gDescSource.add((JRadioButton)dm.getValueAt(i,0));
+               
+        
+        //table fix
+        UIDefaults ui = UIManager.getLookAndFeel().getDefaults();    
+        UIManager.put("RadioButton.focus", ui.getColor("control"));
+        tDescSource.getColumn("Btn").setCellRenderer(new RadioButtonRenderer());
+        tDescSource.getColumn("Btn").setCellEditor(new RadioButtonEditor(new JCheckBox()));
+
+
+        
         addWindowListener(exit);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -76,7 +123,7 @@ public class FSettings extends javax.swing.JFrame {
             tFileDesc.setText(Data.text("settings-program-descfile-noselected"));
         else
             tFileDesc.setText(Main.settings.fileDescPath);
-
+       
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
@@ -88,6 +135,7 @@ public class FSettings extends javax.swing.JFrame {
 
         gAuthor = new javax.swing.ButtonGroup();
         gGallery = new javax.swing.ButtonGroup();
+        gDescSource = new javax.swing.ButtonGroup();
         bSave = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         pFile = new javax.swing.JPanel();
@@ -146,6 +194,15 @@ public class FSettings extends javax.swing.JFrame {
         lFileDescSource = new javax.swing.JLabel();
         bSetFileDesc = new javax.swing.JButton();
         tFileDesc = new javax.swing.JTextField();
+        jPanel12 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tDescSource = new javax.swing.JTable() {
+            public void tableChanged(TableModelEvent e) {
+                super.tableChanged(e);
+                repaint();
+            }
+        };
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
@@ -681,6 +738,41 @@ public class FSettings extends javax.swing.JFrame {
                 .addContainerGap(53, Short.MAX_VALUE))
         );
 
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        tDescSource.setModel(dm);
+        jScrollPane1.setViewportView(tDescSource);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
+                .addContainerGap())
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout pProgramLayout = new javax.swing.GroupLayout(pProgram);
         pProgram.setLayout(pProgramLayout);
         pProgramLayout.setHorizontalGroup(
@@ -692,7 +784,8 @@ public class FSettings extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pProgramLayout.setVerticalGroup(
@@ -704,7 +797,9 @@ public class FSettings extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab(bundle.getString("settings-program"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/application.png")), pProgram); // NOI18N
@@ -866,6 +961,29 @@ public class FSettings extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tQuickTemplatesTableKeyTyped
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Main.settings.descSources.add(new DescSource("New", "Desc"));
+        
+                Object[][] obj = new Object[Main.settings.descSources.size()][3];
+        
+        for(int i=0; i<Main.settings.descSources.size(); ++i) {
+            obj[i][0] = new JRadioButton();
+            obj[i][1] = Main.settings.descSources.get(i).name;
+            obj[i][2] = "buton";
+        };
+        
+        dm.setDataVector(obj, new Object[] {
+            "Btn", Data.text("file-name"), "Buton"
+        });
+               for(int i=0; i<Main.settings.descSources.size(); ++i)
+            gDescSource.add((JRadioButton)dm.getValueAt(i,0));
+               
+               UIDefaults ui = UIManager.getLookAndFeel().getDefaults();    
+        UIManager.put("RadioButton.focus", ui.getColor("control"));
+        tDescSource.getColumn("Btn").setCellRenderer(new RadioButtonRenderer());
+        tDescSource.getColumn("Btn").setCellEditor(new RadioButtonEditor(new JCheckBox()));
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAdd;
     private javax.swing.JButton bDelete;
@@ -879,11 +997,14 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JCheckBox cReadHour;
     private javax.swing.JCheckBox cRenameAfterUpload;
     private javax.swing.ButtonGroup gAuthor;
+    private javax.swing.ButtonGroup gDescSource;
     private javax.swing.ButtonGroup gGallery;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -892,6 +1013,7 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lAttrib;
@@ -915,6 +1037,7 @@ public class FSettings extends javax.swing.JFrame {
     private javax.swing.JCheckBox tCopyCats;
     private javax.swing.JCheckBox tCopyDesc;
     private javax.swing.JCheckBox tCopyName;
+    private javax.swing.JTable tDescSource;
     private javax.swing.JTextArea tExtraText;
     private javax.swing.JScrollPane tExtraTextScroll;
     private javax.swing.JTextField tFileDesc;
@@ -1004,6 +1127,139 @@ class QuickTemplatesModel extends DefaultTableModel {
         /*if(columnIndex==1 && rowIndex<5) return false;  //i18n
         else*/ return true;
     }
-    
-    
 }
+
+final class DescSourceModel extends DefaultTableModel {
+    ButtonGroup group;
+    public DescSourceModel() {
+        group = new ButtonGroup();
+        
+        JRadioButton selected = (JRadioButton) getValueAt(Main.settings.descSourceSelected, 0);
+        selected.setSelected(true);
+    }
+        
+    @Override
+    public int getRowCount() {
+        return Main.settings.descSources.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return 3;
+    }
+    
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        switch(columnIndex) {
+            case 0: {
+                JRadioButton b = new JRadioButton();
+                if(rowIndex == Main.settings.descSourceSelected) b.setSelected(true);
+                else b.setSelected(false);
+                group.add(b);   
+                return b;
+            }
+                        
+            case 1: return Main.settings.descSources.get(rowIndex).name;
+            case 2: return Main.settings.descSources.get(rowIndex).desc;
+            default: return 0;
+        }
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        switch(columnIndex) {
+            case 0: 
+                JRadioButton b = (JRadioButton) value;
+                break;
+            case 1: Main.settings.descSources.get(rowIndex).name = value.toString(); break;
+            case 2: Main.settings.descSources.get(rowIndex).desc = value.toString(); break;
+        }
+    }
+
+    @Override
+    public String getColumnName(int col) {
+        switch(col) {
+            case 0: return Data.text("settings-templates-active");
+            case 1: return Data.text("settings-templates-name");
+            case 2: return Data.text("settings-templates-template");
+            default: return "?";
+        }
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if(columnIndex==0) return Boolean.class;
+        else return super.getColumnClass(columnIndex);
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        /*if(columnIndex==1 && rowIndex<5) return false;  //i18n
+        else*/ return true;
+    }
+}
+
+class RadioButtonRenderer implements TableCellRenderer {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, 
+                                                    boolean hasFocus, int row, int column) {
+        if (value==null) return null;
+        return (Component)value;
+    }
+}
+/*
+class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
+    private JRadioButton button;
+
+    public RadioButtonEditor(JCheckBox checkBox) {
+        super(checkBox);
+    }
+ 
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        if (value==null) return null;
+        button = new JRadioButton("", isSelected);
+        button.addItemListener(this);
+        Main.settings.descSourceSelected = row;
+        System.out.println("Zmieniam na " + Main.settings.descSourceSelected);
+        return (Component)value;
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+        button.removeItemListener(this);
+
+        return button;
+    }
+
+    public void itemStateChanged(ItemEvent e) {
+        super.fireEditingStopped();
+    }
+}*/
+
+class RadioButtonEditor extends    DefaultCellEditor
+                        implements ItemListener {
+  private JRadioButton button;
+ 
+  public RadioButtonEditor(JCheckBox checkBox) {
+    super(checkBox);
+  }
+ 
+    @Override
+  public Component getTableCellEditorComponent(JTable table, Object value,
+                   boolean isSelected, int row, int column) {
+    if (value==null) return null;
+    button = (JRadioButton)value;
+    button.addItemListener(this);
+    return (Component)value;
+  }
+ 
+  public Object getCellEditorValue() {
+    button.removeItemListener(this);
+    return button;
+  }
+ 
+  public void itemStateChanged(ItemEvent e) {
+    super.fireEditingStopped();
+  }
+}
+

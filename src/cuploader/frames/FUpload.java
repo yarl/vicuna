@@ -182,7 +182,7 @@ public class FUpload extends javax.swing.JFrame {
         bCancel.setEnabled(false);
         stopUpload();
     }//GEN-LAST:event_bCancelActionPerformed
-
+    
     private void startUpload() {
     stopRq = false;
     lockLogout(true);

@@ -77,9 +77,6 @@
 
     <echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
 
-
-
-
     <delete dir="${store.dir}"/>
     <mkdir dir="${store.dir}"/>
 
@@ -99,5 +96,7 @@
 
     <delete file="${store.dir}/temp_final.jar"/>
 
+    <property name="resources.dir" value="src/cuploader/text"/>
+    <property name="target.resources.dir" value="src/cuploader/textok"/>
 </target>
 </project>
