@@ -2,7 +2,6 @@ package cuploader;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 import javax.swing.JFileChooser;
@@ -49,9 +48,6 @@ public class Settings {
     public boolean renameAfterUpload = false;
     public boolean askQuit = true;
     
-    public ArrayList<DescSource> descSources = new ArrayList<DescSource>();
-    public int descSourceSelected = 1;
-
     public int fileDescSource = 0;
     public String fileDescPath = "";
     
@@ -78,8 +74,5 @@ public class Settings {
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-es"), "{{es|%TEXT%}}", false));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-pl"), "{{pl|%TEXT%}}", true));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-ru"), "{{ru|%TEXT%}}", true));
-        
-        descSources.add(new DescSource("Standard", "{{aa\n|ver=text\n}}"));
-        descSources.add(new DescSource("Standard2", "umbaumba"));
     }
 }

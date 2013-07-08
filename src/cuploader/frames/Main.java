@@ -14,6 +14,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -55,6 +56,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         int hello = readSettings();
         addWindowListener(exit);
         initComponents();
+        
         readLang();
         
         new DropTarget(pFiles, this);
@@ -156,10 +158,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         mViewToUpload = new javax.swing.JRadioButtonMenuItem();
         mViewNotUpload = new javax.swing.JRadioButtonMenuItem();
         mTools = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
-        mLangDe = new javax.swing.JRadioButtonMenuItem();
-        mLangEn = new javax.swing.JRadioButtonMenuItem();
-        mLangPl = new javax.swing.JRadioButtonMenuItem();
+        mLang = new javax.swing.JMenu();
         mSettings = new javax.swing.JMenuItem();
         mHelp = new javax.swing.JMenu();
         mHelpOnline = new javax.swing.JMenuItem();
@@ -394,15 +393,15 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         pDescLayout.setVerticalGroup(
             pDescLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pDescLayout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -665,36 +664,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
 
         mTools.setText(bundle.getString("tools")); // NOI18N
 
-        jMenu1.setText(bundle.getString("settings-lang")); // NOI18N
-
-        gLang.add(mLangDe);
-        mLangDe.setText("Deutsch (de)");
-        mLangDe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mLangDeActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mLangDe);
-
-        gLang.add(mLangEn);
-        mLangEn.setText("English (en)");
-        mLangEn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mLangEnActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mLangEn);
-
-        gLang.add(mLangPl);
-        mLangPl.setText("Polski (pl)");
-        mLangPl.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mLangPlActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mLangPl);
-
-        mTools.add(jMenu1);
+        mLang.setText(bundle.getString("settings-lang")); // NOI18N
+        mTools.add(mLang);
 
         mSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         mSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/switch.png"))); // NOI18N
@@ -1004,18 +975,6 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         ConfirmClose(true);
     }//GEN-LAST:event_mRestartActionPerformed
 
-    private void mLangEnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangEnActionPerformed
-        changeLang(Locale.ENGLISH);
-    }//GEN-LAST:event_mLangEnActionPerformed
-
-    private void mLangPlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangPlActionPerformed
-        changeLang(new Locale("pl"));
-    }//GEN-LAST:event_mLangPlActionPerformed
-
-    private void mLangDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLangDeActionPerformed
-        changeLang(Locale.GERMAN);
-    }//GEN-LAST:event_mLangDeActionPerformed
-
     /**
      * Init
      **/
@@ -1054,7 +1013,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 
                 XStream xstream = new XStream(new DomDriver());
                 xstream.alias("settings", Settings.class);
-                xstream.alias("quickTemplate", cuploader.QuickTemplate.class);
+                xstream.alias("template", cuploader.QuickTemplate.class);
+                xstream.alias("source", cuploader.DescSource.class);
                 settings = (Settings) xstream.fromXML(text);
 
                 if(Main.settings.lang == null) Main.settings.lang = getLocale();
@@ -1075,21 +1035,156 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     
     private void setDefaultLang() {
         Locale loc = getLocale();
-        
-        if(loc.equals(new Locale("pl", "PL")))
-            Main.settings.lang = new Locale("pl");
-        else
-            Main.settings.lang = loc;
+        Main.settings.lang = loc;
     }
     
     private void readLang() {
-        Locale l = Main.settings.lang;
-        if(l.equals(Locale.GERMAN)) 
-            mLangDe.setSelected(true);
-        else if(l.equals(new Locale("pl")) || l.equals(new Locale("pl", "PL"))) 
-            mLangPl.setSelected(true);
-        else 
-            mLangEn.setSelected(true);
+        //ast
+        JRadioButtonMenuItem mLangEn = new JRadioButtonMenuItem("english (en)");
+        mLangEn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(Locale.ENGLISH); }
+        });
+        gLang.add(mLangEn); mLang.add(mLangEn);
+        
+        //ast
+        JRadioButtonMenuItem mLangAst = new JRadioButtonMenuItem("asturianu (ast)");
+        mLangAst.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("ast")); }
+        });
+        gLang.add(mLangAst); mLang.add(mLangAst);
+        
+        //cs-CZ
+        JRadioButtonMenuItem mLangCs = new JRadioButtonMenuItem("česky (cs)");
+        mLangCs.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("cs", "CZ")); }
+        });
+        gLang.add(mLangCs); mLang.add(mLangCs);
+        
+        //de
+        JRadioButtonMenuItem mLangDe = new JRadioButtonMenuItem("Deutsch (de)");
+        mLangDe.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(Locale.GERMAN); }
+        });
+        gLang.add(mLangDe); mLang.add(mLangDe);
+        
+        //es
+        JRadioButtonMenuItem mLangEs = new JRadioButtonMenuItem("español (es)");
+        mLangEs.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("es", "ES")); }
+        });
+        gLang.add(mLangEs); mLang.add(mLangEs);
+        
+        //fo
+        JRadioButtonMenuItem mLangFo = new JRadioButtonMenuItem("føroyskt (fo)");
+        mLangFo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("fo")); }
+        });
+        gLang.add(mLangFo); mLang.add(mLangFo);
+        
+        //fr
+        JRadioButtonMenuItem mLangFr = new JRadioButtonMenuItem("français (fr)");
+        mLangFr.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(Locale.FRENCH); }
+        });
+        gLang.add(mLangFr); mLang.add(mLangFr);
+        
+        //gl
+        JRadioButtonMenuItem mLangGl = new JRadioButtonMenuItem("galego (gl)");
+        mLangGl.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("gl")); }
+        });
+        gLang.add(mLangGl); mLang.add(mLangGl);
+        
+        //he
+        JRadioButtonMenuItem mLangHe = new JRadioButtonMenuItem("עברית (he)");
+        mLangHe.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("he")); }
+        });
+        gLang.add(mLangHe); mLang.add(mLangHe);
+        
+        //it
+        JRadioButtonMenuItem mLangIt = new JRadioButtonMenuItem("italiano (it)");
+        mLangIt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(Locale.ITALY); }
+        });
+        gLang.add(mLangIt); mLang.add(mLangIt);
+        
+        //ja
+        JRadioButtonMenuItem mLangJa = new JRadioButtonMenuItem("日本語 (ja)");
+        mLangJa.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(Locale.JAPANESE); }
+        });
+        gLang.add(mLangJa); mLang.add(mLangJa);
+        
+        //lb
+        JRadioButtonMenuItem mLangLb = new JRadioButtonMenuItem("Lëtzebuergesch (lb)");
+        mLangLb.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("lb")); }
+        });
+        gLang.add(mLangLb); mLang.add(mLangLb);
+        
+        //lt
+        JRadioButtonMenuItem mLangLt = new JRadioButtonMenuItem("lietuvių (lt)");
+        mLangLt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("lt")); }
+        });
+        gLang.add(mLangLt); mLang.add(mLangLt);
+        
+        //mk
+        JRadioButtonMenuItem mLangMk = new JRadioButtonMenuItem("македонски (mk)");
+        mLangMk.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("mk")); }
+        });
+        gLang.add(mLangMk); mLang.add(mLangMk);
+        
+        //ms
+        JRadioButtonMenuItem mLangMs = new JRadioButtonMenuItem("Bahasa Melayu (ms)");
+        mLangMs.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("ms")); }
+        });
+        gLang.add(mLangMs); mLang.add(mLangMs);
+        
+        //nl
+        JRadioButtonMenuItem mLangNl = new JRadioButtonMenuItem("Nederlands (nl)");
+        mLangNl.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("nl")); }
+        });
+        gLang.add(mLangNl); mLang.add(mLangNl);
+        
+        //oc
+        JRadioButtonMenuItem mLangOc = new JRadioButtonMenuItem("occitan (oc)");
+        mLangOc.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("oc")); }
+        });
+        gLang.add(mLangOc); mLang.add(mLangOc);
+        
+        //pl
+        JRadioButtonMenuItem mLangPl = new JRadioButtonMenuItem("polski (pl)");
+        mLangPl.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("pl", "PL")); }
+        });
+        gLang.add(mLangPl); mLang.add(mLangPl);
+        
+        //sv
+        JRadioButtonMenuItem mLangSv = new JRadioButtonMenuItem("svenska (sv)");
+        mLangSv.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("sv", "SE")); }
+        });
+        gLang.add(mLangSv); mLang.add(mLangSv);
+        
+        //uk
+        JRadioButtonMenuItem mLangUk = new JRadioButtonMenuItem("українська (uk)");
+        mLangUk.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("uk")); }
+        });
+        gLang.add(mLangUk); mLang.add(mLangUk);
+        
+        //ur
+        JRadioButtonMenuItem mLangUr = new JRadioButtonMenuItem("اردو (ur)");
+        mLangUr.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("ur")); }
+        });
+        gLang.add(mLangUr); mLang.add(mLangUr);
     }
     
     private void readPosition() {
@@ -1588,11 +1683,15 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         }
     }
     
-    public static void Save() {
+    /**
+     * 
+     */
+    public static void saveSettings() {
         try {
             XStream xstream = new XStream(new DomDriver());
             xstream.alias("settings", Settings.class);
-            xstream.alias("quickTemplate", cuploader.QuickTemplate.class);
+            xstream.alias("template", cuploader.QuickTemplate.class);
+            xstream.alias("source", cuploader.DescSource.class);
             String xml = xstream.toXML(settings);
             
             try{
@@ -1600,10 +1699,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 BufferedWriter out = new BufferedWriter(fstream);
                 out.write(xml);
                 out.close();
-            } catch (Exception e){//Catch exception if any
+            } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
             }
-            
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1612,7 +1710,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     void Close() {
         Main.settings.windowPosition = getLocation();
         Main.settings.windowSize = getSize();
-        Save();
+        saveSettings();
         System.exit(0);
     }
     
@@ -1678,8 +1776,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         }
         //</editor-fold>
         
-        String version = "1.16";
-        String date = "2012-10-12";
+        String version = "1.17";
+        String date = "2013-07-08";
 
         final JFrame frame = new Main(version, date);
     }
@@ -1701,7 +1799,6 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -1733,9 +1830,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     private javax.swing.JMenuItem mFileUploadSelectInv;
     private javax.swing.JMenu mHelp;
     private javax.swing.JMenuItem mHelpOnline;
-    private javax.swing.JRadioButtonMenuItem mLangDe;
-    private javax.swing.JRadioButtonMenuItem mLangEn;
-    private javax.swing.JRadioButtonMenuItem mLangPl;
+    private javax.swing.JMenu mLang;
     private javax.swing.JMenuItem mLoadFiles;
     private javax.swing.JMenuItem mLoadSession;
     public static javax.swing.JMenuItem mLogin;

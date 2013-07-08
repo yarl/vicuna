@@ -283,13 +283,13 @@ public class FUpload extends javax.swing.JFrame {
 
                         //CATEGORIES (FOR BOTH)
                         String c = "";
-                        if(!categories.isEmpty())
+                        if(categories.matches(".*\\w.*"))
                             c += categories + ";";
-                        if(!file.getComponent(Elem.CATS).isEmpty())
+                        if(file.getComponent(Elem.CATS).matches(".*\\w.*"))
                             c += file.getComponent(Elem.CATS);
 
                         desc += "\n\n";
-                        if(!c.equals("")) {
+                        if(c.matches(".*\\w.*")) {
                             //String categories = Main.settings.categories + ";" + file.getComponent(Elem.CATS);
 
                             String[] c2 = c.split(";");
@@ -383,10 +383,10 @@ public class FUpload extends javax.swing.JFrame {
                     lName.setText(Data.text("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
 
-                    //upload
+                    //upload test
                     //System.out.println(desc);
                     //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
-                     
+
                     try { 
                         boolean fileExist = wiki.isPageExist(name);
                         if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
