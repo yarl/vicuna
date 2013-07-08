@@ -29,7 +29,7 @@ public class Settings {
     //File
     public ArrayList<QuickTemplate> quickTemplates = new ArrayList<QuickTemplate>();
     
-    public boolean copyName = false;
+    public boolean copyName = true;
     public boolean copyDescription = true;
     public boolean copyCategories = true;
     

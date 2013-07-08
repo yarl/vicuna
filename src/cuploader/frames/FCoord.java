@@ -40,6 +40,7 @@ public class FCoord extends javax.swing.JFrame {
             map.setDisplayPositionByLatLon(Main.settings.coor.getLat(), Main.settings.coor.getLon(), Main.settings.coorZoom);
         
         setVisible(true);
+        setFocusableWindowState(true);
         
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
