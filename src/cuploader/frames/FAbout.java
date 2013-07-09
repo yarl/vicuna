@@ -138,7 +138,7 @@ public class FAbout extends javax.swing.JFrame {
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
                 if(n==0) {
                     try {
-                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/downloads"));
+                        Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
                     } catch (URISyntaxException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -155,7 +155,7 @@ public class FAbout extends javax.swing.JFrame {
 
     private void bProgramSiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bProgramSiteActionPerformed
         try {
-            Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna"));
+            Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
         } catch (URISyntaxException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

@@ -87,7 +87,7 @@ public final class FDownload extends javax.swing.JFrame {
         try {
             lName.setText(Data.text("download-connect"));
 
-            URL url = new URL("http://vicuna-uploader.googlecode.com/files/vicuna.jar");
+            URL url = new URL("http://yarl.github.io/vicuna/download/latest.jar");
             url.openConnection();
             InputStream reader = url.openStream();
 

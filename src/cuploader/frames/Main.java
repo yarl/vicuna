@@ -21,9 +21,6 @@ import java.awt.event.WindowListener;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1759,7 +1756,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         //</editor-fold>
         
         String version = "1.17";
-        String date = "2013-07-08";
+        String date = "2013-07-09";
 
         final JFrame frame = new Main(version, date);
     }
