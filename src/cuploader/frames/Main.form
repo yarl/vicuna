@@ -799,7 +799,7 @@
               <Image iconType="3" name="/cuploader/resources/server.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Main.settings.server" type="code"/>
+              <Connection code="Data.settings.server" type="code"/>
             </Property>
           </Properties>
           <AuxValues>

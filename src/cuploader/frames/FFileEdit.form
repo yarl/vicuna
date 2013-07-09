@@ -18,6 +18,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -386,7 +387,7 @@
         <Component class="javax.swing.JTextField" name="tNumFormat">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Main.settings.numFormat" type="code"/>
+              <Connection code="Data.settings.numFormat" type="code"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
@@ -409,11 +410,11 @@
         <Component class="javax.swing.JSpinner" name="tDigits">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new SpinnerNumberModel(Main.settings.numDigits, 1, 5, 1)" type="code"/>
+              <Connection code="new SpinnerNumberModel(Data.settings.numDigits, 1, 5, 1)" type="code"/>
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Main.settings.numDigits" type="code"/>
+              <Connection code="Data.settings.numDigits" type="code"/>
             </Property>
           </Properties>
         </Component>

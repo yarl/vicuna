@@ -1,21 +1,30 @@
 package cuploader;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import cuploader.frames.*;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
 import org.wikipedia.Wiki;
 
 public class Data implements Serializable {
+    public static Settings settings;
+    
     public enum Elem { NAME, EXT, DATE, COOR, DESC, CATS; }
     
     //text
@@ -94,7 +103,7 @@ public class Data implements Serializable {
      */
     public static void refreshQuickTemplates() {
         mQuickTemplates.removeAll();
-        for(final QuickTemplate qt : Main.settings.quickTemplates) {
+        for(final QuickTemplate qt : settings.quickTemplates) {
             if(qt.active) {
                 final JMenuItem item = new JMenuItem(qt.name);
                 item.addActionListener(new ActionListener() {
@@ -154,4 +163,30 @@ public class Data implements Serializable {
         }
         return -1;
     }
+    
+        /**
+     * 
+     */
+    public static void saveSettings() {
+        try {
+            XStream xstream = new XStream(new DomDriver());
+            xstream.alias("settings", cuploader.Settings.class);
+            xstream.alias("template", cuploader.QuickTemplate.class);
+            xstream.alias("source", cuploader.DescSource.class);
+            String xml = xstream.toXML(settings);
+            
+            try{
+                FileWriter fstream = new FileWriter("settings.vicuna");
+                BufferedWriter out = new BufferedWriter(fstream);
+                out.write(xml);
+                out.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(fSettings, e.getMessage());
+                System.err.println("Error: " + e.getMessage());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

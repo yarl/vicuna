@@ -137,7 +137,7 @@ public class FFileEdit extends javax.swing.JFrame {
         lNumFormat.setText(bundle.getString("fileedit-num-format")); // NOI18N
         lNumFormat.setToolTipText("<html>" + java.util.ResourceBundle.getBundle("cuploader/text/messages").getString("fileedit-num-format-tooltip") + "</html>");
 
-        tNumFormat.setText(Main.settings.numFormat);
+        tNumFormat.setText(Data.settings.numFormat);
         tNumFormat.setEnabled(false);
 
         lNumStart.setText(bundle.getString("fileedit-num-start")); // NOI18N
@@ -145,9 +145,9 @@ public class FFileEdit extends javax.swing.JFrame {
         tNumStart.setEnabled(false);
         tNumStart.setValue(1);
 
-        tDigits.setModel(new SpinnerNumberModel(Main.settings.numDigits, 1, 5, 1));
+        tDigits.setModel(new SpinnerNumberModel(Data.settings.numDigits, 1, 5, 1));
         tDigits.setEnabled(false);
-        tDigits.setValue(Main.settings.numDigits);
+        tDigits.setValue(Data.settings.numDigits);
 
         lDigits.setText(bundle.getString("fileedit-num-digits")); // NOI18N
 
@@ -344,8 +344,8 @@ public class FFileEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_bSaveActionPerformed
 
     private void bApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApplyActionPerformed
-        Main.settings.numFormat = tNumFormat.getText();
-        Main.settings.numDigits = Integer.parseInt(tDigits.getValue().toString());
+        Data.settings.numFormat = tNumFormat.getText();
+        Data.settings.numDigits = Integer.parseInt(tDigits.getValue().toString());
         Replace();
     }//GEN-LAST:event_bApplyActionPerformed
 

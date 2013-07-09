@@ -68,11 +68,8 @@ public class Settings {
     public Locale lang;
 
     public Settings() {
-        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-de"), "{{de|%TEXT%}}", true));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-en"), "{{en|%TEXT%}}", true));
+        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-de"), "{{de|%TEXT%}}", true));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-fr"), "{{fr|%TEXT%}}", true));
-        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-es"), "{{es|%TEXT%}}", false));
-        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-pl"), "{{pl|%TEXT%}}", true));
-        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-ru"), "{{ru|%TEXT%}}", true));
     }
 }

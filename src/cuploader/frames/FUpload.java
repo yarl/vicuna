@@ -50,27 +50,27 @@ public class FUpload extends javax.swing.JFrame {
         getRootPane().setDefaultButton(bHide);  
         bHide.requestFocus(); 
         
-        createGallery = Main.settings.createGallery;
-        galleryHeader = Main.settings.galleryHeader;
-        galleryWidth = Main.settings.galleryWidth;
-        fileDescSource = Main.settings.fileDescSource;
-        galleryPage = Main.settings.galleryPage;
-        galleryOnTop = Main.settings.galleryOnTop;
+        createGallery = Data.settings.createGallery;
+        galleryHeader = Data.settings.galleryHeader;
+        galleryWidth = Data.settings.galleryWidth;
+        fileDescSource = Data.settings.fileDescSource;
+        galleryPage = Data.settings.galleryPage;
+        galleryOnTop = Data.settings.galleryOnTop;
         
-        server = Main.settings.server;
-        author = Main.settings.author;
-        username = Main.settings.username;
-        source = Main.settings.source;
-        license = Data.licensesTemplates.get(Main.settings.license);
+        server = Data.settings.server;
+        author = Data.settings.author;
+        username = Data.settings.username;
+        source = Data.settings.source;
+        license = Data.licensesTemplates.get(Data.settings.license);
         
-        attrib = Main.settings.attribution;
-        extratext = Main.settings.extraText;
-        categories = Main.settings.categories;
+        attrib = Data.settings.attribution;
+        extratext = Data.settings.extraText;
+        categories = Data.settings.categories;
         
-        if(fileDescSource==1 && !Main.settings.fileDescPath.isEmpty())
-            f = new File(Main.settings.fileDescPath);
+        if(fileDescSource==1 && !Data.settings.fileDescPath.isEmpty())
+            f = new File(Data.settings.fileDescPath);
         wiki = Data.wiki;
-        renameAfterUpload = Main.settings.renameAfterUpload;
+        renameAfterUpload = Data.settings.renameAfterUpload;
             
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
@@ -290,7 +290,7 @@ public class FUpload extends javax.swing.JFrame {
 
                         desc += "\n\n";
                         if(c.matches(".*\\w.*")) {
-                            //String categories = Main.settings.categories + ";" + file.getComponent(Elem.CATS);
+                            //String categories = Data.settings.categories + ";" + file.getComponent(Elem.CATS);
 
                             String[] c2 = c.split(";");
                             boolean b;

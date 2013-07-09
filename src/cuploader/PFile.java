@@ -665,7 +665,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 
     private void tCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCategoriesFocusGained
         Main.lHelp.setText("<html>" + bundle.getString("help-categories") + "</html>");
-        if(Main.settings.showCatHints) showCategoryHints(true);
+        if(Data.settings.showCatHints) showCategoryHints(true);
     }//GEN-LAST:event_tCategoriesFocusGained
 
     private void bOpenMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bOpenMapActionPerformed
@@ -683,14 +683,14 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             --nr;
             PFile f = Data.getFiles().get(nr);
             
-            if(Main.settings.copyName) {
+            if(Data.settings.copyName) {
                 String name = f.getComponent(Elem.NAME);
-                Pattern pattern = Pattern.compile("^" + Main.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
+                Pattern pattern = Pattern.compile("^" + Data.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
                         .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
                 Matcher match = pattern.matcher(name);
 
                 String zeros = "";
-                for(int i=0; i<Main.settings.numDigits; ++i) zeros += "0";
+                for(int i=0; i<Data.settings.numDigits; ++i) zeros += "0";
                 DecimalFormat df = new DecimalFormat(zeros);
 
                 //there is number
@@ -698,14 +698,14 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                     tName.setText(retNumber(match, df));
                 //nope
                 else {
-                    String name2 = Main.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
+                    String name2 = Data.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
                     match = pattern.matcher(name2);
                     if(match.find()) tName.setText(retNumber(match, df));
                     else tName.setText(name2);
                 }
             }
-            if(Main.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
-            if(Main.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
+            if(Data.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
+            if(Data.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
         }
     }//GEN-LAST:event_bCopyDescUpActionPerformed
 
@@ -733,29 +733,29 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             ++nr;     
             PFile f = Data.getFiles().get(nr);
             
-            if(Main.settings.copyName) {
+            if(Data.settings.copyName) {
                 String name = f.getComponent(Elem.NAME);
-                Pattern pattern = Pattern.compile("^" + Main.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
+                Pattern pattern = Pattern.compile("^" + Data.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
                         .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
                 Matcher match = pattern.matcher(name);
 
                 String zeros = "";
-                for(int i=0; i<Main.settings.numDigits; ++i) zeros += "0";
+                for(int i=0; i<Data.settings.numDigits; ++i) zeros += "0";
                 DecimalFormat df = new DecimalFormat(zeros);
 
                 if(match.find()) {
                     tName.setText(retNumber(match, df));
                 //nope
                 } else {
-                    String name2 = Main.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
+                    String name2 = Data.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
                     match = pattern.matcher(name2);
                     if(match.find()) tName.setText(retNumber(match, df));
                     else tName.setText(name2);
                 }
             }
             
-            if(Main.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
-            if(Main.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
+            if(Data.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
+            if(Data.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
         }
     }//GEN-LAST:event_bCopyDescDownActionPerformed
 
@@ -854,7 +854,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_mDeleteActionPerformed
 
     private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
-        if(Main.settings.showCatHints) showCategoryHints(false);
+        if(Data.settings.showCatHints) showCategoryHints(false);
     }//GEN-LAST:event_tCategoriesCaretUpdate
 
     private void mDelCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mDelCoorActionPerformed
@@ -936,7 +936,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             if(directory != null && directory.containsTag(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL)) {
                 Date date = directory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
                 SimpleDateFormat sdf;
-                if(Main.settings.readExifHour) sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                if(Data.settings.readExifHour) sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 else sdf = new SimpleDateFormat("yyyy-MM-dd");
                 tDate.setText(sdf.format(date));
             } else 

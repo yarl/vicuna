@@ -36,8 +36,8 @@ public class FCoord extends javax.swing.JFrame {
         
         map.setZoomContolsVisible(false);
         
-        if(Main.settings.coor!=null && Main.settings.coorZoom!=0)
-            map.setDisplayPositionByLatLon(Main.settings.coor.getLat(), Main.settings.coor.getLon(), Main.settings.coorZoom);
+        if(Data.settings.coor!=null && Data.settings.coorZoom!=0)
+            map.setDisplayPositionByLatLon(Data.settings.coor.getLat(), Data.settings.coor.getLon(), Data.settings.coorZoom);
         
         setVisible(true);
         setFocusableWindowState(true);
@@ -231,8 +231,8 @@ public class FCoord extends javax.swing.JFrame {
     }
     
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
-        Main.settings.coor = map.getPosition();
-        Main.settings.coorZoom = map.getZoom();
+        Data.settings.coor = map.getPosition();
+        Data.settings.coorZoom = map.getZoom();
         
         String input = tCoor.getText();
         if(!input.isEmpty()) {

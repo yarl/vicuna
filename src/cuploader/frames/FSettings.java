@@ -21,62 +21,62 @@ public class FSettings extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         //GENERAL
-        if(!Main.settings.author.equals("own")) {
+        if(!Data.settings.author.equals("own")) {
             rOtherAuthor.setSelected(true);
-            tOtherAuthor.setText(Main.settings.author);
+            tOtherAuthor.setText(Data.settings.author);
             tOtherAuthor.setEnabled(true);
         }
         
-        tSource.setText(Main.settings.source);
+        tSource.setText(Data.settings.source);
         
         String[] lic = new String[Data.licenses.size()];
         for(int i=0;i<Data.licenses.size();++i)
             lic[i] = Data.licenses.get(i);
         cLicense.setModel(new DefaultComboBoxModel(lic));
         
-        if(Main.settings.license == Data.licenses.size()-1) {
+        if(Data.settings.license == Data.licenses.size()-1) {
             cLicense.setSelectedIndex(Data.licenses.size()-1);
             tLicense.setEditable(true);
-            tLicense.setText(Main.settings.licenseCustom/*Data.licensesTemplates.get(Data.licenses.size()-1)*/);
+            tLicense.setText(Data.settings.licenseCustom/*Data.licensesTemplates.get(Data.licenses.size()-1)*/);
         } else {
-            cLicense.setSelectedIndex(Main.settings.license);
+            cLicense.setSelectedIndex(Data.settings.license);
         }
 
-        tAttrib.setText(Main.settings.attribution);
-        tCategories.setText(Main.settings.categories);
-        tExtraText.setText(Main.settings.extraText);
+        tAttrib.setText(Data.settings.attribution);
+        tCategories.setText(Data.settings.categories);
+        tExtraText.setText(Data.settings.extraText);
         
         //FILE
         tQuickTemplatesTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         tQuickTemplatesTable.getColumnModel().getColumn(0).setMaxWidth(30);
         
-        tCopyName.setSelected(Main.settings.copyName);
-        tCopyDesc.setSelected(Main.settings.copyDescription);
-        tCopyCats.setSelected(Main.settings.copyCategories);
+        tCopyName.setSelected(Data.settings.copyName);
+        tCopyDesc.setSelected(Data.settings.copyDescription);
+        tCopyCats.setSelected(Data.settings.copyCategories);
         
-        tCatHints.setSelected(Main.settings.showCatHints);
+        tCatHints.setSelected(Data.settings.showCatHints);
         
         //GALLERY
-        cCreateGallery.setSelected(Main.settings.createGallery);
+        cCreateGallery.setSelected(Data.settings.createGallery);
         cCreateGalleryActionPerformed(new ActionEvent(this, 0, null));
-        tGalleryPage.setText(Main.settings.galleryPage);
-        tGalleryHeader.setSelectedIndex(Main.settings.galleryHeader);
-        tGalleryWidth.setValue(Main.settings.galleryWidth);
-        tPositionTop.setSelected(Main.settings.galleryOnTop);
-        tPositionBottom.setSelected(!Main.settings.galleryOnTop);
+        tGalleryPage.setText(Data.settings.galleryPage);
+        tGalleryHeader.setSelectedIndex(Data.settings.galleryHeader);
+        tGalleryWidth.setValue(Data.settings.galleryWidth);
+        tPositionTop.setSelected(Data.settings.galleryOnTop);
+        tPositionBottom.setSelected(!Data.settings.galleryOnTop);
         
         //PROGRAM
-        cReadHour.setSelected(Main.settings.readExifHour);
-        cLoadSubdirectory.setSelected(Main.settings.loadSubdirectory);
+        cReadHour.setSelected(Data.settings.readExifHour);
+        cLoadSubdirectory.setSelected(Data.settings.loadSubdirectory);
         
-        cRenameAfterUpload.setSelected(Main.settings.renameAfterUpload);
-        cAskQuit.setSelected(Main.settings.askQuit);
+        cRenameAfterUpload.setSelected(Data.settings.renameAfterUpload);
+        cAskQuit.setSelected(Data.settings.askQuit);
         
-        cFileDescSource.setSelectedIndex(Main.settings.fileDescSource);
-        if(Main.settings.fileDescPath==null)
+        cFileDescSource.setSelectedIndex(Data.settings.fileDescSource);
+        if(Data.settings.fileDescPath==null)
             tFileDesc.setText(Data.text("settings-program-descfile-noselected"));
         else
-            tFileDesc.setText(Main.settings.fileDescPath);
+            tFileDesc.setText(Data.settings.fileDescPath);
        
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
@@ -738,60 +738,60 @@ public class FSettings extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
-        if(cFileDescSource.getSelectedIndex()==1 && Main.settings.fileDescPath==null)
+        if(cFileDescSource.getSelectedIndex()==1 && Data.settings.fileDescPath==null)
             JOptionPane.showMessageDialog(rootPane, "Select file");
         else {
             //GENERAL
             //author
-            if(rOtherAuthor.isSelected() && !"".equals(tOtherAuthor.getText())) Main.settings.author = tOtherAuthor.getText();
-                else Main.settings.author = "own";
+            if(rOtherAuthor.isSelected() && !"".equals(tOtherAuthor.getText())) Data.settings.author = tOtherAuthor.getText();
+                else Data.settings.author = "own";
             //source
-            Main.settings.source = tSource.getText();
+            Data.settings.source = tSource.getText();
             //license
             if(cLicense.getSelectedIndex() == Data.licenses.size()-1) {
                 if(!tLicense.getText().equals("")) {
                     Data.licensesTemplates.set(Data.licenses.size()-1, tLicense.getText());
-                    Main.settings.licenseCustom = tLicense.getText();
-                    Main.settings.license = Data.licenses.size()-1;
+                    Data.settings.licenseCustom = tLicense.getText();
+                    Data.settings.license = Data.licenses.size()-1;
                 }
             } else 
-                Main.settings.license = cLicense.getSelectedIndex();
+                Data.settings.license = cLicense.getSelectedIndex();
             //attrib
-            if(tAttrib.getText() == null ? Main.settings.attribution != null : !tAttrib.getText().equals(Main.settings.attribution)) 
-                Main.settings.attribution = tAttrib.getText();
+            if(tAttrib.getText() == null ? Data.settings.attribution != null : !tAttrib.getText().equals(Data.settings.attribution)) 
+                Data.settings.attribution = tAttrib.getText();
             //cats
-            Main.settings.categories = tCategories.getText();
+            Data.settings.categories = tCategories.getText();
             //extra text
-            if(Main.settings.extraText == null ? tExtraText.getText() != null : !Main.settings.extraText.equals(tExtraText.getText())) 
-                Main.settings.extraText = tExtraText.getText();
+            if(Data.settings.extraText == null ? tExtraText.getText() != null : !Data.settings.extraText.equals(tExtraText.getText())) 
+                Data.settings.extraText = tExtraText.getText();
 
             //FILE
             Data.refreshQuickTemplates();
             
-            Main.settings.copyName = tCopyName.isSelected();
-            Main.settings.copyDescription = tCopyDesc.isSelected();
-            Main.settings.copyCategories = tCopyCats.isSelected();
+            Data.settings.copyName = tCopyName.isSelected();
+            Data.settings.copyDescription = tCopyDesc.isSelected();
+            Data.settings.copyCategories = tCopyCats.isSelected();
 
-            Main.settings.showCatHints = tCatHints.isSelected();
+            Data.settings.showCatHints = tCatHints.isSelected();
             
             //GALLERY
-            Main.settings.createGallery = cCreateGallery.isSelected();
+            Data.settings.createGallery = cCreateGallery.isSelected();
                 if(!tGalleryPage.getText().equals(""))
-            Main.settings.galleryPage = tGalleryPage.getText();
-            Main.settings.galleryHeader = tGalleryHeader.getSelectedIndex();
-            Main.settings.galleryWidth = Integer.parseInt(tGalleryWidth.getValue().toString());
-            Main.settings.galleryOnTop = tPositionTop.isSelected();
+            Data.settings.galleryPage = tGalleryPage.getText();
+            Data.settings.galleryHeader = tGalleryHeader.getSelectedIndex();
+            Data.settings.galleryWidth = Integer.parseInt(tGalleryWidth.getValue().toString());
+            Data.settings.galleryOnTop = tPositionTop.isSelected();
             
             //PROGRAM
-            Main.settings.readExifHour = cReadHour.isSelected();
-            Main.settings.loadSubdirectory = cLoadSubdirectory.isSelected();
+            Data.settings.readExifHour = cReadHour.isSelected();
+            Data.settings.loadSubdirectory = cLoadSubdirectory.isSelected();
 
-            Main.settings.renameAfterUpload = cRenameAfterUpload.isSelected();
-            Main.settings.askQuit = cAskQuit.isSelected();
+            Data.settings.renameAfterUpload = cRenameAfterUpload.isSelected();
+            Data.settings.askQuit = cAskQuit.isSelected();
 
-            Main.settings.fileDescSource = cFileDescSource.getSelectedIndex(); 
+            Data.settings.fileDescSource = cFileDescSource.getSelectedIndex(); 
 
-            Main.saveSettings();
+            Data.saveSettings();
             dispose();
             Data.fSettings = null;
         }
@@ -828,14 +828,14 @@ public class FSettings extends javax.swing.JFrame {
     }//GEN-LAST:event_cLicenseActionPerformed
 
     private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
-        Main.settings.quickTemplates.add(new QuickTemplate(Data.text("settings-templates-name"), "{{" + Data.text("settings-templates-template") + "}}", false));
+        Data.settings.quickTemplates.add(new QuickTemplate(Data.text("settings-templates-name"), "{{" + Data.text("settings-templates-template") + "}}", false));
         ((AbstractTableModel)tQuickTemplatesTable.getModel()).fireTableDataChanged();
     }//GEN-LAST:event_bAddActionPerformed
 
     private void bDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteActionPerformed
         int row = tQuickTemplatesTable.getSelectedRow();
         if(row>-1){
-            Main.settings.quickTemplates.remove(row);
+            Data.settings.quickTemplates.remove(row);
             ((AbstractTableModel)tQuickTemplatesTable.getModel()).fireTableDataChanged();
         }
     }//GEN-LAST:event_bDeleteActionPerformed
@@ -859,7 +859,7 @@ public class FSettings extends javax.swing.JFrame {
         if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File f = ch.getSelectedFile();
             if(f.isFile()) {
-                Main.settings.fileDescPath = f.getPath();
+                Data.settings.fileDescPath = f.getPath();
                 tFileDesc.setText(f.getPath());
             }
             //                else
@@ -954,7 +954,7 @@ class QuickTemplatesModel extends DefaultTableModel {
          
     @Override
     public int getRowCount() {
-        return Main.settings.quickTemplates.size();
+        return Data.settings.quickTemplates.size();
     }
 
     @Override
@@ -969,9 +969,9 @@ class QuickTemplatesModel extends DefaultTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch(columnIndex) {
-            case 0: return Main.settings.quickTemplates.get(rowIndex).active;
-            case 1: return Main.settings.quickTemplates.get(rowIndex).name;
-            case 2: return Main.settings.quickTemplates.get(rowIndex).template;
+            case 0: return Data.settings.quickTemplates.get(rowIndex).active;
+            case 1: return Data.settings.quickTemplates.get(rowIndex).name;
+            case 2: return Data.settings.quickTemplates.get(rowIndex).template;
             default: return 0;
         }
     }
@@ -979,9 +979,9 @@ class QuickTemplatesModel extends DefaultTableModel {
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
         switch(columnIndex) {
-            case 0: Main.settings.quickTemplates.get(rowIndex).active = Boolean.parseBoolean(value.toString()); break;
-            case 1: Main.settings.quickTemplates.get(rowIndex).name = value.toString(); break;
-            case 2: Main.settings.quickTemplates.get(rowIndex).template = value.toString(); break;
+            case 0: Data.settings.quickTemplates.get(rowIndex).active = Boolean.parseBoolean(value.toString()); break;
+            case 1: Data.settings.quickTemplates.get(rowIndex).name = value.toString(); break;
+            case 2: Data.settings.quickTemplates.get(rowIndex).template = value.toString(); break;
         }
     }
 
