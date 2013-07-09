@@ -1205,7 +1205,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                     new FDownload(this);
                 else if(n==1) {
                     try {
-                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/downloads"));
+                        Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
                     } catch (URISyntaxException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
