@@ -118,6 +118,8 @@ public class FUploadCheck extends javax.swing.JFrame {
                 if(problems>0) {
                     tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
                     tProgress.setText(Data.text("uploadcheck-errors") + ": " + problems);
+                    bUpload.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
+                    bUpload.setEnabled(true);
                 } else {
                     tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
                     tProgress.setText(Data.text("uploadcheck-ok"));

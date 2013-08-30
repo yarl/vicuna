@@ -1755,8 +1755,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         }
         //</editor-fold>
         
-        String version = "1.17";
-        String date = "2013-07-09";
+        String version = "1.18";
+        String date = "2013-08-30";
 
         final JFrame frame = new Main(version, date);
     }
