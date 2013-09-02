@@ -299,7 +299,7 @@ public class FUpload extends javax.swing.JFrame {
                                         break;
                                     }
                                 }
-                                if(b)
+                                if(b && !c2[j].equals("") && !c2[j].matches(".*"))
                                     desc += "[[Category:" + c2[j] + "]]\n";
                             }
                         }
