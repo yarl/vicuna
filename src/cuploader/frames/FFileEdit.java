@@ -61,6 +61,7 @@ public class FFileEdit extends javax.swing.JFrame {
         cUpload = new javax.swing.JCheckBox();
         jSeparator1 = new javax.swing.JSeparator();
         bClearCoor = new javax.swing.JButton();
+        bWikiLoves = new javax.swing.JButton();
         bSave = new javax.swing.JButton();
         bCancel = new javax.swing.JButton();
         bApply = new javax.swing.JButton();
@@ -163,6 +164,13 @@ public class FFileEdit extends javax.swing.JFrame {
             }
         });
 
+        bWikiLoves.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/monument.png"))); // NOI18N
+        bWikiLoves.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bWikiLovesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
         Panel.setLayout(PanelLayout);
         PanelLayout.setHorizontalGroup(
@@ -189,7 +197,7 @@ public class FFileEdit extends javax.swing.JFrame {
                                             .addGroup(PanelLayout.createSequentialGroup()
                                                 .addComponent(tNumStart, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(lDigits, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(lDigits, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(tDigits, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(4, 4, 4))
@@ -216,7 +224,8 @@ public class FFileEdit extends javax.swing.JFrame {
                     .addGroup(PanelLayout.createSequentialGroup()
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bWikiLoves, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelLayout.createSequentialGroup()
@@ -272,7 +281,10 @@ public class FFileEdit extends javax.swing.JFrame {
                     .addComponent(jSeparator1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(PanelLayout.createSequentialGroup()
+                        .addComponent(lDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bWikiLoves, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -391,6 +403,10 @@ public class FFileEdit extends javax.swing.JFrame {
         coor = null;
         tCoor.setText("");
     }//GEN-LAST:event_bClearCoorActionPerformed
+
+    private void bWikiLovesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bWikiLovesActionPerformed
+        new FWikiLoves(tName, tDesc, tCategories);
+    }//GEN-LAST:event_bWikiLovesActionPerformed
     
     private void showCategoryHints(boolean b) {
         String cat = CategoryHint.getCategory(tCategories);
@@ -529,6 +545,7 @@ public class FFileEdit extends javax.swing.JFrame {
     private javax.swing.JButton bClearCoor;
     private javax.swing.JButton bSave;
     private javax.swing.JButton bSetCoor;
+    private javax.swing.JButton bWikiLoves;
     private javax.swing.JComboBox cCategoriesMethod;
     private javax.swing.JComboBox cNameMethod;
     private javax.swing.JCheckBox cNum;

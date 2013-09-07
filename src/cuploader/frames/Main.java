@@ -1196,14 +1196,14 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     
     private void checkVersion() {
         try {
-            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version.wlm").trim();
             if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
-                Object[] o = {Data.text("button-autoupdate"), Data.text("button-download"), Data.text("button-cancel")};
+                Object[] o = {Data.text("button-download"), Data.text("button-cancel")};
                 int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>).</body></html>", 
                         Data.text("about-checkupdate"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, o, o[0]);
-                if(n==0)
+                /*if(n==0)
                     new FDownload(this);
-                else if(n==1) {
+                else*/ if(n==0) {
                     try {
                         Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
                     } catch (URISyntaxException ex) {

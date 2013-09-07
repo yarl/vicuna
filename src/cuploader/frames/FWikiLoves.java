@@ -207,9 +207,8 @@ public class FWikiLoves extends javax.swing.JFrame {
 
                     //tName.setText(monument.getString("adm4") + " - " + monument.getString("name"));
                     String desc = "{{pl|" + monument.getString("adm4");
-                        desc += (monument.getString("address").isEmpty()) ? "." : ", "+monument.getString("address")+".";
-                        desc += "}}";
-                        desc += monument.getString("name").substring(0, 1).toUpperCase() + monument.getString("name").substring(1) + ".";
+                        desc += (monument.getString("address").isEmpty()) ? ". " : ", "+monument.getString("address")+". ";
+                        desc += monument.getString("name").substring(0, 1).toUpperCase() + monument.getString("name").substring(1) + ".}}";
                         desc += "\n{{zabytek nieruchomy|"+monument.getString("id")+"}}";
                     
                     tDesc.setText(desc);

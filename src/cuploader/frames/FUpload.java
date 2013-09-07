@@ -303,7 +303,7 @@ public class FUpload extends javax.swing.JFrame {
                                     desc += "[[Category:" + c2[j] + "]]\n";
                             }
                         }
-                        desc += "[[Category:Uploaded with VicuñaUploader]]";
+                        desc += "[[Category:Uploaded with VicuñaUploader (Wiki Loves Monuments edition)]]";
                     }
 
                     // DESC FROM EXTERNAL FILE
