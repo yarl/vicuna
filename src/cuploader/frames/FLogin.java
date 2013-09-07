@@ -1,7 +1,6 @@
 package cuploader.frames;
 
 import cuploader.Data;
-import cuploader.Settings;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
