@@ -391,11 +391,11 @@ public class FFileEdit extends javax.swing.JFrame {
     }//GEN-LAST:event_cNumActionPerformed
 
     private void tCategoriesCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tCategoriesCaretUpdate
-        showCategoryHints(false);
+        if(Data.settings.showCatHints) showCategoryHints(false);
     }//GEN-LAST:event_tCategoriesCaretUpdate
 
     private void tCategoriesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tCategoriesFocusGained
-        showCategoryHints(true);
+        if(Data.settings.showCatHints) showCategoryHints(true);
     }//GEN-LAST:event_tCategoriesFocusGained
 
     private void bClearCoorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bClearCoorActionPerformed

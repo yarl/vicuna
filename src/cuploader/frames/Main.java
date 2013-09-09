@@ -189,7 +189,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         mShow.add(mViewNotUpload1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("VicuñaUploader " + Data.version);
+        setTitle("VicuñaUploader " + Data.version + " (Wiki Lubi Zabytki 2013)");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/color-swatch-lama.png")));
         setMinimumSize(new java.awt.Dimension(900, 600));
         setPreferredSize(new java.awt.Dimension(860, 550));
@@ -1205,7 +1205,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                     new FDownload(this);
                 else*/ if(n==0) {
                     try {
-                        Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
+                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/wiki/Wiki-Lubi-Zabytki#head"));
                     } catch (URISyntaxException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -1755,8 +1755,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         }
         //</editor-fold>
         
-        String version = "1.18";
-        String date = "2013-08-30";
+        String version = "1.00";
+        String date = "2013-09-10";
 
         final JFrame frame = new Main(version, date);
     }

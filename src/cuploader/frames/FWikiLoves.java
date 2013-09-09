@@ -58,7 +58,8 @@ public class FWikiLoves extends javax.swing.JFrame {
         lTextInfo = new javax.swing.JLabel();
         tDownload = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Pobierz opis zabytku");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -68,7 +69,7 @@ public class FWikiLoves extends javax.swing.JFrame {
 
         jLabel2.setText("Numer ID");
 
-        tNumber.setText("639043");
+        tNumber.setText("718300");
 
         tServer.setText("http://toolserver.org/~erfgoed/api/api.php");
 
@@ -131,6 +132,7 @@ public class FWikiLoves extends javax.swing.JFrame {
             .addComponent(lTextInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        tDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/tick.png"))); // NOI18N
         tDownload.setText("Pobierz");
         tDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,6 +205,8 @@ public class FWikiLoves extends javax.swing.JFrame {
                     JSONObject json = readJsonFromUrl(address);
                     JSONArray m = json.getJSONArray("monuments");
                     JSONObject monument = m.getJSONObject(0);
+                    
+                    lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
                     lTextInfo.setText("OK");
 
                     //tName.setText(monument.getString("adm4") + " - " + monument.getString("name"));
@@ -213,12 +217,13 @@ public class FWikiLoves extends javax.swing.JFrame {
                     
                     tDesc.setText(desc);
                     tCategories.setText("Cultural heritage monuments in " + monument.getString("adm3"));
-                    
                     dispose();
                     
                 } catch (IOException ex) {
+                    lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
                     lTextInfo.setText("Błąd!");
                 } catch (JSONException ex) {
+                    lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
                     lTextInfo.setText("Błąd!");
                 }
 

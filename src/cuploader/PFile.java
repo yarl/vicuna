@@ -487,6 +487,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         });
 
         bWikiLoves.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/monument.png"))); // NOI18N
+        bWikiLoves.setOpaque(false);
         bWikiLoves.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bWikiLovesActionPerformed(evt);
