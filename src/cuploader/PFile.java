@@ -11,6 +11,7 @@ import cuploader.fixes.TransferFocus;
 import cuploader.frames.FCoord;
 import cuploader.frames.FExif;
 import cuploader.frames.FFileEdit;
+import cuploader.frames.FUpload;
 import cuploader.frames.FWikiLoves;
 import cuploader.frames.Main;
 import java.awt.*;
@@ -66,6 +67,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
+        bSource.setVisible(false);
         addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
@@ -81,6 +83,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
+        bSource.setVisible(false);
         addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
@@ -155,6 +158,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         bOpenMap = new javax.swing.JButton();
         lDirectory = new javax.swing.JLabel();
         bWikiLoves = new javax.swing.JButton();
+        bSource = new javax.swing.JButton();
         cUpload = new javax.swing.JCheckBox();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
@@ -494,6 +498,13 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             }
         });
 
+        bSource.setFocusable(false);
+        bSource.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSourceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
         Panel.setLayout(PanelLayout);
         PanelLayout.setHorizontalGroup(
@@ -506,7 +517,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                     .addGroup(PanelLayout.createSequentialGroup()
                         .addComponent(bOpenMap, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bTools, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(bTools, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bSource, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -573,9 +586,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             .addGroup(PanelLayout.createSequentialGroup()
                 .addComponent(tThumb, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bOpenMap, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bTools, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(bOpenMap, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bTools, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bSource, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -891,6 +906,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private void bWikiLovesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bWikiLovesActionPerformed
         new FWikiLoves(tName, tDesc, tCategories);
     }//GEN-LAST:event_bWikiLovesActionPerformed
+
+    private void bSourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSourceActionPerformed
+        JOptionPane.showMessageDialog(mContext, FUpload.getUploadTextCommons(this, Data.settings));
+    }//GEN-LAST:event_bSourceActionPerformed
    
     private void addUndo() {
         tName.getDocument().addUndoableEditListener(new UndoableEditListener() {
@@ -1174,6 +1193,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private javax.swing.JButton bOpenDir;
     private javax.swing.JButton bOpenFile;
     private javax.swing.JButton bOpenMap;
+    private javax.swing.JButton bSource;
     private javax.swing.JButton bTools;
     private javax.swing.JButton bWikiLoves;
     private javax.swing.JCheckBox cUpload;

@@ -131,14 +131,14 @@ public class FAbout extends javax.swing.JFrame {
 
     private void bCheckUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCheckUpdateActionPerformed
         try {
-            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version.wlm").trim();
             if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
                 Object[] o = {bundle.getString("button-download"), bundle.getString("button-cancel")};
                 int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + bundle.getString("about-checkupdate-text") + " (<b>" + v + "</b>). " + bundle.getString("about-checkupdate-download") + "</body></html>", bundle.getString("about-checkupdate"), 
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, o, o[0]);
                 if(n==0) {
                     try {
-                        Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
+                        Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/wiki/Wiki-Lubi-Zabytki"));
                     } catch (URISyntaxException ex) {
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -155,7 +155,7 @@ public class FAbout extends javax.swing.JFrame {
 
     private void bProgramSiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bProgramSiteActionPerformed
         try {
-            Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
+            Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/wiki/Wiki-Lubi-Zabytki"));
         } catch (URISyntaxException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

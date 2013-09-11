@@ -37,6 +37,7 @@ public class FWikiLoves extends javax.swing.JFrame {
         
         setLocationRelativeTo(null);
         setDefaultCloseOperation(FLogin.DISPOSE_ON_CLOSE);
+        tNumber.requestFocus();  
         
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
@@ -68,8 +69,6 @@ public class FWikiLoves extends javax.swing.JFrame {
         tCountry.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Polska" }));
 
         jLabel2.setText("Numer ID");
-
-        tNumber.setText("718300");
 
         tServer.setText("http://toolserver.org/~erfgoed/api/api.php");
 

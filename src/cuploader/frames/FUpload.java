@@ -21,6 +21,7 @@ public class FUpload extends javax.swing.JFrame {
     ArrayList<PFile> list = new ArrayList<PFile>();
     private volatile boolean stopRq = false;
     
+    /*
     boolean createGallery;
     int galleryHeader;
     int galleryWidth;
@@ -37,9 +38,14 @@ public class FUpload extends javax.swing.JFrame {
     String attrib;
     String extratext;
     String categories;
+    boolean renameAfterUpload;
+    */
+    
     File f;
     Wiki wiki;
-    boolean renameAfterUpload;
+    
+    
+    Settings set;
     
     public FUpload(ArrayList<PFile> list) {
         this.list = list;
@@ -50,6 +56,9 @@ public class FUpload extends javax.swing.JFrame {
         getRootPane().setDefaultButton(bHide);  
         bHide.requestFocus(); 
         
+        set = Data.settings;
+
+        /*
         createGallery = Data.settings.createGallery;
         galleryHeader = Data.settings.galleryHeader;
         galleryWidth = Data.settings.galleryWidth;
@@ -66,11 +75,13 @@ public class FUpload extends javax.swing.JFrame {
         attrib = Data.settings.attribution;
         extratext = Data.settings.extraText;
         categories = Data.settings.categories;
+        renameAfterUpload = Data.settings.renameAfterUpload;
+        */
         
-        if(fileDescSource==1 && !Data.settings.fileDescPath.isEmpty())
+        if(set.fileDescSource==1 && !set.fileDescPath.isEmpty())
             f = new File(Data.settings.fileDescPath);
         wiki = Data.wiki;
-        renameAfterUpload = Data.settings.renameAfterUpload;
+        
             
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
@@ -180,6 +191,66 @@ public class FUpload extends javax.swing.JFrame {
         stopUpload();
     }//GEN-LAST:event_bCancelActionPerformed
     
+    public static String getUploadTextCommons(PFile file, Settings settings) {
+        String desc = "=={{int:filedesc}}==\n{{Information"
+            + "\n|description = " + file.getComponent(Elem.DESC)
+            + "\n|date = " + file.getComponent(Elem.DATE);
+        
+        if(settings.author.equals("own")) desc += "\n|source = {{own}}\n|author = [[user:" + settings.username + "|]]";
+        else desc += "\n|source = " + settings.source + "\n|author = " + settings.author;
+
+        desc += "\n|permission = \n|other_versions = \n}}";
+        if(file.coor != null)
+            desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon() + "}}";
+
+        desc += "\n\n=={{int:license-header}}==\n";
+
+        if(settings.license == 6) {
+            desc += settings.licenseCustom;
+        } else {
+            String license_ = Data.licensesTemplates.get(settings.license);
+            if(settings.attribution.isEmpty()) license_ = license_.replace("|%ATTRIB%", "");
+            else license_ = license_.replace("%ATTRIB%", settings.attribution);
+            desc += license_;
+        }
+        if(!settings.extraText.isEmpty()) desc += "\n" + settings.extraText;
+        
+        //categories
+        desc += getUploadCategories(file.getComponent(Elem.CATS), settings.categories);
+        
+        return desc;
+    }
+    
+    public static String getUploadCategories(String local, String global) {
+        String text = "";
+        String raw = "";
+        
+        if(local.matches(".*\\w.*")) raw += local + ";";
+        if(global.matches(".*\\w.*")) raw += global;
+        
+        if(raw.isEmpty())
+            return "";
+        
+        text += "\n\n";
+        String[] cat = raw.split(";");
+        boolean b;
+        for(int j=0;j<cat.length;++j) {
+            b = true;
+            for(int k=0; k<j; ++k) {
+                if(cat[j].equals(cat[k])) {
+                    b = false;
+                    break;
+                }
+            }
+            if(b && cat[j].matches(".*\\w.*"))
+                text += "[[Category:" + cat[j] + "]]\n";
+        }
+        text += "[[Category:Uploaded with VicuñaUploader (Wiki Loves Monuments)]]";
+        
+        return text;
+    }
+    
+
     private void startUpload() {
     stopRq = false;
     lockLogout(true);
@@ -197,7 +268,7 @@ public class FUpload extends javax.swing.JFrame {
             //READ DESC FROM FILE
             BufferedReader in = null;
             String text = "";
-            if(fileDescSource==1 && f!= null) {
+            if(set.fileDescSource==1 && f!= null) {
                 try {
                     in = new BufferedReader(new FileReader(f));
                     
@@ -215,17 +286,17 @@ public class FUpload extends javax.swing.JFrame {
             }
             
             //GALLERY HEADER
-            if(createGallery && !stopRq) {
-                if(galleryHeader==1)
+            if(set.createGallery && !stopRq) {
+                if(set.galleryHeader==1)
                     header = JOptionPane.showInputDialog(rootPane, Data.text("upload-gallery-name"), Data.text("upload-uploading"), JOptionPane.INFORMATION_MESSAGE);
-                else if(galleryHeader==0){
+                else if(set.galleryHeader==0){
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Calendar cal = Calendar.getInstance();
                     header = df.format(cal.getTime());
                 } else
                     header = "?";
                 //gallery += "==" + header + "==\n<gallery>\n";
-                gallery += "<gallery widths=" + galleryWidth + ">\n";
+                gallery += "<gallery widths=" + set.galleryWidth + ">\n";
             } else
                 lGallery.setEnabled(false);
             
@@ -241,103 +312,45 @@ public class FUpload extends javax.swing.JFrame {
                 if(!stopRq) {
                     
                     //DEFAULT DESC
-                    if(fileDescSource==0) {
+                    if(set.fileDescSource==0) {
                         
                         //COMMONS
-                        if(server.equals("commons.wikimedia.org")) {
-                            desc = "=={{int:filedesc}}==\n{{Information"
-                            + "\n|description = " + file.getComponent(Elem.DESC)
-                            + "\n|date = " + file.getComponent(Elem.DATE);
-                            
-                            if(author.equals("own")) desc += "\n|source = {{own}}\n|author = [[user:" + username + "|]]";
-                            else desc += "\n|source = " + source + "\n|author = " + author;
-                            
-                            desc += "\n|permission = \n|other_versions = \n}}";
-                            if(file.coor != null)
-                                desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon() + "}}";
-
-                            desc += "\n\n=={{int:license-header}}==\n";
-                            
-                            if(attrib.isEmpty()) license.replace("|%ATTRIB%", "%ATTRIB%");  //delete pipe
-                            desc += license.replace("%ATTRIB%", attrib);
-
-                            if(!extratext.isEmpty())
-                                desc += "\n" + extratext;
+                        if(set.server.equals("commons.wikimedia.org")) {
+                            desc += getUploadTextCommons(file, set);
 
                         //EVERYTHING ELSE
                         } else {
                             desc = "==Summary=="
                             + "\n* Description: " + file.getComponent(Elem.DESC);
                             
-                            if(author.equals("own")) desc += "\n* Source: own work\n* Author: [[user:" + username + "|]]";
-                            else desc += "\n* Source: " + source + "\n* Author: " + author;
+                            if(set.author.equals("own")) desc += "\n* Source: own work\n* Author: [[user:" + set.username + "|]]";
+                            else desc += "\n* Source: " + set.source + "\n* Author: " + set.author;
                             
                             desc += "\n* Date: " + file.getComponent(Elem.DATE)
-                            + "\n* License: " + license.replace("%ATTRIB%", attrib);
-                            if(!extratext.isEmpty()) 
-                                desc += "\n" + extratext;
+                            + "\n* License: " + Data.licensesTemplates.get(set.license).replace("%ATTRIB%", set.attribution);
+                            if(!set.extraText.isEmpty()) 
+                                desc += "\n" + set.extraText;
+                            desc += getUploadCategories(file.getComponent(Elem.CATS), set.categories);
                         }
-
-                        //CATEGORIES (FOR BOTH)
-                        String c = "";
-                        if(categories.matches(".*\\w.*"))
-                            c += categories + ";";
-                        if(file.getComponent(Elem.CATS).matches(".*\\w.*"))
-                            c += file.getComponent(Elem.CATS);
-
-                        desc += "\n\n";
-                        if(c.matches(".*\\w.*")) {
-                            //String categories = Data.settings.categories + ";" + file.getComponent(Elem.CATS);
-
-                            String[] c2 = c.split(";");
-                            boolean b;
-                            for(int j=0;j<c2.length;++j) {
-                                b = true;
-                                for(int k=0; k<j; ++k) {
-                                    if(c2[j].equals(c2[k])) {
-                                        b = false;
-                                        break;
-                                    }
-                                }
-                                if(b && !c2[j].equals("") && !c2[j].matches(".*"))
-                                    desc += "[[Category:" + c2[j] + "]]\n";
-                            }
-                        }
-                        desc += "[[Category:Uploaded with VicuñaUploader (Wiki Loves Monuments)]]";
                     }
 
                     // DESC FROM EXTERNAL FILE
-                    if(fileDescSource==1 && f!= null) {          
+                    if(set.fileDescSource==1 && f!= null) {          
                         desc = text;
 
-                        desc = (attrib.isEmpty()) ? desc.replace("%ATTRIB%", "") : desc.replace("%ATTRIB%", attrib);
-                        desc = desc.replace("%AUTHOR%", author);
+                        desc = (set.attribution.isEmpty()) ? desc.replace("%ATTRIB%", "") : desc.replace("%ATTRIB%", set.attribution);
+                        desc = desc.replace("%AUTHOR%", set.author);
 
                         //CATEGORIES (FOR ALL)
-                        String out = "";
-                        if(!categories.isEmpty()) {
-                            String[] c2 = categories.split(";");
-
-                            boolean b;
-                            for(int j=0;j<c2.length;++j) {
-                                b = true;
-                                for(int k=0; k<j; ++k) {
-                                    if(c2[j].equals(c2[k])) {
-                                        b = false;
-                                        break;
-                                    }
-                                }
-                                if(b && !c2[j].equals(""))
-                                    out += "[[Category:" + c2[j] + "]]\n";
-                            }
-                        }
+                        String out = getUploadCategories(file.getComponent(Elem.CATS), set.categories);
                         desc = desc.replace("%CATEGORIES%", out);
                         
-                        desc = (!extratext.isEmpty()) ? desc.replace("%EXTRA%", "") : desc.replace("%EXTRA%", extratext);
-                        desc = desc.replace("%SOURCE%", source);
-                        desc = desc.replace("%USER%", username);
+                        desc = (!set.extraText.isEmpty()) ? desc.replace("%EXTRA%", "") : desc.replace("%EXTRA%", set.extraText);
+                        desc = desc.replace("%SOURCE%", set.source);
+                        desc = desc.replace("%USER%", set.username);
 
                         //CATEGORIES (FOR IMAGE)
+                        /*
                         boolean b;
                         String[] c2 = file.getComponent(Elem.CATS).split(";");
                         out = "";
@@ -352,10 +365,11 @@ public class FUpload extends javax.swing.JFrame {
                             if(b && !c2[j].equals(""))
                                 out += "[[Category:" + c2[j] + "]]\n";
                         }
-                        desc = desc.replace("%CATS%", out);
+                        */
+                        desc = desc.replace("%CATS%", "");
 
                         //COORDINATES
-                        c2 = file.getComponent(Elem.COOR).split(";");
+                        String[] c2 = file.getComponent(Elem.COOR).split(";");
                         out = "";
                         if(c2.length>1)
                             out += "{{Location dec|" + c2[0] + "|" + c2[1] + "}}";
@@ -364,7 +378,7 @@ public class FUpload extends javax.swing.JFrame {
                         desc = desc.replace("%DATE%", file.getComponent(Elem.DATE));
                         desc = desc.replace("%DESC%", file.getComponent(Elem.DESC));
                     }
-                    if(fileDescSource==1 && f == null) {
+                    if(set.fileDescSource==1 && f == null) {
                         JOptionPane.showMessageDialog(rootPane, "Error: problem with description file!");
                         break;
                     }
@@ -388,8 +402,8 @@ public class FUpload extends javax.swing.JFrame {
                         boolean fileExist = wiki.isPageExist(name);
                         if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version + " (Wiki Lubi Zabytki 2013)");
                         
-                        if(createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
-                        if(renameAfterUpload) {
+                        if(set.createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
+                        if(set.renameAfterUpload) {
                             File f = new File(file.file.getParentFile()+"\\"+name);
                             file.file.renameTo(f);
                             file.file = f;
@@ -419,19 +433,19 @@ public class FUpload extends javax.swing.JFrame {
             else
                 lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
 
-            if(createGallery) gallery += "</gallery>";
-            if(createGallery && uploaded>0) {
+            if(set.createGallery) gallery += "</gallery>";
+            if(set.createGallery && uploaded>0) {
                 Progress.setIndeterminate(true);
                 lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
                 if(header==null)
                     header = "?";
                 try {
-                    if(galleryOnTop) {
-                        String pageText = wiki.getPageText("User:"+username+"/"+galleryPage);
+                    if(set.galleryOnTop) {
+                        String pageText = wiki.getPageText("User:"+set.username+"/"+set.galleryPage);
                         String output = "== " + header + " ==\n\n" + gallery + "\n\n" + pageText;
-                        wiki.edit("User:"+username+"/"+galleryPage, output, header);
+                        wiki.edit("User:"+set.username+"/"+set.galleryPage, output, header);
                     } else
-                        wiki.edit("User:"+username+"/"+galleryPage, gallery, header, -1);
+                        wiki.edit("User:"+set.username+"/"+set.galleryPage, gallery, header, -1);
 
                     lGallery.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
                     lGallery.setText(Data.text("upload-gallery-created"));
