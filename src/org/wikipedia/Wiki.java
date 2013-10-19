@@ -419,6 +419,7 @@ public class Wiki implements Serializable
     private String domain;
     protected String query, base, apiUrl;
     protected String scriptPath = "/w";
+    protected String scriptHttp = "https";
 
     // user management
     private HashMap<String, String> cookies = new HashMap<String, String>(12);
@@ -525,7 +526,7 @@ public class Wiki implements Serializable
      */
     protected void initVars()
     {
-        String temp = "https://" + domain + scriptPath;
+        String temp = scriptHttp + "://" + domain + scriptPath;
         // MediaWiki has inbuilt maxlag functionality, see [[mw:Manual:Maxlag
         // parameter]]. Let's exploit it.
         if (maxlag >= 0)
@@ -564,6 +565,12 @@ public class Wiki implements Serializable
         return throttle;
     }
 
+    public void setHttp(String http)
+    {
+      this.scriptHttp = http;
+      initVars();
+    }
+    
     /**
      *  Sets the editing throttle. Read requests are not throttled or restricted
      *  in any way. Default is 10s.
