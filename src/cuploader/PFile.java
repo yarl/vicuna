@@ -67,7 +67,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
-        bSource.setVisible(false);
+        //bSource.setVisible(false);
         addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
@@ -83,7 +83,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
-        bSource.setVisible(false);
+        //bSource.setVisible(false);
         addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
@@ -109,519 +109,519 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }
   
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+  // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+  private void initComponents() {
 
-        mContext = new javax.swing.JPopupMenu();
-        mSelectToUpload = new javax.swing.JMenuItem();
-        mDeselectToUpload = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        mEdit = new javax.swing.JMenuItem();
-        mDelete = new javax.swing.JMenuItem();
-        mTools = new javax.swing.JPopupMenu();
-        mRefreshThumb = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        mShowEXIF = new javax.swing.JMenuItem();
-        mReloadEXIF = new javax.swing.JMenuItem();
-        mWiki = new javax.swing.JPopupMenu();
-        mAddEngDesc = new javax.swing.JMenuItem();
-        mAddPlDesc = new javax.swing.JMenuItem();
-        mGeoloc = new javax.swing.JPopupMenu();
-        mAddCoor = new javax.swing.JMenuItem();
-        mDelCoor = new javax.swing.JMenuItem();
-        mMaps = new javax.swing.JMenu();
-        mOSM = new javax.swing.JMenuItem();
-        mGoogle = new javax.swing.JMenuItem();
-        mGeoHack = new javax.swing.JMenuItem();
-        mCatHint = new javax.swing.JPopupMenu();
-        Panel = new javax.swing.JPanel();
-        tThumb = new javax.swing.JLabel();
-        tName = new javax.swing.JTextField();
-        jScrollPane1 = new cuploader.fixes.PDControlScrollPane();
-        tDesc = new javax.swing.JTextArea();
-        tDate = new javax.swing.JTextField();
-        lDate = new javax.swing.JLabel();
-        lName = new javax.swing.JLabel();
-        lCategories = new javax.swing.JLabel();
-        tCategories = new javax.swing.JTextField();
-        lDesc = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        lStatus = new javax.swing.JLabel();
-        tSize = new javax.swing.JLabel();
-        tCoor = new javax.swing.JLabel();
-        bCopyDescUp = new javax.swing.JButton();
-        bCopyDescDown = new javax.swing.JButton();
-        bTools = new javax.swing.JButton();
-        lFilename = new javax.swing.JLabel();
-        bOpenFile = new javax.swing.JButton();
-        bOpenDir = new javax.swing.JButton();
-        bOpenMap = new javax.swing.JButton();
-        lDirectory = new javax.swing.JLabel();
-        bWikiLoves = new javax.swing.JButton();
-        bSource = new javax.swing.JButton();
-        cUpload = new javax.swing.JCheckBox();
+    mContext = new javax.swing.JPopupMenu();
+    mSelectToUpload = new javax.swing.JMenuItem();
+    mDeselectToUpload = new javax.swing.JMenuItem();
+    jSeparator1 = new javax.swing.JPopupMenu.Separator();
+    mEdit = new javax.swing.JMenuItem();
+    mDelete = new javax.swing.JMenuItem();
+    mTools = new javax.swing.JPopupMenu();
+    mRefreshThumb = new javax.swing.JMenuItem();
+    jSeparator2 = new javax.swing.JPopupMenu.Separator();
+    mShowEXIF = new javax.swing.JMenuItem();
+    mReloadEXIF = new javax.swing.JMenuItem();
+    mWiki = new javax.swing.JPopupMenu();
+    mAddEngDesc = new javax.swing.JMenuItem();
+    mAddPlDesc = new javax.swing.JMenuItem();
+    mGeoloc = new javax.swing.JPopupMenu();
+    mAddCoor = new javax.swing.JMenuItem();
+    mDelCoor = new javax.swing.JMenuItem();
+    mMaps = new javax.swing.JMenu();
+    mOSM = new javax.swing.JMenuItem();
+    mGoogle = new javax.swing.JMenuItem();
+    mGeoHack = new javax.swing.JMenuItem();
+    mCatHint = new javax.swing.JPopupMenu();
+    Panel = new javax.swing.JPanel();
+    tThumb = new javax.swing.JLabel();
+    tName = new javax.swing.JTextField();
+    jScrollPane1 = new cuploader.fixes.PDControlScrollPane();
+    tDesc = new javax.swing.JTextArea();
+    tDate = new javax.swing.JTextField();
+    lDate = new javax.swing.JLabel();
+    lName = new javax.swing.JLabel();
+    lCategories = new javax.swing.JLabel();
+    tCategories = new javax.swing.JTextField();
+    lDesc = new javax.swing.JLabel();
+    jPanel1 = new javax.swing.JPanel();
+    lStatus = new javax.swing.JLabel();
+    tSize = new javax.swing.JLabel();
+    tCoor = new javax.swing.JLabel();
+    bCopyDescUp = new javax.swing.JButton();
+    bCopyDescDown = new javax.swing.JButton();
+    bTools = new javax.swing.JButton();
+    lFilename = new javax.swing.JLabel();
+    bOpenFile = new javax.swing.JButton();
+    bOpenDir = new javax.swing.JButton();
+    bOpenMap = new javax.swing.JButton();
+    lDirectory = new javax.swing.JLabel();
+    bWikiLoves = new javax.swing.JButton();
+    bSource = new javax.swing.JButton();
+    cUpload = new javax.swing.JCheckBox();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
-        mSelectToUpload.setText(bundle.getString("file-context-selectupload")); // NOI18N
-        mSelectToUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mSelectToUploadActionPerformed(evt);
-            }
-        });
-        mContext.add(mSelectToUpload);
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+    mSelectToUpload.setText(bundle.getString("file-context-selectupload")); // NOI18N
+    mSelectToUpload.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mSelectToUploadActionPerformed(evt);
+      }
+    });
+    mContext.add(mSelectToUpload);
 
-        mDeselectToUpload.setText(bundle.getString("file-context-deselectupload")); // NOI18N
-        mDeselectToUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mDeselectToUploadActionPerformed(evt);
-            }
-        });
-        mContext.add(mDeselectToUpload);
-        mContext.add(jSeparator1);
+    mDeselectToUpload.setText(bundle.getString("file-context-deselectupload")); // NOI18N
+    mDeselectToUpload.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mDeselectToUploadActionPerformed(evt);
+      }
+    });
+    mContext.add(mDeselectToUpload);
+    mContext.add(jSeparator1);
 
-        mEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image--pencil.png"))); // NOI18N
-        mEdit.setText(bundle.getString("file-context-edit")); // NOI18N
-        mEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mEditActionPerformed(evt);
-            }
-        });
-        mContext.add(mEdit);
+    mEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image--pencil.png"))); // NOI18N
+    mEdit.setText(bundle.getString("file-context-edit")); // NOI18N
+    mEdit.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mEditActionPerformed(evt);
+      }
+    });
+    mContext.add(mEdit);
 
-        mDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/cross.png"))); // NOI18N
-        mDelete.setText(bundle.getString("button-delete")); // NOI18N
-        mDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mDeleteActionPerformed(evt);
-            }
-        });
-        mContext.add(mDelete);
+    mDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/cross.png"))); // NOI18N
+    mDelete.setText(bundle.getString("button-delete")); // NOI18N
+    mDelete.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mDeleteActionPerformed(evt);
+      }
+    });
+    mContext.add(mDelete);
 
-        mRefreshThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image-resize.png"))); // NOI18N
-        mRefreshThumb.setText(bundle.getString("file-tools-refreshthumb")); // NOI18N
-        mRefreshThumb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mRefreshThumbActionPerformed(evt);
-            }
-        });
-        mTools.add(mRefreshThumb);
-        mTools.add(jSeparator2);
+    mRefreshThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image-resize.png"))); // NOI18N
+    mRefreshThumb.setText(bundle.getString("file-tools-refreshthumb")); // NOI18N
+    mRefreshThumb.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mRefreshThumbActionPerformed(evt);
+      }
+    });
+    mTools.add(mRefreshThumb);
+    mTools.add(jSeparator2);
 
-        mShowEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image-export.png"))); // NOI18N
-        mShowEXIF.setText(bundle.getString("file-tools-showexif")); // NOI18N
-        mShowEXIF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mShowEXIFActionPerformed(evt);
-            }
-        });
-        mTools.add(mShowEXIF);
+    mShowEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image-export.png"))); // NOI18N
+    mShowEXIF.setText(bundle.getString("file-tools-showexif")); // NOI18N
+    mShowEXIF.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mShowEXIFActionPerformed(evt);
+      }
+    });
+    mTools.add(mShowEXIF);
 
-        mReloadEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-circle-double.png"))); // NOI18N
-        mReloadEXIF.setText(bundle.getString("file-tools-refreshexif")); // NOI18N
-        mReloadEXIF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mReloadEXIFActionPerformed(evt);
-            }
-        });
-        mTools.add(mReloadEXIF);
+    mReloadEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-circle-double.png"))); // NOI18N
+    mReloadEXIF.setText(bundle.getString("file-tools-refreshexif")); // NOI18N
+    mReloadEXIF.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mReloadEXIFActionPerformed(evt);
+      }
+    });
+    mTools.add(mReloadEXIF);
 
-        mAddEngDesc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/flag_great_britain.png"))); // NOI18N
-        mAddEngDesc.setText(bundle.getString("file-wiki-en")); // NOI18N
-        mAddEngDesc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mAddEngDescActionPerformed(evt);
-            }
-        });
-        mWiki.add(mAddEngDesc);
+    mAddEngDesc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/flag_great_britain.png"))); // NOI18N
+    mAddEngDesc.setText(bundle.getString("file-wiki-en")); // NOI18N
+    mAddEngDesc.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mAddEngDescActionPerformed(evt);
+      }
+    });
+    mWiki.add(mAddEngDesc);
 
-        mAddPlDesc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/flag_poland.png"))); // NOI18N
-        mAddPlDesc.setText(bundle.getString("file-wiki-pl")); // NOI18N
-        mAddPlDesc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mAddPlDescActionPerformed(evt);
-            }
-        });
-        mWiki.add(mAddPlDesc);
+    mAddPlDesc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/flag_poland.png"))); // NOI18N
+    mAddPlDesc.setText(bundle.getString("file-wiki-pl")); // NOI18N
+    mAddPlDesc.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mAddPlDescActionPerformed(evt);
+      }
+    });
+    mWiki.add(mAddPlDesc);
 
-        mAddCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png"))); // NOI18N
-        mAddCoor.setText(bundle.getString("fileedit-insert")); // NOI18N
-        mAddCoor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mAddCoorActionPerformed(evt);
-            }
-        });
-        mGeoloc.add(mAddCoor);
+    mAddCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png"))); // NOI18N
+    mAddCoor.setText(bundle.getString("fileedit-insert")); // NOI18N
+    mAddCoor.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mAddCoorActionPerformed(evt);
+      }
+    });
+    mGeoloc.add(mAddCoor);
 
-        mDelCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png"))); // NOI18N
-        mDelCoor.setText(bundle.getString("button-clear")); // NOI18N
-        mDelCoor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mDelCoorActionPerformed(evt);
-            }
-        });
-        mGeoloc.add(mDelCoor);
+    mDelCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png"))); // NOI18N
+    mDelCoor.setText(bundle.getString("button-clear")); // NOI18N
+    mDelCoor.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mDelCoorActionPerformed(evt);
+      }
+    });
+    mGeoloc.add(mDelCoor);
 
-        mMaps.setText(bundle.getString("file-coor-show")); // NOI18N
+    mMaps.setText(bundle.getString("file-coor-show")); // NOI18N
 
-        mOSM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
-        mOSM.setText("OpenStreetMap");
-        mOSM.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mOSMActionPerformed(evt);
-            }
-        });
-        mMaps.add(mOSM);
+    mOSM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
+    mOSM.setText("OpenStreetMap");
+    mOSM.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mOSMActionPerformed(evt);
+      }
+    });
+    mMaps.add(mOSM);
 
-        mGoogle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
-        mGoogle.setText("Google Maps");
-        mGoogle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mGoogleActionPerformed(evt);
-            }
-        });
-        mMaps.add(mGoogle);
+    mGoogle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
+    mGoogle.setText("Google Maps");
+    mGoogle.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mGoogleActionPerformed(evt);
+      }
+    });
+    mMaps.add(mGoogle);
 
-        mGeoHack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
-        mGeoHack.setText("GeoHack");
-        mGeoHack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mGeoHackActionPerformed(evt);
-            }
-        });
-        mMaps.add(mGeoHack);
+    mGeoHack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
+    mGeoHack.setText("GeoHack");
+    mGeoHack.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        mGeoHackActionPerformed(evt);
+      }
+    });
+    mMaps.add(mGeoHack);
 
-        mGeoloc.add(mMaps);
+    mGeoloc.add(mMaps);
 
-        setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        setMaximumSize(new java.awt.Dimension(6400, 200));
-        setMinimumSize(new java.awt.Dimension(550, 200));
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                formMousePressed(evt);
-            }
-        });
+    setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+    setMaximumSize(new java.awt.Dimension(6400, 200));
+    setMinimumSize(new java.awt.Dimension(550, 200));
+    addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mousePressed(java.awt.event.MouseEvent evt) {
+        formMousePressed(evt);
+      }
+    });
 
-        Panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 5));
-        Panel.setName(""); // NOI18N
-        Panel.setOpaque(false);
-        Panel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                PanelMouseClicked(evt);
-            }
-        });
+    Panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 5));
+    Panel.setName(""); // NOI18N
+    Panel.setOpaque(false);
+    Panel.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        PanelMouseClicked(evt);
+      }
+    });
 
-        tThumb.setBackground(new java.awt.Color(0, 0, 0));
-        tThumb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image.png"))); // NOI18N
-        tThumb.setFocusable(false);
-        tThumb.setMaximumSize(new java.awt.Dimension(150, 100));
-        tThumb.setMinimumSize(new java.awt.Dimension(150, 100));
-        tThumb.setOpaque(true);
-        tThumb.setPreferredSize(new java.awt.Dimension(150, 100));
-        tThumb.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        tThumb.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tThumbMouseClicked(evt);
-            }
-        });
+    tThumb.setBackground(new java.awt.Color(0, 0, 0));
+    tThumb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image.png"))); // NOI18N
+    tThumb.setFocusable(false);
+    tThumb.setMaximumSize(new java.awt.Dimension(150, 100));
+    tThumb.setMinimumSize(new java.awt.Dimension(150, 100));
+    tThumb.setOpaque(true);
+    tThumb.setPreferredSize(new java.awt.Dimension(150, 100));
+    tThumb.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+    tThumb.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tThumbMouseClicked(evt);
+      }
+    });
 
-        tName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tNameFocusGained(evt);
-            }
-        });
+    tName.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusGained(java.awt.event.FocusEvent evt) {
+        tNameFocusGained(evt);
+      }
+    });
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setNextFocusableComponent(Panel);
+    jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    jScrollPane1.setNextFocusableComponent(Panel);
 
-        tDesc.setColumns(20);
-        tDesc.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        tDesc.setLineWrap(true);
-        tDesc.setRows(3);
-        tDesc.setComponentPopupMenu(Data.mQuickTemplates);
-        tDesc.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tDescFocusGained(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tDesc);
+    tDesc.setColumns(20);
+    tDesc.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+    tDesc.setLineWrap(true);
+    tDesc.setRows(3);
+    tDesc.setComponentPopupMenu(Data.mQuickTemplates);
+    tDesc.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusGained(java.awt.event.FocusEvent evt) {
+        tDescFocusGained(evt);
+      }
+    });
+    jScrollPane1.setViewportView(tDesc);
 
-        tDate.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tDateFocusGained(evt);
-            }
-        });
+    tDate.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusGained(java.awt.event.FocusEvent evt) {
+        tDateFocusGained(evt);
+      }
+    });
 
-        lDate.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lDate.setText(bundle.getString("file-date")); // NOI18N
+    lDate.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+    lDate.setText(bundle.getString("file-date")); // NOI18N
 
-        lName.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lName.setText(bundle.getString("file-name")); // NOI18N
+    lName.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+    lName.setText(bundle.getString("file-name")); // NOI18N
 
-        lCategories.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lCategories.setText(bundle.getString("file-cats")); // NOI18N
+    lCategories.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+    lCategories.setText(bundle.getString("file-cats")); // NOI18N
 
-        tCategories.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                tCategoriesCaretUpdate(evt);
-            }
-        });
-        tCategories.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tCategoriesFocusGained(evt);
-            }
-        });
+    tCategories.addCaretListener(new javax.swing.event.CaretListener() {
+      public void caretUpdate(javax.swing.event.CaretEvent evt) {
+        tCategoriesCaretUpdate(evt);
+      }
+    });
+    tCategories.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusGained(java.awt.event.FocusEvent evt) {
+        tCategoriesFocusGained(evt);
+      }
+    });
 
-        lDesc.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lDesc.setText(bundle.getString("file-desc")); // NOI18N
+    lDesc.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+    lDesc.setText(bundle.getString("file-desc")); // NOI18N
 
-        jPanel1.setOpaque(false);
+    jPanel1.setOpaque(false);
 
-        lStatus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/null-button.png"))); // NOI18N
-        lStatus.setFocusable(false);
-        lStatus.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    lStatus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    lStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/null-button.png"))); // NOI18N
+    lStatus.setFocusable(false);
+    lStatus.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        tSize.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        tSize.setText("<text>");
+    tSize.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    tSize.setText("<text>");
 
-        tCoor.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
-        tCoor.setPreferredSize(new java.awt.Dimension(34, 20));
+    tCoor.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
+    tCoor.setPreferredSize(new java.awt.Dimension(34, 20));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(lStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tSize, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
-            .addComponent(tCoor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                    .addComponent(tSize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(tCoor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel1Layout.createSequentialGroup()
+        .addComponent(lStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(tSize, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+      .addComponent(tCoor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    jPanel1Layout.setVerticalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel1Layout.createSequentialGroup()
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(lStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+          .addComponent(tSize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(tCoor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+    );
 
-        bCopyDescUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-turn-180.png"))); // NOI18N
-        bCopyDescUp.setToolTipText(bundle.getString("file-copyabove")); // NOI18N
-        bCopyDescUp.setFocusable(false);
-        bCopyDescUp.setOpaque(false);
-        bCopyDescUp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bCopyDescUpActionPerformed(evt);
-            }
-        });
+    bCopyDescUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-turn-180.png"))); // NOI18N
+    bCopyDescUp.setToolTipText(bundle.getString("file-copyabove")); // NOI18N
+    bCopyDescUp.setFocusable(false);
+    bCopyDescUp.setOpaque(false);
+    bCopyDescUp.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bCopyDescUpActionPerformed(evt);
+      }
+    });
 
-        bCopyDescDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-turn-180-left.png"))); // NOI18N
-        bCopyDescDown.setToolTipText(bundle.getString("file-copybelow")); // NOI18N
-        bCopyDescDown.setFocusable(false);
-        bCopyDescDown.setOpaque(false);
-        bCopyDescDown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bCopyDescDownActionPerformed(evt);
-            }
-        });
+    bCopyDescDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-turn-180-left.png"))); // NOI18N
+    bCopyDescDown.setToolTipText(bundle.getString("file-copybelow")); // NOI18N
+    bCopyDescDown.setFocusable(false);
+    bCopyDescDown.setOpaque(false);
+    bCopyDescDown.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bCopyDescDownActionPerformed(evt);
+      }
+    });
 
-        bTools.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/gear.png"))); // NOI18N
-        bTools.setFocusable(false);
-        bTools.setOpaque(false);
-        bTools.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bToolsActionPerformed(evt);
-            }
-        });
+    bTools.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/gear.png"))); // NOI18N
+    bTools.setFocusable(false);
+    bTools.setOpaque(false);
+    bTools.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bToolsActionPerformed(evt);
+      }
+    });
 
-        lFilename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document.png"))); // NOI18N
-        lFilename.setText(file.getName());
-        lFilename.setMaximumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
-        lFilename.setMinimumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
-        lFilename.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                PanelMouseClicked(evt);
-            }
-        });
+    lFilename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document.png"))); // NOI18N
+    lFilename.setText(file.getName());
+    lFilename.setMaximumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
+    lFilename.setMinimumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
+    lFilename.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        PanelMouseClicked(evt);
+      }
+    });
 
-        bOpenFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/magnifier.png"))); // NOI18N
-        bOpenFile.setToolTipText(bundle.getString("file-openfile")); // NOI18N
-        bOpenFile.setFocusable(false);
-        bOpenFile.setOpaque(false);
-        bOpenFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bOpenFileActionPerformed(evt);
-            }
-        });
+    bOpenFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/magnifier.png"))); // NOI18N
+    bOpenFile.setToolTipText(bundle.getString("file-openfile")); // NOI18N
+    bOpenFile.setFocusable(false);
+    bOpenFile.setOpaque(false);
+    bOpenFile.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bOpenFileActionPerformed(evt);
+      }
+    });
 
-        bOpenDir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-horizontal-open.png"))); // NOI18N
-        bOpenDir.setToolTipText(bundle.getString("file-opendir")); // NOI18N
-        bOpenDir.setFocusable(false);
-        bOpenDir.setOpaque(false);
-        bOpenDir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bOpenDirActionPerformed(evt);
-            }
-        });
+    bOpenDir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-horizontal-open.png"))); // NOI18N
+    bOpenDir.setToolTipText(bundle.getString("file-opendir")); // NOI18N
+    bOpenDir.setFocusable(false);
+    bOpenDir.setOpaque(false);
+    bOpenDir.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bOpenDirActionPerformed(evt);
+      }
+    });
 
-        bOpenMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
-        bOpenMap.setToolTipText(Data.text("file-coord")); // NOI18N
-        bOpenMap.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map-bw.png"))); // NOI18N
-        bOpenMap.setFocusable(false);
-        bOpenMap.setOpaque(false);
-        bOpenMap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bOpenMapActionPerformed(evt);
-            }
-        });
+    bOpenMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map.png"))); // NOI18N
+    bOpenMap.setToolTipText(Data.text("file-coord")); // NOI18N
+    bOpenMap.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map-bw.png"))); // NOI18N
+    bOpenMap.setFocusable(false);
+    bOpenMap.setOpaque(false);
+    bOpenMap.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bOpenMapActionPerformed(evt);
+      }
+    });
 
-        lDirectory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-horizontal-open.png"))); // NOI18N
-        lDirectory.setText(file.getParent().substring(file.getParent().lastIndexOf('\\')+1, file.getParent().length()));
-        lDirectory.setToolTipText(file.getParent());
-        lDirectory.setMaximumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
-        lDirectory.setMinimumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
-        lDirectory.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                PanelMouseClicked(evt);
-            }
-        });
+    lDirectory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-horizontal-open.png"))); // NOI18N
+    lDirectory.setText(file.getParent().substring(file.getParent().lastIndexOf('\\')+1, file.getParent().length()));
+    lDirectory.setToolTipText(file.getParent());
+    lDirectory.setMaximumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
+    lDirectory.setMinimumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
+    lDirectory.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        PanelMouseClicked(evt);
+      }
+    });
 
-        bWikiLoves.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/monument.png"))); // NOI18N
-        bWikiLoves.setOpaque(false);
-        bWikiLoves.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bWikiLovesActionPerformed(evt);
-            }
-        });
+    bWikiLoves.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/monument.png"))); // NOI18N
+    bWikiLoves.setOpaque(false);
+    bWikiLoves.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bWikiLovesActionPerformed(evt);
+      }
+    });
 
-        bSource.setFocusable(false);
-        bSource.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bSourceActionPerformed(evt);
-            }
-        });
+    bSource.setFocusable(false);
+    bSource.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bSourceActionPerformed(evt);
+      }
+    });
 
-        javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
-        Panel.setLayout(PanelLayout);
-        PanelLayout.setHorizontalGroup(
-            PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tThumb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(bOpenMap, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bTools, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bSource, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+    javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
+    Panel.setLayout(PanelLayout);
+    PanelLayout.setHorizontalGroup(
+      PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(PanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(tThumb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addGroup(PanelLayout.createSequentialGroup()
+            .addComponent(bOpenMap, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(bTools, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(bSource, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+          .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+            .addComponent(lCategories, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+            .addComponent(lDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(bWikiLoves, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(tCategories)
+          .addGroup(PanelLayout.createSequentialGroup()
+            .addComponent(jScrollPane1)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(bCopyDescUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(bCopyDescDown, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
+            .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+              .addGroup(PanelLayout.createSequentialGroup()
+                .addComponent(lFilename, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lCategories, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
-                        .addComponent(lDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(bWikiLoves, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tCategories)
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bCopyDescUp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bCopyDescDown, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
-                        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(PanelLayout.createSequentialGroup()
-                                .addComponent(lFilename, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bOpenDir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bOpenFile, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanelLayout.createSequentialGroup()
-                                .addComponent(tName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lDate, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9)
-                                .addComponent(tDate, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(2, 2, 2))))
-        );
-        PanelLayout.setVerticalGroup(
-            PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bOpenDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bOpenFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lDirectory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lFilename, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lName, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tDate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lDate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(bOpenDir, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(lDesc)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bWikiLoves, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PanelLayout.createSequentialGroup()
-                        .addComponent(bCopyDescUp)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bCopyDescDown)))
+                .addComponent(bOpenFile, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+              .addGroup(PanelLayout.createSequentialGroup()
+                .addComponent(tName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tCategories, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(PanelLayout.createSequentialGroup()
-                .addComponent(tThumb, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(bOpenMap, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bTools, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(bSource, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+                .addComponent(lDate, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(tDate, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGap(2, 2, 2))))
+    );
+    PanelLayout.setVerticalGroup(
+      PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(bOpenDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(bOpenFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(lDirectory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(lFilename, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(lName, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(tName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(tDate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(lDate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(PanelLayout.createSequentialGroup()
+            .addComponent(lDesc)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(bWikiLoves, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addGroup(PanelLayout.createSequentialGroup()
+            .addComponent(bCopyDescUp)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(bCopyDescDown)))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(lCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(tCategories, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+      .addGroup(PanelLayout.createSequentialGroup()
+        .addComponent(tThumb, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addComponent(bOpenMap, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(bTools, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(bSource, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(0, 0, Short.MAX_VALUE))
+    );
 
-        cUpload.setBackground(new java.awt.Color(255, 204, 153));
-        cUpload.setToolTipText(bundle.getString("file-select")); // NOI18N
-        cUpload.setFocusable(false);
-        cUpload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cUpload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        cUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cUploadActionPerformed(evt);
-            }
-        });
+    cUpload.setBackground(new java.awt.Color(255, 204, 153));
+    cUpload.setToolTipText(bundle.getString("file-select")); // NOI18N
+    cUpload.setFocusable(false);
+    cUpload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    cUpload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+    cUpload.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cUploadActionPerformed(evt);
+      }
+    });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(cUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    this.setLayout(layout);
+    layout.setHorizontalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(layout.createSequentialGroup()
+        .addComponent(cUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE))
+    );
+    layout.setVerticalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addComponent(cUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+      .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+    );
+  }// </editor-fold>//GEN-END:initComponents
     
     private void cUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cUploadActionPerformed
         selectToUpload(cUpload.isSelected());
@@ -908,7 +908,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_bWikiLovesActionPerformed
 
     private void bSourceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSourceActionPerformed
-        JOptionPane.showMessageDialog(mContext, FUpload.getUploadTextCommons(this, Data.settings));
+        JOptionPane.showMessageDialog(mContext, FUpload.getUploadText(this, Data.settings));
     }//GEN-LAST:event_bSourceActionPerformed
    
     private void addUndo() {
@@ -1186,56 +1186,56 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             lStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/null-button.png")));
     }
     
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel Panel;
-    private javax.swing.JButton bCopyDescDown;
-    private javax.swing.JButton bCopyDescUp;
-    private javax.swing.JButton bOpenDir;
-    private javax.swing.JButton bOpenFile;
-    private javax.swing.JButton bOpenMap;
-    private javax.swing.JButton bSource;
-    private javax.swing.JButton bTools;
-    private javax.swing.JButton bWikiLoves;
-    private javax.swing.JCheckBox cUpload;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JLabel lCategories;
-    private javax.swing.JLabel lDate;
-    private javax.swing.JLabel lDesc;
-    private javax.swing.JLabel lDirectory;
-    private javax.swing.JLabel lFilename;
-    private javax.swing.JLabel lName;
-    private javax.swing.JLabel lStatus;
-    private javax.swing.JMenuItem mAddCoor;
-    private javax.swing.JMenuItem mAddEngDesc;
-    private javax.swing.JMenuItem mAddPlDesc;
-    private javax.swing.JPopupMenu mCatHint;
-    private javax.swing.JPopupMenu mContext;
-    private javax.swing.JMenuItem mDelCoor;
-    private javax.swing.JMenuItem mDelete;
-    private javax.swing.JMenuItem mDeselectToUpload;
-    private javax.swing.JMenuItem mEdit;
-    private javax.swing.JMenuItem mGeoHack;
-    private javax.swing.JPopupMenu mGeoloc;
-    private javax.swing.JMenuItem mGoogle;
-    private javax.swing.JMenu mMaps;
-    private javax.swing.JMenuItem mOSM;
-    private javax.swing.JMenuItem mRefreshThumb;
-    private javax.swing.JMenuItem mReloadEXIF;
-    private javax.swing.JMenuItem mSelectToUpload;
-    private javax.swing.JMenuItem mShowEXIF;
-    private javax.swing.JPopupMenu mTools;
-    private javax.swing.JPopupMenu mWiki;
-    private javax.swing.JTextField tCategories;
-    private javax.swing.JLabel tCoor;
-    private javax.swing.JTextField tDate;
-    private javax.swing.JTextArea tDesc;
-    private javax.swing.JTextField tName;
-    private javax.swing.JLabel tSize;
-    private javax.swing.JLabel tThumb;
-    // End of variables declaration//GEN-END:variables
+  // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JPanel Panel;
+  private javax.swing.JButton bCopyDescDown;
+  private javax.swing.JButton bCopyDescUp;
+  private javax.swing.JButton bOpenDir;
+  private javax.swing.JButton bOpenFile;
+  private javax.swing.JButton bOpenMap;
+  private javax.swing.JButton bSource;
+  private javax.swing.JButton bTools;
+  private javax.swing.JButton bWikiLoves;
+  private javax.swing.JCheckBox cUpload;
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JPopupMenu.Separator jSeparator1;
+  private javax.swing.JPopupMenu.Separator jSeparator2;
+  private javax.swing.JLabel lCategories;
+  private javax.swing.JLabel lDate;
+  private javax.swing.JLabel lDesc;
+  private javax.swing.JLabel lDirectory;
+  private javax.swing.JLabel lFilename;
+  private javax.swing.JLabel lName;
+  private javax.swing.JLabel lStatus;
+  private javax.swing.JMenuItem mAddCoor;
+  private javax.swing.JMenuItem mAddEngDesc;
+  private javax.swing.JMenuItem mAddPlDesc;
+  private javax.swing.JPopupMenu mCatHint;
+  private javax.swing.JPopupMenu mContext;
+  private javax.swing.JMenuItem mDelCoor;
+  private javax.swing.JMenuItem mDelete;
+  private javax.swing.JMenuItem mDeselectToUpload;
+  private javax.swing.JMenuItem mEdit;
+  private javax.swing.JMenuItem mGeoHack;
+  private javax.swing.JPopupMenu mGeoloc;
+  private javax.swing.JMenuItem mGoogle;
+  private javax.swing.JMenu mMaps;
+  private javax.swing.JMenuItem mOSM;
+  private javax.swing.JMenuItem mRefreshThumb;
+  private javax.swing.JMenuItem mReloadEXIF;
+  private javax.swing.JMenuItem mSelectToUpload;
+  private javax.swing.JMenuItem mShowEXIF;
+  private javax.swing.JPopupMenu mTools;
+  private javax.swing.JPopupMenu mWiki;
+  private javax.swing.JTextField tCategories;
+  private javax.swing.JLabel tCoor;
+  private javax.swing.JTextField tDate;
+  private javax.swing.JTextArea tDesc;
+  private javax.swing.JTextField tName;
+  private javax.swing.JLabel tSize;
+  private javax.swing.JLabel tThumb;
+  // End of variables declaration//GEN-END:variables
     ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");
 
     /**

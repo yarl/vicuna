@@ -21,30 +21,8 @@ public class FUpload extends javax.swing.JFrame {
     ArrayList<PFile> list = new ArrayList<PFile>();
     private volatile boolean stopRq = false;
     
-    /*
-    boolean createGallery;
-    int galleryHeader;
-    int galleryWidth;
-    String galleryPage;
-    boolean galleryOnTop;
-    
-    int fileDescSource;
-    String server;
-    String author;
-    
-    String username;
-    String source;
-    String license;
-    String attrib;
-    String extratext;
-    String categories;
-    boolean renameAfterUpload;
-    */
-    
     File f;
     Wiki wiki;
-    
-    
     Settings set;
     
     public FUpload(ArrayList<PFile> list) {
@@ -58,31 +36,10 @@ public class FUpload extends javax.swing.JFrame {
         
         set = Data.settings;
 
-        /*
-        createGallery = Data.settings.createGallery;
-        galleryHeader = Data.settings.galleryHeader;
-        galleryWidth = Data.settings.galleryWidth;
-        fileDescSource = Data.settings.fileDescSource;
-        galleryPage = Data.settings.galleryPage;
-        galleryOnTop = Data.settings.galleryOnTop;
-        
-        server = Data.settings.server;
-        author = Data.settings.author;
-        username = Data.settings.username;
-        source = Data.settings.source;
-        license = Data.licensesTemplates.get(Data.settings.license);
-        
-        attrib = Data.settings.attribution;
-        extratext = Data.settings.extraText;
-        categories = Data.settings.categories;
-        renameAfterUpload = Data.settings.renameAfterUpload;
-        */
-        
         if(set.fileDescSource==1 && !set.fileDescPath.isEmpty())
             f = new File(Data.settings.fileDescPath);
         wiki = Data.wiki;
-        
-            
+          
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
@@ -191,35 +148,128 @@ public class FUpload extends javax.swing.JFrame {
         stopUpload();
     }//GEN-LAST:event_bCancelActionPerformed
     
+    public static String getUploadText(PFile file, Settings settings) {
+      String text = "";
+      switch(settings.fileDescSource) {
+        case 0: //usual desc
+          text += settings.server.equals("commons.wikimedia.org") ?
+                  getUploadTextCommons(file, settings) :
+                  getUploadText(file, settings);
+          break;
+
+        case 1: //desc from file
+          text += getUploadTextFile(file, settings);
+          break;
+      }
+      return text;
+    };
+    
+    public static String getUploadTextNormal(PFile file, Settings settings) {
+      String desc = "== Summary =="
+          + "\n* Description: " + file.getComponent(Elem.DESC)
+          + "\n* Date: " + file.getComponent(Elem.DATE);
+
+      if(settings.author.equals("own")) desc += "\n* Source: own work\n* Author: [[user:" + settings.username + "|]]";
+      else desc += "\n* Source: " + settings.source + "\n* Author: " + settings.author;
+
+      if(settings.license == 6) {
+          desc += settings.licenseCustom;
+      } else {
+          String license_ = Data.licensesTemplates.get(settings.license);
+          if(settings.attribution.isEmpty()) license_ = license_.replace("|%ATTRIB%", "");
+          else license_ = license_.replace("%ATTRIB%", settings.attribution);
+          desc += license_;
+      }
+      if(!settings.extraText.isEmpty()) desc += "\n" + settings.extraText;
+
+      desc += getUploadCategories(file.getComponent(Elem.CATS), settings.categories); //categories
+      return desc;
+    };
+    
     public static String getUploadTextCommons(PFile file, Settings settings) {
-        String desc = "=={{int:filedesc}}==\n{{Information"
-            + "\n|description = " + file.getComponent(Elem.DESC)
-            + "\n|date = " + file.getComponent(Elem.DATE);
-        
-        if(settings.author.equals("own")) desc += "\n|source = {{own}}\n|author = [[user:" + settings.username + "|]]";
-        else desc += "\n|source = " + settings.source + "\n|author = " + settings.author;
+      String desc = "=={{int:filedesc}}==\n{{Information"
+          + "\n|description = " + file.getComponent(Elem.DESC)
+          + "\n|date = " + file.getComponent(Elem.DATE);
 
-        desc += "\n|permission = \n|other_versions = \n}}";
-        if(file.coor != null)
-            desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon() + "}}";
+      if(settings.author.equals("own")) desc += "\n|source = {{own}}\n|author = [[user:" + settings.username + "|]]";
+      else desc += "\n|source = " + settings.source + "\n|author = " + settings.author;
 
-        desc += "\n\n=={{int:license-header}}==\n";
+      desc += "\n|permission = \n|other_versions = \n}}";
+      if(file.coor != null)
+          desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon() + "}}";
 
-        if(settings.license == 6) {
-            desc += settings.licenseCustom;
-        } else {
-            String license_ = Data.licensesTemplates.get(settings.license);
-            if(settings.attribution.isEmpty()) license_ = license_.replace("|%ATTRIB%", "");
-            else license_ = license_.replace("%ATTRIB%", settings.attribution);
-            desc += license_;
+      desc += "\n\n=={{int:license-header}}==\n";
+
+      if(settings.license == 6) {
+          desc += settings.licenseCustom;
+      } else {
+          String license_ = Data.licensesTemplates.get(settings.license);
+          if(settings.attribution.isEmpty()) license_ = license_.replace("|%ATTRIB%", "");
+          else license_ = license_.replace("%ATTRIB%", settings.attribution);
+          desc += license_;
+      }
+      if(!settings.extraText.isEmpty()) desc += "\n" + settings.extraText;
+
+      desc += getUploadCategories(file.getComponent(Elem.CATS), settings.categories); //categories
+      return desc;
+    };
+    
+    public static String getUploadTextFile(PFile file, Settings settings) {
+      String desc = "";
+      
+      if(!settings.fileDescPath.isEmpty()) {
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader(settings.fileDescPath));
+            String string;
+            while ((string = in.readLine()) != null)
+                desc += string + "\n";
+
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.toString());
+            return null;
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.toString());
+            return null;
         }
-        if(!settings.extraText.isEmpty()) desc += "\n" + settings.extraText;
+      } else return null;
+      
+      desc = desc.replace("%DESC%", file.getComponent(Elem.DESC));
+
+      desc = settings.author.equals("own") ?
+              desc.replace("%SOURCE%", "own work") :
+              desc.replace("%SOURCE%", settings.source);
+
+      desc = settings.author.equals("own") ?
+              desc.replace("%AUTHOR%", "[[user:"+settings.username+"|]]") :
+              desc.replace("%AUTHOR%", settings.author);
+
+      desc = desc.replace("%USER%", settings.username);
+      desc = desc.replace("%DATE%", file.getComponent(Elem.DATE));
+
+      if(settings.license == 6) {
+          desc = desc.replace("%LICENSE%", settings.licenseCustom);
+      } else {
+          String license_ = Data.licensesTemplates.get(settings.license);
+          license_ = settings.attribution.isEmpty() ?
+                  license_.replace("%ATTRIB%", "") :
+                  license_.replace("%ATTRIB%", settings.attribution);
+          desc = desc.replace("%LICENSE%", license_);
+      }
+
+      desc = desc.replace("%CATEGORIES%", getUploadCategories(file.getComponent(Elem.CATS), settings.categories));
+
+      desc = (!settings.extraText.isEmpty()) ?
+              desc.replace("%EXTRA%", "") :
+              desc.replace("%EXTRA%", settings.extraText);
+
+      String[] c = file.getComponent(Elem.COOR).split(";");
+      String out = "";
+      if(c.length>1) out += "{{Location dec|" + c[0] + "|" + c[1] + "}}";
+      desc = desc.replace("%COOR%", out);
         
-        //categories
-        desc += getUploadCategories(file.getComponent(Elem.CATS), settings.categories);
-        
-        return desc;
-    }
+      return desc;
+    };
     
     public static String getUploadCategories(String local, String global) {
         String text = "";
@@ -250,7 +300,16 @@ public class FUpload extends javax.swing.JFrame {
         return text;
     }
     
+    private String getName(PFile file) {
+       String name = file.getComponent(Elem.NAME);
 
+       //fixes
+       if(name.endsWith(" ")) name = name.substring(0, name.length()-1);
+       name = name.replace("  ", " ");
+       name += "." + file.getComponent(Elem.EXT);
+       return name;
+    };
+    
     private void startUpload() {
     stopRq = false;
     lockLogout(true);
@@ -306,90 +365,11 @@ public class FUpload extends javax.swing.JFrame {
                     file.lockPanel(true);
             
             int i=0;
-            for(PFile file : list) {
-                String desc = "";
-                
+            for(PFile file : list) { 
                 if(!stopRq) {
-                    
-                    //DEFAULT DESC
-                    if(set.fileDescSource==0) {
-                        
-                        //COMMONS
-                        if(set.server.equals("commons.wikimedia.org")) {
-                            desc += getUploadTextCommons(file, set);
-
-                        //EVERYTHING ELSE
-                        } else {
-                            desc = "==Summary=="
-                            + "\n* Description: " + file.getComponent(Elem.DESC);
-                            
-                            if(set.author.equals("own")) desc += "\n* Source: own work\n* Author: [[user:" + set.username + "|]]";
-                            else desc += "\n* Source: " + set.source + "\n* Author: " + set.author;
-                            
-                            desc += "\n* Date: " + file.getComponent(Elem.DATE)
-                            + "\n* License: " + Data.licensesTemplates.get(set.license).replace("%ATTRIB%", set.attribution);
-                            if(!set.extraText.isEmpty()) 
-                                desc += "\n" + set.extraText;
-                            desc += getUploadCategories(file.getComponent(Elem.CATS), set.categories);
-                        }
-                    }
-
-                    // DESC FROM EXTERNAL FILE
-                    if(set.fileDescSource==1 && f!= null) {          
-                        desc = text;
-
-                        desc = (set.attribution.isEmpty()) ? desc.replace("%ATTRIB%", "") : desc.replace("%ATTRIB%", set.attribution);
-                        desc = desc.replace("%AUTHOR%", set.author);
-
-                        //CATEGORIES (FOR ALL)
-                        String out = getUploadCategories(file.getComponent(Elem.CATS), set.categories);
-                        desc = desc.replace("%CATEGORIES%", out);
-                        
-                        desc = (!set.extraText.isEmpty()) ? desc.replace("%EXTRA%", "") : desc.replace("%EXTRA%", set.extraText);
-                        desc = desc.replace("%SOURCE%", set.source);
-                        desc = desc.replace("%USER%", set.username);
-
-                        //CATEGORIES (FOR IMAGE)
-                        /*
-                        boolean b;
-                        String[] c2 = file.getComponent(Elem.CATS).split(";");
-                        out = "";
-                        for(int j=0;j<c2.length;++j) {
-                            b = true;
-                            for(int k=0; k<j; ++k) {
-                                if(c2[j].equals(c2[k])) {
-                                    b = false;
-                                    break;
-                                }
-                            }
-                            if(b && !c2[j].equals(""))
-                                out += "[[Category:" + c2[j] + "]]\n";
-                        }
-                        */
-                        desc = desc.replace("%CATS%", "");
-
-                        //COORDINATES
-                        String[] c2 = file.getComponent(Elem.COOR).split(";");
-                        out = "";
-                        if(c2.length>1)
-                            out += "{{Location dec|" + c2[0] + "|" + c2[1] + "}}";
-                        desc = desc.replace("%COOR%", out);
-
-                        desc = desc.replace("%DATE%", file.getComponent(Elem.DATE));
-                        desc = desc.replace("%DESC%", file.getComponent(Elem.DESC));
-                    }
-                    if(set.fileDescSource==1 && f == null) {
-                        JOptionPane.showMessageDialog(rootPane, "Error: problem with description file!");
-                        break;
-                    }
-
-                    String name = file.getComponent(Elem.NAME);
-
-                    //FIXES
-                    if(name.endsWith(" "))
-                        name = name.substring(0, name.length()-1);
-                    name = name.replace("  ", " ");
-                    name += "." + file.getComponent(Elem.EXT);
+                  
+                    String name = getName(file);
+                    String desc = getUploadText(file, set);
 
                     lName.setText(Data.text("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
