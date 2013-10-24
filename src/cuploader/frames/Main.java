@@ -1076,6 +1076,13 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         });
         gLang.add(mLangEs); mLang.add(mLangEs);
         
+        //fa
+        JRadioButtonMenuItem mLangFa = new JRadioButtonMenuItem("فارسی (fa)");
+        mLangFa.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("fa")); }
+        });
+        gLang.add(mLangFa); mLang.add(mLangFa);
+        
         //fo
         JRadioButtonMenuItem mLangFo = new JRadioButtonMenuItem("føroyskt (fo)");
         mLangFo.addActionListener(new ActionListener() {
