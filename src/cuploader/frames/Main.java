@@ -1040,160 +1040,55 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         Data.settings.lang = loc;
     }
     
+    /**
+     * Adds language to menu (Tools -> Language)
+     * @param locale locale of language
+     * @param name name of language, label of menu item
+     * @since 1.19
+     */
+    private void addLangMenu(final Locale locale, final String name) {
+      JRadioButtonMenuItem item = new JRadioButtonMenuItem(name);
+      item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent evt) { changeLang(locale); }
+      });
+      gLang.add(item); mLang.add(item);
+    }
+    
     private void initLangMenu() {
-        //ast
-        JRadioButtonMenuItem mLangEn = new JRadioButtonMenuItem("english (en)");
-        mLangEn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(Locale.ENGLISH); }
-        });
-        gLang.add(mLangEn); mLang.add(mLangEn);
-        
-        //ast
-        JRadioButtonMenuItem mLangAst = new JRadioButtonMenuItem("asturianu (ast)");
-        mLangAst.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("ast")); }
-        });
-        gLang.add(mLangAst); mLang.add(mLangAst);
-        
-        //cs-CZ
-        JRadioButtonMenuItem mLangCs = new JRadioButtonMenuItem("česky (cs)");
-        mLangCs.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("cs", "CZ")); }
-        });
-        gLang.add(mLangCs); mLang.add(mLangCs);
-        
-        //de
-        JRadioButtonMenuItem mLangDe = new JRadioButtonMenuItem("Deutsch (de)");
-        mLangDe.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(Locale.GERMAN); }
-        });
-        gLang.add(mLangDe); mLang.add(mLangDe);
-        
-        //es
-        JRadioButtonMenuItem mLangEs = new JRadioButtonMenuItem("español (es)");
-        mLangEs.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("es", "ES")); }
-        });
-        gLang.add(mLangEs); mLang.add(mLangEs);
-        
-        //fa
-        JRadioButtonMenuItem mLangFa = new JRadioButtonMenuItem("فارسی (fa)");
-        mLangFa.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("fa")); }
-        });
-        gLang.add(mLangFa); mLang.add(mLangFa);
-        
-        //fo
-        JRadioButtonMenuItem mLangFo = new JRadioButtonMenuItem("føroyskt (fo)");
-        mLangFo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("fo")); }
-        });
-        gLang.add(mLangFo); mLang.add(mLangFo);
-        
-        //fr
-        JRadioButtonMenuItem mLangFr = new JRadioButtonMenuItem("français (fr)");
-        mLangFr.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(Locale.FRENCH); }
-        });
-        gLang.add(mLangFr); mLang.add(mLangFr);
-        
-        //gl
-        JRadioButtonMenuItem mLangGl = new JRadioButtonMenuItem("galego (gl)");
-        mLangGl.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("gl")); }
-        });
-        gLang.add(mLangGl); mLang.add(mLangGl);
-        
-        //he
-        JRadioButtonMenuItem mLangHe = new JRadioButtonMenuItem("עברית (he)");
-        mLangHe.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("he")); }
-        });
-        gLang.add(mLangHe); mLang.add(mLangHe);
-        
-        //it
-        JRadioButtonMenuItem mLangIt = new JRadioButtonMenuItem("italiano (it)");
-        mLangIt.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(Locale.ITALY); }
-        });
-        gLang.add(mLangIt); mLang.add(mLangIt);
-        
-        //ja
-        JRadioButtonMenuItem mLangJa = new JRadioButtonMenuItem("日本語 (ja)");
-        mLangJa.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(Locale.JAPANESE); }
-        });
-        gLang.add(mLangJa); mLang.add(mLangJa);
-        
-        //lb
-        JRadioButtonMenuItem mLangLb = new JRadioButtonMenuItem("Lëtzebuergesch (lb)");
-        mLangLb.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("lb")); }
-        });
-        gLang.add(mLangLb); mLang.add(mLangLb);
-        
-        //lt
-        JRadioButtonMenuItem mLangLt = new JRadioButtonMenuItem("lietuvių (lt)");
-        mLangLt.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("lt")); }
-        });
-        gLang.add(mLangLt); mLang.add(mLangLt);
-        
-        //mk
-        JRadioButtonMenuItem mLangMk = new JRadioButtonMenuItem("македонски (mk)");
-        mLangMk.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("mk")); }
-        });
-        gLang.add(mLangMk); mLang.add(mLangMk);
-        
-        //ms
-        JRadioButtonMenuItem mLangMs = new JRadioButtonMenuItem("Bahasa Melayu (ms)");
-        mLangMs.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("ms")); }
-        });
-        gLang.add(mLangMs); mLang.add(mLangMs);
-        
-        //nl
-        JRadioButtonMenuItem mLangNl = new JRadioButtonMenuItem("Nederlands (nl)");
-        mLangNl.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("nl")); }
-        });
-        gLang.add(mLangNl); mLang.add(mLangNl);
-        
-        //oc
-        JRadioButtonMenuItem mLangOc = new JRadioButtonMenuItem("occitan (oc)");
-        mLangOc.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("oc")); }
-        });
-        gLang.add(mLangOc); mLang.add(mLangOc);
-        
-        //pl
-        JRadioButtonMenuItem mLangPl = new JRadioButtonMenuItem("polski (pl)");
-        mLangPl.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("pl", "PL")); }
-        });
-        gLang.add(mLangPl); mLang.add(mLangPl);
-        
-        //sv
-        JRadioButtonMenuItem mLangSv = new JRadioButtonMenuItem("svenska (sv)");
-        mLangSv.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("sv", "SE")); }
-        });
-        gLang.add(mLangSv); mLang.add(mLangSv);
-        
-        //uk
-        JRadioButtonMenuItem mLangUk = new JRadioButtonMenuItem("українська (uk)");
-        mLangUk.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("uk")); }
-        });
-        gLang.add(mLangUk); mLang.add(mLangUk);
-        
-        //ur
-        JRadioButtonMenuItem mLangUr = new JRadioButtonMenuItem("اردو (ur)");
-        mLangUr.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) { changeLang(new Locale("ur")); }
-        });
-        gLang.add(mLangUr); mLang.add(mLangUr);
+      addLangMenu(Locale.ENGLISH, "english (en)");
+      addLangMenu(new Locale("ast"), "asturianu (ast)");
+      addLangMenu(new Locale("bn"), "বাংলা (bn)");
+      addLangMenu(new Locale("ca"), "català (ca)");
+      addLangMenu(new Locale("cs", "CZ"), "česky (cs)");
+      addLangMenu(new Locale("da"), "dansk (da)");
+      addLangMenu(Locale.GERMAN, "Deutsch (de)");
+      addLangMenu(new Locale("es", "ES"), "español (es)");
+      addLangMenu(new Locale("fa"), "فارسی (fa)");
+      addLangMenu(new Locale("fo"), "føroyskt (fo)");
+      addLangMenu(Locale.FRENCH, "français (fr)");
+      addLangMenu(new Locale("gl"), "galego (gl)");
+      addLangMenu(new Locale("he"), "עברית (he)");
+      addLangMenu(Locale.ITALY, "italiano (it)");
+      addLangMenu(Locale.JAPANESE, "日本語 (ja)");
+      addLangMenu(new Locale("ko"), "한국어 (ko)");
+      addLangMenu(new Locale("lb"), "Lëtzebuergesch (lb)");
+      addLangMenu(new Locale("lt"), "lietuvių (lt)");
+      addLangMenu(new Locale("mk"), "македонски (mk)");
+      addLangMenu(new Locale("ml"), "മലയാളം (ml)");
+      addLangMenu(new Locale("mr"), "मराठी (mr)");
+      addLangMenu(new Locale("ms"), "Bahasa Melayu (ms)");
+      addLangMenu(new Locale("ml"), "Nederlands (nl)");
+      addLangMenu(new Locale("oc"), "occitan (oc)");
+      addLangMenu(new Locale("pl", "PL"), "polski (pl)");
+      addLangMenu(new Locale("pt", "PT"), "português (pt)");
+      addLangMenu(new Locale("pt", "BR"), "português do Brasil (pt-BR)");
+      addLangMenu(new Locale("ru"), "русский (ru)");
+      addLangMenu(new Locale("sv", "SE"), "svenska (sv)");
+      addLangMenu(new Locale("tr"), "Türkçe (tr)");
+      addLangMenu(new Locale("tt"), "татарча (tt)");
+      addLangMenu(new Locale("uk"), "українська (uk)");
+      addLangMenu(new Locale("yr"), "اردو (ur)");
+      addLangMenu(new Locale("zh", "CN"), "中文（简体）‎ (zh)");
     }
     
     private void readPosition() {
