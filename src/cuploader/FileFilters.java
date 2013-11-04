@@ -4,15 +4,26 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
 public class FileFilters {
-    public static AllFilter all= new AllFilter();
+    public static AllFilter all = new AllFilter();
     
     public static XMLFilter session = new XMLFilter();
     public static ImgFilter images = new ImgFilter();
     public static DocsFilter documents = new DocsFilter();
     public static TxtFilter text = new TxtFilter();
-    public static OggFilter multimedia = new OggFilter();
+    public static AVFilter multimedia = new AVFilter();
 
     public static class AllFilter extends FileFilter {
+        public static boolean isMatching(String ext) {
+          if (ext.equals("png") || ext.equals("gif") || ext.equals("jpg") ||
+              ext.equals("jpeg") || ext.equals("tiff") || ext.equals("tif") ||
+              ext.equals("xcf") || ext.equals("mid") || ext.equals("ogg") ||
+              ext.equals("ogv") || ext.equals("svg") || ext.equals("djvu") ||
+              ext.equals("oga") || ext.equals("flac") || ext.equals("wav") ||
+              ext.equals("webm"))
+              return true;
+          return false;
+        }
+      
         @Override
         public boolean accept(File f) {
             if (f.isDirectory())
@@ -22,8 +33,7 @@ public class FileFilters {
 
             if (i > 0 && i < s.length() - 1) {
                 s = s.substring(i + 1).toLowerCase();
-                if (s.equals("jpg") || s.equals("png") || s.equals("svg") ||s.equals("gif") || s.equals("pdf") || s.equals("djvu") || s.equals("ogg") || s.equals("ogv"))
-                    return true;
+                return isMatching(s);
             }
             return false;
         }
@@ -54,7 +64,7 @@ public class FileFilters {
         }
     }
 
-    public static class OggFilter extends FileFilter {
+    public static class AVFilter extends FileFilter {
         @Override
         public boolean accept(File f) {
             if (f.isDirectory())
@@ -64,15 +74,17 @@ public class FileFilters {
 
             if (i > 0 && i < s.length() - 1) {
                 s = s.substring(i + 1).toLowerCase();
-                if (s.equals("ogg") || s.equals("ogv"))
+                if (s.equals("mid") || s.equals("ogg") || s.equals("ogv") ||
+                    s.equals("oga") || s.equals("flac") || s.equals("wav") ||
+                    s.equals("webm"))
                     return true;
             }
             return false;
         }
-
+        
         @Override
         public String getDescription() {
-            return Data.text("loading-filter-media") + " (*.ogg, *.ogv)";
+            return Data.text("loading-filter-media") + " (*.mid, *.ogg, *.ogv, *.oga, *.flac, *.wav, *.webm)";
         }
     }
     
@@ -86,7 +98,9 @@ public class FileFilters {
 
             if (i > 0 && i < s.length() - 1) {
                 s = s.substring(i + 1).toLowerCase();
-                if (s.equals("jpg") || s.equals("png") || s.equals("gif"))
+                if(s.equals("png") || s.equals("gif") || s.equals("jpg") ||
+                   s.equals("jpeg") || s.equals("tiff") || s.equals("tif") ||
+                   s.equals("xcf") || s.equals("svg"))
                     return true;
             }
             return false;
@@ -94,7 +108,7 @@ public class FileFilters {
 
         @Override
         public String getDescription() {
-            return Data.text("loading-filter-img") + " (*.jpg, *.png, *.gif)";
+            return Data.text("loading-filter-img") + " (*.jpg, *.png, *.gif, *.tiff, *.svg, *.xcf)";
         }
     }
 

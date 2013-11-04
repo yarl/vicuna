@@ -1513,10 +1513,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                 if(f.isFile()) {
                     String name = f.getName();
                     String ext = name.substring(name.lastIndexOf('.')+1).toLowerCase();
-                    if(ext.matches("jpg") || ext.matches("png") || ext.matches("svg") || ext.matches("gif") || 
-                            ext.matches("pdf") || ext.matches("djvu") || ext.matches("ogg") || 
-                            ext.matches("ogv")) {
-
+                    
+                    if(FileFilters.AllFilter.isMatching(ext)) {
                         boolean dupe = false;
                         for(PFile ff : Data.getFiles()) {
                             if(ff.file.equals(f)) {
@@ -1802,10 +1800,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
                         if(Data.settings.loadSubdirectory)
                             addToArray(f);
                         else {
-                            if(f.isDirectory())
-                                array.addAll(Arrays.asList(f.listFiles())); 
-                            if(f.isFile())
-                               array.add(f);
+                            if(f.isDirectory()) array.addAll(Arrays.asList(f.listFiles())); 
+                            if(f.isFile()) array.add(f);
                         }
                     }
                     addImages(array);
