@@ -190,7 +190,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     setTitle("VicuñaUploader " + Data.version);
-    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/color-swatch-lama.png")));
+    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/logo.png")));
     setMinimumSize(new java.awt.Dimension(900, 600));
     setPreferredSize(new java.awt.Dimension(860, 550));
 
