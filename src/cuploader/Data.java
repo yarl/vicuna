@@ -3,6 +3,7 @@ package cuploader;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import cuploader.frames.*;
+import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.undo.UndoManager;
 import org.wikipedia.Wiki;
 
@@ -189,4 +191,9 @@ public class Data implements Serializable {
         }
     }
     
+    public static int getOrientation(boolean isImage) {
+      ComponentOrientation co = ComponentOrientation.getOrientation(settings.lang);
+      if(isImage) return co.isLeftToRight() ? SwingConstants.RIGHT : SwingConstants.LEFT;
+      return co.isLeftToRight() ? SwingConstants.LEFT : SwingConstants.RIGHT;
+    }
 }

@@ -8,6 +8,7 @@ import cuploader.FileFilters;
 import cuploader.PFile;
 import cuploader.Settings;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -306,9 +307,11 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     pFiles.setMinimumSize(new java.awt.Dimension(300, 56));
     pFiles.setLayout(new java.awt.GridBagLayout());
 
+    lStartInfo.setHorizontalAlignment(Data.getOrientation(false));
     lStartInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
     lStartInfo.setText(bundle.getString("start-info")); // NOI18N
     lStartInfo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    lStartInfo.setHorizontalTextPosition(Data.getOrientation(true));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -321,14 +324,20 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     pUserInfo.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("status"))); // NOI18N
 
     lUserInfo.setForeground(new java.awt.Color(102, 102, 102));
+    lUserInfo.setHorizontalAlignment(Data.getOrientation(false));
     lUserInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/user.png"))); // NOI18N
     lUserInfo.setText(bundle.getString("status-unlogged")); // NOI18N
+    lUserInfo.setHorizontalTextPosition(Data.getOrientation(true));
 
+    lServer.setHorizontalAlignment(Data.getOrientation(false));
     lServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/server.png"))); // NOI18N
     lServer.setText(Data.settings.server);
+    lServer.setHorizontalTextPosition(Data.getOrientation(true));
 
+    lServerStatus.setHorizontalAlignment(Data.getOrientation(false));
     lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
     lServerStatus.setText("Status");
+    lServerStatus.setHorizontalTextPosition(Data.getOrientation(true));
 
     javax.swing.GroupLayout pUserInfoLayout = new javax.swing.GroupLayout(pUserInfo);
     pUserInfo.setLayout(pUserInfoLayout);
@@ -337,10 +346,10 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       .addGroup(pUserInfoLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(lUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(lServerStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(lServer, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(lServerStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(lServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(lUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap())
     );
     pUserInfoLayout.setVerticalGroup(
       pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,22 +363,32 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
 
     pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("manual"))); // NOI18N
 
+    jLabel1.setHorizontalAlignment(Data.getOrientation(false));
     jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter.png"))); // NOI18N
     jLabel1.setText("<html>" + Data.text("manual-1") + "</html>"); // NOI18N
+    jLabel1.setHorizontalTextPosition(Data.getOrientation(true));
 
+    jLabel2.setHorizontalAlignment(Data.getOrientation(false));
     jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-02.png"))); // NOI18N
     jLabel2.setText("<html>" + Data.text("manual-2") + "</html>"); // NOI18N
+    jLabel2.setHorizontalTextPosition(Data.getOrientation(true));
     jLabel2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
+    jLabel4.setHorizontalAlignment(Data.getOrientation(false));
     jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-03.png"))); // NOI18N
     jLabel4.setText("<html>" + Data.text("manual-3") + "</html>"); // NOI18N
+    jLabel4.setHorizontalTextPosition(Data.getOrientation(true));
     jLabel4.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
+    jLabel6.setHorizontalAlignment(Data.getOrientation(false));
     jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-04.png"))); // NOI18N
     jLabel6.setText("<html>" + Data.text("manual-4") + "</html>"); // NOI18N
+    jLabel6.setHorizontalTextPosition(Data.getOrientation(true));
 
+    jLabel7.setHorizontalAlignment(Data.getOrientation(false));
     jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-05.png"))); // NOI18N
     jLabel7.setText("<html>" + Data.text("manual-5") + "</html>"); // NOI18N
+    jLabel7.setHorizontalTextPosition(Data.getOrientation(true));
 
     javax.swing.GroupLayout pDescLayout = new javax.swing.GroupLayout(pDesc);
     pDesc.setLayout(pDescLayout);
@@ -403,8 +422,10 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     pHelp.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help"))); // NOI18N
     pHelp.setToolTipText("");
 
+    lHelp.setHorizontalAlignment(Data.getOrientation(false));
     lHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
     lHelp.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+    lHelp.setHorizontalTextPosition(Data.getOrientation(true));
 
     javax.swing.GroupLayout pHelpLayout = new javax.swing.GroupLayout(pHelp);
     pHelp.setLayout(pHelpLayout);
@@ -440,6 +461,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     });
     jToolBar4.add(bUpload);
 
+    lFileUpload.setHorizontalAlignment(Data.getOrientation(false));
     lFileUpload.setText("0 / 0 (0 MiB)");
     jToolBar4.add(lFileUpload);
 
