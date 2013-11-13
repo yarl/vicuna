@@ -196,4 +196,8 @@ public class Data implements Serializable {
       if(isImage) return co.isLeftToRight() ? SwingConstants.RIGHT : SwingConstants.LEFT;
       return co.isLeftToRight() ? SwingConstants.LEFT : SwingConstants.RIGHT;
     }
+
+    public static ComponentOrientation getComponentOrientation() {
+      return ComponentOrientation.getOrientation(settings.lang);
+    }
 }
