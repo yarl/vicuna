@@ -8,7 +8,6 @@ import cuploader.FileFilters;
 import cuploader.PFile;
 import cuploader.Settings;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -45,12 +44,16 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     File directory = null;
 
     public Main(String version, String date) {
+
         data = new Data();
         Data.version = version;
         Data.date = date;
         
         int hello = readSettings();
         addWindowListener(exit);
+        
+        setComponentOrientation(Data.getComponentOrientation());
+        
         initComponents();
         
         initLangMenu();
@@ -82,686 +85,709 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     }
       
     @SuppressWarnings("unchecked")
-  // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-  private void initComponents() {
-    java.awt.GridBagConstraints gridBagConstraints;
-
-    gView = new javax.swing.ButtonGroup();
-    mShow = new javax.swing.JPopupMenu();
-    mViewAll1 = new javax.swing.JRadioButtonMenuItem();
-    mViewToUpload1 = new javax.swing.JRadioButtonMenuItem();
-    mViewNotUpload1 = new javax.swing.JRadioButtonMenuItem();
-    gLang = new javax.swing.ButtonGroup();
-    jToolBar1 = new javax.swing.JToolBar();
-    bLoadFiles = new javax.swing.JButton();
-    jSeparator6 = new javax.swing.JToolBar.Separator();
-    bLoadSession = new javax.swing.JButton();
-    bSaveSession = new javax.swing.JButton();
-    jSeparator7 = new javax.swing.JToolBar.Separator();
-    bFileEditSelected = new javax.swing.JButton();
-    bView = new javax.swing.JButton();
-    jToolBar2 = new javax.swing.JToolBar();
-    bLogin = new javax.swing.JButton();
-    jSeparator8 = new javax.swing.JToolBar.Separator();
-    bSettings = new javax.swing.JButton();
-    bAbout = new javax.swing.JButton();
-    pFilesScroll = new javax.swing.JScrollPane();
-    pFiles = new javax.swing.JPanel();
-    lStartInfo = new javax.swing.JLabel();
-    pUserInfo = new javax.swing.JPanel();
-    lUserInfo = new javax.swing.JLabel();
-    lServer = new javax.swing.JLabel();
-    lServerStatus = new javax.swing.JLabel();
-    pDesc = new javax.swing.JPanel();
-    jLabel1 = new javax.swing.JLabel();
-    jLabel2 = new javax.swing.JLabel();
-    jLabel4 = new javax.swing.JLabel();
-    jLabel6 = new javax.swing.JLabel();
-    jLabel7 = new javax.swing.JLabel();
-    pHelp = new javax.swing.JPanel();
-    lHelp = new javax.swing.JLabel();
-    pUpload = new javax.swing.JPanel();
-    jToolBar4 = new javax.swing.JToolBar();
-    bUpload = new javax.swing.JButton();
-    lFileUpload = new javax.swing.JLabel();
-    mMenu = new javax.swing.JMenuBar();
-    mFile = new javax.swing.JMenu();
-    mLoadFiles = new javax.swing.JMenuItem();
-    jSeparator5 = new javax.swing.JPopupMenu.Separator();
-    mLoadSession = new javax.swing.JMenuItem();
-    mSaveSession = new javax.swing.JMenuItem();
-    mCleanSession = new javax.swing.JMenuItem();
-    jSeparator3 = new javax.swing.JPopupMenu.Separator();
-    mLogin = new javax.swing.JMenuItem();
-    mUpload = new javax.swing.JMenuItem();
-    jSeparator4 = new javax.swing.JPopupMenu.Separator();
-    mFileUploadSelect = new javax.swing.JMenu();
-    mFileUploadSelectAll = new javax.swing.JMenuItem();
-    mFileUploadSelectInv = new javax.swing.JMenuItem();
-    jSeparator1 = new javax.swing.JPopupMenu.Separator();
-    mEnd = new javax.swing.JMenuItem();
-    mRestart = new javax.swing.JMenuItem();
-    mEdit = new javax.swing.JMenu();
-    mUndo = new javax.swing.JMenuItem();
-    mRedo = new javax.swing.JMenuItem();
-    mFileSelectAll = new javax.swing.JMenuItem();
-    mFileSelectInv = new javax.swing.JMenuItem();
-    jSeparator2 = new javax.swing.JPopupMenu.Separator();
-    mFileSelectedToUpload = new javax.swing.JMenuItem();
-    mFileEditSelected = new javax.swing.JMenuItem();
-    mView = new javax.swing.JMenu();
-    mViewAll = new javax.swing.JRadioButtonMenuItem();
-    mViewToUpload = new javax.swing.JRadioButtonMenuItem();
-    mViewNotUpload = new javax.swing.JRadioButtonMenuItem();
-    mTools = new javax.swing.JMenu();
-    mLang = new javax.swing.JMenu();
-    mSettings = new javax.swing.JMenuItem();
-    mHelp = new javax.swing.JMenu();
-    mHelpOnline = new javax.swing.JMenuItem();
-    mAbout = new javax.swing.JMenuItem();
-
-    gView.add(mViewAll1);
-    mViewAll1.setSelected(true);
-    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
-    mViewAll1.setText(bundle.getString("view-all")); // NOI18N
-    mViewAll1.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mViewAll1ActionPerformed(evt);
-      }
-    });
-    mShow.add(mViewAll1);
-
-    gView.add(mViewToUpload1);
-    mViewToUpload1.setText(bundle.getString("view-toupload")); // NOI18N
-    mViewToUpload1.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mViewToUpload1ActionPerformed(evt);
-      }
-    });
-    mShow.add(mViewToUpload1);
-
-    gView.add(mViewNotUpload1);
-    mViewNotUpload1.setText(bundle.getString("view-notupload")); // NOI18N
-    mViewNotUpload1.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mViewNotUpload1ActionPerformed(evt);
-      }
-    });
-    mShow.add(mViewNotUpload1);
-
-    setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-    setTitle("VicuñaUploader " + Data.version);
-    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/logo.png")));
-    setMinimumSize(new java.awt.Dimension(900, 600));
-    setPreferredSize(new java.awt.Dimension(860, 550));
-
-    jToolBar1.setFloatable(false);
-    jToolBar1.setRollover(true);
-
-    bLoadFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-import.png"))); // NOI18N
-    bLoadFiles.setToolTipText(bundle.getString("folder-read")); // NOI18N
-    bLoadFiles.setFocusable(false);
-    bLoadFiles.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bLoadFiles.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bLoadFilesActionPerformed(evt);
-      }
-    });
-    jToolBar1.add(bLoadFiles);
-    jToolBar1.add(jSeparator6);
-
-    bLoadSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/blue-folder-open.png"))); // NOI18N
-    bLoadSession.setToolTipText(bundle.getString("session-open")); // NOI18N
-    bLoadSession.setFocusable(false);
-    bLoadSession.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bLoadSession.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bLoadSession.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bLoadSessionActionPerformed(evt);
-      }
-    });
-    jToolBar1.add(bLoadSession);
-
-    bSaveSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/disk-black-24.png"))); // NOI18N
-    bSaveSession.setToolTipText(bundle.getString("session-save")); // NOI18N
-    bSaveSession.setFocusable(false);
-    bSaveSession.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bSaveSession.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bSaveSession.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bSaveSessionActionPerformed(evt);
-      }
-    });
-    jToolBar1.add(bSaveSession);
-    jToolBar1.add(jSeparator7);
-
-    bFileEditSelected.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image-edit-24.png"))); // NOI18N
-    bFileEditSelected.setToolTipText(bundle.getString("files-edit")); // NOI18N
-    bFileEditSelected.setFocusable(false);
-    bFileEditSelected.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bFileEditSelected.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bFileEditSelected.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bFileEditSelectedActionPerformed(evt);
-      }
-    });
-    jToolBar1.add(bFileEditSelected);
-
-    bView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/card-address-img-24.png"))); // NOI18N
-    bView.setToolTipText(bundle.getString("view")); // NOI18N
-    bView.setFocusable(false);
-    bView.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bView.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bViewActionPerformed(evt);
-      }
-    });
-    jToolBar1.add(bView);
-
-    jToolBar2.setFloatable(false);
-    jToolBar2.setRollover(true);
-
-    bLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/user-24.png"))); // NOI18N
-    bLogin.setToolTipText(bundle.getString("login")); // NOI18N
-    bLogin.setFocusable(false);
-    bLogin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bLogin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bLogin.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bLoginActionPerformed(evt);
-      }
-    });
-    jToolBar2.add(bLogin);
-    jToolBar2.add(jSeparator8);
-
-    bSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/switch-24.png"))); // NOI18N
-    bSettings.setToolTipText(bundle.getString("settings")); // NOI18N
-    bSettings.setFocusable(false);
-    bSettings.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bSettings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bSettings.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bSettingsActionPerformed(evt);
-      }
-    });
-    jToolBar2.add(bSettings);
-
-    bAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/color-swatch-24.png"))); // NOI18N
-    bAbout.setToolTipText(bundle.getString("help-about")); // NOI18N
-    bAbout.setFocusable(false);
-    bAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bAbout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bAbout.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bAboutActionPerformed(evt);
-      }
-    });
-    jToolBar2.add(bAbout);
-
-    pFilesScroll.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("files"))); // NOI18N
-    pFilesScroll.setAutoscrolls(true);
-    pFilesScroll.setMinimumSize(new java.awt.Dimension(100, 100));
-    pFilesScroll.setPreferredSize(new java.awt.Dimension(100, 100));
-
-    pFiles.setMinimumSize(new java.awt.Dimension(300, 56));
-    pFiles.setLayout(new java.awt.GridBagLayout());
-
-    lStartInfo.setHorizontalAlignment(Data.getOrientation(false));
-    lStartInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
-    lStartInfo.setText(bundle.getString("start-info")); // NOI18N
-    lStartInfo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
-    lStartInfo.setHorizontalTextPosition(Data.getOrientation(true));
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-    pFiles.add(lStartInfo, gridBagConstraints);
-
-    pFilesScroll.setViewportView(pFiles);
-
-    pUserInfo.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("status"))); // NOI18N
-
-    lUserInfo.setForeground(new java.awt.Color(102, 102, 102));
-    lUserInfo.setHorizontalAlignment(Data.getOrientation(false));
-    lUserInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/user.png"))); // NOI18N
-    lUserInfo.setText(bundle.getString("status-unlogged")); // NOI18N
-    lUserInfo.setHorizontalTextPosition(Data.getOrientation(true));
-
-    lServer.setHorizontalAlignment(Data.getOrientation(false));
-    lServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/server.png"))); // NOI18N
-    lServer.setText(Data.settings.server);
-    lServer.setHorizontalTextPosition(Data.getOrientation(true));
-
-    lServerStatus.setHorizontalAlignment(Data.getOrientation(false));
-    lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
-    lServerStatus.setText("Status");
-    lServerStatus.setHorizontalTextPosition(Data.getOrientation(true));
-
-    javax.swing.GroupLayout pUserInfoLayout = new javax.swing.GroupLayout(pUserInfo);
-    pUserInfo.setLayout(pUserInfoLayout);
-    pUserInfoLayout.setHorizontalGroup(
-      pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(pUserInfoLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(lServerStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(lServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(lUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addContainerGap())
-    );
-    pUserInfoLayout.setVerticalGroup(
-      pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(pUserInfoLayout.createSequentialGroup()
-        .addComponent(lUserInfo)
-        .addGap(18, 18, 18)
-        .addComponent(lServer, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(lServerStatus))
-    );
-
-    pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("manual"))); // NOI18N
-
-    jLabel1.setHorizontalAlignment(Data.getOrientation(false));
-    jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter.png"))); // NOI18N
-    jLabel1.setText("<html>" + Data.text("manual-1") + "</html>"); // NOI18N
-    jLabel1.setHorizontalTextPosition(Data.getOrientation(true));
-
-    jLabel2.setHorizontalAlignment(Data.getOrientation(false));
-    jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-02.png"))); // NOI18N
-    jLabel2.setText("<html>" + Data.text("manual-2") + "</html>"); // NOI18N
-    jLabel2.setHorizontalTextPosition(Data.getOrientation(true));
-    jLabel2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-    jLabel4.setHorizontalAlignment(Data.getOrientation(false));
-    jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-03.png"))); // NOI18N
-    jLabel4.setText("<html>" + Data.text("manual-3") + "</html>"); // NOI18N
-    jLabel4.setHorizontalTextPosition(Data.getOrientation(true));
-    jLabel4.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-
-    jLabel6.setHorizontalAlignment(Data.getOrientation(false));
-    jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-04.png"))); // NOI18N
-    jLabel6.setText("<html>" + Data.text("manual-4") + "</html>"); // NOI18N
-    jLabel6.setHorizontalTextPosition(Data.getOrientation(true));
-
-    jLabel7.setHorizontalAlignment(Data.getOrientation(false));
-    jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-05.png"))); // NOI18N
-    jLabel7.setText("<html>" + Data.text("manual-5") + "</html>"); // NOI18N
-    jLabel7.setHorizontalTextPosition(Data.getOrientation(true));
-
-    javax.swing.GroupLayout pDescLayout = new javax.swing.GroupLayout(pDesc);
-    pDesc.setLayout(pDescLayout);
-    pDescLayout.setHorizontalGroup(
-      pDescLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(pDescLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(pDescLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap())
-    );
-    pDescLayout.setVerticalGroup(
-      pDescLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(pDescLayout.createSequentialGroup()
-        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
-
-    pHelp.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help"))); // NOI18N
-    pHelp.setToolTipText("");
-
-    lHelp.setHorizontalAlignment(Data.getOrientation(false));
-    lHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
-    lHelp.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-    lHelp.setHorizontalTextPosition(Data.getOrientation(true));
-
-    javax.swing.GroupLayout pHelpLayout = new javax.swing.GroupLayout(pHelp);
-    pHelp.setLayout(pHelpLayout);
-    pHelpLayout.setHorizontalGroup(
-      pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(pHelpLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(lHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
-    pHelpLayout.setVerticalGroup(
-      pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pHelpLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-        .addContainerGap())
-    );
-
-    pUpload.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("toupload"))); // NOI18N
-
-    jToolBar4.setFloatable(false);
-    jToolBar4.setRollover(true);
-
-    bUpload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/drive-upload-24.png"))); // NOI18N
-    bUpload.setToolTipText(bundle.getString("upload")); // NOI18N
-    bUpload.setFocusable(false);
-    bUpload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-    bUpload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-    bUpload.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bUploadActionPerformed(evt);
-      }
-    });
-    jToolBar4.add(bUpload);
-
-    lFileUpload.setHorizontalAlignment(Data.getOrientation(false));
-    lFileUpload.setText("0 / 0 (0 MiB)");
-    jToolBar4.add(lFileUpload);
-
-    javax.swing.GroupLayout pUploadLayout = new javax.swing.GroupLayout(pUpload);
-    pUpload.setLayout(pUploadLayout);
-    pUploadLayout.setHorizontalGroup(
-      pUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(pUploadLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
-    pUploadLayout.setVerticalGroup(
-      pUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(pUploadLayout.createSequentialGroup()
-        .addGap(3, 3, 3)
-        .addComponent(jToolBar4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
-
-    mFile.setText(bundle.getString("file")); // NOI18N
-
-    mLoadFiles.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SPACE, java.awt.event.InputEvent.CTRL_MASK));
-    mLoadFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-import_1.png"))); // NOI18N
-    mLoadFiles.setText(Data.text("folder-read")); // NOI18N
-    mLoadFiles.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mLoadFilesActionPerformed(evt);
-      }
-    });
-    mFile.add(mLoadFiles);
-    mFile.add(jSeparator5);
-
-    mLoadSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-    mLoadSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/blue-folder-open_1.png"))); // NOI18N
-    mLoadSession.setText(bundle.getString("session-open")); // NOI18N
-    mLoadSession.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mLoadSessionActionPerformed(evt);
-      }
-    });
-    mFile.add(mLoadSession);
-
-    mSaveSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-    mSaveSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/disk-black.png"))); // NOI18N
-    mSaveSession.setText(bundle.getString("session-save")); // NOI18N
-    mSaveSession.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mSaveSessionActionPerformed(evt);
-      }
-    });
-    mFile.add(mSaveSession);
-
-    mCleanSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.CTRL_MASK));
-    mCleanSession.setText(bundle.getString("session-clear")); // NOI18N
-    mCleanSession.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mCleanSessionActionPerformed(evt);
-      }
-    });
-    mFile.add(mCleanSession);
-    mFile.add(jSeparator3);
-
-    mLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_BACK_QUOTE, java.awt.event.InputEvent.CTRL_MASK));
-    mLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/users.png"))); // NOI18N
-    mLogin.setText(bundle.getString("login")); // NOI18N
-    mLogin.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mLoginActionPerformed(evt);
-      }
-    });
-    mFile.add(mLogin);
-
-    mUpload.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
-    mUpload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/drive-upload.png"))); // NOI18N
-    mUpload.setText(bundle.getString("upload")); // NOI18N
-    mUpload.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mUploadActionPerformed(evt);
-      }
-    });
-    mFile.add(mUpload);
-    mFile.add(jSeparator4);
-
-    mFileUploadSelect.setText(bundle.getString("files-to-upload")); // NOI18N
-
-    mFileUploadSelectAll.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-    mFileUploadSelectAll.setText(bundle.getString("files-select-all")); // NOI18N
-    mFileUploadSelectAll.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mFileUploadSelectAllActionPerformed(evt);
-      }
-    });
-    mFileUploadSelect.add(mFileUploadSelectAll);
-
-    mFileUploadSelectInv.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-    mFileUploadSelectInv.setText(bundle.getString("files-inv")); // NOI18N
-    mFileUploadSelectInv.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mFileUploadSelectInvActionPerformed(evt);
-      }
-    });
-    mFileUploadSelect.add(mFileUploadSelectInv);
-
-    mFile.add(mFileUploadSelect);
-    mFile.add(jSeparator1);
-
-    mEnd.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
-    mEnd.setText(bundle.getString("button-close")); // NOI18N
-    mEnd.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mEndActionPerformed(evt);
-      }
-    });
-    mFile.add(mEnd);
-
-    mRestart.setText(bundle.getString("restart")); // NOI18N
-    mRestart.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mRestartActionPerformed(evt);
-      }
-    });
-    mFile.add(mRestart);
-
-    mMenu.add(mFile);
-
-    mEdit.setText(bundle.getString("edit")); // NOI18N
-
-    mUndo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-    mUndo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-transition.png"))); // NOI18N
-    mUndo.setText(bundle.getString("undo")); // NOI18N
-    mUndo.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mUndoActionPerformed(evt);
-      }
-    });
-    mEdit.add(mUndo);
-
-    mRedo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
-    mRedo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-transition-180.png"))); // NOI18N
-    mRedo.setText(bundle.getString("redo")); // NOI18N
-    mRedo.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mRedoActionPerformed(evt);
-      }
-    });
-    mEdit.add(mRedo);
-
-    mFileSelectAll.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-    mFileSelectAll.setText(bundle.getString("files-select-all")); // NOI18N
-    mFileSelectAll.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mFileSelectAllActionPerformed(evt);
-      }
-    });
-    mEdit.add(mFileSelectAll);
-
-    mFileSelectInv.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-    mFileSelectInv.setText(bundle.getString("files-inv")); // NOI18N
-    mFileSelectInv.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mFileSelectInvActionPerformed(evt);
-      }
-    });
-    mEdit.add(mFileSelectInv);
-    mEdit.add(jSeparator2);
-
-    mFileSelectedToUpload.setText(bundle.getString("files-select-to-upload")); // NOI18N
-    mFileSelectedToUpload.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mFileSelectedToUploadActionPerformed(evt);
-      }
-    });
-    mEdit.add(mFileSelectedToUpload);
-
-    mFileEditSelected.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-    mFileEditSelected.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image--pencil.png"))); // NOI18N
-    mFileEditSelected.setText(bundle.getString("files-edit")); // NOI18N
-    mFileEditSelected.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mFileEditSelectedActionPerformed(evt);
-      }
-    });
-    mEdit.add(mFileEditSelected);
-
-    mMenu.add(mEdit);
-
-    mView.setText(bundle.getString("view")); // NOI18N
-
-    gView.add(mViewAll);
-    mViewAll.setText(bundle.getString("view-all")); // NOI18N
-    mViewAll.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mViewAllActionPerformed(evt);
-      }
-    });
-    mView.add(mViewAll);
-
-    gView.add(mViewToUpload);
-    mViewToUpload.setText(bundle.getString("view-toupload")); // NOI18N
-    mViewToUpload.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mViewToUploadActionPerformed(evt);
-      }
-    });
-    mView.add(mViewToUpload);
-
-    gView.add(mViewNotUpload);
-    mViewNotUpload.setText(bundle.getString("view-notupload")); // NOI18N
-    mViewNotUpload.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mViewNotUploadActionPerformed(evt);
-      }
-    });
-    mView.add(mViewNotUpload);
-
-    mMenu.add(mView);
-
-    mTools.setText(bundle.getString("tools")); // NOI18N
-
-    mLang.setText(bundle.getString("settings-lang")); // NOI18N
-    mTools.add(mLang);
-
-    mSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
-    mSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/switch.png"))); // NOI18N
-    mSettings.setText(bundle.getString("settings")); // NOI18N
-    mSettings.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mSettingsActionPerformed(evt);
-      }
-    });
-    mTools.add(mSettings);
-
-    mMenu.add(mTools);
-
-    mHelp.setText(bundle.getString("help")); // NOI18N
-
-    mHelpOnline.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
-    mHelpOnline.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/lifebuoy.png"))); // NOI18N
-    mHelpOnline.setText(bundle.getString("help-help")); // NOI18N
-    mHelpOnline.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mHelpOnlineActionPerformed(evt);
-      }
-    });
-    mHelp.add(mHelpOnline);
-
-    mAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/color-swatch_1.png"))); // NOI18N
-    mAbout.setText(bundle.getString("help-about")); // NOI18N
-    mAbout.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mAboutActionPerformed(evt);
-      }
-    });
-    mHelp.add(mAbout);
-
-    mMenu.add(mHelp);
-
-    setJMenuBar(mMenu);
-
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-          .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addComponent(pUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(pDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(pHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(pUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addContainerGap())
-    );
-    layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(pUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(pDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(pHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(pUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addContainerGap())
-    );
-
-    pack();
-  }// </editor-fold>//GEN-END:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        gView = new javax.swing.ButtonGroup();
+        mShow = new javax.swing.JPopupMenu();
+        mViewAll1 = new javax.swing.JRadioButtonMenuItem();
+        mViewToUpload1 = new javax.swing.JRadioButtonMenuItem();
+        mViewNotUpload1 = new javax.swing.JRadioButtonMenuItem();
+        gLang = new javax.swing.ButtonGroup();
+        jToolBar1 = new javax.swing.JToolBar();
+        bLoadFiles = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
+        bLoadSession = new javax.swing.JButton();
+        bSaveSession = new javax.swing.JButton();
+        jSeparator7 = new javax.swing.JToolBar.Separator();
+        bFileEditSelected = new javax.swing.JButton();
+        bView = new javax.swing.JButton();
+        jToolBar2 = new javax.swing.JToolBar();
+        bLogin = new javax.swing.JButton();
+        jSeparator8 = new javax.swing.JToolBar.Separator();
+        bSettings = new javax.swing.JButton();
+        bAbout = new javax.swing.JButton();
+        pFilesScroll = new javax.swing.JScrollPane();
+        pFiles = new javax.swing.JPanel();
+        lStartInfo = new javax.swing.JLabel();
+        pUserInfo = new javax.swing.JPanel();
+        lUserInfo = new javax.swing.JLabel();
+        lServer = new javax.swing.JLabel();
+        lServerStatus = new javax.swing.JLabel();
+        pDesc = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        pHelp = new javax.swing.JPanel();
+        lHelp = new javax.swing.JLabel();
+        pUpload = new javax.swing.JPanel();
+        jToolBar4 = new javax.swing.JToolBar();
+        bUpload = new javax.swing.JButton();
+        lFileUpload = new javax.swing.JLabel();
+        mMenu = new javax.swing.JMenuBar();
+        mFile = new javax.swing.JMenu();
+        mLoadFiles = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        mLoadSession = new javax.swing.JMenuItem();
+        mSaveSession = new javax.swing.JMenuItem();
+        mCleanSession = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        mLogin = new javax.swing.JMenuItem();
+        mUpload = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        mFileUploadSelect = new javax.swing.JMenu();
+        mFileUploadSelectAll = new javax.swing.JMenuItem();
+        mFileUploadSelectInv = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        mEnd = new javax.swing.JMenuItem();
+        mRestart = new javax.swing.JMenuItem();
+        mEdit = new javax.swing.JMenu();
+        mUndo = new javax.swing.JMenuItem();
+        mRedo = new javax.swing.JMenuItem();
+        mFileSelectAll = new javax.swing.JMenuItem();
+        mFileSelectInv = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        mFileSelectedToUpload = new javax.swing.JMenuItem();
+        mFileEditSelected = new javax.swing.JMenuItem();
+        mView = new javax.swing.JMenu();
+        mViewAll = new javax.swing.JRadioButtonMenuItem();
+        mViewToUpload = new javax.swing.JRadioButtonMenuItem();
+        mViewNotUpload = new javax.swing.JRadioButtonMenuItem();
+        mTools = new javax.swing.JMenu();
+        mLang = new javax.swing.JMenu();
+        mSettings = new javax.swing.JMenuItem();
+        mHelp = new javax.swing.JMenu();
+        mHelpOnline = new javax.swing.JMenuItem();
+        mAbout = new javax.swing.JMenuItem();
+
+        gView.add(mViewAll1);
+        mViewAll1.setSelected(true);
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+        mViewAll1.setText(bundle.getString("view-all")); // NOI18N
+        mViewAll1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mViewAll1ActionPerformed(evt);
+            }
+        });
+        mShow.add(mViewAll1);
+
+        gView.add(mViewToUpload1);
+        mViewToUpload1.setText(bundle.getString("view-toupload")); // NOI18N
+        mViewToUpload1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mViewToUpload1ActionPerformed(evt);
+            }
+        });
+        mShow.add(mViewToUpload1);
+
+        gView.add(mViewNotUpload1);
+        mViewNotUpload1.setText(bundle.getString("view-notupload")); // NOI18N
+        mViewNotUpload1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mViewNotUpload1ActionPerformed(evt);
+            }
+        });
+        mShow.add(mViewNotUpload1);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("VicuñaUploader " + Data.version);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/logo.png")));
+        setMinimumSize(new java.awt.Dimension(900, 600));
+        setPreferredSize(new java.awt.Dimension(860, 550));
+
+        jToolBar1.setComponentOrientation(getComponentOrientation());
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        bLoadFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-import.png"))); // NOI18N
+        bLoadFiles.setToolTipText(bundle.getString("folder-read")); // NOI18N
+        bLoadFiles.setFocusable(false);
+        bLoadFiles.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bLoadFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bLoadFilesActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(bLoadFiles);
+        jToolBar1.add(jSeparator6);
+
+        bLoadSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/blue-folder-open.png"))); // NOI18N
+        bLoadSession.setToolTipText(bundle.getString("session-open")); // NOI18N
+        bLoadSession.setFocusable(false);
+        bLoadSession.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bLoadSession.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bLoadSession.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bLoadSessionActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(bLoadSession);
+
+        bSaveSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/disk-black-24.png"))); // NOI18N
+        bSaveSession.setToolTipText(bundle.getString("session-save")); // NOI18N
+        bSaveSession.setFocusable(false);
+        bSaveSession.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bSaveSession.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bSaveSession.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSaveSessionActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(bSaveSession);
+        jToolBar1.add(jSeparator7);
+
+        bFileEditSelected.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image-edit-24.png"))); // NOI18N
+        bFileEditSelected.setToolTipText(bundle.getString("files-edit")); // NOI18N
+        bFileEditSelected.setFocusable(false);
+        bFileEditSelected.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bFileEditSelected.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bFileEditSelected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bFileEditSelectedActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(bFileEditSelected);
+
+        bView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/card-address-img-24.png"))); // NOI18N
+        bView.setToolTipText(bundle.getString("view")); // NOI18N
+        bView.setFocusable(false);
+        bView.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bViewActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(bView);
+
+        jToolBar2.setComponentOrientation(getComponentOrientation());
+        jToolBar2.setFloatable(false);
+        jToolBar2.setRollover(true);
+
+        bLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/user-24.png"))); // NOI18N
+        bLogin.setToolTipText(bundle.getString("login")); // NOI18N
+        bLogin.setFocusable(false);
+        bLogin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bLogin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bLoginActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(bLogin);
+        jToolBar2.add(jSeparator8);
+
+        bSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/switch-24.png"))); // NOI18N
+        bSettings.setToolTipText(bundle.getString("settings")); // NOI18N
+        bSettings.setFocusable(false);
+        bSettings.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bSettings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSettingsActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(bSettings);
+
+        bAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/color-swatch-24.png"))); // NOI18N
+        bAbout.setToolTipText(bundle.getString("help-about")); // NOI18N
+        bAbout.setFocusable(false);
+        bAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bAbout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAboutActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(bAbout);
+
+        pFilesScroll.setComponentOrientation(getComponentOrientation());
+        pFilesScroll.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("files"))); // NOI18N
+        pFilesScroll.setAutoscrolls(true);
+        pFilesScroll.setMinimumSize(new java.awt.Dimension(100, 100));
+        pFilesScroll.setPreferredSize(new java.awt.Dimension(100, 100));
+
+        pFiles.setMinimumSize(new java.awt.Dimension(300, 56));
+        pFiles.setLayout(new java.awt.GridBagLayout());
+
+        lStartInfo.setHorizontalAlignment(Data.getOrientation(false));
+        lStartInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
+        lStartInfo.setText(bundle.getString("start-info")); // NOI18N
+        lStartInfo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        lStartInfo.setHorizontalTextPosition(Data.getOrientation(true));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        pFiles.add(lStartInfo, gridBagConstraints);
+
+        pFilesScroll.setViewportView(pFiles);
+
+        pUserInfo.setComponentOrientation(getComponentOrientation());
+        pUserInfo.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("status"))); // NOI18N
+
+        lUserInfo.setForeground(new java.awt.Color(102, 102, 102));
+        lUserInfo.setHorizontalAlignment(Data.getOrientation(false));
+        lUserInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/user.png"))); // NOI18N
+        lUserInfo.setText(bundle.getString("status-unlogged")); // NOI18N
+        lUserInfo.setHorizontalTextPosition(Data.getOrientation(true));
+
+        lServer.setHorizontalAlignment(Data.getOrientation(false));
+        lServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/server.png"))); // NOI18N
+        lServer.setText(Data.settings.server);
+        lServer.setHorizontalTextPosition(Data.getOrientation(true));
+
+        lServerStatus.setHorizontalAlignment(Data.getOrientation(false));
+        lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
+        lServerStatus.setText("Status");
+        lServerStatus.setHorizontalTextPosition(Data.getOrientation(true));
+
+        javax.swing.GroupLayout pUserInfoLayout = new javax.swing.GroupLayout(pUserInfo);
+        pUserInfo.setLayout(pUserInfoLayout);
+        pUserInfoLayout.setHorizontalGroup(
+            pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pUserInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lServerStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        pUserInfoLayout.setVerticalGroup(
+            pUserInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pUserInfoLayout.createSequentialGroup()
+                .addComponent(lUserInfo)
+                .addGap(18, 18, 18)
+                .addComponent(lServer, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lServerStatus))
+        );
+
+        pDesc.setComponentOrientation(getComponentOrientation());
+        pDesc.setBorder(javax.swing.BorderFactory.createTitledBorder(Data.text("manual"))); // NOI18N
+
+        jLabel1.setHorizontalAlignment(Data.getOrientation(false));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter.png"))); // NOI18N
+        jLabel1.setText("<html>" + Data.text("manual-1") + "</html>"); // NOI18N
+        jLabel1.setHorizontalTextPosition(Data.getOrientation(true));
+
+        jLabel2.setComponentOrientation(getComponentOrientation());
+        jLabel2.setHorizontalAlignment(Data.getOrientation(false));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-02.png"))); // NOI18N
+        jLabel2.setText("<html>" + Data.text("manual-2") + "</html>"); // NOI18N
+        jLabel2.setHorizontalTextPosition(Data.getOrientation(true));
+        jLabel2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+
+        jLabel4.setComponentOrientation(getComponentOrientation());
+        jLabel4.setHorizontalAlignment(Data.getOrientation(false));
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-03.png"))); // NOI18N
+        jLabel4.setText("<html>" + Data.text("manual-3") + "</html>"); // NOI18N
+        jLabel4.setHorizontalTextPosition(Data.getOrientation(true));
+        jLabel4.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+
+        jLabel6.setHorizontalAlignment(Data.getOrientation(false));
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-04.png"))); // NOI18N
+        jLabel6.setText("<html>" + Data.text("manual-4") + "</html>"); // NOI18N
+        jLabel6.setHorizontalTextPosition(Data.getOrientation(true));
+
+        jLabel7.setHorizontalAlignment(Data.getOrientation(false));
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/notification-counter-05.png"))); // NOI18N
+        jLabel7.setText("<html>" + Data.text("manual-5") + "</html>"); // NOI18N
+        jLabel7.setHorizontalTextPosition(Data.getOrientation(true));
+
+        javax.swing.GroupLayout pDescLayout = new javax.swing.GroupLayout(pDesc);
+        pDesc.setLayout(pDescLayout);
+        pDescLayout.setHorizontalGroup(
+            pDescLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pDescLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pDescLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        pDescLayout.setVerticalGroup(
+            pDescLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pDescLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pHelp.setComponentOrientation(getComponentOrientation());
+        pHelp.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help"))); // NOI18N
+        pHelp.setToolTipText("");
+
+        lHelp.setHorizontalAlignment(Data.getOrientation(false));
+        lHelp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
+        lHelp.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lHelp.setHorizontalTextPosition(Data.getOrientation(true));
+
+        javax.swing.GroupLayout pHelpLayout = new javax.swing.GroupLayout(pHelp);
+        pHelp.setLayout(pHelpLayout);
+        pHelpLayout.setHorizontalGroup(
+            pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pHelpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pHelpLayout.setVerticalGroup(
+            pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pHelpLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pUpload.setComponentOrientation(getComponentOrientation());
+        pUpload.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("toupload"))); // NOI18N
+
+        jToolBar4.setComponentOrientation(getComponentOrientation());
+        jToolBar4.setFloatable(false);
+        jToolBar4.setRollover(true);
+
+        bUpload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/drive-upload-24.png"))); // NOI18N
+        bUpload.setToolTipText(bundle.getString("upload")); // NOI18N
+        bUpload.setFocusable(false);
+        bUpload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bUpload.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bUploadActionPerformed(evt);
+            }
+        });
+        jToolBar4.add(bUpload);
+
+        lFileUpload.setHorizontalAlignment(Data.getOrientation(false));
+        lFileUpload.setText("0 / 0 (0 MiB)");
+        jToolBar4.add(lFileUpload);
+
+        javax.swing.GroupLayout pUploadLayout = new javax.swing.GroupLayout(pUpload);
+        pUpload.setLayout(pUploadLayout);
+        pUploadLayout.setHorizontalGroup(
+            pUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pUploadLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jToolBar4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pUploadLayout.setVerticalGroup(
+            pUploadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pUploadLayout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addComponent(jToolBar4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        mMenu.setComponentOrientation(getComponentOrientation());
+
+        mFile.setComponentOrientation(getComponentOrientation());
+        mFile.setText(bundle.getString("file")); // NOI18N
+
+        mLoadFiles.setComponentOrientation(getComponentOrientation());
+        mLoadFiles.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SPACE, java.awt.event.InputEvent.CTRL_MASK));
+        mLoadFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-import_1.png"))); // NOI18N
+        mLoadFiles.setText(Data.text("folder-read")); // NOI18N
+        mLoadFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLoadFilesActionPerformed(evt);
+            }
+        });
+        mFile.add(mLoadFiles);
+        mFile.add(jSeparator5);
+
+        mLoadSession.setComponentOrientation(getComponentOrientation());
+        mLoadSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        mLoadSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/blue-folder-open_1.png"))); // NOI18N
+        mLoadSession.setText(bundle.getString("session-open")); // NOI18N
+        mLoadSession.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLoadSessionActionPerformed(evt);
+            }
+        });
+        mFile.add(mLoadSession);
+
+        mSaveSession.setComponentOrientation(getComponentOrientation());
+        mSaveSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        mSaveSession.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/disk-black.png"))); // NOI18N
+        mSaveSession.setText(bundle.getString("session-save")); // NOI18N
+        mSaveSession.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mSaveSessionActionPerformed(evt);
+            }
+        });
+        mFile.add(mSaveSession);
+
+        mCleanSession.setComponentOrientation(getComponentOrientation());
+        mCleanSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.CTRL_MASK));
+        mCleanSession.setText(bundle.getString("session-clear")); // NOI18N
+        mCleanSession.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mCleanSessionActionPerformed(evt);
+            }
+        });
+        mFile.add(mCleanSession);
+        mFile.add(jSeparator3);
+
+        mLogin.setComponentOrientation(getComponentOrientation());
+        mLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_BACK_QUOTE, java.awt.event.InputEvent.CTRL_MASK));
+        mLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/users.png"))); // NOI18N
+        mLogin.setText(bundle.getString("login")); // NOI18N
+        mLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLoginActionPerformed(evt);
+            }
+        });
+        mFile.add(mLogin);
+
+        mUpload.setComponentOrientation(getComponentOrientation());
+        mUpload.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
+        mUpload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/drive-upload.png"))); // NOI18N
+        mUpload.setText(bundle.getString("upload")); // NOI18N
+        mUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mUploadActionPerformed(evt);
+            }
+        });
+        mFile.add(mUpload);
+        mFile.add(jSeparator4);
+
+        mFileUploadSelect.setComponentOrientation(getComponentOrientation());
+        mFileUploadSelect.setText(bundle.getString("files-to-upload")); // NOI18N
+
+        mFileUploadSelectAll.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        mFileUploadSelectAll.setText(bundle.getString("files-select-all")); // NOI18N
+        mFileUploadSelectAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mFileUploadSelectAllActionPerformed(evt);
+            }
+        });
+        mFileUploadSelect.add(mFileUploadSelectAll);
+
+        mFileUploadSelectInv.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        mFileUploadSelectInv.setText(bundle.getString("files-inv")); // NOI18N
+        mFileUploadSelectInv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mFileUploadSelectInvActionPerformed(evt);
+            }
+        });
+        mFileUploadSelect.add(mFileUploadSelectInv);
+
+        mFile.add(mFileUploadSelect);
+        mFile.add(jSeparator1);
+
+        mEnd.setComponentOrientation(getComponentOrientation());
+        mEnd.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        mEnd.setText(bundle.getString("button-close")); // NOI18N
+        mEnd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mEndActionPerformed(evt);
+            }
+        });
+        mFile.add(mEnd);
+
+        mRestart.setComponentOrientation(getComponentOrientation());
+        mRestart.setText(bundle.getString("restart")); // NOI18N
+        mRestart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mRestartActionPerformed(evt);
+            }
+        });
+        mFile.add(mRestart);
+
+        mMenu.add(mFile);
+
+        mEdit.setComponentOrientation(getComponentOrientation());
+        mEdit.setText(bundle.getString("edit")); // NOI18N
+
+        mUndo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        mUndo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-transition.png"))); // NOI18N
+        mUndo.setText(bundle.getString("undo")); // NOI18N
+        mUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mUndoActionPerformed(evt);
+            }
+        });
+        mEdit.add(mUndo);
+
+        mRedo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
+        mRedo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-transition-180.png"))); // NOI18N
+        mRedo.setText(bundle.getString("redo")); // NOI18N
+        mRedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mRedoActionPerformed(evt);
+            }
+        });
+        mEdit.add(mRedo);
+
+        mFileSelectAll.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        mFileSelectAll.setText(bundle.getString("files-select-all")); // NOI18N
+        mFileSelectAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mFileSelectAllActionPerformed(evt);
+            }
+        });
+        mEdit.add(mFileSelectAll);
+
+        mFileSelectInv.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        mFileSelectInv.setText(bundle.getString("files-inv")); // NOI18N
+        mFileSelectInv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mFileSelectInvActionPerformed(evt);
+            }
+        });
+        mEdit.add(mFileSelectInv);
+        mEdit.add(jSeparator2);
+
+        mFileSelectedToUpload.setText(bundle.getString("files-select-to-upload")); // NOI18N
+        mFileSelectedToUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mFileSelectedToUploadActionPerformed(evt);
+            }
+        });
+        mEdit.add(mFileSelectedToUpload);
+
+        mFileEditSelected.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        mFileEditSelected.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image--pencil.png"))); // NOI18N
+        mFileEditSelected.setText(bundle.getString("files-edit")); // NOI18N
+        mFileEditSelected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mFileEditSelectedActionPerformed(evt);
+            }
+        });
+        mEdit.add(mFileEditSelected);
+
+        mMenu.add(mEdit);
+
+        mView.setText(bundle.getString("view")); // NOI18N
+
+        gView.add(mViewAll);
+        mViewAll.setText(bundle.getString("view-all")); // NOI18N
+        mViewAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mViewAllActionPerformed(evt);
+            }
+        });
+        mView.add(mViewAll);
+
+        gView.add(mViewToUpload);
+        mViewToUpload.setText(bundle.getString("view-toupload")); // NOI18N
+        mViewToUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mViewToUploadActionPerformed(evt);
+            }
+        });
+        mView.add(mViewToUpload);
+
+        gView.add(mViewNotUpload);
+        mViewNotUpload.setText(bundle.getString("view-notupload")); // NOI18N
+        mViewNotUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mViewNotUploadActionPerformed(evt);
+            }
+        });
+        mView.add(mViewNotUpload);
+
+        mMenu.add(mView);
+
+        mTools.setText(bundle.getString("tools")); // NOI18N
+
+        mLang.setText(bundle.getString("settings-lang")); // NOI18N
+        mTools.add(mLang);
+
+        mSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        mSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/switch.png"))); // NOI18N
+        mSettings.setText(bundle.getString("settings")); // NOI18N
+        mSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mSettingsActionPerformed(evt);
+            }
+        });
+        mTools.add(mSettings);
+
+        mMenu.add(mTools);
+
+        mHelp.setText(bundle.getString("help")); // NOI18N
+
+        mHelpOnline.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
+        mHelpOnline.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/lifebuoy.png"))); // NOI18N
+        mHelpOnline.setText(bundle.getString("help-help")); // NOI18N
+        mHelpOnline.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mHelpOnlineActionPerformed(evt);
+            }
+        });
+        mHelp.add(mHelpOnline);
+
+        mAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/color-swatch_1.png"))); // NOI18N
+        mAbout.setText(bundle.getString("help-about")); // NOI18N
+        mAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mAboutActionPerformed(evt);
+            }
+        });
+        mHelp.add(mAbout);
+
+        mMenu.add(mHelp);
+
+        setJMenuBar(mMenu);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pUserInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(pUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
     
     private void mLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLoginActionPerformed
         if(Data.isLogged) {
@@ -1686,81 +1712,81 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         final JFrame frame = new Main(version, date);
     }
 
-  // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton bAbout;
-  private javax.swing.JButton bFileEditSelected;
-  private javax.swing.JButton bLoadFiles;
-  private javax.swing.JButton bLoadSession;
-  public static javax.swing.JButton bLogin;
-  private javax.swing.JButton bSaveSession;
-  private javax.swing.JButton bSettings;
-  private javax.swing.JButton bUpload;
-  private javax.swing.JButton bView;
-  private javax.swing.ButtonGroup gLang;
-  private javax.swing.ButtonGroup gView;
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
-  private javax.swing.JLabel jLabel4;
-  private javax.swing.JLabel jLabel6;
-  private javax.swing.JLabel jLabel7;
-  private javax.swing.JPopupMenu.Separator jSeparator1;
-  private javax.swing.JPopupMenu.Separator jSeparator2;
-  private javax.swing.JPopupMenu.Separator jSeparator3;
-  private javax.swing.JPopupMenu.Separator jSeparator4;
-  private javax.swing.JPopupMenu.Separator jSeparator5;
-  private javax.swing.JToolBar.Separator jSeparator6;
-  private javax.swing.JToolBar.Separator jSeparator7;
-  private javax.swing.JToolBar.Separator jSeparator8;
-  private javax.swing.JToolBar jToolBar1;
-  private javax.swing.JToolBar jToolBar2;
-  private javax.swing.JToolBar jToolBar4;
-  public static javax.swing.JLabel lFileUpload;
-  public static javax.swing.JLabel lHelp;
-  public static javax.swing.JLabel lServer;
-  private javax.swing.JLabel lServerStatus;
-  private javax.swing.JLabel lStartInfo;
-  public static javax.swing.JLabel lUserInfo;
-  private javax.swing.JMenuItem mAbout;
-  private javax.swing.JMenuItem mCleanSession;
-  private javax.swing.JMenu mEdit;
-  private javax.swing.JMenuItem mEnd;
-  private javax.swing.JMenu mFile;
-  private javax.swing.JMenuItem mFileEditSelected;
-  private javax.swing.JMenuItem mFileSelectAll;
-  private javax.swing.JMenuItem mFileSelectInv;
-  private javax.swing.JMenuItem mFileSelectedToUpload;
-  private javax.swing.JMenu mFileUploadSelect;
-  private javax.swing.JMenuItem mFileUploadSelectAll;
-  private javax.swing.JMenuItem mFileUploadSelectInv;
-  private javax.swing.JMenu mHelp;
-  private javax.swing.JMenuItem mHelpOnline;
-  private javax.swing.JMenu mLang;
-  private javax.swing.JMenuItem mLoadFiles;
-  private javax.swing.JMenuItem mLoadSession;
-  public static javax.swing.JMenuItem mLogin;
-  private javax.swing.JMenuBar mMenu;
-  private javax.swing.JMenuItem mRedo;
-  private javax.swing.JMenuItem mRestart;
-  private javax.swing.JMenuItem mSaveSession;
-  private javax.swing.JMenuItem mSettings;
-  private javax.swing.JPopupMenu mShow;
-  private javax.swing.JMenu mTools;
-  private javax.swing.JMenuItem mUndo;
-  private javax.swing.JMenuItem mUpload;
-  private javax.swing.JMenu mView;
-  private javax.swing.JRadioButtonMenuItem mViewAll;
-  private javax.swing.JRadioButtonMenuItem mViewAll1;
-  private javax.swing.JRadioButtonMenuItem mViewNotUpload;
-  private javax.swing.JRadioButtonMenuItem mViewNotUpload1;
-  private javax.swing.JRadioButtonMenuItem mViewToUpload;
-  private javax.swing.JRadioButtonMenuItem mViewToUpload1;
-  private javax.swing.JPanel pDesc;
-  public static javax.swing.JPanel pFiles;
-  private javax.swing.JScrollPane pFilesScroll;
-  private javax.swing.JPanel pHelp;
-  private javax.swing.JPanel pUpload;
-  private javax.swing.JPanel pUserInfo;
-  // End of variables declaration//GEN-END:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bAbout;
+    private javax.swing.JButton bFileEditSelected;
+    private javax.swing.JButton bLoadFiles;
+    private javax.swing.JButton bLoadSession;
+    public static javax.swing.JButton bLogin;
+    private javax.swing.JButton bSaveSession;
+    private javax.swing.JButton bSettings;
+    private javax.swing.JButton bUpload;
+    private javax.swing.JButton bView;
+    private javax.swing.ButtonGroup gLang;
+    private javax.swing.ButtonGroup gView;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator6;
+    private javax.swing.JToolBar.Separator jSeparator7;
+    private javax.swing.JToolBar.Separator jSeparator8;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar4;
+    public static javax.swing.JLabel lFileUpload;
+    public static javax.swing.JLabel lHelp;
+    public static javax.swing.JLabel lServer;
+    private javax.swing.JLabel lServerStatus;
+    private javax.swing.JLabel lStartInfo;
+    public static javax.swing.JLabel lUserInfo;
+    private javax.swing.JMenuItem mAbout;
+    private javax.swing.JMenuItem mCleanSession;
+    private javax.swing.JMenu mEdit;
+    private javax.swing.JMenuItem mEnd;
+    private javax.swing.JMenu mFile;
+    private javax.swing.JMenuItem mFileEditSelected;
+    private javax.swing.JMenuItem mFileSelectAll;
+    private javax.swing.JMenuItem mFileSelectInv;
+    private javax.swing.JMenuItem mFileSelectedToUpload;
+    private javax.swing.JMenu mFileUploadSelect;
+    private javax.swing.JMenuItem mFileUploadSelectAll;
+    private javax.swing.JMenuItem mFileUploadSelectInv;
+    private javax.swing.JMenu mHelp;
+    private javax.swing.JMenuItem mHelpOnline;
+    private javax.swing.JMenu mLang;
+    private javax.swing.JMenuItem mLoadFiles;
+    private javax.swing.JMenuItem mLoadSession;
+    public static javax.swing.JMenuItem mLogin;
+    private javax.swing.JMenuBar mMenu;
+    private javax.swing.JMenuItem mRedo;
+    private javax.swing.JMenuItem mRestart;
+    private javax.swing.JMenuItem mSaveSession;
+    private javax.swing.JMenuItem mSettings;
+    private javax.swing.JPopupMenu mShow;
+    private javax.swing.JMenu mTools;
+    private javax.swing.JMenuItem mUndo;
+    private javax.swing.JMenuItem mUpload;
+    private javax.swing.JMenu mView;
+    private javax.swing.JRadioButtonMenuItem mViewAll;
+    private javax.swing.JRadioButtonMenuItem mViewAll1;
+    private javax.swing.JRadioButtonMenuItem mViewNotUpload;
+    private javax.swing.JRadioButtonMenuItem mViewNotUpload1;
+    private javax.swing.JRadioButtonMenuItem mViewToUpload;
+    private javax.swing.JRadioButtonMenuItem mViewToUpload1;
+    private javax.swing.JPanel pDesc;
+    public static javax.swing.JPanel pFiles;
+    private javax.swing.JScrollPane pFilesScroll;
+    private javax.swing.JPanel pHelp;
+    private javax.swing.JPanel pUpload;
+    private javax.swing.JPanel pUserInfo;
+    // End of variables declaration//GEN-END:variables
 
     public static void setLogged(boolean mode) {
         if(mode) {
