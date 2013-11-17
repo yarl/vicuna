@@ -295,7 +295,7 @@ public class FUpload extends javax.swing.JFrame {
             if(b && cat[j].matches(".*\\w.*"))
                 text += "[[Category:" + cat[j] + "]]\n";
         }
-        text += "[[Category:Uploaded with VicuñaUploader (Wiki Loves Monuments)]]";
+        text += "[[Category:Uploaded with VicuñaUploader]]";
         
         return text;
     }
@@ -380,7 +380,7 @@ public class FUpload extends javax.swing.JFrame {
 
                     try { 
                         boolean fileExist = wiki.isPageExist(name);
-                        if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version + " (Wiki Lubi Zabytki 2013)");
+                        if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
                         
                         if(set.createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
                         if(set.renameAfterUpload) {
