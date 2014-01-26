@@ -21,8 +21,9 @@
 
 	body
 	{
-		font-family: 'Open Sans', sans-serif;
-		font-weight: 300;
+		font-family: 'PT Sans', sans-serif;
+    /*font-family: 'Open Sans', sans-serif;
+		font-weight: 300;*/
 		background: #252122;
 		background-image: url('images/bg02.png');
 		color: #5d5d5d;
@@ -78,8 +79,8 @@
 	.byline
 	{
 		display: block;
-		/*font-style: italic;*/
-		letter-spacing: 1px;
+		/*font-style: italic;
+		letter-spacing: 1px;*/
 	}
 	
 	form
@@ -147,6 +148,12 @@
 				position: relative;
 				width: auto;
 			}
+
+            .box .image-flat
+            {
+                height: 140px;
+                overflow: hidden;
+            }
 
 	/* Button */
 		
