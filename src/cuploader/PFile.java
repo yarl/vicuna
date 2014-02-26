@@ -26,15 +26,15 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 
@@ -61,6 +61,17 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     public String ext;
     public int number;
     public Coord coor = null;
+    
+    public Map<String, String> returnData() {
+      Map<String, String> map = new HashMap<String, String>();
+        map.put("name", tName.getText());
+        map.put("path", file.getAbsolutePath());
+        map.put("desc", tDesc.getText());
+        map.put("date", tDesc.getText());
+        map.put("cats", tDesc.getText());
+        //map.put("coor", coor.getDecimal());
+      return map;
+    }
     
     public PFile(File file, int number) {  
         this.file = file;

@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -155,6 +156,13 @@ public class Data implements Serializable {
     //get
     public static ArrayList<PFile> getFiles() {
         return files;
+    }
+    
+    public static ArrayList<Map> getFilesXML() {
+      ArrayList list = new ArrayList();
+      for(PFile file : files)
+        list.add(file.returnData());
+      return list;
     }
 
     public static int getFirstFileEdit() {

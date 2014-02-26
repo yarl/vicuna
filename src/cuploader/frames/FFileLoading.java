@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.*;
 
@@ -22,7 +23,9 @@ public final class FFileLoading extends javax.swing.JFrame {
     ArrayList<String> fDesc = null;
     ArrayList<String> fCoor = null;
     ArrayList<String> fCats = null;
-     
+    
+    private ArrayList<Map> sessionFiles;
+    
     public FFileLoading(ArrayList<File> fPath, ArrayList<Boolean> fEdit, ArrayList<Boolean> fUpload, ArrayList<String> fName, 
             ArrayList<String> fDate, ArrayList<String> fDesc, ArrayList<String> fCoor, ArrayList<String> fCats) {
         this.files = fPath;
@@ -64,6 +67,29 @@ public final class FFileLoading extends javax.swing.JFrame {
         
         startRead(false);
     }
+    
+    public FFileLoading(ArrayList<Map> files_, boolean hack) {
+        this.sessionFiles = files_;
+        
+        files = new ArrayList<File>();
+        for(Map m : files_) {
+          File f = new File((String)m.get("path"));
+          files.add(f);
+        }
+        
+        initComponents();
+        setLocationRelativeTo(null);
+        
+        //focus to 'hide'
+        getRootPane().setDefaultButton(bHide); 
+        bHide.requestFocus();  
+        
+        setVisible(true);
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
+        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        
+        startRead(true);
+    }
             
     private void startRead(final boolean isLoadingSession) {
         if(isLoadingSession) {
@@ -90,10 +116,14 @@ public final class FFileLoading extends javax.swing.JFrame {
                         lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
                         
                         PFile f;
-                        if(isLoadingSession)
+                        if(isLoadingSession) {
+                          if(sessionFiles==null)
                             f = new PFile(file, Data.getFiles().size(), fUpload.get(i), fEdit.get(i), fName.get(i), fDesc.get(i),
                                                   fDate.get(i), fCats.get(i), fCoor.get(i));
-                        else
+                          else
+                            f = new PFile(file, Data.getFiles().size(), false, false, (String)sessionFiles.get(i).get("name"),
+                                    (String)sessionFiles.get(i).get("desc"), (String)sessionFiles.get(i).get("date"), (String)sessionFiles.get(i).get("cats"), "");
+                        } else
                             f = new PFile(file, Data.getFiles().size());
                         
                         Data.addPanel(f);
