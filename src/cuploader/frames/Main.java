@@ -29,6 +29,7 @@ import java.awt.event.WindowListener;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -1077,18 +1078,17 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
   private String readFile(String path) throws IOException {
     File f = new File(path);
     if (f.exists()) {
-      FileInputStream fis = new FileInputStream(f);
-      Integer fileLength = (int) (long) f.length();
-      byte[] b = new byte[fileLength];
-      int read = 0;
-      while (read < b.length) {
-        read += fis.read(b, read, b.length - read);
-      }
-      String text = new String(b);
+      BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
+      
+      String str;
+      String text = "";
+      while ((str = in.readLine()) != null)
+        text += str;
+      in.close();
+      
       return text;
     } else {
-      String text = "";
-      return text;
+      return "";
     }
   }
 
@@ -1308,7 +1308,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
 
   private boolean saveSessionFile2(File f) {
     try {
-      XStream xstream = new XStream(new DomDriver());
+      XStream xstream = new XStream(new DomDriver("UTF-8"));
       xstream.alias("settings", cuploader.Settings.class);
       xstream.alias("template", cuploader.QuickTemplate.class);
       xstream.alias("source", cuploader.DescSource.class);
@@ -1318,10 +1318,16 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       xml += xstream.toXML(Data.getFilesXML());
 
       try {
-        FileWriter fstream = new FileWriter(f.getAbsolutePath());
-        BufferedWriter out = new BufferedWriter(fstream);
-        out.write(xml);
-        out.close();
+        //FileWriter fstream = new FileWriter(f.getAbsolutePath());
+        //BufferedWriter out = new BufferedWriter(fstream);
+        //out.write(xml);
+        //out.close();
+        
+        OutputStream outputStream = new FileOutputStream(f);
+        Writer writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
+        xstream.toXML(settings, writer);
+        xstream.toXML(Data.getFilesXML(), writer);
+        
         return true;
       } catch (IOException e) {
         JOptionPane.showMessageDialog(fSettings, e.getMessage());
@@ -1537,12 +1543,12 @@ class Comment {
       String settings = text.substring(0,stop);
       String files = text.substring(stop);
       
-      System.out.println(settings);
-      System.out.println(" ");
-      System.out.println(files);
+      //System.out.println(settings);
+      //System.out.println(" ");
+      //System.out.println(files);
       
       if (!settings.isEmpty()) {
-        XStream xstream = new XStream(new DomDriver());
+        XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.alias("settings", Settings.class);
         xstream.alias("template", cuploader.QuickTemplate.class);
         xstream.alias("source", cuploader.DescSource.class);
@@ -1550,7 +1556,7 @@ class Comment {
       }
       
       if (!files.isEmpty()) {
-        XStream xstream = new XStream(new DomDriver());
+        XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.registerConverter(new MapEntryConverter());
 
         ArrayList<Map> elements = (ArrayList) xstream.fromXML(files);
