@@ -67,8 +67,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         map.put("name", tName.getText());
         map.put("path", file.getAbsolutePath());
         map.put("desc", tDesc.getText());
-        map.put("date", tDesc.getText());
-        map.put("cats", tDesc.getText());
+        map.put("date", tDate.getText());
+        map.put("cats", tCategories.getText());
         //map.put("coor", coor.getDecimal());
       return map;
     }
