@@ -1082,9 +1082,10 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       
       String str;
       String text = "";
-      while ((str = in.readLine()) != null)
+      while ((str = in.readLine()) != null) {
         text += str;
-      in.close();
+        text += System.getProperty("line.separator");
+      } in.close();
       
       return text;
     } else {
