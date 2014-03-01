@@ -52,21 +52,16 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class Main extends javax.swing.JFrame implements DropTargetListener {
 
   Data data;
-  File directory = null;
 
-  public Main(String version, String date) {
+  public Main(Data data) {
 
-    data = new Data();
-    Data.version = version;
-    Data.date = date;
+    this.data = data;
 
     int hello = readSettings();
     addWindowListener(exit);
 
     setComponentOrientation(Data.getComponentOrientation());
-
     initComponents();
-
     initLangMenu();
 
     new DropTarget(pFiles, this);
@@ -93,7 +88,6 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         JOptionPane.showMessageDialog(rootPane, Data.text("hello-newsession"));
       }
     }
-    checkVersion();
   }
 
   @SuppressWarnings("unchecked")
@@ -219,7 +213,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     bLoadFiles.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
     bLoadFiles.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bLoadFilesActionPerformed(evt);
+        loadFiles(evt);
       }
     });
     jToolBar1.add(bLoadFiles);
@@ -285,7 +279,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     bLogin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
     bLogin.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bLoginActionPerformed(evt);
+        logIn(evt);
       }
     });
     jToolBar2.add(bLogin);
@@ -516,7 +510,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     mLoadFiles.setText(Data.text("folder-read")); // NOI18N
     mLoadFiles.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mLoadFilesActionPerformed(evt);
+        loadFiles(evt);
       }
     });
     mFile.add(mLoadFiles);
@@ -561,7 +555,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     mLogin.setText(bundle.getString("login")); // NOI18N
     mLogin.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mLoginActionPerformed(evt);
+        logIn(evt);
       }
     });
     mFile.add(mLogin);
@@ -800,17 +794,18 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-    private void mLoginActionPerformed(java.awt.event.ActionEvent evt) {
+    /**
+     * When logged out opens log in window. When logged in log out.
+     * @param evt 
+     */
+    private void logIn(ActionEvent evt) {
       if (Data.isLogged) {
         Data.wiki.logout();
         Data.isLogged = false;
         setLogged(false);
       } else {
-        if (Data.fLogin == null) {
-          Data.fLogin = new FLogin(data);
-        } else {
-          Data.fLogin.setVisible(true);
-        }
+        if (Data.fLogin == null) Data.fLogin = new FLogin(data);
+        else Data.fLogin.setVisible(true);
       }
     }
 
@@ -862,39 +857,37 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       }
     }
 
-    private void mLoadFilesActionPerformed(java.awt.event.ActionEvent evt) {
+    /**
+     * Loading files to program. Opens file chooser.
+     * @param evt 
+     */
+    private void loadFiles(ActionEvent evt) {
       //@TODO: translate: http://www.java-forums.org/new-java/13699-filechooser-ui.html
       JFileChooser ch = new JFileChooser();
-      ch.setCurrentDirectory(directory);
-      ch.setDialogTitle(Data.text("files-load"));
-      ch.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-      ch.setMultiSelectionEnabled(true);
-      ch.setAcceptAllFileFilterUsed(false);
-      ch.addChoosableFileFilter(FileFilters.all);
-      ch.addChoosableFileFilter(FileFilters.images);
-      ch.addChoosableFileFilter(FileFilters.documents);
-      ch.addChoosableFileFilter(FileFilters.multimedia);
+        ch.setCurrentDirectory(new File(Data.settings.defaultDir));
+        ch.setDialogTitle(Data.text("files-load"));
+        ch.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        ch.setMultiSelectionEnabled(true);
+        ch.setAcceptAllFileFilterUsed(false);
+        ch.addChoosableFileFilter(FileFilters.all);
+        ch.addChoosableFileFilter(FileFilters.images);
+        ch.addChoosableFileFilter(FileFilters.documents);
+        ch.addChoosableFileFilter(FileFilters.multimedia);
 
       if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
         File[] selected = ch.getSelectedFiles();
         ArrayList<File> files = new ArrayList<File>();
 
-        array = new ArrayList<File>();
-
         for (File f : selected) {
           if (Data.settings.loadSubdirectory) {
             addToArray(f);
           } else {
-            if (f.isDirectory()) {
-              array.addAll(Arrays.asList(f.listFiles()));
-            }
-            if (f.isFile()) {
-              array.add(f);
-            }
+            if (f.isDirectory()) files.addAll(Arrays.asList(f.listFiles()));
+            if (f.isFile()) files.add(f);
           }
         }
-        addImages(array);
-        directory = ch.getCurrentDirectory();
+        addImages(files);
+        Data.settings.defaultDir = ch.getCurrentDirectory().getAbsolutePath();
       }
     }
 
@@ -980,20 +973,12 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       }
     }
 
-    private void bLoadFilesActionPerformed(java.awt.event.ActionEvent evt) {
-      mLoadFilesActionPerformed(evt);
-    }
-
     private void bLoadSessionActionPerformed(java.awt.event.ActionEvent evt) {
       mLoadSessionActionPerformed(evt);
     }
 
     private void bSaveSessionActionPerformed(java.awt.event.ActionEvent evt) {
       mSaveSessionActionPerformed(evt);
-    }
-
-    private void bLoginActionPerformed(java.awt.event.ActionEvent evt) {
-      mLoginActionPerformed(evt);
     }
 
     private void bFileEditSelectedActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1266,11 +1251,11 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
   //<editor-fold defaultstate="collapsed" desc=" Saving session ">
   private void saveSession() {
     JFileChooser ch = new JFileChooser();
-    ch.setCurrentDirectory(directory);
+    ch.setCurrentDirectory(new File(Data.settings.defaultDir));
     ch.setDialogTitle(Data.text("session-save"));
     ch.setAcceptAllFileFilterUsed(false);
     ch.addChoosableFileFilter(FileFilters.session);
-    ch.setSelectedFile(new File(directory, "session"));
+    ch.setSelectedFile(new File(Data.settings.defaultDir, "session"));
 
     if (ch.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
       File file;
@@ -1330,7 +1315,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         xstream.toXML(Data.getFilesXML(), writer);
         
         return true;
-      } catch (IOException e) {
+      } catch (FileNotFoundException e) {
         JOptionPane.showMessageDialog(fSettings, e.getMessage());
         System.err.println("Error: " + e.getMessage());
         return false;
@@ -1513,7 +1498,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
    */
   private void loadSession() {
     JFileChooser ch = new JFileChooser();
-    ch.setCurrentDirectory(directory);
+    ch.setCurrentDirectory(new File(Data.settings.defaultDir));
     ch.setDialogTitle(Data.text("session-load"));
     ch.setAcceptAllFileFilterUsed(false);
     ch.setMultiSelectionEnabled(false);
@@ -1717,20 +1702,12 @@ class Comment {
     //</editor-fold>
 
   /**
-   * Adding files
-     *
-   */
-  //<editor-fold defaultstate="collapsed" desc=" Adding files ">
-  /**
-   * *
    * Reads directory and/or files to upload, send list of files to 'loading
    * frame'.
-   *
    * @param files array of selected directories/files
    * @return true if ok
    */
   public synchronized boolean addImages(ArrayList<File> files) {
-
     if (!files.isEmpty()) {
       ArrayList<File> vector = new ArrayList<File>();
 
@@ -1747,16 +1724,13 @@ class Comment {
                 break;
               }
             }
-            if (!dupe) {
-              vector.add(f);
-            }
+            if (!dupe) vector.add(f);
           }
         }
       }
 
       if (vector.isEmpty()) {
-        JOptionPane.showMessageDialog(rootPane, Data.text("loading-nofiles"), Data.text("loading"),
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(rootPane, Data.text("loading-nofiles"), Data.text("loading"), JOptionPane.INFORMATION_MESSAGE);
         return false;
       } else {
         new FFileLoading(vector);
@@ -1767,12 +1741,10 @@ class Comment {
         return true;
       }
     } else {
-      JOptionPane.showMessageDialog(rootPane, Data.text("loading-nofiles"), Data.text("loading"),
-              JOptionPane.INFORMATION_MESSAGE);
+      JOptionPane.showMessageDialog(rootPane, Data.text("loading-nofiles"), Data.text("loading"), JOptionPane.INFORMATION_MESSAGE);
       return false;
     }
   }
-    //</editor-fold>
 
   /**
    * Closing
@@ -1897,10 +1869,7 @@ class Comment {
     }
         //</editor-fold>
 
-    String version = "1.20";
-    String date = "2014-02-26";
-
-    final JFrame frame = new Main(version, date);
+    //final JFrame frame = new Main(version, date);
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

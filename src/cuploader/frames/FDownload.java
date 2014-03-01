@@ -17,10 +17,10 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 public final class FDownload extends javax.swing.JFrame {
-    Main frame;
+    JFrame frame;
     private volatile boolean stopRq = false;
     
-    public FDownload(Main frame) {
+    public FDownload(JFrame frame) {
         this.frame = frame;
         
         initComponents();
@@ -41,14 +41,15 @@ public final class FDownload extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    frame.setState(Frame.ICONIFIED);
+                    //frame.setState(Frame.ICONIFIED);
+                  frame.dispose();
                     
                     final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
                     final File currentJar = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
                     /* is it a jar file? */
                     if(currentJar.getName().endsWith(".jar")) {
-                        frame.saveSessionFile(new File(currentJar.getParentFile() + File.separator + "autoupdate-session.xml"));
+                        //frame.saveSessionFile(new File(currentJar.getParentFile() + File.separator + "autoupdate-session.xml"));
                         
                         String path = currentJar.getAbsolutePath();
                         //JOptionPane.showMessageDialog(frame, "Path: " + path);
