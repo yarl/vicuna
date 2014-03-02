@@ -713,30 +713,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         if(nr>0) {
             --nr;
             PFile f = Data.getFiles().get(nr);
-            
-            if(Data.settings.copyName) {
-                String name = f.getComponent(Elem.NAME);
-                Pattern pattern = Pattern.compile("^" + Data.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
-                        .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
-                Matcher match = pattern.matcher(name);
-
-                String zeros = "";
-                for(int i=0; i<Data.settings.numDigits; ++i) zeros += "0";
-                DecimalFormat df = new DecimalFormat(zeros);
-
-                //there is number
-                if(match.find())
-                    tName.setText(retNumber(match, df));
-                //nope
-                else {
-                    String name2 = Data.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
-                    match = pattern.matcher(name2);
-                    if(match.find()) tName.setText(retNumber(match, df));
-                    else tName.setText(name2);
-                }
-            }
-            if(Data.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
-            if(Data.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
+            copyDescription(f);
         }
     }//GEN-LAST:event_bCopyDescUpActionPerformed
 
@@ -753,6 +730,39 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         return text;
     }
     
+    /**
+     * Copies description from another file to this file
+     * @param source source file
+     */
+    private void copyDescription(PFile source) {
+      if(Data.settings.copyName) {
+        String name = source.getComponent(Elem.NAME);
+        String format = Data.settings.numFormat.replace("(", "\\(")
+                .replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
+                .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)");
+        
+        Pattern pattern = Pattern.compile("^" + format + "$");
+        Matcher match = pattern.matcher(name);
+
+        String zeros = "";
+        for(int i=0; i<Data.settings.numDigits; ++i) zeros += "0";
+        DecimalFormat df = new DecimalFormat(zeros);
+
+        if(match.find()) {
+            tName.setText(retNumber(match, df));
+        //nope
+        } else {
+            String name2 = Data.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
+            match = pattern.matcher(name2);
+            if(match.find()) tName.setText(retNumber(match, df));
+            else tName.setText(name2);
+        }
+      }
+
+      if(Data.settings.copyDescription) setDescription(source.getComponent(Elem.DESC));
+      if(Data.settings.copyCategories) setCategories(source.getComponent(Elem.CATS));
+    }
+    
     private void bCopyDescDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCopyDescDownActionPerformed
         int nr = number;
         while(true) {
@@ -763,30 +773,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         if(nr<Data.getFiles().size()-1) {
             ++nr;     
             PFile f = Data.getFiles().get(nr);
-            
-            if(Data.settings.copyName) {
-                String name = f.getComponent(Elem.NAME);
-                Pattern pattern = Pattern.compile("^" + Data.settings.numFormat.replace("(", "\\(").replace(")", "\\)").replace("[", "\\[").replace("]", "\\]")
-                        .replace("%NAME%", "(.*?)").replace("%N%", "([0-9]*)") + "$");
-                Matcher match = pattern.matcher(name);
-
-                String zeros = "";
-                for(int i=0; i<Data.settings.numDigits; ++i) zeros += "0";
-                DecimalFormat df = new DecimalFormat(zeros);
-
-                if(match.find()) {
-                    tName.setText(retNumber(match, df));
-                //nope
-                } else {
-                    String name2 = Data.settings.numFormat.replace("%NAME%", name).replace("%N%", df.format(2));
-                    match = pattern.matcher(name2);
-                    if(match.find()) tName.setText(retNumber(match, df));
-                    else tName.setText(name2);
-                }
-            }
-            
-            if(Data.settings.copyDescription) setDescription(f.getComponent(Elem.DESC));
-            if(Data.settings.copyCategories) setCategories(f.getComponent(Elem.CATS));
+            copyDescription(f);
         }
     }//GEN-LAST:event_bCopyDescDownActionPerformed
 

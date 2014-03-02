@@ -11,11 +11,22 @@ import org.wikipedia.Wiki;
 
 public class FLogin extends javax.swing.JFrame {
     private Data data;
+    private boolean startUpload = false;
     
     public FLogin(Data data) {   
         this.data = data;
         initComponents();
-
+        init();
+    }
+    
+    public FLogin(Data data, boolean startUpload) {   
+        this.data = data;
+        this.startUpload = startUpload;
+        initComponents();
+        init();
+    }
+    
+    private void init() {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(FLogin.DISPOSE_ON_CLOSE);
 
@@ -82,6 +93,7 @@ public class FLogin extends javax.swing.JFrame {
                         Main.setLogged(true);
                         
                         dispose();
+                        if(startUpload) new FUploadCheck(data);
                         Data.fLogin = null;
                 } catch (IOException ex) {
                     //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

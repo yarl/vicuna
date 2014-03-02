@@ -819,7 +819,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       } else {
         if (Data.wiki == null) {
           if (Data.fLogin == null) {
-            Data.fLogin = new FLogin(data);
+            Data.fLogin = new FLogin(data, true);
           } else {
             Data.fLogin.setVisible(true);
           }
