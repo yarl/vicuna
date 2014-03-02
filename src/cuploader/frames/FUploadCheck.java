@@ -7,10 +7,13 @@ import cuploader.Settings;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import org.wikipedia.Wiki;
 
 public class FUploadCheck extends javax.swing.JFrame {
     Data data;
@@ -67,6 +70,39 @@ public class FUploadCheck extends javax.swing.JFrame {
             }
         }
         return list;
+    }
+    
+    /**
+     * Checks if filename is correct to upload
+     * @param name name of file to upload (with extention)
+     * @return i18n string with error, empty string if everything is OK
+     */
+    public static String checkFile(String name) {
+      System.out.println("Sprawdzam: " + name);
+      
+      //check IMG* / DSCF* names
+      Pattern pattern = Pattern.compile("^(DSCF|IMG|P|)[0-9 _-]*\\..{3,4}$");
+      Matcher match = pattern.matcher(name.intern());
+      if(match.matches()) {
+          return "uploadcheck-error-dscf";
+      }
+      
+      //check unique names at PC
+      int names = 0;
+      for(PFile f : Data.getFiles())
+        if(f.getName().equals(name)) ++names;
+      if(names > 1)
+        return "uploadcheck-error-dupe";
+      
+      //check unique names on internet
+      try {
+        Wiki wiki = (Data.wiki == null ? new Wiki("commons.wikimedia.org") : Data.wiki);
+        if(wiki.isPageExist(name))
+          return "uploadcheck-error-dupe";
+      } catch (IOException ex) {
+        Logger.getLogger(FUploadCheck.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return "";
     }
     
     private void startCheck() {

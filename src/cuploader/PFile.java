@@ -12,6 +12,7 @@ import cuploader.frames.FCoord;
 import cuploader.frames.FInfo;
 import cuploader.frames.FFileEdit;
 import cuploader.frames.FUpload;
+import cuploader.frames.FUploadCheck;
 import cuploader.frames.Main;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.event.UndoableEditEvent;
@@ -335,6 +337,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     tName.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusGained(java.awt.event.FocusEvent evt) {
         tNameFocusGained(evt);
+      }
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        tNameFocusLost(evt);
       }
     });
 
@@ -901,6 +906,17 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
   private void bDescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDescActionPerformed
     new FInfo(FUpload.getUploadText(this, Data.settings));
   }//GEN-LAST:event_bDescActionPerformed
+
+  private void tNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tNameFocusLost
+    String result = FUploadCheck.checkFile(getName()+"."+getExt());
+    if(!result.isEmpty()) {
+      tName.setBackground(new Color(255,226,226));
+      tName.setToolTipText(Data.text(result));
+    } else {
+      tName.setBackground(new Color(194,238,194));
+      tName.setToolTipText(null);
+    }  
+  }//GEN-LAST:event_tNameFocusLost
    
     private void addUndo() {
         tName.getDocument().addUndoableEditListener(new UndoableEditListener() {
@@ -1136,6 +1152,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             default: return null;
         }
     }
+    
+    public String getName() { return tName.getText(); };
+    public String getExt() { return ext; };
     
     public void setAsUploaded() {
         selectToUpload(false);
