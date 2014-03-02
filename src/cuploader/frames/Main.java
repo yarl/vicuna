@@ -1146,6 +1146,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     addLangMenu(new Locale("cs", "CZ"), "česky (cs)");
     addLangMenu(new Locale("da"), "dansk (da)");
     addLangMenu(Locale.GERMAN, "Deutsch (de)");
+    addLangMenu(new Locale("eo"), "Esperanto (eo)");
     addLangMenu(new Locale("es", "ES"), "español (es)");
     addLangMenu(new Locale("fa"), "فارسی (fa)");
     addLangMenu(new Locale("fo"), "føroyskt (fo)");
@@ -1154,6 +1155,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     addLangMenu(new Locale("he"), "עברית (he)");
     addLangMenu(Locale.ITALY, "italiano (it)");
     addLangMenu(Locale.JAPANESE, "日本語 (ja)");
+    addLangMenu(new Locale("km"), "ភាសាខ្មែរ (km)");
     addLangMenu(new Locale("ko"), "한국어 (ko)");
     addLangMenu(new Locale("lb"), "Lëtzebuergesch (lb)");
     addLangMenu(new Locale("lt"), "lietuvių (lt)");
