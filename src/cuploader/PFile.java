@@ -9,7 +9,7 @@ import com.drew.metadata.exif.GpsDirectory;
 import cuploader.Data.Elem;
 import cuploader.fixes.TransferFocus;
 import cuploader.frames.FCoord;
-import cuploader.frames.FExif;
+import cuploader.frames.FInfo;
 import cuploader.frames.FFileEdit;
 import cuploader.frames.FUpload;
 import cuploader.frames.Main;
@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.event.UndoableEditEvent;
@@ -53,7 +52,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     int nameHelp = 2;
     
     int rotateThumb = 0;    //rotate thumbnail
-    FExif fExif;            // subwindow exif
+    FInfo fExif;            // subwindow exif
     public FCoord fCoord;   // subwindow coordinates
     
     //info
@@ -832,7 +831,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_mReloadEXIFActionPerformed
 
     private void mShowEXIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mShowEXIFActionPerformed
-        if(fExif==null) fExif = new FExif(file);
+        if(fExif==null) fExif = new FInfo(file);
         else fExif.setVisible(true);
     }//GEN-LAST:event_mShowEXIFActionPerformed
 
@@ -900,7 +899,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_mGeoHackActionPerformed
 
   private void bDescActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDescActionPerformed
-    JOptionPane.showMessageDialog(mContext, FUpload.getUploadText(this, Data.settings));
+    new FInfo(FUpload.getUploadText(this, Data.settings));
   }//GEN-LAST:event_bDescActionPerformed
    
     private void addUndo() {
@@ -1005,7 +1004,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
      * @return BufferedImage rotated thumbnail
      * @see http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0
      */
-    public BufferedImage rotateThumbnail(BufferedImage imageToRotate, int angle) {
+    public BufferedImage rotateThumbnail(Image imageToRotate, int angle) {
 	Image rotatedImage = new BufferedImage(imageToRotate.getHeight(null), imageToRotate.getWidth(null), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) rotatedImage.getGraphics();
         if(angle==1) {
@@ -1021,48 +1020,69 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 	return (BufferedImage)rotatedImage;
     }
 
+    /**
+     * Thumbnail generator
+     * @source: http://codereview.stackexchange.com/questions/912/optimized-thumbnail-generation
+     */
     private void generateThumbnail() {
-        ext = file.getName().substring(file.getName().lastIndexOf('.')+1).toLowerCase();
+      ext = file.getName().substring(file.getName().lastIndexOf('.')+1).toLowerCase();
+
+      double size = 9.5367e-7*file.length();
+      DecimalFormat df = new DecimalFormat("#.##");
+      tSize.setText(df.format(size) + " MiB");
+
+      //IMAGES
+      if(ext.equals("jpg") || ext.equals("png") || ext.equals("gif")) {
         
-        double size = 9.5367e-7*file.length();
-        DecimalFormat df = new DecimalFormat("#.##");
-        tSize.setText(df.format(size) + " MiB");
-        
-        //IMAGES
-        if(ext.equals("jpg") || ext.equals("png") || ext.equals("gif")) {
-            int width=0, height=0;
-            try {
-                BufferedImage image = ImageIO.read(file);
-                if(image!=null) {
-
-                    if(rotateThumb!=0) image = rotateThumbnail(image, rotateThumb);
-                    width = image.getWidth();
-                    height = image.getHeight();
-                    float ratio = (float)width/(float)height;
-
-                    int theight = 100;
-                    int twidth = (int)(100.0*(ratio));
-                    if(twidth>150) {
-                        theight = (int)(theight*(150.0/twidth));
-                        twidth = 150;
-                    }
-                    image = getScaledInstance(image, twidth, theight, RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
-                    tThumb.setIcon(new ImageIcon(image));
-
-                    //size
-                    tSize.setText("<html><body>" + width + " x " + height + " (" + df.format((width*height)/1000000.0) + " Mpix)<br>" +
-                        df.format(size) + " MiB");
-                } else throw new IOException();
-            } catch (IOException ex) {
-                tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-32.png")));
-            }
-            lFilename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-image.png")));
-            lFilename.setToolTipText(bundle.getString("file-image") + " (." + ext + ")");
-        } else if(ext.equals("svg")) {
-
-        } else {
-            tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-32.png")));
+        Image image = Toolkit.getDefaultToolkit().getImage(file.getAbsolutePath());
+        final MediaTracker tracker = new MediaTracker(new Container());
+        tracker.addImage(image, 0);
+        try {
+           tracker.waitForID(0);
+        } catch (InterruptedException e) {
+           System.out.println("Interrupted getting thumb");
         }
+        
+        if(rotateThumb != 0) image = rotateThumbnail(image, rotateThumb);
+
+        final int width = image.getWidth(null);
+        final int height = image.getHeight(null);
+
+        if ((width > 0) && (width * height < 54000000)) {
+          float ratio = (float)width/(float)height;
+
+          int thumbHeight = 100;
+          int thumbWidth = (int)(100.0*(ratio));
+          if(thumbWidth>150) {
+              thumbHeight = (int)(thumbHeight*(150.0/thumbWidth));
+              thumbWidth = 150;
+          }
+
+          BufferedImage scaledImage = new BufferedImage(thumbWidth, thumbHeight, BufferedImage.TYPE_INT_RGB);
+
+          Graphics2D g2dBuffer = scaledImage.createGraphics();
+          g2dBuffer.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+          g2dBuffer.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
+
+          tThumb.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(scaledImage.getSource())));
+          scaledImage.flush();
+          image.flush();
+          g2dBuffer = null;
+          
+          tSize.setText("<html><body>" + width + " x " + height + " (" + df.format((width*height)/1000000.0) + " Mpix)<br>" +
+            df.format(size) + " MiB");
+
+        } else
+            tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-32.png")));
+        
+        lFilename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-image.png")));
+        lFilename.setToolTipText(bundle.getString("file-image") + " (." + ext + ")");
+        
+      } else if(ext.equals("svg")) {
+          tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-32.png")));
+      } else {
+          tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document-32.png")));
+      }
     }
     
     /*
