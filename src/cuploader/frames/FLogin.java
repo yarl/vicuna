@@ -124,14 +124,26 @@ public class FLogin extends javax.swing.JFrame {
 
     bLogin = new javax.swing.JButton();
     Panel = new javax.swing.JPanel();
+    jTabbedPane1 = new javax.swing.JTabbedPane();
+    jPanel2 = new javax.swing.JPanel();
+    jLabel1 = new javax.swing.JLabel();
+    jRadioButton1 = new javax.swing.JRadioButton();
+    jRadioButton2 = new javax.swing.JRadioButton();
+    tPrefix = new javax.swing.JTextField();
+    cServer = new javax.swing.JComboBox();
+    jPanel3 = new javax.swing.JPanel();
+    tServer = new javax.swing.JTextField();
+    jTextField1 = new javax.swing.JTextField();
+    jLabel2 = new javax.swing.JLabel();
+    jTextField2 = new javax.swing.JTextField();
+    jLabel3 = new javax.swing.JLabel();
+    jLabel4 = new javax.swing.JLabel();
+    jLabel5 = new javax.swing.JLabel();
+    lPath = new javax.swing.JLabel();
     lLogin = new javax.swing.JLabel();
     lPassword = new javax.swing.JLabel();
     tName = new javax.swing.JTextField();
     tPassword = new javax.swing.JPasswordField();
-    cServer = new javax.swing.JComboBox();
-    tServer = new javax.swing.JTextField();
-    jLabel1 = new javax.swing.JLabel();
-    tPrefix = new javax.swing.JTextField();
     jPanel1 = new javax.swing.JPanel();
     lTextInfo = new javax.swing.JLabel();
 
@@ -151,6 +163,116 @@ public class FLogin extends javax.swing.JFrame {
     Panel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
     Panel.setName(""); // NOI18N
 
+    jLabel1.setText(bundle.getString("login-server")); // NOI18N
+
+    jRadioButton1.setText("Wikimedia Commons");
+
+    cServer.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "wikipedia.org", "wiktionary.org", "wikiquote.org", "wikibooks.org", "wikisource.org", "wikispecies.org", "wikinews.org", "wikiversity.org", "wikivoyage.org" }));
+    cServer.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cServerActionPerformed(evt);
+      }
+    });
+
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel2Layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(jPanel2Layout.createSequentialGroup()
+            .addComponent(jRadioButton2)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(tPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(cServer, 0, 249, Short.MAX_VALUE))
+          .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap())
+    );
+    jPanel2Layout.setVerticalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel2Layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGap(1, 1, 1)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+              .addComponent(cServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(tPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+          .addComponent(jRadioButton2))
+        .addContainerGap(29, Short.MAX_VALUE))
+    );
+
+    jTabbedPane1.addTab(bundle.getString("settings-basic"), jPanel2); // NOI18N
+
+    tServer.setText("en.wikipedia.org");
+    tServer.setEnabled(false);
+
+    jTextField1.setText("http");
+
+    jLabel2.setText("://");
+
+    jTextField2.setText("/w");
+
+    jLabel3.setText("/api.php");
+
+    jLabel4.setText(bundle.getString("login-protocol")); // NOI18N
+
+    jLabel5.setText(bundle.getString("login-server")); // NOI18N
+
+    lPath.setText(bundle.getString("login-server-path")); // NOI18N
+
+    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+    jPanel3.setLayout(jPanel3Layout);
+    jPanel3Layout.setHorizontalGroup(
+      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel3Layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+          .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+          .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jLabel2)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(tServer, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(lPath, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+          .addComponent(jTextField2))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jLabel3)
+        .addContainerGap())
+    );
+    jPanel3Layout.setVerticalGroup(
+      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+          .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel5))
+          .addComponent(lPath, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(tServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(35, Short.MAX_VALUE))
+    );
+
+    jTabbedPane1.addTab(bundle.getString("settings-advanced"), jPanel3); // NOI18N
+
     lLogin.setText(bundle.getString("login-name")); // NOI18N
 
     lPassword.setText(bundle.getString("login-password")); // NOI18N
@@ -161,57 +283,38 @@ public class FLogin extends javax.swing.JFrame {
       }
     });
 
-    cServer.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Wikimedia Commons", "Wikipedia", "..." }));
-    cServer.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        cServerActionPerformed(evt);
-      }
-    });
-
-    tServer.setEnabled(false);
-
-    jLabel1.setText(bundle.getString("login-server")); // NOI18N
-
     javax.swing.GroupLayout PanelLayout = new javax.swing.GroupLayout(Panel);
     Panel.setLayout(PanelLayout);
     PanelLayout.setHorizontalGroup(
       PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(PanelLayout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addComponent(lLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(lPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-          .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(tName, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-          .addComponent(tPassword)
-          .addComponent(tServer)
-          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLayout.createSequentialGroup()
-            .addComponent(tPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(jTabbedPane1)
+          .addGroup(PanelLayout.createSequentialGroup()
+            .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+              .addComponent(lLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+              .addComponent(lPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cServer, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+              .addComponent(tName)
+              .addComponent(tPassword))))
         .addContainerGap())
     );
     PanelLayout.setVerticalGroup(
       PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(PanelLayout.createSequentialGroup()
-        .addGap(14, 14, 14)
-        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel1)
-          .addComponent(cServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(tPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(tServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(lLogin)
+        .addContainerGap()
+        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(lLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(tName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(lPassword)
-          .addComponent(tPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap())
+        .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(tPassword)
+          .addComponent(lPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
     jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -223,7 +326,7 @@ public class FLogin extends javax.swing.JFrame {
       .addGroup(jPanel1Layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(lTextInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(25, Short.MAX_VALUE))
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,9 +395,21 @@ public class FLogin extends javax.swing.JFrame {
   private javax.swing.JButton bLogin;
   private javax.swing.JComboBox cServer;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
+  private javax.swing.JLabel jLabel3;
+  private javax.swing.JLabel jLabel4;
+  private javax.swing.JLabel jLabel5;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
+  private javax.swing.JPanel jPanel3;
+  private javax.swing.JRadioButton jRadioButton1;
+  private javax.swing.JRadioButton jRadioButton2;
+  private javax.swing.JTabbedPane jTabbedPane1;
+  private javax.swing.JTextField jTextField1;
+  private javax.swing.JTextField jTextField2;
   private javax.swing.JLabel lLogin;
   private javax.swing.JLabel lPassword;
+  private javax.swing.JLabel lPath;
   private javax.swing.JLabel lTextInfo;
   private javax.swing.JTextField tName;
   private javax.swing.JPasswordField tPassword;

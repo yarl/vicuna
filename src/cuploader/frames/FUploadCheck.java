@@ -81,6 +81,7 @@ public class FUploadCheck extends javax.swing.JFrame {
       System.out.println("Sprawdzam: " + name);
       
       //check IMG* / DSCF* names
+      //@todo: add https://commons.wikimedia.org/wiki/MediaWiki:Filename-prefix-blacklist
       Pattern pattern = Pattern.compile("^(DSCF|IMG|P|)[0-9 _-]*\\..{3,4}$");
       Matcher match = pattern.matcher(name.intern());
       if(match.matches()) {

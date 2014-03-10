@@ -16,6 +16,8 @@ public class Settings {
     public String server = "commons.wikimedia.org";
     public String username = "";
     
+    
+    
 //SETTINGS
     //General
     public String author = "own";
