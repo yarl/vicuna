@@ -81,6 +81,14 @@ public class FSettings extends javax.swing.JFrame {
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        
+        lDefaults.setVisible(false);
+        lName.setVisible(false);
+        rNameEmpty.setVisible(false);
+        rNameDefault.setVisible(false);
+        lDesc.setVisible(false);
+        jScrollPane1.setVisible(false);
+        tDesc.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")

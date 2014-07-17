@@ -199,7 +199,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     mShow.add(mViewNotUpload1);
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-    setTitle("VicuñaUploader " + Data.version + " (TEST VERSION)");
+    setTitle("VicuñaUploader " + Data.version);
     setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/cuploader/resources/logo.png")));
     setMinimumSize(new java.awt.Dimension(900, 600));
 
@@ -1235,7 +1235,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
             lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png")));
           }
           try {
-            Thread.sleep(5000);
+            Thread.sleep(30000);
           } catch (InterruptedException ex) {
           }
         }

@@ -2,6 +2,7 @@ package cuploader.frames;
 
 import cuploader.Data;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -10,132 +11,156 @@ import javax.swing.*;
 import org.wikipedia.Wiki;
 
 public class FLogin extends javax.swing.JFrame {
-    private Data data;
-    private boolean startUpload = false;
-    
-    public FLogin(Data data) {   
-        this.data = data;
-        initComponents();
-        init();
-    }
-    
-    public FLogin(Data data, boolean startUpload) {   
-        this.data = data;
-        this.startUpload = startUpload;
-        initComponents();
-        init();
-    }
-    
-    private void init() {
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(FLogin.DISPOSE_ON_CLOSE);
 
-        if(!Data.settings.username.isEmpty()) {
-            tName.setText(Data.settings.username);
-            tPassword.requestFocus();
-        } else
-            tName.requestFocus();  
-        
-        tPrefix.setEnabled(false);
-        
-        if(Data.settings.server.equals("commons.wikimedia.org")) 
-            cServer.setSelectedIndex(0);
-        else if (Data.settings.server.endsWith(".wikipedia.org")) {
-            cServer.setSelectedIndex(1);
-            
-            String prefix = Data.settings.server.substring(0, Data.settings.server.lastIndexOf(".wikipedia.org"));
-            tPrefix.setEnabled(true);
-            tPrefix.setText(prefix);
-        } else {
-            cServer.setSelectedIndex(2);
-            tServer.setEnabled(true);
-            tServer.setText(Data.settings.server);
+  private Data data;
+  private boolean startUpload = false;
+
+  public FLogin(Data data) {
+    this.data = data;
+    initComponents();
+    init();
+  }
+
+  public FLogin(Data data, boolean startUpload) {
+    this.data = data;
+    this.startUpload = startUpload;
+    initComponents();
+    init();
+  }
+
+  private void init() {
+    setLocationRelativeTo(null);
+    setDefaultCloseOperation(FLogin.DISPOSE_ON_CLOSE);
+
+    if (!Data.settings.username.isEmpty()) {
+      tName.setText(Data.settings.username);
+      tPassword.requestFocus();
+    } else {
+      tName.requestFocus();
+    }
+
+    //commons
+    if (Data.settings.server.equals("commons.wikimedia.org")) {
+      pServer.setSelectedIndex(0);
+      rCommons.setSelected(true);
+      //sister projects
+    } else if (Data.settings.server.matches(".*wik[it](pedia|ionary|quote|books|source|species|news|versity|voyage)\\.org")) {
+      pServer.setSelectedIndex(0);
+      rWikimedia.setSelected(true);
+
+      String prefix = Data.settings.server.substring(0, Data.settings.server.indexOf("."));
+      tPrefix.setText(prefix);
+
+      String domain = Data.settings.server.substring(prefix.length() + 1);
+      for (int i = 0; i < cServer.getItemCount(); i++) {
+        String s = cServer.getItemAt(i).toString();
+        if (s.equals(domain)) {
+          cServer.setSelectedIndex(i);
+          break;
         }
-        
-        setVisible(true);
-        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
-        getRootPane().getActionMap().put("ESCAPE", escapeAction);
+      }
+      //sth else
+    } else {
+      pServer.setSelectedIndex(1);
+      tServer.setText(Data.settings.server);
+      tProtocol.setText(Data.settings.protocol == null ? "http" : Data.settings.protocol);
+      tPath.setText(Data.settings.path == null ? "/w" : Data.settings.path);
     }
-    
-    private void Login() {
-        Runnable run = new Runnable() {
-            @Override
-            public void run() {
-                tName.setEditable(false);
-                tPassword.setEditable(false);
-                Data.settings.username = tName.getText();
-                
-                switch(cServer.getSelectedIndex()) {
-                    case 0:
-                        Data.settings.server = "commons.wikimedia.org";
-                        break;
-                    case 1:
-                        String prefix = tPrefix.getText().toLowerCase();
-                        if(prefix.equals("")) prefix="en";
-                        Data.settings.server = prefix + ".wikipedia.org";
-                        break;
-                    case 2:
-                        Data.settings.server = tServer.getText();
-                }
-                lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-                lTextInfo.setText(bundle.getString("login-loggingin"));
-                lTextInfo.setVisible(true);
-                try {
-                        Wiki w;
-                        if(Data.settings.server.contains("wikiskripta")) {
-                            w = new Wiki(Data.settings.server, "");
-                            w.setHttp("http");
-                        } else
-                            w = new Wiki(Data.settings.server);
-                        w.login(tName.getText(), tPassword.getPassword());
-                        Data.wiki = w;
-                        //TODO: pobieranie ustawień konta
-                        Main.setLogged(true);
-                        
-                        dispose();
-                        if(startUpload) new FUploadCheck(data);
-                        Data.fLogin = null;
-                } catch (IOException ex) {
-                    //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
-                    lTextInfo.setText(bundle.getString("login-error-server"));
-                    tName.setEditable(true);
-                    tPassword.setEditable(true);
-                    tPassword.selectAll();
 
-                } catch (FailedLoginException ex) {
-                    //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
-                    lTextInfo.setText(bundle.getString("login-error-login"));
-                    tName.setEditable(true);
-                    tPassword.setEditable(true);
-                    tPassword.selectAll();
-                }
-            }
-        };
-        
-        Thread t = new Thread(run);
-        t.start();
-    }
-    
-    @SuppressWarnings("unchecked")
+    setVisible(true);
+    getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
+    getRootPane().getActionMap().put("ESCAPE", escapeAction);
+  }
+
+  private void Login() {
+    Runnable run = new Runnable() {
+      @Override
+      public void run() {
+        tName.setEditable(false);
+        tPassword.setEditable(false);
+        Data.settings.username = tName.getText();
+        Wiki w;
+
+        if (pServer.getSelectedIndex() == 0) {
+          //commons
+          if (rCommons.isSelected()) {
+            Data.settings.server = "commons.wikimedia.org";
+            Data.settings.protocol = "https";
+            Data.settings.path = "/w";
+          } //sister projects
+          else if (rWikimedia.isSelected()) {
+            Data.settings.server = tPrefix.getText() + "." + cServer.getSelectedItem().toString();
+            Data.settings.protocol = "https";
+            Data.settings.path = "/w";
+          }
+        } //sth else
+        else {
+          Data.settings.protocol = tProtocol.getText();
+          Data.settings.server = tServer.getText();
+          Data.settings.path = tPath.getText();
+        }
+
+        w = new Wiki(Data.settings.server, Data.settings.path);
+        w.setHttp(Data.settings.protocol);
+
+        //login info
+        lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
+        lTextInfo.setText(bundle.getString("login-loggingin"));
+        lTextInfo.setVisible(true);
+
+        //login
+        try {
+          w.login(tName.getText(), tPassword.getPassword());
+          Data.wiki = w;
+
+          //TODO: pobieranie ustawień konta
+          Main.setLogged(true);
+
+          dispose();
+          if (startUpload) {
+            new FUploadCheck(data);
+          }
+          Data.fLogin = null;
+        } catch (IOException ex) {
+          lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
+          lTextInfo.setText(bundle.getString("login-error-server"));
+          tName.setEditable(true);
+          tPassword.setEditable(true);
+          tPassword.selectAll();
+
+        } catch (FailedLoginException ex) {
+          lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
+          lTextInfo.setText(bundle.getString("login-error-login"));
+          tName.setEditable(true);
+          tPassword.setEditable(true);
+          tPassword.selectAll();
+        }
+      }
+    };
+
+    Thread t = new Thread(run);
+    t.start();
+  }
+
+  @SuppressWarnings("unchecked")
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
+    buttonGroup1 = new javax.swing.ButtonGroup();
     bLogin = new javax.swing.JButton();
     Panel = new javax.swing.JPanel();
-    jTabbedPane1 = new javax.swing.JTabbedPane();
+    pServer = new javax.swing.JTabbedPane();
     jPanel2 = new javax.swing.JPanel();
     jLabel1 = new javax.swing.JLabel();
-    jRadioButton1 = new javax.swing.JRadioButton();
-    jRadioButton2 = new javax.swing.JRadioButton();
+    rCommons = new javax.swing.JRadioButton();
+    rWikimedia = new javax.swing.JRadioButton();
     tPrefix = new javax.swing.JTextField();
     cServer = new javax.swing.JComboBox();
     jPanel3 = new javax.swing.JPanel();
     tServer = new javax.swing.JTextField();
-    jTextField1 = new javax.swing.JTextField();
+    tProtocol = new javax.swing.JTextField();
     jLabel2 = new javax.swing.JLabel();
-    jTextField2 = new javax.swing.JTextField();
+    tPath = new javax.swing.JTextField();
     jLabel3 = new javax.swing.JLabel();
     jLabel4 = new javax.swing.JLabel();
     jLabel5 = new javax.swing.JLabel();
@@ -165,14 +190,12 @@ public class FLogin extends javax.swing.JFrame {
 
     jLabel1.setText(bundle.getString("login-server")); // NOI18N
 
-    jRadioButton1.setText("Wikimedia Commons");
+    buttonGroup1.add(rCommons);
+    rCommons.setText("Wikimedia Commons");
+
+    buttonGroup1.add(rWikimedia);
 
     cServer.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "wikipedia.org", "wiktionary.org", "wikiquote.org", "wikibooks.org", "wikisource.org", "wikispecies.org", "wikinews.org", "wikiversity.org", "wikivoyage.org" }));
-    cServer.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        cServerActionPerformed(evt);
-      }
-    });
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
@@ -184,12 +207,12 @@ public class FLogin extends javax.swing.JFrame {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(jPanel2Layout.createSequentialGroup()
-            .addComponent(jRadioButton2)
+            .addComponent(rWikimedia)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(tPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(cServer, 0, 249, Short.MAX_VALUE))
-          .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(rCommons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
     jPanel2Layout.setVerticalGroup(
@@ -197,7 +220,7 @@ public class FLogin extends javax.swing.JFrame {
       .addGroup(jPanel2Layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(rCommons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,20 +229,19 @@ public class FLogin extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
               .addComponent(cServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
               .addComponent(tPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-          .addComponent(jRadioButton2))
+          .addComponent(rWikimedia))
         .addContainerGap(29, Short.MAX_VALUE))
     );
 
-    jTabbedPane1.addTab(bundle.getString("settings-basic"), jPanel2); // NOI18N
+    pServer.addTab(bundle.getString("settings-basic"), jPanel2); // NOI18N
 
     tServer.setText("en.wikipedia.org");
-    tServer.setEnabled(false);
 
-    jTextField1.setText("http");
+    tProtocol.setText("http");
 
     jLabel2.setText("://");
 
-    jTextField2.setText("/w");
+    tPath.setText("/w");
 
     jLabel3.setText("/api.php");
 
@@ -237,7 +259,7 @@ public class FLogin extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
           .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-          .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
+          .addComponent(tProtocol, javax.swing.GroupLayout.Alignment.LEADING))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jLabel2)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -247,7 +269,7 @@ public class FLogin extends javax.swing.JFrame {
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(lPath, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
-          .addComponent(jTextField2))
+          .addComponent(tPath))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jLabel3)
         .addContainerGap())
@@ -263,15 +285,15 @@ public class FLogin extends javax.swing.JFrame {
           .addComponent(lPath, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(tProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(tServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(tPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addContainerGap(35, Short.MAX_VALUE))
     );
 
-    jTabbedPane1.addTab(bundle.getString("settings-advanced"), jPanel3); // NOI18N
+    pServer.addTab(bundle.getString("settings-advanced"), jPanel3); // NOI18N
 
     lLogin.setText(bundle.getString("login-name")); // NOI18N
 
@@ -290,7 +312,7 @@ public class FLogin extends javax.swing.JFrame {
       .addGroup(PanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jTabbedPane1)
+          .addComponent(pServer)
           .addGroup(PanelLayout.createSequentialGroup()
             .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
               .addComponent(lLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
@@ -305,7 +327,7 @@ public class FLogin extends javax.swing.JFrame {
       PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(PanelLayout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(pServer, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
         .addGroup(PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
           .addComponent(lLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -364,35 +386,25 @@ public class FLogin extends javax.swing.JFrame {
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void bLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLoginActionPerformed
-        if(tName.getText().length()==0 || tPassword.getPassword().length==0)
-            JOptionPane.showMessageDialog(rootPane, bundle.getString("login-error-nodata"), bundle.getString("login-loggingin"), JOptionPane.WARNING_MESSAGE);
-        else
-            Login();
+      if (tName.getText().length() == 0 || tPassword.getPassword().length == 0) {
+        JOptionPane.showMessageDialog(rootPane, bundle.getString("login-error-nodata"), bundle.getString("login-loggingin"), JOptionPane.WARNING_MESSAGE);
+      } else {
+        Login();
+      }
     }//GEN-LAST:event_bLoginActionPerformed
 
     private void tPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tPasswordKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER) 
-            Login();
+      if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        Login();
+      }
     }//GEN-LAST:event_tPasswordKeyPressed
-
-    private void cServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cServerActionPerformed
-        if(cServer.getSelectedIndex()==(cServer.getComponentCount())) {//other
-            tServer.setEnabled(true);
-            tPrefix.setEnabled(false);
-        } else if (cServer.getSelectedIndex()==1) {
-            tServer.setEnabled(false);
-            tPrefix.setEnabled(true);
-        } else if (cServer.getSelectedIndex()==0) {
-            tServer.setEnabled(false);
-            tPrefix.setEnabled(false);
-        }
-    }//GEN-LAST:event_cServerActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel Panel;
   private javax.swing.JButton bLogin;
+  private javax.swing.ButtonGroup buttonGroup1;
   private javax.swing.JComboBox cServer;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
@@ -402,26 +414,26 @@ public class FLogin extends javax.swing.JFrame {
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel3;
-  private javax.swing.JRadioButton jRadioButton1;
-  private javax.swing.JRadioButton jRadioButton2;
-  private javax.swing.JTabbedPane jTabbedPane1;
-  private javax.swing.JTextField jTextField1;
-  private javax.swing.JTextField jTextField2;
   private javax.swing.JLabel lLogin;
   private javax.swing.JLabel lPassword;
   private javax.swing.JLabel lPath;
   private javax.swing.JLabel lTextInfo;
+  private javax.swing.JTabbedPane pServer;
+  private javax.swing.JRadioButton rCommons;
+  private javax.swing.JRadioButton rWikimedia;
   private javax.swing.JTextField tName;
   private javax.swing.JPasswordField tPassword;
+  private javax.swing.JTextField tPath;
   private javax.swing.JTextField tPrefix;
+  private javax.swing.JTextField tProtocol;
   private javax.swing.JTextField tServer;
   // End of variables declaration//GEN-END:variables
 
-    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
-    KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
-    Action escapeAction = new AbstractAction() {
-        public void actionPerformed(ActionEvent e) {
-            dispose();
-        }
-    };
+  ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
+  KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+  Action escapeAction = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      dispose();
+    }
+  };
 }

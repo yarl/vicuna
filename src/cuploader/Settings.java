@@ -16,7 +16,8 @@ public class Settings {
     public String server = "commons.wikimedia.org";
     public String username = "";
     
-    
+    public String protocol = "http";
+    public String path = "/w";
     
 //SETTINGS
     //General
