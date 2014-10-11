@@ -1,25 +1,25 @@
 package cuploader;
 
-import java.awt.Dimension;
-import java.awt.Point;
+import javax.swing.*;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Locale;
-import javax.swing.JFileChooser;
-import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 /**
  * This class cointain fileds with program settings. This stuff will be serialized and read after next start.
+ *
  * @author Pawel
  */
 public class Settings {
     //User
     public String server = "commons.wikimedia.org";
     public String username = "";
-    
+
     public String protocol = "http";
     public String path = "/w";
-    
-//SETTINGS
+
+    //SETTINGS
     //General
     public String author = "own";
     public String source = "";
@@ -31,13 +31,13 @@ public class Settings {
 
     //File
     public ArrayList<QuickTemplate> quickTemplates = new ArrayList<QuickTemplate>();
-    
+
     public boolean copyName = true;
     public boolean copyDescription = true;
     public boolean copyCategories = true;
-    
+
     public boolean showCatHints = true;
-    
+
     //Gallery
     public boolean createGallery = true;
     public String galleryPage = "gallery";
@@ -50,23 +50,23 @@ public class Settings {
     public boolean loadSubdirectory = false;
     public boolean renameAfterUpload = false;
     public boolean askQuit = true;
-    
+
     public int fileDescSource = 0;
     public String fileDescPath = "";
-    
+
     public String defaultDir = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
-    
+
     //WINDOW POSITION
     public Dimension windowSize;
     public Point windowPosition;
-    
+
     //FILE EDIT
     public String numFormat = "%NAME% (%N%)";
     public int numDigits = 2;
-    
-    public Coordinate coor = null;
+
+    public ImmutableCoordinate coor = null;
     public int coorZoom = 0;
-    
+
     //OTHER
     public Locale lang;
 
