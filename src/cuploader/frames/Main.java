@@ -1140,6 +1140,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
 
   private void initLangMenu() {
     addLangMenu(Locale.ENGLISH, "english (en)");
+    addLangMenu(new Locale("ar"), "العربية (ar)");
     addLangMenu(new Locale("ast"), "asturianu (ast)");
     addLangMenu(new Locale("bn"), "বাংলা (bn)");
     addLangMenu(new Locale("ca"), "català (ca)");
@@ -1148,7 +1149,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     addLangMenu(Locale.GERMAN, "Deutsch (de)");
     addLangMenu(new Locale("eo"), "Esperanto (eo)");
     addLangMenu(new Locale("es", "ES"), "español (es)");
+    addLangMenu(new Locale("eu"), "euskara (eu)");
     addLangMenu(new Locale("fa"), "فارسی (fa)");
+    addLangMenu(new Locale("fi"), "suomi (fi)");
     addLangMenu(new Locale("fo"), "føroyskt (fo)");
     addLangMenu(Locale.FRENCH, "français (fr)");
     addLangMenu(new Locale("gl"), "galego (gl)");
@@ -1157,6 +1160,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     addLangMenu(Locale.JAPANESE, "日本語 (ja)");
     addLangMenu(new Locale("km"), "ភាសាខ្មែរ (km)");
     addLangMenu(new Locale("ko"), "한국어 (ko)");
+    addLangMenu(new Locale("ko"), "Ripoarisch (ksh)");
     addLangMenu(new Locale("lb"), "Lëtzebuergesch (lb)");
     addLangMenu(new Locale("lt"), "lietuvių (lt)");
     addLangMenu(new Locale("mk"), "македонски (mk)");
@@ -1165,15 +1169,18 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     addLangMenu(new Locale("ms"), "Bahasa Melayu (ms)");
     addLangMenu(new Locale("ml"), "Nederlands (nl)");
     addLangMenu(new Locale("oc"), "occitan (oc)");
+    addLangMenu(new Locale("pa"), "ਪੰਜਾਬੀ (pa)");
     addLangMenu(new Locale("pl", "PL"), "polski (pl)");
     addLangMenu(new Locale("pt", "PT"), "português (pt)");
     addLangMenu(new Locale("pt", "BR"), "português do Brasil (pt-BR)");
     addLangMenu(new Locale("ru"), "русский (ru)");
+    addLangMenu(new Locale("sr-ec"), "српски (ћирилица)‎ (sr-ec)");
     addLangMenu(new Locale("sv", "SE"), "svenska (sv)");
     addLangMenu(new Locale("tr"), "Türkçe (tr)");
     addLangMenu(new Locale("tt"), "татарча (tt)");
     addLangMenu(new Locale("uk"), "українська (uk)");
     addLangMenu(new Locale("yr"), "اردو (ur)");
+    addLangMenu(new Locale("zh-hant"), "中文（繁體）‎ (zh-hant)");
     addLangMenu(new Locale("zh", "CN"), "中文（简体）‎ (zh)");
   }
 
