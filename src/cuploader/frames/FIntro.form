@@ -109,7 +109,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="tStatus">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Uruchamianie..."/>
+            <Property name="text" type="java.lang.String" value="Initializing..."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="bUpdate">
@@ -150,7 +150,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="tTitle">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jLabel1"/>
+            <Property name="text" type="java.lang.String" value=" "/>
           </Properties>
         </Component>
       </SubComponents>
