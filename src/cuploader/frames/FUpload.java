@@ -154,7 +154,7 @@ public class FUpload extends javax.swing.JFrame {
         case 0: //usual desc
           text += settings.server.equals("commons.wikimedia.org") ?
                   getUploadTextCommons(file, settings) :
-                  getUploadText(file, settings);
+                  getUploadTextNormal(file, settings);
           break;
 
         case 1: //desc from file
