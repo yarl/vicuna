@@ -136,6 +136,10 @@ public final class FFileLoading extends javax.swing.JFrame {
                 }
                 Progress.setIndeterminate(true);
                 stopRead();
+                
+                for(PFile file : Data.getFiles()) {
+                  file.generateThumbnail();
+                }
             }
         };
         

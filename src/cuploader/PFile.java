@@ -86,7 +86,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         String name = file.getName();
         tName.setText(name.substring(0, name.lastIndexOf('.')));
         readEXIF();
-        generateThumbnail();
+        //generateThumbnail();
     }
     
     public PFile(File file, int number, boolean toUpload, boolean toEdit, String name, String desc, String date, String cats, String coor) {  
@@ -115,7 +115,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             setCoordinates(this.coor);
         }
         
-        generateThumbnail();
+        //generateThumbnail();
     }
   
     @SuppressWarnings("unchecked")
@@ -319,9 +319,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
       }
     });
 
-    tThumb.setBackground(new java.awt.Color(0, 0, 0));
     tThumb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/image.png"))); // NOI18N
+    tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-circle.png"))); // NOI18N
     tThumb.setFocusable(false);
     tThumb.setMaximumSize(new java.awt.Dimension(150, 100));
     tThumb.setMinimumSize(new java.awt.Dimension(150, 100));
@@ -395,7 +394,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     lStatus.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
     tSize.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-    tSize.setText("<text>");
+    tSize.setText(bundle.getString("loading")); // NOI18N
 
     tCoor.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
     tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
@@ -1028,7 +1027,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
      * Thumbnail generator
      * @source: http://codereview.stackexchange.com/questions/912/optimized-thumbnail-generation
      */
-    private void generateThumbnail() {
+    public void generateThumbnail() {
       ext = file.getName().substring(file.getName().lastIndexOf('.')+1).toLowerCase();
 
       double size = 9.5367e-7*file.length();
@@ -1068,6 +1067,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
           g2dBuffer.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
           g2dBuffer.drawImage(image, 0, 0, thumbWidth, thumbHeight, null);
 
+          tThumb.setBackground(Color.black);
           tThumb.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(scaledImage.getSource())));
           scaledImage.flush();
           image.flush();

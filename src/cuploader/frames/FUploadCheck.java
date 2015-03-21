@@ -3,7 +3,6 @@ package cuploader.frames;
 import cuploader.Data;
 import cuploader.Data.Elem;
 import cuploader.PFile;
-import cuploader.Settings;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
