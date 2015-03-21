@@ -1,156 +1,153 @@
 package cuploader;
 
 import java.io.File;
+import java.util.Arrays;
 import javax.swing.filechooser.FileFilter;
 
 public class FileFilters {
-    public static AllFilter all = new AllFilter();
-    
-    public static XMLFilter session = new XMLFilter();
-    public static ImgFilter images = new ImgFilter();
-    public static DocsFilter documents = new DocsFilter();
-    public static TxtFilter text = new TxtFilter();
-    public static AVFilter multimedia = new AVFilter();
 
-    public static class AllFilter extends FileFilter {
-        public static boolean isMatching(String ext) {
-          if (ext.equals("png") || ext.equals("gif") || ext.equals("jpg") ||
-              ext.equals("jpeg") || ext.equals("tiff") || ext.equals("tif") ||
-              ext.equals("xcf") || ext.equals("mid") || ext.equals("ogg") ||
-              ext.equals("ogv") || ext.equals("svg") || ext.equals("djvu") ||
-              ext.equals("oga") || ext.equals("flac") || ext.equals("wav") ||
-              ext.equals("webm"))
-              return true;
-          return false;
-        }
-      
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory())
-                return true;
-            String s = f.getName();
-            int i = s.lastIndexOf('.');
+  public static AllFilter all = new AllFilter();
+  public static XMLFilter session = new XMLFilter();
+  public static ImgFilter images = new ImgFilter();
+  public static DocsFilter documents = new DocsFilter();
+  public static TxtFilter text = new TxtFilter();
+  public static AVFilter multimedia = new AVFilter();
 
-            if (i > 0 && i < s.length() - 1) {
-                s = s.substring(i + 1).toLowerCase();
-                return isMatching(s);
-            }
-            return false;
-        }
+  public static class AllFilter extends FileFilter {
 
-        @Override
-        public String getDescription() {
-            return Data.text("loading-filter-all");
-        }
-    }
-    
-    public static class XMLFilter extends FileFilter {
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory())
-                return true;
-            String s = f.getName();
-            int i = s.lastIndexOf('.');
+    public static String getExtension(String name) {
+      int i = name.lastIndexOf('.');
 
-            if (i > 0 && i < s.length() - 1)
-                if (s.substring(i + 1).toLowerCase().equals("xml"))
-                    return true;
-            return false;
-        }
-
-        @Override
-        public String getDescription() {
-            return Data.text("session-file") + " (*.xml)";
-        }
+      if (i > 0 && i < name.length() - 1) {
+        return name.substring(i + 1).toLowerCase();
+      } else {
+        return "";
+      }
     }
 
-    public static class AVFilter extends FileFilter {
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory())
-                return true;
-            String s = f.getName();
-            int i = s.lastIndexOf('.');
-
-            if (i > 0 && i < s.length() - 1) {
-                s = s.substring(i + 1).toLowerCase();
-                if (s.equals("mid") || s.equals("ogg") || s.equals("ogv") ||
-                    s.equals("oga") || s.equals("flac") || s.equals("wav") ||
-                    s.equals("webm"))
-                    return true;
-            }
-            return false;
-        }
-        
-        @Override
-        public String getDescription() {
-            return Data.text("loading-filter-media") + " (*.mid, *.ogg, *.ogv, *.oga, *.flac, *.wav, *.webm)";
-        }
-    }
-    
-    public static class ImgFilter extends FileFilter {
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory())
-                return true;
-            String s = f.getName();
-            int i = s.lastIndexOf('.');
-
-            if (i > 0 && i < s.length() - 1) {
-                s = s.substring(i + 1).toLowerCase();
-                if(s.equals("png") || s.equals("gif") || s.equals("jpg") ||
-                   s.equals("jpeg") || s.equals("tiff") || s.equals("tif") ||
-                   s.equals("xcf") || s.equals("svg"))
-                    return true;
-            }
-            return false;
-        }
-
-        @Override
-        public String getDescription() {
-            return Data.text("loading-filter-img") + " (*.jpg, *.png, *.gif, *.tiff, *.svg, *.xcf)";
-        }
+    public static boolean isMatching(String ext) {
+      return Arrays.asList(exts).contains(ext);
     }
 
-    public static class DocsFilter extends FileFilter {
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory())
-                return true;
-            String s = f.getName();
-            int i = s.lastIndexOf('.');
-
-            if (i > 0 && i < s.length() - 1) {
-                s = s.substring(i + 1).toLowerCase();
-                if (s.equals("jpg") || s.equals("pdf") || s.equals("djvu"))
-                    return true;
-            }
-            return false;
-        }
-
-        @Override
-        public String getDescription() {
-            return Data.text("loading-filter-scan") + " (*.jpg, *.pdf, *.djvu)";
-        }
+    public static boolean isMatching(String ext, String[] exts) {
+      return Arrays.asList(exts).contains(ext);
     }
 
-    public static class TxtFilter extends FileFilter {
-        @Override
-        public boolean accept(File f) {
-            if (f.isDirectory())
-                return true;
-            String s = f.getName();
-            int i = s.lastIndexOf('.');
+    final static String[] exts = {"png", "gif", "jpg", "jpeg", "tiff", "tif", "xcf", "mid", "ogg", "ogv", "pdf", "svg", "djvu", "oga", "flac", "wav", "webm"};
 
-            if (i > 0 && i < s.length() - 1)
-                if (s.substring(i + 1).toLowerCase().equals("txt"))
-                    return true;
-            return false;
-        }
-
-        @Override
-        public String getDescription() {
-            return Data.text("settings-program-descfile-file") + " (*.txt)";
-        }
+    @Override
+    public boolean accept(File f) {
+      if (f.isDirectory()) {
+        return true;
+      }
+      return isMatching(getExtension(f.getName()), exts);
     }
+
+    @Override
+    public String getDescription() {
+      return Data.text("loading-filter-all");
+    }
+  }
+
+  public static class XMLFilter extends FileFilter {
+
+    final String[] exts = {"xml"};
+
+    @Override
+    public boolean accept(File f) {
+      if (f.isDirectory()) {
+        return true;
+      }
+      return AllFilter.isMatching(AllFilter.getExtension(f.getName()), exts);
+    }
+
+    @Override
+    public String getDescription() {
+      return Data.text("session-file") + " (*.xml)";
+    }
+  }
+
+  public static class AVFilter extends FileFilter {
+
+    final String[] exts = {"mid", "ogg", "ogv", "oga", "flac", "wav", "webm"};
+
+    @Override
+    public boolean accept(File f) {
+      if (f.isDirectory()) {
+        return true;
+      }
+      return AllFilter.isMatching(AllFilter.getExtension(f.getName()), exts);
+    }
+
+    @Override
+    public String getDescription() {
+      String desc = Data.text("loading-filter-media") + " (";
+      for (String ext : exts) {
+        desc += "*." + ext + ", ";
+      }
+      return desc.substring(0, desc.length() - 2) + ")";
+    }
+  }
+
+  public static class ImgFilter extends FileFilter {
+
+    final String[] exts = {"png", "gif", "jpg", "jpeg", "svg", "tiff", "tif", "xcf"};
+
+    @Override
+    public boolean accept(File f) {
+      if (f.isDirectory()) {
+        return true;
+      }
+      return AllFilter.isMatching(AllFilter.getExtension(f.getName()), exts);
+    }
+
+    @Override
+    public String getDescription() {
+      String desc = Data.text("loading-filter-img") + " (";
+      for (String ext : exts) {
+        desc += "*." + ext + ", ";
+      }
+      return desc.substring(0, desc.length() - 2) + ")";
+    }
+  }
+
+  public static class DocsFilter extends FileFilter {
+
+    final String[] exts = {"djvu", "jpg", "pdf"};
+
+    @Override
+    public boolean accept(File f) {
+      if (f.isDirectory()) {
+        return true;
+      }
+      return AllFilter.isMatching(AllFilter.getExtension(f.getName()), exts);
+    }
+
+    @Override
+    public String getDescription() {
+      String desc = Data.text("loading-filter-scan") + " (";
+      for (String ext : exts) {
+        desc += "*." + ext + ", ";
+      }
+      return desc.substring(0, desc.length() - 2) + ")";
+    }
+  }
+
+  public static class TxtFilter extends FileFilter {
+
+    final String[] exts = {"txt"};
+
+    @Override
+    public boolean accept(File f) {
+      if (f.isDirectory()) {
+        return true;
+      }
+      return AllFilter.isMatching(AllFilter.getExtension(f.getName()), exts);
+    }
+
+    @Override
+    public String getDescription() {
+      return Data.text("settings-program-descfile-file") + " (*.txt)";
+    }
+  }
 }
