@@ -24,6 +24,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
+import org.jxmapviewer.VirtualEarthTileFactoryInfo;
 
 public class FCoord extends javax.swing.JFrame {
     private int number;
@@ -42,17 +43,13 @@ public class FCoord extends javax.swing.JFrame {
         MouseInputListener mia = new PanMouseInputListener(mapViewer);
         mapViewer.addMouseListener(mia);
         mapViewer.addMouseMotionListener(mia);
-
         mapViewer.addMouseListener(new CenterMapListener(mapViewer));
-
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
-
         mapViewer.addKeyListener(new PanKeyListener(mapViewer));
 
         MapMarkerListener clickListener = new MapMarkerListener(this);
         mapViewer.addMouseListener(clickListener);
         mapViewer.setOverlayPainter(clickListener);
-
         return mapViewer;
     }
 
@@ -365,15 +362,25 @@ public class FCoord extends javax.swing.JFrame {
     }//GEN-LAST:event_pMapMouseReleased
 
     private void bOSMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bOSMActionPerformed
-        // TODO fire event
+        DefaultTileFactory tileFactory = new DefaultTileFactory(new OSMTileFactoryInfo());
+        mapViewer.setTileFactory(tileFactory);
     }//GEN-LAST:event_bOSMActionPerformed
 
     private void bBingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBingActionPerformed
-        // TODO fire event
+        mapViewer.setTileFactory(new DefaultTileFactory(new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID)));
     }//GEN-LAST:event_bBingActionPerformed
 
     private void bMapquestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bMapquestActionPerformed
-        // TODO fire event
+        TileFactoryInfo info = new TileFactoryInfo(1,17,19,
+                    256, true, true,
+                    "http://otile1.mqcdn.com/tiles/1.0.0/map",
+                    "x","y","z") {
+                @Override
+                public String getTileUrl(int x, int y, int zoom) {
+                    return this.baseURL +"/"+(19-zoom)+"/"+x+"/"+y+".jpg";
+                }
+        };
+        mapViewer.setTileFactory(new DefaultTileFactory(info));
     }//GEN-LAST:event_bMapquestActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
