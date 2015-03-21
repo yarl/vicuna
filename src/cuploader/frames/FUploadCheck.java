@@ -78,7 +78,7 @@ public class FUploadCheck extends javax.swing.JFrame {
      * @return i18n string with error, empty string if everything is OK
      */
     public static String checkFile(String name) {
-      System.out.println("Sprawdzam: " + name);
+      //System.out.println("Checking: " + name);
       
       //check IMG* / DSCF* names
       //@todo: add https://commons.wikimedia.org/wiki/MediaWiki:Filename-prefix-blacklist
