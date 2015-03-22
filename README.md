@@ -1,5 +1,5 @@
-# VicuñaUploader
-ultimate tool for upload files to Wikimedia Commons and other Wikimedia projects
+# ![a](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/VicunaUploader_logo.png/30px-VicunaUploader_logo.png) VicuñaUploader
+_ultimate tool for upload files to Wikimedia Commons and other Wikimedia projects_
 
 ## Usage
 For manual, take a look at [project wiki](https://github.com/yarl/vicuna/wiki) and [website](http://yarl.github.io/vicuna). 
@@ -29,3 +29,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+### External libs used
+
+- [wiki-java](http://code.google.com/p/wiki-java/) (GNU GPL)
+- [metadata-extractor](https://github.com/drewnoakes/metadata-extractor) (Apache 2.0)
+- [JMapViewer](https://github.com/msteiger/jxmapviewer2) (LGPL)
+- IU icons by [Yusuke Kamiyamane](http://p.yusukekamiyamane.com/) (CC BB 3.0)
