@@ -195,8 +195,12 @@ public class FUpload extends javax.swing.JFrame {
       else desc += "\n|source = " + settings.source + "\n|author = " + settings.author;
 
       desc += "\n|permission = \n|other_versions = \n}}";
-      if(file.coor != null)
-          desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon() + "}}";
+      if (file.coor != null) {
+        desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon();
+        if(!file.coor.getHeading().isEmpty())
+          desc += "|heading:" + file.coor.getHeading();
+        desc += "}}";
+      }
 
       desc += "\n\n=={{int:license-header}}==\n";
 

@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 
 public class Coord {
     private double lat, lon;
+    private String heading;
     
     public Coord(String[] lat, String[] lon) {
         this.lat = Double.parseDouble(lat[0]) + (Double.parseDouble(lat[1])/60.0) + (Double.parseDouble(lat[2])/3600.0);
@@ -27,6 +28,11 @@ public class Coord {
         }
     }
     
+    public Coord(String[] lat, String NS, String[] lon, String EW, String heading) {
+        this(lat, NS, lon, EW);
+        setHeading(heading);
+    }
+    
     public Coord(String lat, String lon) {
         this.lat = Double.parseDouble(lat);
         this.lon = Double.parseDouble(lon);
@@ -35,6 +41,10 @@ public class Coord {
     public Coord(double lat, double lon) {
         this.lat = lat;
         this.lon = lon;
+    }
+    
+    public void setHeading(String heading) {
+      this.heading = heading == null ? "" : heading;
     }
     
     public String[] getDM() {
@@ -84,11 +94,17 @@ public class Coord {
         return lat + ";" + lon;
     }
     
-    public double getLat() {
-        return lat;
+    public String getLat() {
+        DecimalFormat df = new DecimalFormat("#.######");
+        return df.format(lat);
     }
     
-    public double getLon() {
-        return lon;
+    public String getLon() {
+        DecimalFormat df = new DecimalFormat("#.######");
+        return df.format(lon);
+    }
+    
+    public String getHeading() {
+        return heading == null ? "" : heading;
     }
 }

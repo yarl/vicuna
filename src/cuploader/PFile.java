@@ -979,6 +979,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             if(directory != null) {
                 String lat = directory.getDescription(GpsDirectory.TAG_GPS_LATITUDE);
                 String lon  = directory.getDescription(GpsDirectory.TAG_GPS_LONGITUDE);
+                String heading = directory.getDescription(GpsDirectory.TAG_GPS_IMG_DIRECTION);
+                
                 if(lat!=null && lon!=null) {
                     String[] NS = lat.split(" ");
                         NS[0] = NS[0].substring(0, NS[0].lastIndexOf('°'));
@@ -988,8 +990,13 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                         EW[0] = EW[0].substring(0, EW[0].lastIndexOf('°'));
                         EW[1] = EW[1].substring(0, EW[1].lastIndexOf('\''));
                         EW[2] = EW[2].substring(0, EW[2].lastIndexOf('\"'));
-                    coor = new Coord(NS, directory.getDescription(GpsDirectory.TAG_GPS_LATITUDE_REF), 
-                                            EW, directory.getDescription(GpsDirectory.TAG_GPS_LONGITUDE_REF));
+                        
+                    if(heading != null && heading.contains(" degrees")) {
+                      heading = heading.substring(0, heading.indexOf(" degrees"));
+                    }
+                        
+                    coor = new Coord(NS, directory.getDescription(GpsDirectory.TAG_GPS_LATITUDE_REF),
+                            EW, directory.getDescription(GpsDirectory.TAG_GPS_LONGITUDE_REF), heading);
                     setCoordinates(coor);
                 } else resetCoordinates();
             } else resetCoordinates();
@@ -1105,7 +1112,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     public void setCoordinates(Coord coor) {
         this.coor = coor;
         tCoor.setText(coor.getDMSformated());
-        tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/geolocation.png")));
+        String icon = "geolocation.png";
+        if(!coor.getHeading().isEmpty())
+          icon = "geolocation-plus.png";
+        tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/"+icon)));
         mMaps.setEnabled(true);
         mDelCoor.setEnabled(true);
     }
