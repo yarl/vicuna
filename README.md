@@ -34,5 +34,5 @@ limitations under the License.
 
 - [wiki-java](http://code.google.com/p/wiki-java/) (GNU GPL)
 - [metadata-extractor](https://github.com/drewnoakes/metadata-extractor) (Apache 2.0)
-- [JMapViewer](https://github.com/msteiger/jxmapviewer2) (LGPL)
-- IU icons by [Yusuke Kamiyamane](http://p.yusukekamiyamane.com/) (CC BB 3.0)
+- [jxmapviewer2](https://github.com/msteiger/jxmapviewer2) (LGPL)
+- IU icons by [Yusuke Kamiyamane](http://p.yusukekamiyamane.com/) (CC BY-3.0)
