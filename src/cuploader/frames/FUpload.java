@@ -39,6 +39,7 @@ public class FUpload extends javax.swing.JFrame {
         if(set.fileDescSource==1 && !set.fileDescPath.isEmpty())
             f = new File(Data.settings.fileDescPath);
         wiki = Data.wiki;
+        wiki.setUserAgent("VicunaUploader/" + Data.version + " (https://github.com/yarl/vicuna)");
           
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");

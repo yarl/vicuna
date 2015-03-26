@@ -97,6 +97,7 @@ public class FUploadCheck extends javax.swing.JFrame {
       //check unique names on internet
       try {
         Wiki wiki = (Data.wiki == null ? new Wiki("commons.wikimedia.org") : Data.wiki);
+        wiki.setUserAgent("VicunaUploader/" + Data.version + " (https://github.com/yarl/vicuna)");
         if(wiki.isPageExist(name))
           return "uploadcheck-error-dupe";
       } catch (IOException ex) {

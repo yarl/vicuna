@@ -102,6 +102,8 @@ public class FLogin extends javax.swing.JFrame {
 
         w = new Wiki(Data.settings.server, Data.settings.path);
         w.setHttp(Data.settings.protocol);
+        w.setUserAgent("VicunaUploader/" + Data.version + " (https://github.com/yarl/vicuna)");
+
 
         //login info
         lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
