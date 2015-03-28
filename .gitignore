@@ -1,8 +1,6 @@
 build
-dist
 store
 .vicuna-settings
 settings.vicuna
-vicuna.jar
 nbproject\private
 /nbproject/private/
