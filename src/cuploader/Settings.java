@@ -50,6 +50,7 @@ public class Settings {
     public boolean loadSubdirectory = false;
     public boolean renameAfterUpload = false;
     public boolean askQuit = true;
+    public String uploadSummary = "";
 
     public int fileDescSource = 0;
     public String fileDescPath = "";

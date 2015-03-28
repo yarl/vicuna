@@ -73,22 +73,15 @@ public class FSettings extends javax.swing.JFrame {
         cAskQuit.setSelected(Data.settings.askQuit);
         
         cFileDescSource.setSelectedIndex(Data.settings.fileDescSource);
-        if(Data.settings.fileDescPath==null)
-            tFileDesc.setText(Data.text("settings-program-descfile-noselected"));
-        else
-            tFileDesc.setText(Data.settings.fileDescPath);
+        tFileDesc.setText(Data.settings.fileDescPath == null ? Data.text("settings-program-descfile-noselected") : Data.settings.fileDescPath);
+        tUploadSummary.setText(Data.settings.uploadSummary == null ? "VicuñaUploader" : Data.settings.uploadSummary);
        
         setVisible(true);
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
         
-        lDefaults.setVisible(false);
-        lName.setVisible(false);
-        rNameEmpty.setVisible(false);
-        rNameDefault.setVisible(false);
-        lDesc.setVisible(false);
-        jScrollPane1.setVisible(false);
-        tDesc.setVisible(false);
+        pDefault.setVisible(false);
+        tUploadSummary.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -154,21 +147,22 @@ public class FSettings extends javax.swing.JFrame {
     jPanel1 = new javax.swing.JPanel();
     cReadHour = new javax.swing.JCheckBox();
     cLoadSubdirectory = new javax.swing.JCheckBox();
-    lDefaults = new javax.swing.JLabel();
-    rNameDefault = new javax.swing.JRadioButton();
-    rNameEmpty = new javax.swing.JRadioButton();
-    jScrollPane1 = new javax.swing.JScrollPane();
-    tDesc = new javax.swing.JTextArea();
-    lDesc = new javax.swing.JLabel();
-    lName = new javax.swing.JLabel();
     jPanel2 = new javax.swing.JPanel();
     cRenameAfterUpload = new javax.swing.JCheckBox();
     cAskQuit = new javax.swing.JCheckBox();
+    tUploadSummary = new javax.swing.JTextField();
     jPanel3 = new javax.swing.JPanel();
     cFileDescSource = new javax.swing.JComboBox();
     lFileDescSource = new javax.swing.JLabel();
     bSetFileDesc = new javax.swing.JButton();
     tFileDesc = new javax.swing.JTextField();
+    pDefault = new javax.swing.JPanel();
+    lName = new javax.swing.JLabel();
+    rNameEmpty = new javax.swing.JRadioButton();
+    rNameDefault = new javax.swing.JRadioButton();
+    lDesc = new javax.swing.JLabel();
+    jScrollPane1 = new javax.swing.JScrollPane();
+    tDesc = new javax.swing.JTextArea();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
@@ -652,23 +646,6 @@ public class FSettings extends javax.swing.JFrame {
 
     cLoadSubdirectory.setText(bundle.getString("settings-program-readsubdir")); // NOI18N
 
-    lDefaults.setText(bundle.getString("settings-default-values")); // NOI18N
-
-    rNameDefault.setText(bundle.getString("settings-default-name-filename")); // NOI18N
-    rNameDefault.setEnabled(false);
-
-    rNameEmpty.setText(bundle.getString("settings-default-name-empty")); // NOI18N
-    rNameEmpty.setEnabled(false);
-
-    tDesc.setColumns(20);
-    tDesc.setRows(5);
-    tDesc.setEnabled(false);
-    jScrollPane1.setViewportView(tDesc);
-
-    lDesc.setText(bundle.getString("file-desc")); // NOI18N
-
-    lName.setText(bundle.getString("file-name")); // NOI18N
-
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -677,35 +654,17 @@ public class FSettings extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(cReadHour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(cLoadSubdirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
-          .addComponent(lDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(jScrollPane1)
-          .addComponent(lName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(lDefaults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(rNameEmpty, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(rNameDefault, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(cLoadSubdirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE))
         .addContainerGap())
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel1Layout.createSequentialGroup()
-        .addContainerGap()
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(cReadHour)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cLoadSubdirectory)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(lDefaults, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(lName)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(rNameEmpty)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(rNameDefault)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(lDesc)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(26, Short.MAX_VALUE))
+        .addGap(119, 119, 119))
     );
 
     jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("settings-other"))); // NOI18N
@@ -720,10 +679,14 @@ public class FSettings extends javax.swing.JFrame {
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel2Layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addComponent(cRenameAfterUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
-          .addComponent(cAskQuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addContainerGap(45, Short.MAX_VALUE))
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+              .addComponent(cRenameAfterUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+              .addComponent(cAskQuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 39, Short.MAX_VALUE))
+          .addComponent(tUploadSummary))
+        .addContainerGap())
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -732,6 +695,8 @@ public class FSettings extends javax.swing.JFrame {
         .addComponent(cRenameAfterUpload)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cAskQuit)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(tUploadSummary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
@@ -777,6 +742,53 @@ public class FSettings extends javax.swing.JFrame {
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
+    pDefault.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("settings-default-values"))); // NOI18N
+
+    lName.setText(bundle.getString("file-name")); // NOI18N
+
+    rNameEmpty.setText(bundle.getString("settings-default-name-empty")); // NOI18N
+    rNameEmpty.setEnabled(false);
+
+    rNameDefault.setText(bundle.getString("settings-default-name-filename")); // NOI18N
+    rNameDefault.setEnabled(false);
+
+    lDesc.setText(bundle.getString("file-desc")); // NOI18N
+
+    tDesc.setColumns(20);
+    tDesc.setRows(5);
+    tDesc.setEnabled(false);
+    jScrollPane1.setViewportView(tDesc);
+
+    javax.swing.GroupLayout pDefaultLayout = new javax.swing.GroupLayout(pDefault);
+    pDefault.setLayout(pDefaultLayout);
+    pDefaultLayout.setHorizontalGroup(
+      pDefaultLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(pDefaultLayout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(pDefaultLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(lName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(rNameEmpty, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(rNameDefault, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(jScrollPane1)
+          .addComponent(lDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap())
+    );
+    pDefaultLayout.setVerticalGroup(
+      pDefaultLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(pDefaultLayout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(lName)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(rNameEmpty)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(rNameDefault)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(lDesc)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+        .addContainerGap())
+    );
+
     javax.swing.GroupLayout pProgramLayout = new javax.swing.GroupLayout(pProgram);
     pProgram.setLayout(pProgramLayout);
     pProgramLayout.setHorizontalGroup(
@@ -785,7 +797,9 @@ public class FSettings extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(pProgramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(pProgramLayout.createSequentialGroup()
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(pProgramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+              .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+              .addComponent(pDefault, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
           .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -796,10 +810,11 @@ public class FSettings extends javax.swing.JFrame {
       .addGroup(pProgramLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(pProgramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(pProgramLayout.createSequentialGroup()
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(0, 0, Short.MAX_VALUE))
-          .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(pDefault, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addContainerGap())
@@ -889,7 +904,8 @@ public class FSettings extends javax.swing.JFrame {
             Data.settings.askQuit = cAskQuit.isSelected();
 
             Data.settings.fileDescSource = cFileDescSource.getSelectedIndex(); 
-
+            Data.settings.uploadSummary = tUploadSummary.getText();
+            
             Data.saveSettings();
             dispose();
             Data.fSettings = null;
@@ -998,7 +1014,6 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JLabel lAttrib;
   private javax.swing.JLabel lCategories;
   private javax.swing.JLabel lCopyInfoHint;
-  private javax.swing.JLabel lDefaults;
   private javax.swing.JLabel lDesc;
   private javax.swing.JLabel lDigits;
   private javax.swing.JLabel lExtraText;
@@ -1011,6 +1026,7 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JLabel lPermission;
   private javax.swing.JLabel lQuickTemplatesHint;
   private javax.swing.JLabel lSource;
+  private javax.swing.JPanel pDefault;
   private javax.swing.JPanel pFile;
   private javax.swing.JPanel pFileDetails;
   private javax.swing.JPanel pGallery;
@@ -1041,6 +1057,7 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JRadioButton tPositionTop;
   private javax.swing.JTable tQuickTemplatesTable;
   private javax.swing.JTextField tSource;
+  private javax.swing.JTextField tUploadSummary;
   // End of variables declaration//GEN-END:variables
 
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);

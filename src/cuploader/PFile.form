@@ -564,6 +564,9 @@
                   <Dimension value="[34, 20]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tCoorMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

@@ -399,6 +399,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     tCoor.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
     tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
     tCoor.setPreferredSize(new java.awt.Dimension(34, 20));
+    tCoor.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        tCoorMouseClicked(evt);
+      }
+    });
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -904,6 +909,14 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 //      tName.setToolTipText(Data.text(result));
 //    }
   }//GEN-LAST:event_tNameFocusLost
+
+  private void tCoorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tCoorMouseClicked
+    if (fCoord == null) {
+      fCoord = new FCoord(number, false);
+    } else {
+      fCoord.setVisible(true);
+    }
+  }//GEN-LAST:event_tCoorMouseClicked
    
     private void addUndo() {
         tName.getDocument().addUndoableEditListener(new UndoableEditListener() {

@@ -99,9 +99,17 @@ public class Coord {
         return df.format(lat);
     }
     
+    public double getLatDouble() {
+      return lat;
+    }
+    
     public String getLon() {
         DecimalFormat df = new DecimalFormat("#.######");
         return df.format(lon);
+    }
+    
+    public double getLonDouble() {
+      return lat;
     }
     
     public String getHeading() {

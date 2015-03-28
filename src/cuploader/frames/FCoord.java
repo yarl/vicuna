@@ -25,6 +25,7 @@ import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
+import org.jxmapviewer.painter.CompoundPainter;
 
 public class FCoord extends javax.swing.JFrame {
     private int number;
@@ -146,11 +147,18 @@ public class FCoord extends javax.swing.JFrame {
 
         map = initMap();
         initComponents();
-        setResizable(false);
+        //setResizable(false);
         setLocationRelativeTo(null);
-
-        if (Data.settings.coor != null && Data.settings.coorZoom != 0) {
-            setMapPosition(Data.settings.coor, Data.settings.coorZoom);
+        Coord fileCoord = Data.getFiles().get(number).coor;
+        
+        if(!multiEdit && fileCoord != null) {          
+          setMapPosition(new ImmutableCoordinate(fileCoord.getLat(), fileCoord.getLon()), 2);
+          DecimalFormat df = new DecimalFormat("#.######");
+          GeoPosition coordinate = mapViewer.getCenterPosition();
+          tCoor.setText(df.format(coordinate.getLatitude()) + ";" + df.format(coordinate.getLongitude()));
+        } else if (Data.settings.coor != null && Data.settings.coorZoom != 0) {
+          System.out.println("b");
+          setMapPosition(Data.settings.coor, Data.settings.coorZoom);
         }
         setVisible(true);
         setFocusableWindowState(true);
@@ -160,130 +168,148 @@ public class FCoord extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+  // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+  private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        tCoor = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        bSave = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        pMap = map;
-        bOSM = new javax.swing.JButton();
-        bBing = new javax.swing.JButton();
-        bMapquest = new javax.swing.JButton();
+    jLabel1 = new javax.swing.JLabel();
+    jPanel1 = new javax.swing.JPanel();
+    tCoor = new javax.swing.JTextField();
+    jLabel3 = new javax.swing.JLabel();
+    bSave = new javax.swing.JButton();
+    jLabel2 = new javax.swing.JLabel();
+    pMap = map;
+    bOSM = new javax.swing.JButton();
+    bBing = new javax.swing.JButton();
+    bMapquest = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
-        setTitle(bundle.getString("file-coor")); // NOI18N
+    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+    setTitle(bundle.getString("file-coor")); // NOI18N
 
-        jLabel1.setIcon(
-            new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
-        jLabel1.setText(bundle.getString("coord-info")); // NOI18N
+    jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
+    jLabel1.setText(bundle.getString("coord-info")); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel3.setText("<html>" + Data.text("fileedit-coor-info") + "</html>");
-        jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+    jLabel3.setText("<html>"+Data.text("fileedit-coor-info")+"</html>");
+    jLabel3.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        bSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/tick.png"))); // NOI18N
-        bSave.setText(bundle.getString("button-apply")); // NOI18N
-        bSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bSaveActionPerformed(evt);
-            }
-        });
+    bSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/tick.png"))); // NOI18N
+    bSave.setText(bundle.getString("button-apply")); // NOI18N
+    bSave.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bSaveActionPerformed(evt);
+      }
+    });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                jPanel1Layout.createSequentialGroup().addContainerGap().addGroup(
-                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        tCoor).addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 461,
-                        Short.MAX_VALUE)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(bSave,
-                    javax.swing.GroupLayout.PREFERRED_SIZE, 120,
-                    javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()));
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                javax.swing.GroupLayout.Alignment.TRAILING,
-                jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(jLabel3,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(tCoor,
-                        javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(bSave)).addContainerGap()));
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel1Layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(tCoor)
+          .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(bSave, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap())
+    );
+    jPanel1Layout.setVerticalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(tCoor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(bSave))
+        .addContainerGap())
+    );
 
-        jLabel2.setIcon(
-            new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
-        jLabel2.setText(bundle.getString("coord-info-map")); // NOI18N
+    jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
+    jLabel2.setText(bundle.getString("coord-info-map")); // NOI18N
 
-        pMap.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
-        pMap.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                pMapMouseReleased(evt);
-            }
-        });
+    pMap.setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
+    pMap.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseReleased(java.awt.event.MouseEvent evt) {
+        pMapMouseReleased(evt);
+      }
+    });
 
-        javax.swing.GroupLayout pMapLayout = new javax.swing.GroupLayout(pMap);
-        pMap.setLayout(pMapLayout);
-        pMapLayout.setHorizontalGroup(
-            pMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
-        pMapLayout.setVerticalGroup(
-            pMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 256, Short.MAX_VALUE));
+    javax.swing.GroupLayout pMapLayout = new javax.swing.GroupLayout(pMap);
+    pMap.setLayout(pMapLayout);
+    pMapLayout.setHorizontalGroup(
+      pMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+    pMapLayout.setVerticalGroup(
+      pMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 256, Short.MAX_VALUE)
+    );
 
-        bOSM.setText("OpenStreetMap");
-        bOSM.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bOSMActionPerformed(evt);
-            }
-        });
+    bOSM.setText("OpenStreetMap");
+    bOSM.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bOSMActionPerformed(evt);
+      }
+    });
 
-        bBing.setText("Bing");
-        bBing.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bBingActionPerformed(evt);
-            }
-        });
+    bBing.setText("Bing");
+    bBing.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bBingActionPerformed(evt);
+      }
+    });
 
-        bMapquest.setText("MapQuest Open");
-        bMapquest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bMapquestActionPerformed(evt);
-            }
-        });
+    bMapquest.setText("MapQuest Open");
+    bMapquest.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bMapquestActionPerformed(evt);
+      }
+    });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup().addContainerGap().addGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jLabel1,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE).addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(jPanel1,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE).addComponent(pMap, javax.swing.GroupLayout.DEFAULT_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addGroup(
-                    layout.createSequentialGroup().addComponent(bOSM).addPreferredGap(
-                        javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(bBing).addPreferredGap(
-                        javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(bMapquest).addGap(0, 0,
-                        Short.MAX_VALUE))).addContainerGap()));
-        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-            layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addPreferredGap(
-                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(bOSM).addComponent(
-                    bBing).addComponent(bMapquest)).addPreferredGap(
-                javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(pMap,
-                javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                javax.swing.GroupLayout.PREFERRED_SIZE).addGap(18, 18, 18).addComponent(jLabel2).addPreferredGap(
-                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jPanel1,
-                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                Short.MAX_VALUE).addContainerGap()));
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(pMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(bOSM)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(bBing)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(bMapquest)
+            .addGap(0, 0, Short.MAX_VALUE)))
+        .addContainerGap())
+    );
+    layout.setVerticalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jLabel1)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(bOSM)
+          .addComponent(bBing)
+          .addComponent(bMapquest))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(pMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGap(18, 18, 18)
+        .addComponent(jLabel2)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap())
+    );
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+    pack();
+  }// </editor-fold>//GEN-END:initComponents
 
     private Coord readCoordinates(String input) {
         Coord coor = null;
@@ -383,18 +409,18 @@ public class FCoord extends javax.swing.JFrame {
         mapViewer.setTileFactory(new DefaultTileFactory(info));
     }//GEN-LAST:event_bMapquestActionPerformed
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bBing;
-    private javax.swing.JButton bMapquest;
-    private javax.swing.JButton bOSM;
-    private javax.swing.JButton bSave;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel pMap;
-    private javax.swing.JTextField tCoor;
-    // End of variables declaration//GEN-END:variables
+  // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton bBing;
+  private javax.swing.JButton bMapquest;
+  private javax.swing.JButton bOSM;
+  private javax.swing.JButton bSave;
+  private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
+  private javax.swing.JLabel jLabel3;
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel pMap;
+  private javax.swing.JTextField tCoor;
+  // End of variables declaration//GEN-END:variables
 
     ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
