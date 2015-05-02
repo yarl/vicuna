@@ -14,6 +14,7 @@ import static cuploader.Data.settings;
 import cuploader.FileFilters;
 import cuploader.PFile;
 import cuploader.Settings;
+import cuploader.ServerMonitor;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.HeadlessException;
@@ -52,6 +53,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class Main extends javax.swing.JFrame implements DropTargetListener {
 
   Data data;
+  ServerMonitor monitor;
 
   public Main(Data data) {
 
@@ -75,9 +77,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     readPosition();
     setVisible(true);
 
-    if (data.settings.checkDatabaseLag) {
-      checkLag();
-    }
+    ServerMonitor monitor = new ServerMonitor(lServerStatus, data);
+    monitor.start();
+
     if (hello == 1) {
       JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
     } else if (hello == 2) {
@@ -1218,44 +1220,6 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     } catch (IOException ex) {
       error(null, ex);
     }
-  }
-
-  private void checkLag() {
-    Runnable run = new Runnable() {
-      @Override
-      public void run() {
-        while (true) {
-          try {
-            int lag;
-            if (Data.wiki == null) {
-              lag = new Wiki(Data.settings.server).getCurrentDatabaseLag();
-            } else {
-              lag = Data.wiki.getCurrentDatabaseLag();
-            }
-
-            if (lag <= 0) {
-              lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status.png")));
-              lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-ok"));
-            } else if (lag > 0 && lag <= 5) {
-              lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-away.png")));
-              lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-lag") + " " + lag + " s");
-            } else {
-              lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-busy.png")));
-              lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-lag") + " " + lag + " s");
-            }
-          } catch (IOException ex) {
-            lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-offline"));
-            lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png")));
-          }
-          try {
-            Thread.sleep(30000);
-          } catch (InterruptedException ex) {
-          }
-        }
-      }
-    };
-    Thread t = new Thread(run);
-    t.start();
   }
 
     //</editor-fold>
