@@ -70,6 +70,7 @@ public class FSettings extends javax.swing.JFrame {
         cLoadSubdirectory.setSelected(Data.settings.loadSubdirectory);
         
         cRenameAfterUpload.setSelected(Data.settings.renameAfterUpload);
+        cCheckDatabaseLag.setSelected(Data.settings.checkDatabaseLag);
         cAskQuit.setSelected(Data.settings.askQuit);
         
         cFileDescSource.setSelectedIndex(Data.settings.fileDescSource);
@@ -149,6 +150,7 @@ public class FSettings extends javax.swing.JFrame {
     cLoadSubdirectory = new javax.swing.JCheckBox();
     jPanel2 = new javax.swing.JPanel();
     cRenameAfterUpload = new javax.swing.JCheckBox();
+    cCheckDatabaseLag = new javax.swing.JCheckBox();
     cAskQuit = new javax.swing.JCheckBox();
     tUploadSummary = new javax.swing.JTextField();
     jPanel3 = new javax.swing.JPanel();
@@ -671,6 +673,7 @@ public class FSettings extends javax.swing.JFrame {
 
     cRenameAfterUpload.setText(bundle.getString("settings-program-changename")); // NOI18N
 
+    cCheckDatabaseLag.setText(bundle.getString("settings-program-checkdatabaselag")); // NOI18N
     cAskQuit.setText(bundle.getString("settings-program-askquit")); // NOI18N
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -683,6 +686,7 @@ public class FSettings extends javax.swing.JFrame {
           .addGroup(jPanel2Layout.createSequentialGroup()
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
               .addComponent(cRenameAfterUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+              .addComponent(cCheckDatabaseLag, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
               .addComponent(cAskQuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGap(0, 39, Short.MAX_VALUE))
           .addComponent(tUploadSummary))
@@ -693,6 +697,8 @@ public class FSettings extends javax.swing.JFrame {
       .addGroup(jPanel2Layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(cRenameAfterUpload)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(cCheckDatabaseLag)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cAskQuit)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -901,6 +907,7 @@ public class FSettings extends javax.swing.JFrame {
             Data.settings.loadSubdirectory = cLoadSubdirectory.isSelected();
 
             Data.settings.renameAfterUpload = cRenameAfterUpload.isSelected();
+            Data.settings.checkDatabaseLag = cCheckDatabaseLag.isSelected();
             Data.settings.askQuit = cAskQuit.isSelected();
 
             Data.settings.fileDescSource = cFileDescSource.getSelectedIndex(); 
@@ -988,6 +995,7 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JButton bSave;
   private javax.swing.JButton bSetFileDesc;
   private javax.swing.JCheckBox cAskQuit;
+  private javax.swing.JCheckBox cCheckDatabaseLag;
   private javax.swing.JCheckBox cCreateGallery;
   private javax.swing.JComboBox cFileDescSource;
   private javax.swing.JComboBox cLicense;

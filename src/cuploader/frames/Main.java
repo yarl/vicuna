@@ -75,7 +75,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     readPosition();
     setVisible(true);
 
-    checkLag();
+    if (data.settings.checkDatabaseLag) {
+      checkLag();
+    }
     if (hello == 1) {
       JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
     } else if (hello == 2) {
@@ -1421,6 +1423,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       attr = doc.createAttribute("load_subdirectory");
       attr.setValue(Data.settings.loadSubdirectory + "");
       other.setAttributeNode(attr);
+      attr = doc.createAttribute("check_database_lag");
+      attr.setValue(Data.settings.checkDatabaseLag + "");
+      other.setAttributeNode(attr);
       attr = doc.createAttribute("ask_quit");
       attr.setValue(Data.settings.askQuit + "");
       other.setAttributeNode(attr);
@@ -1646,6 +1651,9 @@ class Comment {
               }
               if (attr.get("load_subdirectory") != null) {
                 Data.settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
+              }
+              if (attr.get("check_database_lag") != null) {
+                Data.settings.checkDatabaseLag = Boolean.parseBoolean(attr.get("check_database_lag"));
               }
               if (attr.get("ask_quit") != null) {
                 Data.settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));

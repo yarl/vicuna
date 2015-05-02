@@ -49,6 +49,7 @@ public class Settings {
     public boolean readExifHour = false;
     public boolean loadSubdirectory = false;
     public boolean renameAfterUpload = false;
+    public boolean checkDatabaseLag = true;
     public boolean askQuit = true;
     public String uploadSummary = "";
 
