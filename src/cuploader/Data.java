@@ -208,4 +208,6 @@ public class Data implements Serializable {
     public static ComponentOrientation getComponentOrientation() {
       return ComponentOrientation.getOrientation(settings.lang);
     }
+
+    static final long serialVersionUID = 5293929884165981611L;
 }
