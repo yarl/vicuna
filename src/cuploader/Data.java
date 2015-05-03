@@ -27,7 +27,7 @@ import javax.swing.undo.UndoManager;
 import org.wikipedia.Wiki;
 
 public class Data implements Serializable {
-    private PropertyChangeSupport propchange;
+    private static PropertyChangeSupport propchange;
     public static Settings settings;
     
     public enum Elem { NAME, EXT, DATE, COOR, DESC, CATS; }
@@ -86,11 +86,11 @@ public class Data implements Serializable {
         propchange = new PropertyChangeSupport(this);
     }
 
-    public boolean isLoggedIn() {
+    public static boolean isLoggedIn() {
         return loggedIn;
     }
 
-    public void setLoggedIn(boolean n) {
+    public static void setLoggedIn(boolean n) {
         boolean old = loggedIn;
         loggedIn = n;
         propchange.firePropertyChange("loggedIn", old, n);

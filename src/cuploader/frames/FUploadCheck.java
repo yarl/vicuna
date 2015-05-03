@@ -176,7 +176,7 @@ public class FUploadCheck extends javax.swing.JFrame {
     }
     
     private void startUpload() {
-        if(!this.data.isLoggedIn()) {
+        if(!Data.isLoggedIn()) {
             new FLogin(data);
         } else {
             setVisible(false);

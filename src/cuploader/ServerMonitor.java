@@ -9,12 +9,10 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 public class ServerMonitor implements Runnable, PropertyChangeListener {
-  public Data data;
   public JLabel lServerStatus;
   protected Thread monitor;
 
-  public ServerMonitor(JLabel lServerStatus_, Data data_) {
-    this.data = data_;
+  public ServerMonitor(JLabel lServerStatus_) {
     this.lServerStatus = lServerStatus_;
   }
 
@@ -30,12 +28,12 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
 
   @Override
   public void run() {
-    while (!this.monitor.interrupted()) {
+    while (!Thread.interrupted()) {
         try {
           int lag;
-          if (this.data.wiki != null && this.data.isLoggedIn()) {
+          if (Data.wiki != null && Data.isLoggedIn()) {
             debug("Got wiki, logged in");
-            lag = this.data.wiki.getCurrentDatabaseLag();
+            lag = Data.wiki.getCurrentDatabaseLag();
 
             if (lag <= 0) {
               lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status.png")));
@@ -80,8 +78,8 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
   }
 
   public void propertyChange(PropertyChangeEvent evt) {
-    boolean enabled = this.data.settings.isServerMonitorEnabled();
-    boolean loggedIn = this.data.isLoggedIn();
+    boolean enabled = Data.settings.isServerMonitorEnabled();
+    boolean loggedIn = Data.isLoggedIn();
 
     if (evt.getPropertyName() == "serverMonitorEnabled") {
       enabled = (Boolean)evt.getNewValue();

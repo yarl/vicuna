@@ -79,8 +79,8 @@ public final class Main extends javax.swing.JFrame
     readPosition();
     setVisible(true);
 
-    monitor = new ServerMonitor(lServerStatus, data);
-    data.settings.addPropertyChangeListener(monitor);
+    monitor = new ServerMonitor(lServerStatus);
+    Data.settings.addPropertyChangeListener(monitor);
     data.addPropertyChangeListener(monitor);
 
     data.addPropertyChangeListener(this); // login, logout events
@@ -808,13 +808,13 @@ public final class Main extends javax.swing.JFrame
      * @param evt 
      */
     private void logIn(ActionEvent evt) {
-      if (data.isLoggedIn()) {
-        data.wiki.logout();
-        data.setLoggedIn(false);
+      if (Data.isLoggedIn()) {
+        Data.wiki.logout();
+        Data.setLoggedIn(false);
       } else {
-        if (data.fLogin == null) {
+        if (Data.fLogin == null) {
           Log.finer("Opening login window");
-          data.fLogin = new FLogin(data);
+          Data.fLogin = new FLogin(data);
         } else {
           Log.finer("Login window exists");
         }
