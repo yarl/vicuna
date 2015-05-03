@@ -1391,8 +1391,8 @@ public final class Main extends javax.swing.JFrame
       attr = doc.createAttribute("load_subdirectory");
       attr.setValue(Data.settings.loadSubdirectory + "");
       other.setAttributeNode(attr);
-      attr = doc.createAttribute("check_database_lag");
-      attr.setValue(Data.settings.isCheckDatabaseLag() + "");
+      attr = doc.createAttribute("server_monitor_enabled");
+      attr.setValue(Data.settings.isServerMonitorEnabled() + "");
       other.setAttributeNode(attr);
       attr = doc.createAttribute("ask_quit");
       attr.setValue(Data.settings.askQuit + "");
@@ -1620,8 +1620,8 @@ class Comment {
               if (attr.get("load_subdirectory") != null) {
                 Data.settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
               }
-              if (attr.get("check_database_lag") != null) {
-                Data.settings.setCheckDatabaseLag(Boolean.parseBoolean(attr.get("check_database_lag")));
+              if (attr.get("server_monitor_enabled") != null) {
+                Data.settings.setServerMonitorEnabled(Boolean.parseBoolean(attr.get("server_monitor_enabled")));
               }
               if (attr.get("ask_quit") != null) {
                 Data.settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));

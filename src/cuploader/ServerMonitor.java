@@ -80,10 +80,10 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
   }
 
   public void propertyChange(PropertyChangeEvent evt) {
-    boolean enabled = this.data.settings.isCheckDatabaseLag();
+    boolean enabled = this.data.settings.isServerMonitorEnabled();
     boolean loggedIn = this.data.isLoggedIn();
 
-    if (evt.getPropertyName() == "checkDatabaseLag") {
+    if (evt.getPropertyName() == "serverMonitorEnabled") {
       enabled = (Boolean)evt.getNewValue();
     }
     if (evt.getPropertyName() == "loggedIn") {

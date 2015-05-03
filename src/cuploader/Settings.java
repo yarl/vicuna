@@ -53,7 +53,7 @@ public class Settings {
     public boolean readExifHour = false;
     public boolean loadSubdirectory = false;
     public boolean renameAfterUpload = false;
-    private boolean checkDatabaseLag = true;
+    private boolean serverMonitorEnabled = true;
     public boolean askQuit = true;
     public String uploadSummary = "";
 
@@ -83,12 +83,12 @@ public class Settings {
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-fr"), "{{fr|%TEXT%}}", true));
     }
 
-    public boolean isCheckDatabaseLag() {
-        return checkDatabaseLag;
+    public boolean isServerMonitorEnabled() {
+        return serverMonitorEnabled;
     }
-    public void setCheckDatabaseLag(boolean n) {
-        boolean old = checkDatabaseLag;
-        checkDatabaseLag = n;
+    public void setServerMonitorEnabled(boolean n) {
+        boolean old = serverMonitorEnabled;
+        serverMonitorEnabled = n;
         propchange.firePropertyChange("checkDataBaseLag", old, n);
     }
 

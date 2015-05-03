@@ -1074,7 +1074,7 @@
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="cRenameAfterUpload" pref="191" max="32767" attributes="1"/>
-                                      <Component id="cCheckDatabaseLag" max="32767" attributes="0"/>
+                                      <Component id="cServerMonitorEnabled" max="32767" attributes="0"/>
                                       <Component id="cAskQuit" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
@@ -1091,7 +1091,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="cRenameAfterUpload" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="cCheckDatabaseLag" min="-2" max="-2" attributes="0"/>
+                          <Component id="cServerMonitorEnabled" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="cAskQuit" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1109,10 +1109,10 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JCheckBox" name="cCheckDatabaseLag">
+                <Component class="javax.swing.JCheckBox" name="cServerMonitorEnabled">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cuploader/text/messages.properties" key="settings-program-checkdatabaselag" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="cuploader/text/messages.properties" key="settings-program-servermonitorenabled" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
