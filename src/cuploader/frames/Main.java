@@ -804,8 +804,12 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         Data.isLogged = false;
         setLogged(false);
       } else {
-        if (Data.fLogin == null) Data.fLogin = new FLogin(data);
-        else Data.fLogin.setVisible(true);
+        if (data.fLogin == null) {
+          Log.finer("Opening login window");
+          data.fLogin = new FLogin(data);
+        } else {
+          Log.finer("Login window exists");
+        }
       }
     }
 
