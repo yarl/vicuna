@@ -70,7 +70,7 @@ public class FSettings extends javax.swing.JFrame {
         cLoadSubdirectory.setSelected(Data.settings.loadSubdirectory);
         
         cRenameAfterUpload.setSelected(Data.settings.renameAfterUpload);
-        cCheckDatabaseLag.setSelected(Data.settings.checkDatabaseLag);
+        cCheckDatabaseLag.setSelected(Data.settings.isCheckDatabaseLag());
         cAskQuit.setSelected(Data.settings.askQuit);
         
         cFileDescSource.setSelectedIndex(Data.settings.fileDescSource);
@@ -907,7 +907,7 @@ public class FSettings extends javax.swing.JFrame {
             Data.settings.loadSubdirectory = cLoadSubdirectory.isSelected();
 
             Data.settings.renameAfterUpload = cRenameAfterUpload.isSelected();
-            Data.settings.checkDatabaseLag = cCheckDatabaseLag.isSelected();
+            Data.settings.setCheckDatabaseLag(cCheckDatabaseLag.isSelected());
             Data.settings.askQuit = cAskQuit.isSelected();
 
             Data.settings.fileDescSource = cFileDescSource.getSelectedIndex(); 

@@ -77,7 +77,8 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     readPosition();
     setVisible(true);
 
-    ServerMonitor monitor = new ServerMonitor(lServerStatus, data);
+    monitor = new ServerMonitor(lServerStatus, data);
+    Data.settings.addPropertyChangeListener(monitor);
     monitor.start();
 
     if (hello == 1) {
@@ -352,7 +353,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
 
     lServerStatus.setHorizontalAlignment(Data.getOrientation(false));
     lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
-    lServerStatus.setText("Status");
+    lServerStatus.setText(Data.text("server-status"));
     lServerStatus.setHorizontalTextPosition(Data.getOrientation(true));
 
     javax.swing.GroupLayout pUserInfoLayout = new javax.swing.GroupLayout(pUserInfo);
@@ -1388,7 +1389,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       attr.setValue(Data.settings.loadSubdirectory + "");
       other.setAttributeNode(attr);
       attr = doc.createAttribute("check_database_lag");
-      attr.setValue(Data.settings.checkDatabaseLag + "");
+      attr.setValue(Data.settings.isCheckDatabaseLag() + "");
       other.setAttributeNode(attr);
       attr = doc.createAttribute("ask_quit");
       attr.setValue(Data.settings.askQuit + "");
@@ -1617,7 +1618,7 @@ class Comment {
                 Data.settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
               }
               if (attr.get("check_database_lag") != null) {
-                Data.settings.checkDatabaseLag = Boolean.parseBoolean(attr.get("check_database_lag"));
+                Data.settings.setCheckDatabaseLag(Boolean.parseBoolean(attr.get("check_database_lag")));
               }
               if (attr.get("ask_quit") != null) {
                 Data.settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));

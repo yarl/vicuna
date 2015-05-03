@@ -54,18 +54,26 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ServerMonitor implements Runnable, PropertyChangeListener {
   public Data data;
   public JLabel lServerStatus;
-  public Runnable run;
-  public Thread monitor;
+  protected Thread monitor;
 
   public ServerMonitor(JLabel lServerStatus_, Data data_) {
     this.data = data_;
     this.lServerStatus = lServerStatus_;
-    this.monitor = new Thread(this);
+  }
+
+  public void statusIdle() {
+    lServerStatus.setText(Data.text("server-status"));
+    lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png")));
+  }
+
+  public void statusOffline() {
+    lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-offline"));
+    lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png")));
   }
 
   @Override
   public void run() {
-    while (true) {
+    while (!this.monitor.interrupted()) {
         try {
           int lag;
           if (this.data.wiki != null && this.data.isLogged) {
@@ -84,12 +92,26 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
             }
           }
         } catch (IOException ex) {
-          lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-offline"));
-          lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png")));
+          statusOffline();
         }
       try {
         Thread.sleep(30000);
       } catch (InterruptedException ex) {
+        statusIdle();
+        return;
+      }
+      statusIdle();
+    }
+  }
+
+  protected void startStop(boolean loggedIn, boolean enabled) {
+    if (enabled && loggedIn) {
+      if (!this.monitor.isAlive()) {
+        start();
+      }
+    } else {
+      if (this.monitor.isAlive()) {
+        stop();
       }
     }
   }
@@ -97,18 +119,22 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
   public void propertyChange(PropertyChangeEvent evt) {
     if (evt.getSource() instanceof Settings) {
       Settings settings = (Settings)evt.getSource();
-      debug("event!");
+      startStop(true, settings.isCheckDatabaseLag());
     } else {
-      log.log(Level.SEVERE, "ServerMonitor is interested only in changes of settings");
+      log.log(Level.SEVERE, "Uninteresting change for the ServerMonitor");
     }
   }
 
   public void start() {
+    debug("ServerMonitor starting");
+    this.monitor = new Thread(this);
     this.monitor.start();
   }
 
   public void stop() {
-    this.monitor.stop();
+    debug("ServerMonitor will be stopped");
+    this.monitor.interrupt();
+    statusIdle();
   }
 
   protected static Logger log = Logger.getLogger(ServerMonitor.class.getName());
