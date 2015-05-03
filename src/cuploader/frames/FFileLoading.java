@@ -111,7 +111,7 @@ public final class FFileLoading extends javax.swing.JFrame {
                 for(File file : files) {
                     if(!stopRq) {
                         start = System.nanoTime(); 
-                        lName.setText(bundle.getString("loading") + " " + (int)(i+1) + " / " + files.size() + ": " + file.getName() + 
+                        lName.setText(bundle.getString("loading") + " " + (i+1) + " / " + files.size() + ": " + file.getName() + 
                                 " (" + df.format(9.5367e-7*file.length()) + " MiB)");
                         lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
                         

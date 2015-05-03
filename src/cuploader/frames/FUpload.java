@@ -376,7 +376,7 @@ public class FUpload extends javax.swing.JFrame {
                     String name = getName(file);
                     String desc = getUploadText(file, set);
 
-                    lName.setText(Data.text("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
+                    lName.setText(Data.text("upload-uploading") + " " + (i+1) + " / " + toUpload + ": " + name + "...");
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
 
                     //upload test
