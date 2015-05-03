@@ -106,23 +106,33 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
 
   protected void startStop(boolean loggedIn, boolean enabled) {
     if (enabled && loggedIn) {
-      if (!this.monitor.isAlive()) {
+      if (this.monitor != null) {
+        if (!this.monitor.isAlive()) {
+          start();
+        }
+      } else {
         start();
       }
     } else {
-      if (this.monitor.isAlive()) {
-        stop();
+      if (this.monitor != null) {
+        if (this.monitor.isAlive()) {
+          stop();
+        }
       }
     }
   }
 
   public void propertyChange(PropertyChangeEvent evt) {
-    if (evt.getSource() instanceof Settings) {
-      Settings settings = (Settings)evt.getSource();
-      startStop(true, settings.isCheckDatabaseLag());
-    } else {
-      log.log(Level.SEVERE, "Uninteresting change for the ServerMonitor");
+    boolean enabled = this.data.settings.isCheckDatabaseLag();
+    boolean loggedIn = this.data.isLoggedIn();
+
+    if (evt.getPropertyName() == "checkDatabaseLag") {
+      enabled = (Boolean)evt.getNewValue();
     }
+    if (evt.getPropertyName() == "loggedIn") {
+      loggedIn = (Boolean)evt.getNewValue();
+    }
+    startStop(loggedIn, enabled);
   }
 
   public void start() {

@@ -82,7 +82,6 @@ public final class Main extends javax.swing.JFrame
     monitor = new ServerMonitor(lServerStatus, data);
     data.settings.addPropertyChangeListener(monitor);
     data.addPropertyChangeListener(monitor);
-    monitor.start();
 
     data.addPropertyChangeListener(this); // login, logout events
     if (hello == 1) {
