@@ -1029,9 +1029,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       try {
         Desktop.getDesktop().browse(new URI("https://github.com/yarl/vicuna/wiki#head"));
       } catch (URISyntaxException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error(null, ex);
       } catch (IOException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error(null, ex);
       }
     }
 
@@ -1203,14 +1203,14 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
           try {
             Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
           } catch (URISyntaxException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            error(null, ex);
           } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            error(null, ex);
           }
         }
       }
     } catch (IOException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error(null, ex);
     }
   }
 
@@ -1287,7 +1287,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
           }
         } catch (IOException ex) {
           JOptionPane.showMessageDialog(rootPane, Data.text("error") + ": " + ex.toString());
-          Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+          error(null, ex);
         }
       } else {
         int dialog = JOptionPane.showConfirmDialog(rootPane, Data.text("session-save-exist"));
@@ -1330,7 +1330,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
         return false;
       }
     } catch (HeadlessException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error(null, ex);
       return false;
     }
   }
@@ -1488,10 +1488,10 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       transformer.transform(source, result);
       return true;
     } catch (ParserConfigurationException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error(null, ex);
       return false;
     } catch (TransformerException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error(null, ex);
       return false;
     }
   }
@@ -1566,7 +1566,7 @@ class Comment {
       }
       
     } catch (IOException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error(null, ex);
       return false;
     }
     return true;
@@ -1703,9 +1703,9 @@ class Comment {
       mFileUploadSelect.setEnabled(true);
       mUpload.setEnabled(true);
 
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(rootPane, Data.text("session-error") + " " + e.getLocalizedMessage(), Data.text("session-load"), JOptionPane.ERROR_MESSAGE, null);
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+    } catch (Exception ex) {
+      JOptionPane.showMessageDialog(rootPane, Data.text("session-error") + " " + ex.getLocalizedMessage(), Data.text("session-load"), JOptionPane.ERROR_MESSAGE, null);
+      error(null, ex);
     }
   }
     //</editor-fold>
@@ -1832,9 +1832,9 @@ class Comment {
       final ProcessBuilder builder = new ProcessBuilder(command);
       builder.start();
     } catch (IOException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error(null, ex);
     } catch (URISyntaxException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error(null, ex);
     }
   }
     //</editor-fold>
@@ -1867,14 +1867,14 @@ class Comment {
       try {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       } catch (ClassNotFoundException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error(null, ex);
       } catch (InstantiationException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error(null, ex);
       } catch (IllegalAccessException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error(null, ex);
       }
     } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-      java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+      error(null, ex);
     }
         //</editor-fold>
 
@@ -2047,6 +2047,12 @@ class Comment {
       dtde.rejectDrop();
     }
   }
+
+  protected static void error(String s1, Object s2) {
+    Log.log(Level.SEVERE, s1, s2);
+  }
+
+  protected static java.util.logging.Logger Log = java.util.logging.Logger.getLogger(Main.class.getName());
 }
 
 class MapEntryConverter implements Converter {
