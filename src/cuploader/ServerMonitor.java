@@ -76,7 +76,7 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
     while (!this.monitor.interrupted()) {
         try {
           int lag;
-          if (this.data.wiki != null && this.data.isLogged) {
+          if (this.data.wiki != null && this.data.isLoggedIn()) {
             debug("Got wiki, logged in");
             lag = this.data.wiki.getCurrentDatabaseLag();
 

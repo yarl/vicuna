@@ -119,7 +119,7 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
           Data.wiki = w;
 
           //TODO: pobieranie ustawień konta
-          Main.setLogged(true);
+          data.setLoggedIn(true);
 
           if (startUpload) {
             new FUploadCheck(data);

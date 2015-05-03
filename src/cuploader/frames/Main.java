@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -50,7 +51,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public final class Main extends javax.swing.JFrame implements DropTargetListener {
+public final class Main extends javax.swing.JFrame
+    implements DropTargetListener, PropertyChangeListener {
 
   Data data;
   ServerMonitor monitor;
@@ -78,9 +80,11 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     setVisible(true);
 
     monitor = new ServerMonitor(lServerStatus, data);
-    Data.settings.addPropertyChangeListener(monitor);
+    data.settings.addPropertyChangeListener(monitor);
+    data.addPropertyChangeListener(monitor);
     monitor.start();
 
+    data.addPropertyChangeListener(this); // login, logout events
     if (hello == 1) {
       JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
     } else if (hello == 2) {
@@ -800,14 +804,14 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
   }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * When logged out opens log in window. When logged in log out.
+     * Reponse to the GUI Login/Logout button
+     * When logged out opens log in window. When logged in log out right now.
      * @param evt 
      */
     private void logIn(ActionEvent evt) {
-      if (Data.isLogged) {
-        Data.wiki.logout();
-        Data.isLogged = false;
-        setLogged(false);
+      if (data.isLoggedIn()) {
+        data.wiki.logout();
+        data.setLoggedIn(false);
       } else {
         if (data.fLogin == null) {
           Log.finer("Opening login window");
@@ -1934,18 +1938,28 @@ class Comment {
   private javax.swing.JPanel pUserInfo;
   // End of variables declaration//GEN-END:variables
 
-  public static void setLogged(boolean mode) {
-    if (mode) {
-      Data.isLogged = true;
-      lUserInfo.setText("<html>" + Data.text("status-hello") + ", <b>" + Data.settings.username + "</b>!</html>");
-      lUserInfo.setForeground(Color.BLACK);
-      mLogin.setText(Data.text("logoff"));
-      lServer.setText(Data.settings.server);
-    } else {
-      lUserInfo.setText(Data.text("status-unlogged"));
-      lUserInfo.setForeground(new Color(102, 102, 102));
-      mLogin.setText(Data.text("login"));
+  public void propertyChange(PropertyChangeEvent evt) {
+    java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.INFO, evt.getPropertyName(), "propertyChange");
+    if (evt.getPropertyName() == "loggedIn") {
+      if ((Boolean)evt.getNewValue()) {
+        displayHelloMessage();
+      } else {
+        userLoggedOff();
+      } 
     }
+  }
+
+  public void displayHelloMessage() {
+    lUserInfo.setText("<html>" + Data.text("status-hello") + ", <b>" + Data.settings.username + "</b>!</html>");
+    lUserInfo.setForeground(Color.BLACK);
+    mLogin.setText(Data.text("logoff"));
+    lServer.setText(Data.settings.server);
+  }
+
+  public void userLoggedOff() {
+    lUserInfo.setText(Data.text("status-unlogged"));
+    lUserInfo.setForeground(new Color(102, 102, 102));
+    mLogin.setText(Data.text("login"));
   }
 
   /**
