@@ -4,13 +4,15 @@ import cuploader.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.security.auth.login.FailedLoginException;
 import javax.swing.*;
 import org.wikipedia.Wiki;
 
-public class FLogin extends javax.swing.JFrame {
+public class FLogin extends javax.swing.JFrame implements WindowListener {
 
   private Data data;
   private boolean startUpload = false;
@@ -30,7 +32,8 @@ public class FLogin extends javax.swing.JFrame {
 
   private void init() {
     setLocationRelativeTo(null);
-    setDefaultCloseOperation(FLogin.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(FLogin.DO_NOTHING_ON_CLOSE);
+    addWindowListener(this);
 
     if (!Data.settings.username.isEmpty()) {
       tName.setText(Data.settings.username);
@@ -118,10 +121,10 @@ public class FLogin extends javax.swing.JFrame {
           //TODO: pobieranie ustawień konta
           Main.setLogged(true);
 
-          dispose();
           if (startUpload) {
             new FUploadCheck(data);
           }
+          dispose();
           Data.fLogin = null;
         } catch (IOException ex) {
           lTextInfo.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/cross.png")));
@@ -142,6 +145,23 @@ public class FLogin extends javax.swing.JFrame {
 
     Thread t = new Thread(run);
     t.start();
+  }
+
+
+  /* implement WindowListener */
+  public void windowOpened(WindowEvent e) {};
+  public void windowClosed(WindowEvent e) {};
+  public void windowIconified(WindowEvent e) {};
+  public void windowDeiconified(WindowEvent e) {};
+  public void windowActivated(WindowEvent e) {};
+  public void windowDeactivated(WindowEvent e) {};
+  /**
+   * Close the login window
+   */
+  public void windowClosing(WindowEvent e) {
+    Log.finer("Login window closing");
+    dispose();
+    Data.fLogin = null;
   }
 
   @SuppressWarnings("unchecked")
@@ -435,7 +455,9 @@ public class FLogin extends javax.swing.JFrame {
   KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
   Action escapeAction = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      dispose();
+      windowClosing(null);
     }
   };
+
+  public static java.util.logging.Logger Log = java.util.logging.Logger.getLogger(FLogin.class.getName());
 }
