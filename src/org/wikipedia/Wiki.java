@@ -6549,6 +6549,7 @@ public class Wiki implements Serializable
      *  @throws ClassNotFoundException if we can't recognize the input
      *  @since 0.10
      */
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
     {
         String z = (String)in.readObject();
