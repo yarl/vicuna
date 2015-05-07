@@ -2055,11 +2055,13 @@ class Comment {
 
 class MapEntryConverter implements Converter {
   
+  @SuppressWarnings("rawtypes")
   public boolean canConvert(Class clazz) {
     return AbstractMap.class.isAssignableFrom(clazz);
   }
   
   public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
+    @SuppressWarnings("unchecked")
     AbstractMap<String, String> map = (AbstractMap<String, String>) value;
     for (Entry<String, String> entry : map.entrySet()) {
       writer.startNode(entry.getKey().toString());
