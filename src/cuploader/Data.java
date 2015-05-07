@@ -27,7 +27,7 @@ import javax.swing.undo.UndoManager;
 import org.wikipedia.Wiki;
 
 public class Data implements Serializable {
-    private static PropertyChangeSupport propchange;
+    private transient static PropertyChangeSupport propchange;
     public static Settings settings;
     
     public enum Elem { NAME, EXT, DATE, COOR, DESC, CATS; }

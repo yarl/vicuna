@@ -14,7 +14,7 @@ import java.util.Locale;
  * @author saper
  */
 public class Settings {
-    private PropertyChangeSupport propchange;
+    private transient PropertyChangeSupport propchange;
 
     //User
     public String server = "commons.wikimedia.org";
