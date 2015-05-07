@@ -173,7 +173,7 @@ public class FIntro extends javax.swing.JFrame {
 
   /**
    * Checks current version of program and compate it to latest version available online.
-   * @return 
+   * @return boolean need update?
    */
   private boolean checkVersion() {
     try {

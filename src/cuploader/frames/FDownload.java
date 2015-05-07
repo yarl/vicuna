@@ -34,7 +34,7 @@ public final class FDownload extends javax.swing.JFrame {
     }
 
     /**
-     * @see http://stackoverflow.com/a/4194224/1418878
+     * @see <a href="http://stackoverflow.com/a/4194224/1418878">Stack Overflow: How can I restart a Java application?</a>
      */
     void start() {
         Runnable run = new Runnable() {
@@ -82,7 +82,7 @@ public final class FDownload extends javax.swing.JFrame {
     /**
      * Downloads file from server
      * @param dest destination
-     * @see http://cookbooks.adobe.com/post_Download_a_file_from_a_URL_in_Java-17947.html
+     * @see <a href="http://cookbooks.adobe.com/post_Download_a_file_from_a_URL_in_Java-17947.html">Adobe Forums: Download a file from a URL</a>
      */
     private void download(String dest) {
         try {

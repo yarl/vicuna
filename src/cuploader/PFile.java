@@ -1024,7 +1024,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
      * @param  imageToRotate original thumbnail
      * @param  angle         angle to rotate it
      * @return BufferedImage rotated thumbnail
-     * @see http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0
+     * @see <a href="http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0">Java - Rotate -90 deg</a>
      */
     public BufferedImage rotateThumbnail(Image imageToRotate, int angle) {
 	Image rotatedImage = new BufferedImage(imageToRotate.getHeight(null), imageToRotate.getWidth(null), BufferedImage.TYPE_INT_ARGB);
@@ -1044,7 +1044,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 
     /**
      * Thumbnail generator
-     * @source: http://codereview.stackexchange.com/questions/912/optimized-thumbnail-generation
+     * @see <a href="http://codereview.stackexchange.com/questions/912/optimized-thumbnail-generation">StackExchange: Optimized Thumbnail Generation</a>
      */
     public void generateThumbnail() {
       ext = file.getName().substring(file.getName().lastIndexOf('.')+1).toLowerCase();
