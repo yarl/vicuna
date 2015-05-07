@@ -2014,10 +2014,10 @@ class Comment {
         if (flavors[i].isFlavorJavaFileListType()) {
           dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
           array = new ArrayList<File>();
-          List list = (List) tr.getTransferData(flavors[i]);
+          @SuppressWarnings("unchecked")
+          List<File> list = (List<File>) tr.getTransferData(flavors[i]);
 
-          for (Object o : list) {
-            File f = new File(o.toString());
+          for (File f : list) {
             if (Data.settings.loadSubdirectory) {
               addToArray(f);
             } else {
