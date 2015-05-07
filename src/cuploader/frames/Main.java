@@ -1531,15 +1531,21 @@ class Comment {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.registerConverter(new MapEntryConverter());
 
-        ArrayList<Map> elements = (ArrayList) xstream.fromXML(files);
-        //System.out.println(elements);
-        new FFileLoading(elements, true);
-        
-        //new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
-        //lStartInfo.setVisible(false);
-        //mEdit.setEnabled(true);
-        //mFileUploadSelect.setEnabled(true);
-        //mUpload.setEnabled(true);
+        try {
+          @SuppressWarnings("unchecked")
+          ArrayList<Map<String,String>> elements = (ArrayList<Map<String,String>>) xstream.fromXML(files);
+          //System.out.println(elements);
+          new FFileLoading(elements, true);
+          
+          //new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
+          //lStartInfo.setVisible(false);
+          //mEdit.setEnabled(true);
+          //mFileUploadSelect.setEnabled(true);
+          //mUpload.setEnabled(true);
+        } catch (ClassCastException ex) {
+          error("Bad session file format", ex);
+          return false;
+        }
       }
       
     } catch (IOException ex) {

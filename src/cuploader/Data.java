@@ -171,8 +171,8 @@ public class Data implements Serializable {
         return files;
     }
     
-    public static ArrayList<Map> getFilesXML() {
-      ArrayList list = new ArrayList();
+    public static ArrayList<Map<String, String>> getFilesXML() {
+      ArrayList<Map<String, String>> list = new ArrayList<Map<String,String>>();
       for(PFile file : files)
         list.add(file.returnData());
       return list;
