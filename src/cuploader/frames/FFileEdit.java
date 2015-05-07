@@ -561,5 +561,8 @@ public class FFileEdit extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+        static final long serialVersionUID = 1524481548181604908L;
     };
+
+    static final long serialVersionUID = 6692654803431054850L;
 }

@@ -1363,7 +1363,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             if (f.toEdit) del.add(f.number);
 
         Object[] options = { bundle.getString("button-delete"), bundle.getString("button-cancel")};
-        int n = JOptionPane.showOptionDialog(new Component() {}, bundle.getString("file-delete-confirm"), bundle.getString("file-delete"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        int n = JOptionPane.showOptionDialog(new Component() {
+          static final long serialVersionUID = -6689060806100517959L;
+        }, bundle.getString("file-delete-confirm"), bundle.getString("file-delete"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         if(n==0) {
             for (Iterator<PFile> it = Data.getFiles().iterator(); it.hasNext();) {
                 PFile f = it.next();
@@ -1408,4 +1410,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
     }
+
+    static final long serialVersionUID = 6505572376784816620L;
 }

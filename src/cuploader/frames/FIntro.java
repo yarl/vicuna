@@ -228,4 +228,6 @@ public class FIntro extends javax.swing.JFrame {
     private javax.swing.JLabel tStatus;
     private javax.swing.JLabel tTitle;
     // End of variables declaration//GEN-END:variables
+
+    static final long serialVersionUID = 8446207171851566362L;
 }

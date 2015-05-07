@@ -266,5 +266,7 @@ public final class FFileLoading extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+        static final long serialVersionUID = 2104677564832798767L;
     }; 
+    static final long serialVersionUID = 6325967143502514326L;
 }

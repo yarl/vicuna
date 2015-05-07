@@ -2043,6 +2043,8 @@ class Comment {
   }
 
   protected static java.util.logging.Logger Log = java.util.logging.Logger.getLogger(Main.class.getName());
+
+  static final long serialVersionUID = -4314089010092936678L;
 }
 
 class MapEntryConverter implements Converter {

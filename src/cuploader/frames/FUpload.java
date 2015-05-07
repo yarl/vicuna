@@ -478,10 +478,12 @@ public class FUpload extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             stopUpload();
         }
+        static final long serialVersionUID = 5875361058922075517L;
     };
 
     private void lockLogout(boolean b) {
         Main.bLogin.setEnabled(!b);
         Main.mLogin.setEnabled(!b);
     }
+    static final long serialVersionUID = -7669448777553409665L;
 }

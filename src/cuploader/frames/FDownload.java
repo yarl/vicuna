@@ -185,6 +185,8 @@ public final class FDownload extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+        static final long serialVersionUID = -3107930852053039496L;
     };
 
+    static final long serialVersionUID = -333719907535778260L;
 }

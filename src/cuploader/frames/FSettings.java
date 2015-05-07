@@ -1074,6 +1074,7 @@ public class FSettings extends javax.swing.JFrame {
             dispose();
             Data.fSettings = null;
         }
+        static final long serialVersionUID = 7850593258773014992L;
     }; 
     
     WindowListener exit = new WindowAdapter() {
@@ -1083,6 +1084,7 @@ public class FSettings extends javax.swing.JFrame {
             Data.fSettings = null;
         }
     };
+    static final long serialVersionUID = 8765476340053495420L;
 }
 
 class QuickTemplatesModel extends DefaultTableModel {
@@ -1143,4 +1145,6 @@ class QuickTemplatesModel extends DefaultTableModel {
         /*if(columnIndex==1 && rowIndex<5) return false;  //i18n
         else*/ return true;
     }
+
+    static final long serialVersionUID = -8533295926904577136L;
 }
