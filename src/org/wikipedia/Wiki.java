@@ -1189,7 +1189,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.28
      */
-    public HashMap getPageInfo(String page) throws IOException
+    public HashMap<String, Object> getPageInfo(String page) throws IOException
     {
         return getPageInfo(new String[] { page } )[0];
     }
@@ -1220,15 +1220,16 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    public HashMap[] getPageInfo(String[] pages) throws IOException
+    public HashMap<String, Object>[] getPageInfo(String[] pages) throws IOException
     {
-        HashMap[] info = new HashMap[pages.length];
+        @SuppressWarnings({"rawtypes", "unchecked"}) /* This is hopeless */
+        HashMap<String, Object>[] info = new HashMap[pages.length];
         String urlstart = query + "prop=info&intoken=edit%7Cwatch&inprop=protection%7Cdisplaytitle%7Cwatchers&titles=";
         StringBuilder url = new StringBuilder(urlstart);
         int k = 0;
         for (int i = 0; i < pages.length; i++)
         {
-            info[i] = new HashMap(15);
+            info[i] = new HashMap<String, Object>(15);
             url.append(URLEncoder.encode(normalize(pages[i]), "UTF-8"));
             // send off in batches of slowmax
             if (i % slowmax == slowmax - 1 || i == pages.length - 1)
@@ -1670,7 +1671,7 @@ public class Wiki implements Serializable
         statusCheck();
 
         // protection and token
-        HashMap info = getPageInfo(title);
+        HashMap<String, Object> info = getPageInfo(title);
         if (!checkRights(info, "edit") || (Boolean)info.get("exists") && !checkRights(info, "create"))
         {
             CredentialException ex = new CredentialException("Permission denied: page is protected.");
@@ -1820,7 +1821,7 @@ public class Wiki implements Serializable
             throw new CredentialNotFoundException("Cannot delete: Permission denied");
 
         // edit token
-        HashMap info = getPageInfo(title);
+        HashMap<String, Object> info = getPageInfo(title);
         if (!(Boolean)info.get("exists"))
         {
             logger.log(Level.INFO, "Page \"{0}\" does not exist.", title);
@@ -2284,7 +2285,7 @@ public class Wiki implements Serializable
         // TODO: image renaming? TEST ME (MediaWiki, that is).
 
         // protection and token
-        HashMap info = getPageInfo(title);
+        HashMap<String, Object> info = getPageInfo(title);
         // determine whether the page exists
         if (!(Boolean)info.get("exists"))
             throw new IllegalArgumentException("Tried to move a non-existant page!");
@@ -2591,7 +2592,7 @@ public class Wiki implements Serializable
             throw new IllegalArgumentException("Cannot undo - the revisions supplied are not on the same page!");
 
         // protection and token
-        HashMap info = getPageInfo(rev.getPage());
+        HashMap<String, Object> info = getPageInfo(rev.getPage());
         if (!checkRights(info, "edit"))
         {
             CredentialException ex = new CredentialException("Permission denied: page is protected.");
@@ -3068,7 +3069,7 @@ public class Wiki implements Serializable
         filename = filename.replaceFirst("^(File|Image|" + namespaceIdentifier(FILE_NAMESPACE) + "):", "");
 
         // protection and token
-        HashMap info = getPageInfo("File:" + filename);
+        HashMap<String, Object> info = getPageInfo("File:" + filename);
         if (!checkRights(info, "upload"))
         {
             CredentialException ex = new CredentialException("Permission denied: page is protected.");
@@ -6321,6 +6322,7 @@ public class Wiki implements Serializable
             throw new CredentialExpiredException("Cookies have expired.");
         }
         // check protection
+        @SuppressWarnings("unchecked")
         HashMap<String, Object> protectionstate = (HashMap<String, Object>)pageinfo.get("protection");
         if (protectionstate.containsKey(action))
         {
