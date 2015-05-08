@@ -1418,7 +1418,7 @@ public class Wiki implements Serializable
     {
         if (namespaces == null)
             populateNamespaceCache();
-        return (HashMap<String, Integer>)namespaces.clone();
+        return new HashMap<String, Integer>(namespaces);
     }
 
     /**
