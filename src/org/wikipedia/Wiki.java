@@ -4059,6 +4059,7 @@ public class Wiki implements Serializable
      *  the list of urls (instance of <tt>java.net.URL</tt>)
      *  @since 0.24
      */
+    @SuppressWarnings("rawtypes")
     public ArrayList[] linksearch(String pattern, String protocol, int... ns) throws IOException
     {
         // FIXME: Change return type to ArrayList<Object[]> or Object[][]
@@ -4066,6 +4067,9 @@ public class Wiki implements Serializable
 
         // set it up
         StringBuilder url = new StringBuilder(query);
+        // no reason for more than 500 links
+        ArrayList<String> pagetitles = new ArrayList<String>(667);
+        ArrayList<URL> pageurls = new ArrayList<URL>(667);
         url.append("list=exturlusage&euprop=title%7curl&euquery=");
         url.append(pattern);
         url.append("&euprotocol=");
@@ -4076,17 +4080,12 @@ public class Wiki implements Serializable
 
         // some variables we need later
         boolean done = false;
-        ArrayList[] ret = new ArrayList[] // no reason for more than 500 links
-        {
-            new ArrayList<String>(667), // page titles
-            new ArrayList<URL>(667) // urls
-        };
 
         // begin
         while (!done)
         {
             // if this is the last page of results then there is no euoffset parameter
-            String line = fetch(url.toString() + ret[0].size(), "linksearch");
+            String line = fetch(url.toString() + pagetitles.size(), "linksearch");
             if (!line.contains("euoffset=\""))
                 done = true;
 
@@ -4094,17 +4093,17 @@ public class Wiki implements Serializable
             for (int x = line.indexOf("<eu"); x > 0; x = line.indexOf("<eu ", ++x))
             {
                 String link = parseAttribute(line, "url", x);
-                ret[0].add(decode(parseAttribute(line, "title", x)));
+                pagetitles.add(decode(parseAttribute(line, "title", x)));
                 if (link.charAt(0) == '/') // protocol relative url
-                    ret[1].add(new URL(protocol + ":" + link));
+                    pageurls.add(new URL(protocol + ":" + link));
                 else
-                    ret[1].add(new URL(link));
+                    pageurls.add(new URL(link));
             }
         }
 
         // return value
-        log(Level.INFO, "Successfully returned instances of external link " + pattern + " (" + ret[0].size() + " links)", "linksearch");
-        return ret;
+        log(Level.INFO, "Successfully returned instances of external link " + pattern + " (" + pagetitles.size() + " links)", "linksearch");
+        return new ArrayList[]{ pagetitles, pageurls };
     }
 
     /**
