@@ -3,6 +3,7 @@ package cuploader;
 import javax.swing.*;
 
 import java.awt.*;
+import java.beans.*;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -10,8 +11,11 @@ import java.util.Locale;
  * This class cointain fileds with program settings. This stuff will be serialized and read after next start.
  *
  * @author Pawel
+ * @author saper
  */
 public class Settings {
+    private transient PropertyChangeSupport propchange;
+
     //User
     public String server = "commons.wikimedia.org";
     public String username = "";
@@ -49,6 +53,7 @@ public class Settings {
     public boolean readExifHour = false;
     public boolean loadSubdirectory = false;
     public boolean renameAfterUpload = false;
+    private boolean serverMonitorEnabled = true;
     public boolean askQuit = true;
     public String uploadSummary = "";
 
@@ -72,8 +77,32 @@ public class Settings {
     public Locale lang;
 
     public Settings() {
+        this.propchange = new PropertyChangeSupport(this);
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-en"), "{{en|%TEXT%}}", true));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-de"), "{{de|%TEXT%}}", true));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-fr"), "{{fr|%TEXT%}}", true));
+    }
+
+    public boolean isServerMonitorEnabled() {
+        return serverMonitorEnabled;
+    }
+    public void setServerMonitorEnabled(boolean n) {
+        boolean old = serverMonitorEnabled;
+        serverMonitorEnabled = n;
+        propchange.firePropertyChange("checkDataBaseLag", old, n);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        if (propchange == null) {
+          propchange = new PropertyChangeSupport(this);
+        }
+        propchange.addPropertyChangeListener(listener);
+    }
+    
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        if (propchange == null) {
+          propchange = new PropertyChangeSupport(this);
+        }
+        propchange.removePropertyChangeListener(listener);
     }
 }

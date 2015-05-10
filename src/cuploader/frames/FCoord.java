@@ -428,5 +428,7 @@ public class FCoord extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+        static final long serialVersionUID = -2856674781867817746L;
     };
+    static final long serialVersionUID = 7619939933241725736L;
 }

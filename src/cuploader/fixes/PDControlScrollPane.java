@@ -76,5 +76,7 @@ class PDMouseWheelListener implements MouseWheelListener {
                 .getScrollAmount(), e.getWheelRotation());
     }
 }
+
+    static final long serialVersionUID = -8795905233455855235L;
 }  
 

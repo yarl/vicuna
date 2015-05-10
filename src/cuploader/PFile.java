@@ -343,7 +343,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     });
 
     jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    jScrollPane1.setNextFocusableComponent(Panel);
 
     tDesc.setColumns(20);
     tDesc.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
@@ -1025,7 +1024,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
      * @param  imageToRotate original thumbnail
      * @param  angle         angle to rotate it
      * @return BufferedImage rotated thumbnail
-     * @see http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0
+     * @see <a href="http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0">Java - Rotate -90 deg</a>
      */
     public BufferedImage rotateThumbnail(Image imageToRotate, int angle) {
 	Image rotatedImage = new BufferedImage(imageToRotate.getHeight(null), imageToRotate.getWidth(null), BufferedImage.TYPE_INT_ARGB);
@@ -1045,7 +1044,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 
     /**
      * Thumbnail generator
-     * @source: http://codereview.stackexchange.com/questions/912/optimized-thumbnail-generation
+     * @see <a href="http://codereview.stackexchange.com/questions/912/optimized-thumbnail-generation">StackExchange: Optimized Thumbnail Generation</a>
      */
     public void generateThumbnail() {
       ext = file.getName().substring(file.getName().lastIndexOf('.')+1).toLowerCase();
@@ -1309,7 +1308,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
                                            boolean higherQuality) {
         int type = (img.getTransparency() == Transparency.OPAQUE) ?
             BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
-        BufferedImage ret = (BufferedImage)img;
+        BufferedImage ret = img;
         
         int w, h;
         if (higherQuality) {
@@ -1364,7 +1363,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             if (f.toEdit) del.add(f.number);
 
         Object[] options = { bundle.getString("button-delete"), bundle.getString("button-cancel")};
-        int n = JOptionPane.showOptionDialog(new Component() {}, bundle.getString("file-delete-confirm"), bundle.getString("file-delete"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        int n = JOptionPane.showOptionDialog(new Component() {
+          static final long serialVersionUID = -6689060806100517959L;
+        }, bundle.getString("file-delete-confirm"), bundle.getString("file-delete"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         if(n==0) {
             for (Iterator<PFile> it = Data.getFiles().iterator(); it.hasNext();) {
                 PFile f = it.next();
@@ -1409,4 +1410,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
     }
+
+    static final long serialVersionUID = 6505572376784816620L;
 }

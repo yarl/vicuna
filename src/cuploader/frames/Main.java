@@ -14,6 +14,7 @@ import static cuploader.Data.settings;
 import cuploader.FileFilters;
 import cuploader.PFile;
 import cuploader.Settings;
+import cuploader.ServerMonitor;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.HeadlessException;
@@ -26,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -49,9 +51,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public final class Main extends javax.swing.JFrame implements DropTargetListener {
+public final class Main extends javax.swing.JFrame
+    implements DropTargetListener, PropertyChangeListener {
 
   Data data;
+  ServerMonitor monitor;
 
   public Main(Data data) {
 
@@ -75,7 +79,11 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     readPosition();
     setVisible(true);
 
-    checkLag();
+    monitor = new ServerMonitor(lServerStatus);
+    Data.settings.addPropertyChangeListener(monitor);
+    data.addPropertyChangeListener(monitor);
+
+    data.addPropertyChangeListener(this); // login, logout events
     if (hello == 1) {
       JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
     } else if (hello == 2) {
@@ -348,7 +356,7 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
 
     lServerStatus.setHorizontalAlignment(Data.getOrientation(false));
     lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
-    lServerStatus.setText("Status");
+    lServerStatus.setText(Data.text("server-status"));
     lServerStatus.setHorizontalTextPosition(Data.getOrientation(true));
 
     javax.swing.GroupLayout pUserInfoLayout = new javax.swing.GroupLayout(pUserInfo);
@@ -795,18 +803,18 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
   }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * When logged out opens log in window. When logged in log out.
+     * Reponse to the GUI Login/Logout button
+     * When logged out opens log in window. When logged in log out right now.
      * @param evt 
      */
     private void logIn(ActionEvent evt) {
-      if (Data.isLogged) {
+      if (Data.isLoggedIn()) {
         Data.wiki.logout();
-        Data.isLogged = false;
-        setLogged(false);
+        Data.setLoggedIn(false);
       } else {
-        if (data.fLogin == null) {
+        if (Data.fLogin == null) {
           Log.finer("Opening login window");
-          data.fLogin = new FLogin(data);
+          Data.fLogin = new FLogin(data);
         } else {
           Log.finer("Login window exists");
         }
@@ -1218,44 +1226,6 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
     }
   }
 
-  private void checkLag() {
-    Runnable run = new Runnable() {
-      @Override
-      public void run() {
-        while (true) {
-          try {
-            int lag;
-            if (Data.wiki == null) {
-              lag = new Wiki(Data.settings.server).getCurrentDatabaseLag();
-            } else {
-              lag = Data.wiki.getCurrentDatabaseLag();
-            }
-
-            if (lag <= 0) {
-              lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status.png")));
-              lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-ok"));
-            } else if (lag > 0 && lag <= 5) {
-              lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-away.png")));
-              lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-lag") + " " + lag + " s");
-            } else {
-              lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-busy.png")));
-              lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-lag") + " " + lag + " s");
-            }
-          } catch (IOException ex) {
-            lServerStatus.setText(Data.text("server-status") + ": " + Data.text("server-offline"));
-            lServerStatus.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png")));
-          }
-          try {
-            Thread.sleep(30000);
-          } catch (InterruptedException ex) {
-          }
-        }
-      }
-    };
-    Thread t = new Thread(run);
-    t.start();
-  }
-
     //</editor-fold>
   /**
    * Saving session
@@ -1421,6 +1391,9 @@ public final class Main extends javax.swing.JFrame implements DropTargetListener
       attr = doc.createAttribute("load_subdirectory");
       attr.setValue(Data.settings.loadSubdirectory + "");
       other.setAttributeNode(attr);
+      attr = doc.createAttribute("server_monitor_enabled");
+      attr.setValue(Data.settings.isServerMonitorEnabled() + "");
+      other.setAttributeNode(attr);
       attr = doc.createAttribute("ask_quit");
       attr.setValue(Data.settings.askQuit + "");
       other.setAttributeNode(attr);
@@ -1558,15 +1531,21 @@ class Comment {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.registerConverter(new MapEntryConverter());
 
-        ArrayList<Map> elements = (ArrayList) xstream.fromXML(files);
-        //System.out.println(elements);
-        new FFileLoading(elements, true);
-        
-        //new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
-        //lStartInfo.setVisible(false);
-        //mEdit.setEnabled(true);
-        //mFileUploadSelect.setEnabled(true);
-        //mUpload.setEnabled(true);
+        try {
+          @SuppressWarnings("unchecked")
+          ArrayList<Map<String,String>> elements = (ArrayList<Map<String,String>>) xstream.fromXML(files);
+          //System.out.println(elements);
+          new FFileLoading(elements, true);
+          
+          //new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
+          //lStartInfo.setVisible(false);
+          //mEdit.setEnabled(true);
+          //mFileUploadSelect.setEnabled(true);
+          //mUpload.setEnabled(true);
+        } catch (ClassCastException ex) {
+          error("Bad session file format", ex);
+          return false;
+        }
       }
       
     } catch (IOException ex) {
@@ -1646,6 +1625,9 @@ class Comment {
               }
               if (attr.get("load_subdirectory") != null) {
                 Data.settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
+              }
+              if (attr.get("server_monitor_enabled") != null) {
+                Data.settings.setServerMonitorEnabled(Boolean.parseBoolean(attr.get("server_monitor_enabled")));
               }
               if (attr.get("ask_quit") != null) {
                 Data.settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));
@@ -1961,25 +1943,35 @@ class Comment {
   private javax.swing.JPanel pUserInfo;
   // End of variables declaration//GEN-END:variables
 
-  public static void setLogged(boolean mode) {
-    if (mode) {
-      Data.isLogged = true;
-      lUserInfo.setText("<html>" + Data.text("status-hello") + ", <b>" + Data.settings.username + "</b>!</html>");
-      lUserInfo.setForeground(Color.BLACK);
-      mLogin.setText(Data.text("logoff"));
-      lServer.setText(Data.settings.server);
-    } else {
-      lUserInfo.setText(Data.text("status-unlogged"));
-      lUserInfo.setForeground(new Color(102, 102, 102));
-      mLogin.setText(Data.text("login"));
+  public void propertyChange(PropertyChangeEvent evt) {
+    java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.INFO, evt.getPropertyName(), "propertyChange");
+    if (evt.getPropertyName() == "loggedIn") {
+      if ((Boolean)evt.getNewValue()) {
+        displayHelloMessage();
+      } else {
+        userLoggedOff();
+      } 
     }
+  }
+
+  public void displayHelloMessage() {
+    lUserInfo.setText("<html>" + Data.text("status-hello") + ", <b>" + Data.settings.username + "</b>!</html>");
+    lUserInfo.setForeground(Color.BLACK);
+    mLogin.setText(Data.text("logoff"));
+    lServer.setText(Data.settings.server);
+  }
+
+  public void userLoggedOff() {
+    lUserInfo.setText(Data.text("status-unlogged"));
+    lUserInfo.setForeground(new Color(102, 102, 102));
+    mLogin.setText(Data.text("login"));
   }
 
   /**
    * Drag & drop
    *
    * @see
-   * http://www.java-tips.org/java-se-tips/javax.swing/how-to-implement-drag-drop-functionality-in-your-applic.html
+   * <a href="http://www.java-tips.org/java-se-tips/javax.swing/how-to-implement-drag-drop-functionality-in-your-applic.html">How to implement drag'n'drop functionality</a>
    */
   @Override
   public void dragEnter(DropTargetDragEvent dtde) {
@@ -2022,10 +2014,10 @@ class Comment {
         if (flavors[i].isFlavorJavaFileListType()) {
           dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
           array = new ArrayList<File>();
-          List list = (List) tr.getTransferData(flavors[i]);
+          @SuppressWarnings("unchecked")
+          List<File> list = (List<File>) tr.getTransferData(flavors[i]);
 
-          for (Object o : list) {
-            File f = new File(o.toString());
+          for (File f : list) {
             if (Data.settings.loadSubdirectory) {
               addToArray(f);
             } else {
@@ -2057,15 +2049,19 @@ class Comment {
   }
 
   protected static java.util.logging.Logger Log = java.util.logging.Logger.getLogger(Main.class.getName());
+
+  static final long serialVersionUID = -4314089010092936678L;
 }
 
 class MapEntryConverter implements Converter {
   
+  @SuppressWarnings("rawtypes")
   public boolean canConvert(Class clazz) {
     return AbstractMap.class.isAssignableFrom(clazz);
   }
   
   public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
+    @SuppressWarnings("unchecked")
     AbstractMap<String, String> map = (AbstractMap<String, String>) value;
     for (Entry<String, String> entry : map.entrySet()) {
       writer.startNode(entry.getKey().toString());

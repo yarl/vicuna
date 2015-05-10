@@ -81,7 +81,7 @@
     <mkdir dir="${store.dir}"/>
 
     <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
-        <zipgroupfileset dir="dist" includes="*.jar"/>
+        <zipgroupfileset dir="${dist.dir}" includes="*.jar"/>
         <zipgroupfileset dir="lib" includes="*.jar"/>
 
         <manifest>

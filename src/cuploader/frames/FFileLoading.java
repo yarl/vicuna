@@ -24,7 +24,7 @@ public final class FFileLoading extends javax.swing.JFrame {
     ArrayList<String> fCoor = null;
     ArrayList<String> fCats = null;
     
-    private ArrayList<Map> sessionFiles;
+    private ArrayList<Map<String,String>> sessionFiles;
     
     public FFileLoading(ArrayList<File> fPath, ArrayList<Boolean> fEdit, ArrayList<Boolean> fUpload, ArrayList<String> fName, 
             ArrayList<String> fDate, ArrayList<String> fDesc, ArrayList<String> fCoor, ArrayList<String> fCats) {
@@ -68,12 +68,12 @@ public final class FFileLoading extends javax.swing.JFrame {
         startRead(false);
     }
     
-    public FFileLoading(ArrayList<Map> files_, boolean hack) {
+    public FFileLoading(ArrayList<Map<String, String>> files_, boolean hack) {
         this.sessionFiles = files_;
         
         files = new ArrayList<File>();
-        for(Map m : files_) {
-          File f = new File((String)m.get("path"));
+        for(Map<String, String> m : files_) {
+          File f = new File(m.get("path"));
           files.add(f);
         }
         
@@ -111,7 +111,7 @@ public final class FFileLoading extends javax.swing.JFrame {
                 for(File file : files) {
                     if(!stopRq) {
                         start = System.nanoTime(); 
-                        lName.setText(bundle.getString("loading") + " " + (int)(i+1) + " / " + files.size() + ": " + file.getName() + 
+                        lName.setText(bundle.getString("loading") + " " + (i+1) + " / " + files.size() + ": " + file.getName() + 
                                 " (" + df.format(9.5367e-7*file.length()) + " MiB)");
                         lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
                         
@@ -121,8 +121,8 @@ public final class FFileLoading extends javax.swing.JFrame {
                             f = new PFile(file, Data.getFiles().size(), fUpload.get(i), fEdit.get(i), fName.get(i), fDesc.get(i),
                                                   fDate.get(i), fCats.get(i), fCoor.get(i));
                           else
-                            f = new PFile(file, Data.getFiles().size(), false, false, (String)sessionFiles.get(i).get("name"),
-                                    (String)sessionFiles.get(i).get("desc"), (String)sessionFiles.get(i).get("date"), (String)sessionFiles.get(i).get("cats"), "");
+                            f = new PFile(file, Data.getFiles().size(), false, false, sessionFiles.get(i).get("name"),
+                                    sessionFiles.get(i).get("desc"), sessionFiles.get(i).get("date"), sessionFiles.get(i).get("cats"), "");
                         } else
                             f = new PFile(file, Data.getFiles().size());
                         
@@ -266,5 +266,7 @@ public final class FFileLoading extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+        static final long serialVersionUID = 2104677564832798767L;
     }; 
+    static final long serialVersionUID = 6325967143502514326L;
 }

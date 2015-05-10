@@ -178,5 +178,8 @@ public class FAbout extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+        static final long serialVersionUID = -870636177102960976L;
     }; 
+
+    static final long serialVersionUID = 3563015584085051392L;
 }

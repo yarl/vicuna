@@ -119,7 +119,7 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
           Data.wiki = w;
 
           //TODO: pobieranie ustawień konta
-          Main.setLogged(true);
+          Data.setLoggedIn(true);
 
           if (startUpload) {
             new FUploadCheck(data);
@@ -457,7 +457,10 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
     public void actionPerformed(ActionEvent e) {
       windowClosing(null);
     }
+    static final long serialVersionUID = 3641980775838779462L;
   };
 
   public static java.util.logging.Logger Log = java.util.logging.Logger.getLogger(FLogin.class.getName());
+
+  static final long serialVersionUID = -1163628623045129787L;
 }

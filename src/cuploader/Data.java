@@ -7,6 +7,7 @@ import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.Serializable;
@@ -26,6 +27,7 @@ import javax.swing.undo.UndoManager;
 import org.wikipedia.Wiki;
 
 public class Data implements Serializable {
+    private transient static PropertyChangeSupport propchange;
     public static Settings settings;
     
     public enum Elem { NAME, EXT, DATE, COOR, DESC, CATS; }
@@ -41,7 +43,7 @@ public class Data implements Serializable {
     
     public static String version;
     public static String date;
-    public static boolean isLogged = false;
+    private static boolean loggedIn = false;
     
     //windows
     public static FSettings fSettings;
@@ -81,6 +83,17 @@ public class Data implements Serializable {
         licenses.add(text("license-other"));                licensesTemplates.add("");
         
         
+        propchange = new PropertyChangeSupport(this);
+    }
+
+    public static boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public static void setLoggedIn(boolean n) {
+        boolean old = loggedIn;
+        loggedIn = n;
+        propchange.firePropertyChange("loggedIn", old, n);
     }
     
     /***
@@ -158,8 +171,8 @@ public class Data implements Serializable {
         return files;
     }
     
-    public static ArrayList<Map> getFilesXML() {
-      ArrayList list = new ArrayList();
+    public static ArrayList<Map<String, String>> getFilesXML() {
+      ArrayList<Map<String, String>> list = new ArrayList<Map<String,String>>();
       for(PFile file : files)
         list.add(file.returnData());
       return list;
@@ -208,4 +221,19 @@ public class Data implements Serializable {
     public static ComponentOrientation getComponentOrientation() {
       return ComponentOrientation.getOrientation(settings.lang);
     }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        if (propchange == null) {
+          propchange = new PropertyChangeSupport(this);
+        }
+        propchange.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        if (propchange == null) {
+          propchange = new PropertyChangeSupport(this);
+        }
+    }
+
+    static final long serialVersionUID = 5293929884165981611L;
 }

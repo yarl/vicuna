@@ -1189,7 +1189,7 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.28
      */
-    public HashMap getPageInfo(String page) throws IOException
+    public HashMap<String, Object> getPageInfo(String page) throws IOException
     {
         return getPageInfo(new String[] { page } )[0];
     }
@@ -1220,15 +1220,16 @@ public class Wiki implements Serializable
      *  @throws IOException if a network error occurs
      *  @since 0.23
      */
-    public HashMap[] getPageInfo(String[] pages) throws IOException
+    public HashMap<String, Object>[] getPageInfo(String[] pages) throws IOException
     {
-        HashMap[] info = new HashMap[pages.length];
+        @SuppressWarnings({"rawtypes", "unchecked"}) /* This is hopeless */
+        HashMap<String, Object>[] info = new HashMap[pages.length];
         String urlstart = query + "prop=info&intoken=edit%7Cwatch&inprop=protection%7Cdisplaytitle%7Cwatchers&titles=";
         StringBuilder url = new StringBuilder(urlstart);
         int k = 0;
         for (int i = 0; i < pages.length; i++)
         {
-            info[i] = new HashMap(15);
+            info[i] = new HashMap<String, Object>(15);
             url.append(URLEncoder.encode(normalize(pages[i]), "UTF-8"));
             // send off in batches of slowmax
             if (i % slowmax == slowmax - 1 || i == pages.length - 1)
@@ -1418,7 +1419,7 @@ public class Wiki implements Serializable
     {
         if (namespaces == null)
             populateNamespaceCache();
-        return (HashMap<String, Integer>)namespaces.clone();
+        return new HashMap<String, Integer>(namespaces);
     }
 
     /**
@@ -1670,7 +1671,7 @@ public class Wiki implements Serializable
         statusCheck();
 
         // protection and token
-        HashMap info = getPageInfo(title);
+        HashMap<String, Object> info = getPageInfo(title);
         if (!checkRights(info, "edit") || (Boolean)info.get("exists") && !checkRights(info, "create"))
         {
             CredentialException ex = new CredentialException("Permission denied: page is protected.");
@@ -1820,7 +1821,7 @@ public class Wiki implements Serializable
             throw new CredentialNotFoundException("Cannot delete: Permission denied");
 
         // edit token
-        HashMap info = getPageInfo(title);
+        HashMap<String, Object> info = getPageInfo(title);
         if (!(Boolean)info.get("exists"))
         {
             logger.log(Level.INFO, "Page \"{0}\" does not exist.", title);
@@ -2284,7 +2285,7 @@ public class Wiki implements Serializable
         // TODO: image renaming? TEST ME (MediaWiki, that is).
 
         // protection and token
-        HashMap info = getPageInfo(title);
+        HashMap<String, Object> info = getPageInfo(title);
         // determine whether the page exists
         if (!(Boolean)info.get("exists"))
             throw new IllegalArgumentException("Tried to move a non-existant page!");
@@ -2591,7 +2592,7 @@ public class Wiki implements Serializable
             throw new IllegalArgumentException("Cannot undo - the revisions supplied are not on the same page!");
 
         // protection and token
-        HashMap info = getPageInfo(rev.getPage());
+        HashMap<String, Object> info = getPageInfo(rev.getPage());
         if (!checkRights(info, "edit"))
         {
             CredentialException ex = new CredentialException("Permission denied: page is protected.");
@@ -3068,7 +3069,7 @@ public class Wiki implements Serializable
         filename = filename.replaceFirst("^(File|Image|" + namespaceIdentifier(FILE_NAMESPACE) + "):", "");
 
         // protection and token
-        HashMap info = getPageInfo("File:" + filename);
+        HashMap<String, Object> info = getPageInfo("File:" + filename);
         if (!checkRights(info, "upload"))
         {
             CredentialException ex = new CredentialException("Permission denied: page is protected.");
@@ -4058,6 +4059,7 @@ public class Wiki implements Serializable
      *  the list of urls (instance of <tt>java.net.URL</tt>)
      *  @since 0.24
      */
+    @SuppressWarnings("rawtypes")
     public ArrayList[] linksearch(String pattern, String protocol, int... ns) throws IOException
     {
         // FIXME: Change return type to ArrayList<Object[]> or Object[][]
@@ -4065,6 +4067,9 @@ public class Wiki implements Serializable
 
         // set it up
         StringBuilder url = new StringBuilder(query);
+        // no reason for more than 500 links
+        ArrayList<String> pagetitles = new ArrayList<String>(667);
+        ArrayList<URL> pageurls = new ArrayList<URL>(667);
         url.append("list=exturlusage&euprop=title%7curl&euquery=");
         url.append(pattern);
         url.append("&euprotocol=");
@@ -4075,17 +4080,12 @@ public class Wiki implements Serializable
 
         // some variables we need later
         boolean done = false;
-        ArrayList[] ret = new ArrayList[] // no reason for more than 500 links
-        {
-            new ArrayList<String>(667), // page titles
-            new ArrayList<URL>(667) // urls
-        };
 
         // begin
         while (!done)
         {
             // if this is the last page of results then there is no euoffset parameter
-            String line = fetch(url.toString() + ret[0].size(), "linksearch");
+            String line = fetch(url.toString() + pagetitles.size(), "linksearch");
             if (!line.contains("euoffset=\""))
                 done = true;
 
@@ -4093,17 +4093,17 @@ public class Wiki implements Serializable
             for (int x = line.indexOf("<eu"); x > 0; x = line.indexOf("<eu ", ++x))
             {
                 String link = parseAttribute(line, "url", x);
-                ret[0].add(decode(parseAttribute(line, "title", x)));
+                pagetitles.add(decode(parseAttribute(line, "title", x)));
                 if (link.charAt(0) == '/') // protocol relative url
-                    ret[1].add(new URL(protocol + ":" + link));
+                    pageurls.add(new URL(protocol + ":" + link));
                 else
-                    ret[1].add(new URL(link));
+                    pageurls.add(new URL(link));
             }
         }
 
         // return value
-        log(Level.INFO, "Successfully returned instances of external link " + pattern + " (" + ret[0].size() + " links)", "linksearch");
-        return ret;
+        log(Level.INFO, "Successfully returned instances of external link " + pattern + " (" + pagetitles.size() + " links)", "linksearch");
+        return new ArrayList[]{ pagetitles, pageurls };
     }
 
     /**
@@ -6321,6 +6321,7 @@ public class Wiki implements Serializable
             throw new CredentialExpiredException("Cookies have expired.");
         }
         // check protection
+        @SuppressWarnings("unchecked")
         HashMap<String, Object> protectionstate = (HashMap<String, Object>)pageinfo.get("protection");
         if (protectionstate.containsKey(action))
         {
@@ -6549,6 +6550,7 @@ public class Wiki implements Serializable
      *  @throws ClassNotFoundException if we can't recognize the input
      *  @since 0.10
      */
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
     {
         String z = (String)in.readObject();

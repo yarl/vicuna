@@ -104,5 +104,7 @@ public class FInfo extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             dispose();
         }
+        static final long serialVersionUID = 6268509638332148434L;
     }; 
+    static final long serialVersionUID = 8400848783643219708L;
 }

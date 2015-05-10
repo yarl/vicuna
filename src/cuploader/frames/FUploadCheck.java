@@ -176,7 +176,7 @@ public class FUploadCheck extends javax.swing.JFrame {
     }
     
     private void startUpload() {
-        if(!Data.isLogged) {
+        if(!Data.isLoggedIn()) {
             new FLogin(data);
         } else {
             setVisible(false);
@@ -310,6 +310,7 @@ public class FUploadCheck extends javax.swing.JFrame {
             dispose();
             Data.fUploadCheck = null;
         }
+        static final long serialVersionUID = -7671854455507221107L;
     }; 
     
     WindowListener exit = new WindowAdapter() {
@@ -319,4 +320,6 @@ public class FUploadCheck extends javax.swing.JFrame {
             Data.fUploadCheck = null;
         }
     };
+
+    static final long serialVersionUID = -4077266583844917305L;
 }

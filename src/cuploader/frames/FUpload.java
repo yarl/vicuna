@@ -376,7 +376,7 @@ public class FUpload extends javax.swing.JFrame {
                     String name = getName(file);
                     String desc = getUploadText(file, set);
 
-                    lName.setText(Data.text("upload-uploading") + " " + (int)(i+1) + " / " + toUpload + ": " + name + "...");
+                    lName.setText(Data.text("upload-uploading") + " " + (i+1) + " / " + toUpload + ": " + name + "...");
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
 
                     //upload test
@@ -478,10 +478,12 @@ public class FUpload extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             stopUpload();
         }
+        static final long serialVersionUID = 5875361058922075517L;
     };
 
     private void lockLogout(boolean b) {
         Main.bLogin.setEnabled(!b);
         Main.mLogin.setEnabled(!b);
     }
+    static final long serialVersionUID = -7669448777553409665L;
 }
