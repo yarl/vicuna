@@ -881,10 +881,10 @@ public final class Main extends javax.swing.JFrame
         ch.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         ch.setMultiSelectionEnabled(true);
         ch.setAcceptAllFileFilterUsed(false);
-        ch.addChoosableFileFilter(FileFilters.all);
         ch.addChoosableFileFilter(FileFilters.images);
         ch.addChoosableFileFilter(FileFilters.documents);
         ch.addChoosableFileFilter(FileFilters.multimedia);
+        ch.addChoosableFileFilter(FileFilters.all);
 
       if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
         File[] selected = ch.getSelectedFiles();
