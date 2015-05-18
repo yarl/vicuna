@@ -1121,6 +1121,10 @@ public final class Main extends javax.swing.JFrame
       i = 1;
     }
 
+    /* new field added */
+    if (Data.settings.permission == null) {
+      Data.settings.permission = "";
+    }
     Locale.setDefault(Data.settings.lang);
     Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Data.settings.lang);
     Data.refreshQuickTemplates();
@@ -1547,6 +1551,9 @@ class Comment {
           return false;
         }
       }
+      if (Data.settings.permission == null) {
+        Data.settings.permission = "";
+      }
       
     } catch (IOException ex) {
       error(null, ex);
@@ -1683,6 +1690,10 @@ class Comment {
 
       };
       saxParser.parse(f, handler);
+      /* new field added */
+      if (Data.settings.permission == null) {
+        Data.settings.permission = "";
+      }
       new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
       lStartInfo.setVisible(false);
       mEdit.setEnabled(true);

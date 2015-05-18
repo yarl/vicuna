@@ -195,7 +195,7 @@ public class FUpload extends javax.swing.JFrame {
       if(settings.author.equals("own")) desc += "\n|source = {{own}}\n|author = [[user:" + settings.username + "|]]";
       else desc += "\n|source = " + settings.source + "\n|author = " + settings.author;
 
-      desc += "\n|permission = \n|other_versions = \n}}";
+      desc += "\n|permission = " + settings.permission + "\n|other_versions = \n}}";
       if (file.coor != null) {
         desc += "\n{{Location dec|" + file.coor.getLat() + "|" + file.coor.getLon();
         if(!file.coor.getHeading().isEmpty())

@@ -27,6 +27,7 @@ public class Settings {
     //General
     public String author = "own";
     public String source = "";
+    public String permission = "";
     public int license = 0;
     public String licenseCustom = "";
     public String attribution = "";
