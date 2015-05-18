@@ -87,6 +87,9 @@ public class Settings {
         return serverMonitorEnabled;
     }
     public void setServerMonitorEnabled(boolean n) {
+        if (propchange == null) {
+          propchange = new PropertyChangeSupport(this);
+        }
         boolean old = serverMonitorEnabled;
         serverMonitorEnabled = n;
         propchange.firePropertyChange("checkDataBaseLag", old, n);
