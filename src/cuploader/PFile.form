@@ -682,7 +682,7 @@
               <Image iconType="3" name="/cuploader/resources/folder-horizontal-open.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="file.getParent().substring(file.getParent().lastIndexOf(&apos;\\&apos;)+1, file.getParent().length())" type="code"/>
+              <Connection code="file.getParent()" type="code"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="file.getParent()" type="code"/>

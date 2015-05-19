@@ -495,7 +495,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     });
 
     lDirectory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-horizontal-open.png"))); // NOI18N
-    lDirectory.setText(file.getParent().substring(file.getParent().lastIndexOf('\\')+1, file.getParent().length()));
+    lDirectory.setText(file.getParent());
     lDirectory.setToolTipText(file.getParent());
     lDirectory.setMaximumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
     lDirectory.setMinimumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
