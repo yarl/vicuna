@@ -28,6 +28,7 @@ public class FSettings extends javax.swing.JFrame {
         }
         
         tSource.setText(Data.settings.source);
+        tPermission.setText(Data.settings.permission);
         
         String[] lic = new String[Data.licenses.size()];
         for(int i=0;i<Data.licenses.size();++i)
@@ -289,8 +290,6 @@ public class FSettings extends javax.swing.JFrame {
     tExtraText.setRows(5);
     tExtraText.setComponentPopupMenu(Data.mQuickTemplates);
     tExtraTextScroll.setViewportView(tExtraText);
-
-    tPermission.setEnabled(false);
 
     lPermission.setText(bundle.getString("settings-permission")); // NOI18N
 
@@ -864,6 +863,8 @@ public class FSettings extends javax.swing.JFrame {
                 else Data.settings.author = "own";
             //source
             Data.settings.source = tSource.getText();
+            //permission
+            Data.settings.permission = tPermission.getText();
             //license
             if(cLicense.getSelectedIndex() == Data.licenses.size()-1) {
                 if(!tLicense.getText().equals("")) {

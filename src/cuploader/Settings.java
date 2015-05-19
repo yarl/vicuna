@@ -27,6 +27,7 @@ public class Settings {
     //General
     public String author = "own";
     public String source = "";
+    public String permission = "";
     public int license = 0;
     public String licenseCustom = "";
     public String attribution = "";
@@ -87,6 +88,9 @@ public class Settings {
         return serverMonitorEnabled;
     }
     public void setServerMonitorEnabled(boolean n) {
+        if (propchange == null) {
+          propchange = new PropertyChangeSupport(this);
+        }
         boolean old = serverMonitorEnabled;
         serverMonitorEnabled = n;
         propchange.firePropertyChange("checkDataBaseLag", old, n);
