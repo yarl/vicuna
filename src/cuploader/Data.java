@@ -193,9 +193,9 @@ public class Data implements Serializable {
     public static void saveSettings() {
         try {
             XStream xstream = new XStream(new DomDriver());
-            xstream.alias("settings", cuploader.Settings.class);
-            xstream.alias("template", cuploader.QuickTemplate.class);
-            xstream.alias("source", cuploader.DescSource.class);
+            xstream.processAnnotations(cuploader.Settings.class);
+            xstream.processAnnotations(cuploader.QuickTemplate.class);
+            xstream.processAnnotations(cuploader.DescSource.class);
             String xml = xstream.toXML(settings);
             
             try{

@@ -13,6 +13,7 @@ import java.util.Locale;
  * @author Pawel
  * @author saper
  */
+@com.thoughtworks.xstream.annotations.XStreamAlias("settings")
 public class Settings {
     private transient PropertyChangeSupport propchange;
 

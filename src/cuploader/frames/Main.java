@@ -1104,9 +1104,9 @@ public final class Main extends javax.swing.JFrame
 
       if (!text.isEmpty()) {
         XStream xstream = new XStream(new DomDriver());
-        xstream.alias("settings", Settings.class);
-        xstream.alias("template", cuploader.QuickTemplate.class);
-        xstream.alias("source", cuploader.DescSource.class);
+        xstream.processAnnotations(cuploader.Settings.class);
+        xstream.processAnnotations(cuploader.QuickTemplate.class);
+        xstream.processAnnotations(cuploader.DescSource.class);
         Data.settings = (Settings) xstream.fromXML(text);
         if (Data.settings.lang == null) {
           Data.settings.lang = getLocale();
@@ -1282,9 +1282,9 @@ public final class Main extends javax.swing.JFrame
   private boolean saveSessionFile2(File f) {
     try {
       XStream xstream = new XStream(new DomDriver("UTF-8"));
-      xstream.alias("settings", cuploader.Settings.class);
-      xstream.alias("template", cuploader.QuickTemplate.class);
-      xstream.alias("source", cuploader.DescSource.class);
+      xstream.processAnnotations(cuploader.Settings.class);
+      xstream.processAnnotations(cuploader.QuickTemplate.class);
+      xstream.processAnnotations(cuploader.DescSource.class);
       xstream.registerConverter(new MapEntryConverter());
 
       String xml = xstream.toXML(settings);
@@ -1525,9 +1525,9 @@ class Comment {
       
       if (!settings.isEmpty()) {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
-        xstream.alias("settings", Settings.class);
-        xstream.alias("template", cuploader.QuickTemplate.class);
-        xstream.alias("source", cuploader.DescSource.class);
+        xstream.processAnnotations(cuploader.Settings.class);
+        xstream.processAnnotations(cuploader.QuickTemplate.class);
+        xstream.processAnnotations(cuploader.DescSource.class);
         Data.settings = (Settings) xstream.fromXML(settings);
       }
       
