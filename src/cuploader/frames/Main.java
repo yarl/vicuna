@@ -89,7 +89,11 @@ public final class Main extends javax.swing.JFrame
 
     data.addPropertyChangeListener(this); // login, logout, lang, first-time events
     if (sayHello) { 
-      JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
+      java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+          JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
+        }
+      });
     }
   }
 

@@ -34,8 +34,11 @@ public class FIntro extends javax.swing.JFrame {
         
         boolean b = checkVersion();
         if(!b) {
-          m = new Main(data);
-          dispose();
+          try {
+            m = new Main(data);
+          } finally {
+            dispose();
+          }
         }
       }
     };
