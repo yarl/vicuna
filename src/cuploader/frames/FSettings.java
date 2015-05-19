@@ -286,7 +286,7 @@ public class FSettings extends javax.swing.JFrame {
     lExtraText.setText(bundle.getString("settings-extratext")); // NOI18N
 
     tExtraText.setColumns(20);
-    tExtraText.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+    tExtraText.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
     tExtraText.setRows(5);
     tExtraText.setComponentPopupMenu(Data.mQuickTemplates);
     tExtraTextScroll.setViewportView(tExtraText);
@@ -673,6 +673,7 @@ public class FSettings extends javax.swing.JFrame {
     cRenameAfterUpload.setText(bundle.getString("settings-program-changename")); // NOI18N
 
     cServerMonitorEnabled.setText(bundle.getString("settings-program-servermonitorenabled")); // NOI18N
+
     cAskQuit.setText(bundle.getString("settings-program-askquit")); // NOI18N
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -684,7 +685,7 @@ public class FSettings extends javax.swing.JFrame {
         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(jPanel2Layout.createSequentialGroup()
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-              .addComponent(cRenameAfterUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+              .addComponent(cRenameAfterUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
               .addComponent(cServerMonitorEnabled, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
               .addComponent(cAskQuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGap(0, 39, Short.MAX_VALUE))
@@ -760,6 +761,7 @@ public class FSettings extends javax.swing.JFrame {
     lDesc.setText(bundle.getString("file-desc")); // NOI18N
 
     tDesc.setColumns(20);
+    tDesc.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
     tDesc.setRows(5);
     tDesc.setEnabled(false);
     jScrollPane1.setViewportView(tDesc);
@@ -996,13 +998,13 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JButton bSave;
   private javax.swing.JButton bSetFileDesc;
   private javax.swing.JCheckBox cAskQuit;
-  private javax.swing.JCheckBox cServerMonitorEnabled;
   private javax.swing.JCheckBox cCreateGallery;
   private javax.swing.JComboBox cFileDescSource;
   private javax.swing.JComboBox cLicense;
   private javax.swing.JCheckBox cLoadSubdirectory;
   private javax.swing.JCheckBox cReadHour;
   private javax.swing.JCheckBox cRenameAfterUpload;
+  private javax.swing.JCheckBox cServerMonitorEnabled;
   private javax.swing.ButtonGroup gAuthor;
   private javax.swing.ButtonGroup gDescSource;
   private javax.swing.ButtonGroup gGallery;

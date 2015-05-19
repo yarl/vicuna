@@ -345,7 +345,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
     tDesc.setColumns(20);
-    tDesc.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+    tDesc.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
     tDesc.setLineWrap(true);
     tDesc.setRows(3);
     tDesc.setComponentPopupMenu(Data.mQuickTemplates);

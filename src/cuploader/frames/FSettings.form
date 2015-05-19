@@ -374,7 +374,7 @@
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Courier New" size="12" style="0"/>
+                          <Font name="Monospaced" size="12" style="0"/>
                         </Property>
                         <Property name="rows" type="int" value="5"/>
                         <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -385,9 +385,6 @@
                   </SubComponents>
                 </Container>
                 <Component class="javax.swing.JTextField" name="tPermission">
-                  <Properties>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lPermission">
                   <Properties>
@@ -1073,7 +1070,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="cRenameAfterUpload" pref="191" max="32767" attributes="1"/>
+                                      <Component id="cRenameAfterUpload" max="32767" attributes="1"/>
                                       <Component id="cServerMonitorEnabled" max="32767" attributes="0"/>
                                       <Component id="cAskQuit" max="32767" attributes="0"/>
                                   </Group>
@@ -1289,6 +1286,9 @@
                     <Component class="javax.swing.JTextArea" name="tDesc">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Monospaced" size="12" style="0"/>
+                        </Property>
                         <Property name="rows" type="int" value="5"/>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
