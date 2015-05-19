@@ -213,13 +213,13 @@ public class Data implements Serializable {
     }
     
     public static int getOrientation(boolean isImage) {
-      ComponentOrientation co = ComponentOrientation.getOrientation(settings.lang);
+      ComponentOrientation co = ComponentOrientation.getOrientation(settings.getLang());
       if(isImage) return co.isLeftToRight() ? SwingConstants.RIGHT : SwingConstants.LEFT;
       return co.isLeftToRight() ? SwingConstants.LEFT : SwingConstants.RIGHT;
     }
 
     public static ComponentOrientation getComponentOrientation() {
-      return ComponentOrientation.getOrientation(settings.lang);
+      return ComponentOrientation.getOrientation(settings.getLang());
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
