@@ -80,6 +80,7 @@ public final class FDownload extends javax.swing.JFrame {
             }
         };
         Thread t = new Thread(run);
+        t.setName("FDownload: Update download");
         t.start();
     }
     

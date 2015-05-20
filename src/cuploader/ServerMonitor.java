@@ -93,6 +93,7 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
   public void start() {
     debug("ServerMonitor starting");
     this.monitor = new Thread(this);
+    this.monitor.setName("Server monitor (database lag)");
     this.monitor.start();
   }
 

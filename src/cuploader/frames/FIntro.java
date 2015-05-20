@@ -47,6 +47,7 @@ public class FIntro extends javax.swing.JFrame {
     };
 
     Thread t = new Thread(run);
+    t.setName("FIntro: Splash screen/Updater");
     t.start();
   }
 

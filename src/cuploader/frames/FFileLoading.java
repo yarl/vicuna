@@ -145,6 +145,7 @@ public final class FFileLoading extends javax.swing.JFrame {
         
          
         Thread t = new Thread(run);
+        t.setName("FFileLoading");
         t.start();
     }
     

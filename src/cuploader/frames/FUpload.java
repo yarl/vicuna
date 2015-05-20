@@ -452,6 +452,7 @@ public class FUpload extends javax.swing.JFrame {
     };
     
     Thread t = new Thread(run);
+    t.setName("FUpload: Image upload");
     t.start();
 }
 
