@@ -131,6 +131,9 @@ public class Data implements Serializable {
             }
         }
     }
+    public static void destroyQuickTemplates() {
+        mQuickTemplates.removeAll();
+    }
     
     static void insertTemplate(JTextArea textarea, QuickTemplate i) {
         String template = i.template;

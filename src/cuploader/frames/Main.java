@@ -1647,6 +1647,7 @@ class Comment {
     Data.settings.windowPosition = getLocation();
     Data.settings.windowSize = getSize();
     Data.saveSettings();
+    Data.destroyQuickTemplates();
     try {
       Thread.sleep(500);
     } catch (InterruptedException ex) {
