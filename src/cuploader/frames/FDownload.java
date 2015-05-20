@@ -13,15 +13,16 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 public final class FDownload extends javax.swing.JFrame {
     JFrame frame;
     private volatile boolean stopRq = false;
+    private URL downloadURL;
     
-    public FDownload(JFrame frame) {
+    public FDownload(JFrame frame, URL downloadSource_) {
         this.frame = frame;
+        this.downloadURL = downloadSource_;
         
         initComponents();
         setLocationRelativeTo(null);
@@ -53,7 +54,7 @@ public final class FDownload extends javax.swing.JFrame {
                         
                         String path = currentJar.getAbsolutePath();
                         //JOptionPane.showMessageDialog(frame, "Path: " + path);
-                        download(path);
+                        download(downloadURL, path);
 
                         /* Build command: java -jar application.jar */
                         final ArrayList<String> command = new ArrayList<String>();
@@ -62,16 +63,19 @@ public final class FDownload extends javax.swing.JFrame {
                         command.add(currentJar.getPath());
 
                         final ProcessBuilder builder = new ProcessBuilder(command);
+                        logger.log(Level.FINE, "Attempting to restart via " + command + ", bye");
                         builder.start();
                         System.exit(0);
                         
-                    } else
+                    } else {
+                        logger.log(Level.WARNING, "Don't know how to restart <" + currentJar + ">, exiting");
                         dispose();
+                    }
                     
                 } catch (IOException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, "Restarting jar failed:", ex);
                 } catch (URISyntaxException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, "Restarting jar failed:", ex);
                 }
             }
         };
@@ -84,11 +88,10 @@ public final class FDownload extends javax.swing.JFrame {
      * @param dest destination
      * @see <a href="http://cookbooks.adobe.com/post_Download_a_file_from_a_URL_in_Java-17947.html">Adobe Forums: Download a file from a URL</a>
      */
-    private void download(String dest) {
+    private void download(URL url, String dest) {
         try {
             lName.setText(Data.text("download-connect"));
 
-            URL url = new URL("http://yarl.github.io/vicuna/download/latest.jar");
             url.openConnection();
             InputStream reader = url.openStream();
 
@@ -111,10 +114,11 @@ public final class FDownload extends javax.swing.JFrame {
             writer.close();
             reader.close();
         } catch (MalformedURLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
+        logger.log(Level.FINE, "Updated jar downloaded from <" + url + "> to <" + dest + ">");
     }
     
     @SuppressWarnings("unchecked")
@@ -188,5 +192,6 @@ public final class FDownload extends javax.swing.JFrame {
         static final long serialVersionUID = -3107930852053039496L;
     };
 
-    static final long serialVersionUID = -333719907535778260L;
+    static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FDownload.class.getName());
+    static final long serialVersionUID = -333719907535778261L;
 }

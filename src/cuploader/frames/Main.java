@@ -31,6 +31,8 @@ import java.beans.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.Map.Entry;
@@ -56,6 +58,9 @@ public final class Main extends javax.swing.JFrame
 
   Data data;
   ServerMonitor monitor;
+
+  public final static String UPDATE_URL = "http://yarl.github.io/vicuna/download/latest.jar";
+  public final static String HOMEPAGE_URL = "http://yarl.github.io/vicuna/";
 
   public Main(Data data) {
 
@@ -1200,19 +1205,23 @@ public final class Main extends javax.swing.JFrame
         int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>).</body></html>",
                 Data.text("about-checkupdate"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, o, o[0]);
         if (n == 0) {
-          new FDownload(this);
+          try {
+            new FDownload(this, new URL(UPDATE_URL));
+          } catch (MalformedURLException ex) {
+            error("Cannot download: <" + UPDATE_URL + ">", ex);
+          }
         } else if (n == 1) {
           try {
-            Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
+            Desktop.getDesktop().browse(new URI(HOMEPAGE_URL));
           } catch (URISyntaxException ex) {
-            error(null, ex);
+            error("Cannot navigate to the home page: <" + HOMEPAGE_URL + ">", ex);
           } catch (IOException ex) {
-            error(null, ex);
+            error("Cannot navigate to the home page: <" + HOMEPAGE_URL + ">", ex);
           }
         }
       }
     } catch (IOException ex) {
-      error(null, ex);
+      error("Cannot check for the new version", ex);
     }
   }
 
