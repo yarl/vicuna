@@ -65,17 +65,16 @@ public final class FDownload extends javax.swing.JFrame {
                         final ProcessBuilder builder = new ProcessBuilder(command);
                         logger.log(Level.FINE, "Attempting to restart via " + command + ", bye");
                         builder.start();
-                        System.exit(0);
-                        
                     } else {
                         logger.log(Level.WARNING, "Don't know how to restart <" + currentJar + ">, exiting");
-                        dispose();
                     }
                     
                 } catch (IOException ex) {
                     logger.log(Level.SEVERE, "Restarting jar failed:", ex);
                 } catch (URISyntaxException ex) {
                     logger.log(Level.SEVERE, "Restarting jar failed:", ex);
+                } finally {
+                    dispose();
                 }
             }
         };

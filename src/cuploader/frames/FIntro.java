@@ -37,11 +37,8 @@ public class FIntro extends javax.swing.JFrame {
         
         boolean b = checkVersion();
         if(!b) {
-          try {
-            m = new Main(data);
-          } finally {
-            dispose();
-          }
+          dispose();
+          m = new Main(data);
         }
       }
     };
@@ -159,14 +156,14 @@ public class FIntro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
   private void bCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCancelActionPerformed
-    m = new Main(data);
-    dispose();
+      dispose();
+      m = new Main(data);
   }//GEN-LAST:event_bCancelActionPerformed
 
   private void bDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDownloadActionPerformed
     try {
       Desktop.getDesktop().browse(new URI(HOMEPAGE_URL));
-      System.exit(0);
+      dispose();
     } catch (IOException ex) {
       error("Cannot open the home page", ex);
     } catch (URISyntaxException ex) {
