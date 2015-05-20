@@ -94,6 +94,7 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
     debug("ServerMonitor starting");
     this.monitor = new Thread(this);
     this.monitor.setName("Server monitor (database lag)");
+    this.monitor.setDaemon(true);
     this.monitor.start();
   }
 
