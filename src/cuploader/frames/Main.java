@@ -87,7 +87,8 @@ public final class Main extends javax.swing.JFrame
     Data.settings.addPropertyChangeListener(monitor);
     data.addPropertyChangeListener(monitor);
 
-    data.addPropertyChangeListener(this); // login, logout, lang, first-time events
+    data.addPropertyChangeListener(this); // login, logout events
+    Data.settings.addPropertyChangeListener(this); // lang event
     if (sayHello) { 
       java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
@@ -1794,7 +1795,8 @@ class Comment {
   // End of variables declaration//GEN-END:variables
 
   public void propertyChange(PropertyChangeEvent evt) {
-    java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.INFO, evt.getPropertyName(), "propertyChange");
+    java.util.logging.Logger.getLogger(Main.class.getName())
+      .log(java.util.logging.Level.FINEST, "property changed: <" + evt.getPropertyName() + ">", evt);
     if (evt.getPropertyName() == "loggedIn") {
       if ((Boolean)evt.getNewValue()) {
         displayHelloMessage();
