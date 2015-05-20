@@ -117,7 +117,7 @@ public class Data implements Serializable {
     /*
      * Quick templates stuff
      */
-    public static void refreshQuickTemplates() {
+    public static void initializeQuickTemplates() {
         mQuickTemplates.removeAll();
         for(final QuickTemplate qt : settings.quickTemplates) {
             if(qt.active) {

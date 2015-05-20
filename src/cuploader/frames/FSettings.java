@@ -886,7 +886,7 @@ public class FSettings extends javax.swing.JFrame {
                 Data.settings.extraText = tExtraText.getText();
 
             //FILE
-            Data.refreshQuickTemplates();
+            Data.initializeQuickTemplates();
             
             Data.settings.copyName = tCopyName.isSelected();
             Data.settings.copyDescription = tCopyDesc.isSelected();

@@ -70,7 +70,7 @@ public final class Main extends javax.swing.JFrame
     Data.settings.initializeLocale();
     Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Data.settings.getLang());
 
-    Data.refreshQuickTemplates();
+    Data.initializeQuickTemplates();
     addWindowListener(exit);
 
     setComponentOrientation(Data.getComponentOrientation());
@@ -1119,12 +1119,6 @@ public final class Main extends javax.swing.JFrame
       error("Could not understand the settings file", ex);
     }
     return false;
-  }
-
-  private void initializeLang() {
-    Locale.setDefault(Data.settings.getLang());
-    Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Data.settings.getLang());
-    Data.refreshQuickTemplates();
   }
 
   /**
