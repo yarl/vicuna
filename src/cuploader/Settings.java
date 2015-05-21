@@ -123,6 +123,20 @@ public class Settings {
         propchange.removePropertyChangeListener(listener);
     }
 
+    public void addLocalizationChangedListener(LocalizationChangedListener listener) {
+        propchange.addPropertyChangeListener(new LocalizationChangedBridge(listener));
+    } 
+
+    public void removeLocalizationChangedListener(LocalizationChangedListener listener) {
+        for (PropertyChangeListener p : propchange.getPropertyChangeListeners()) {
+            if (p instanceof LocalizationChangedBridge) {
+               if (((LocalizationChangedBridge)p).supports(listener)) {
+                  propchange.removePropertyChangeListener(p);
+               }
+              }
+        }
+    }
+
     /**
      * Read after the object is de-serialized, also by XStream
      * Useful to fill in empty fields

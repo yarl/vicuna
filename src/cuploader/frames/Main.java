@@ -90,9 +90,9 @@ public final class Main extends javax.swing.JFrame
 
     monitor = new ServerMonitor(lServerStatus);
     Data.settings.addPropertyChangeListener(monitor);
-    data.addPropertyChangeListener(monitor);
+    Data.addPropertyChangeListener(monitor);
 
-    data.addPropertyChangeListener(this); // login, logout events
+    Data.addPropertyChangeListener(this); // login, logout events
     Data.settings.addPropertyChangeListener(this); // lang event
     if (sayHello) { 
       java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1811,7 +1811,7 @@ class Comment {
     if (evt.getPropertyName() == "first-time") {
     }
     if (evt.getPropertyName() == "lang") {
-      changeLang((Locale)evt.getNewValue());
+      //changeLang((Locale)evt.getNewValue());
     }
   }
 

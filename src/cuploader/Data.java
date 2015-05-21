@@ -225,17 +225,12 @@ public class Data implements Serializable {
       return ComponentOrientation.getOrientation(settings.getLang());
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        if (propchange == null) {
-          propchange = new PropertyChangeSupport(this);
-        }
+    public static void addPropertyChangeListener(PropertyChangeListener listener) {
         propchange.addPropertyChangeListener(listener);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        if (propchange == null) {
-          propchange = new PropertyChangeSupport(this);
-        }
+    public static void removePropertyChangeListener(PropertyChangeListener listener) {
+        propchange.removePropertyChangeListener(listener);
     }
 
     static final long serialVersionUID = 5293929884165981611L;

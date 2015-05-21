@@ -1,6 +1,7 @@
 package cuploader.frames;
 
 import cuploader.Data;
+import cuploader.LocalizationChangedListener;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import org.wikipedia.Wiki;
 
-public class FAbout extends javax.swing.JFrame {
+public class FAbout extends javax.swing.JFrame implements LocalizationChangedListener {
 
     public FAbout() {
         initComponents();
@@ -22,6 +23,7 @@ public class FAbout extends javax.swing.JFrame {
         
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        Data.settings.addLocalizationChangedListener(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -162,6 +164,19 @@ public class FAbout extends javax.swing.JFrame {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bProgramSiteActionPerformed
+
+    @Override
+    public void localizationChanged(java.util.Locale loc) {
+        Logger.getLogger(FAbout.class.getName()).log(Level.INFO, "Reloading messages");
+        this.bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages", loc);
+        lInfo.setText("<html><body>VicuñaUploader " + Data.version + "<br>" + Data.date + "</body></html>");
+        setTitle(bundle.getString("help-about")); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help-about"))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("about-used"))); // NOI18N
+        bProgramSite.setText(bundle.getString("about-site")); // NOI18N
+        bCheckUpdate.setText(bundle.getString("about-checkupdate")); // NOI18N
+    }
+
     
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton bCheckUpdate;
