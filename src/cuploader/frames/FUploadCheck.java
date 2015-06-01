@@ -168,6 +168,7 @@ public class FUploadCheck extends javax.swing.JFrame {
         };
         
         Thread t = new Thread(run);
+        t.setName("FUploadCheck");
         t.start();
     }
     

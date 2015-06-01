@@ -389,7 +389,7 @@ public class FUpload extends javax.swing.JFrame {
                         
                         if(set.createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
                         if(set.renameAfterUpload) {
-                            File f = new File(file.file.getParentFile()+"\\"+name);
+                            File f = new File(file.file.getParentFile()+File.separator+name);
                             file.file.renameTo(f);
                             file.file = f;
                         }
@@ -452,6 +452,7 @@ public class FUpload extends javax.swing.JFrame {
     };
     
     Thread t = new Thread(run);
+    t.setName("FUpload: Image upload");
     t.start();
 }
 

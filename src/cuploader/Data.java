@@ -117,7 +117,7 @@ public class Data implements Serializable {
     /*
      * Quick templates stuff
      */
-    public static void refreshQuickTemplates() {
+    public static void initializeQuickTemplates() {
         mQuickTemplates.removeAll();
         for(final QuickTemplate qt : settings.quickTemplates) {
             if(qt.active) {
@@ -130,6 +130,9 @@ public class Data implements Serializable {
                 mQuickTemplates.add(item);
             }
         }
+    }
+    public static void destroyQuickTemplates() {
+        mQuickTemplates.removeAll();
     }
     
     static void insertTemplate(JTextArea textarea, QuickTemplate i) {
@@ -193,9 +196,9 @@ public class Data implements Serializable {
     public static void saveSettings() {
         try {
             XStream xstream = new XStream(new DomDriver());
-            xstream.alias("settings", cuploader.Settings.class);
-            xstream.alias("template", cuploader.QuickTemplate.class);
-            xstream.alias("source", cuploader.DescSource.class);
+            xstream.processAnnotations(cuploader.Settings.class);
+            xstream.processAnnotations(cuploader.QuickTemplate.class);
+            xstream.processAnnotations(cuploader.DescSource.class);
             String xml = xstream.toXML(settings);
             
             try{
@@ -213,26 +216,21 @@ public class Data implements Serializable {
     }
     
     public static int getOrientation(boolean isImage) {
-      ComponentOrientation co = ComponentOrientation.getOrientation(settings.lang);
+      ComponentOrientation co = ComponentOrientation.getOrientation(settings.getLang());
       if(isImage) return co.isLeftToRight() ? SwingConstants.RIGHT : SwingConstants.LEFT;
       return co.isLeftToRight() ? SwingConstants.LEFT : SwingConstants.RIGHT;
     }
 
     public static ComponentOrientation getComponentOrientation() {
-      return ComponentOrientation.getOrientation(settings.lang);
+      return ComponentOrientation.getOrientation(settings.getLang());
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        if (propchange == null) {
-          propchange = new PropertyChangeSupport(this);
-        }
+    public static void addPropertyChangeListener(PropertyChangeListener listener) {
         propchange.addPropertyChangeListener(listener);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        if (propchange == null) {
-          propchange = new PropertyChangeSupport(this);
-        }
+    public static void removePropertyChangeListener(PropertyChangeListener listener) {
+        propchange.removePropertyChangeListener(listener);
     }
 
     static final long serialVersionUID = 5293929884165981611L;

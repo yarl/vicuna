@@ -4,6 +4,7 @@ package cuploader;
  *
  * @author Pawel
  */
+@com.thoughtworks.xstream.annotations.XStreamAlias("template")
 public class QuickTemplate {
     public String name;
     public String template;

@@ -6,8 +6,8 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URL;
+import java.net.MalformedURLException;
 import javax.swing.UIManager;
 import org.wikipedia.Wiki;
 
@@ -15,6 +15,9 @@ public class FIntro extends javax.swing.JFrame {
 
   Data data = new Data();
   Main m;
+
+  public final static String UPDATE_URL = "http://yarl.github.io/vicuna/download/latest.jar";
+  public final static String HOMEPAGE_URL = "http://yarl.github.io/vicuna/";
   
   public FIntro() {
     initComponents();
@@ -34,13 +37,14 @@ public class FIntro extends javax.swing.JFrame {
         
         boolean b = checkVersion();
         if(!b) {
-          m = new Main(data);
           dispose();
+          m = new Main(data);
         }
       }
     };
 
     Thread t = new Thread(run);
+    t.setName("FIntro: Splash screen/Updater");
     t.start();
   }
 
@@ -152,24 +156,51 @@ public class FIntro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
   private void bCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCancelActionPerformed
-    m = new Main(data);
-    dispose();
+      dispose();
+      m = new Main(data);
   }//GEN-LAST:event_bCancelActionPerformed
 
   private void bDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDownloadActionPerformed
     try {
-      Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
-      System.exit(0);
+      Desktop.getDesktop().browse(new URI(HOMEPAGE_URL));
+      dispose();
     } catch (IOException ex) {
-      Logger.getLogger(FIntro.class.getName()).log(Level.SEVERE, null, ex);
+      error("Cannot open the home page", ex);
     } catch (URISyntaxException ex) {
-      Logger.getLogger(FIntro.class.getName()).log(Level.SEVERE, null, ex);
+      error("Cannot open the home page", ex);
     }
   }//GEN-LAST:event_bDownloadActionPerformed
 
   private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
-    new FDownload(this);
+    URL source = forcedUpdateURL();
+    if (source == null) {
+       try {
+         source = new URL(UPDATE_URL);
+       } catch (MalformedURLException ex) {
+         error("Invalid update URL: <" + UPDATE_URL + ">", ex);
+       }
+    }
+    new FDownload(this, source);
   }//GEN-LAST:event_bUpdateActionPerformed
+
+
+  /**
+   * Return URL to download the update from (if faking)
+   * @return String
+   */
+  public URL forcedUpdateURL() {
+     String forceupdate = System.getProperties().getProperty("cuploader.test.forceupdate");
+     URL u = null;
+     if (forceupdate != null) {
+       try {
+          u = new URL(forceupdate);
+       } catch (MalformedURLException ex) {
+          error("Ignored fake update request: <" + forceupdate + ">", ex);
+          u = null;
+       }
+     }
+     return u;
+  }
 
   /**
    * Checks current version of program and compate it to latest version available online.
@@ -178,7 +209,7 @@ public class FIntro extends javax.swing.JFrame {
   private boolean checkVersion() {
     try {
       String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
-      if (Double.parseDouble(v) > Double.parseDouble(Data.version)) {
+      if (Double.parseDouble(v) > Double.parseDouble(Data.version) || forcedUpdateURL() != null) {
         bUpdate.setVisible(true);
         bDownload.setVisible(true);
         bCancel.setVisible(true);
@@ -189,7 +220,7 @@ public class FIntro extends javax.swing.JFrame {
         return true;
       } else return false;
     } catch (IOException ex) {
-      Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      error("Cannot check for the new version", ex);
     }
     return false;
   }
@@ -200,14 +231,14 @@ public class FIntro extends javax.swing.JFrame {
       try {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       } catch (ClassNotFoundException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error("Cannot setup look and feel", ex);
       } catch (InstantiationException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error("Cannot setup look and feel", ex);
       } catch (IllegalAccessException ex) {
-        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        error("Cannot setup look and feel", ex);
       }
     } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-      java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+      error("Cannot setup look and feel", ex);
     }
         //</editor-fold>
 
@@ -217,6 +248,10 @@ public class FIntro extends javax.swing.JFrame {
       }
     });
   }
+      
+    protected static void error(String s, Object ex) {
+      logger.log(java.util.logging.Level.SEVERE, s, ex);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bCancel;
@@ -229,5 +264,7 @@ public class FIntro extends javax.swing.JFrame {
     private javax.swing.JLabel tTitle;
     // End of variables declaration//GEN-END:variables
 
-    static final long serialVersionUID = 8446207171851566362L;
+    static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FIntro.class.getName());
+
+    static final long serialVersionUID = 8446207171851566363L;
 }

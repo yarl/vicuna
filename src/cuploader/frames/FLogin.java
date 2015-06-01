@@ -144,6 +144,7 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
     };
 
     Thread t = new Thread(run);
+    t.setName("FLogin: login window backend");
     t.start();
   }
 

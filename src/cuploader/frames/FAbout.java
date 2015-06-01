@@ -1,9 +1,11 @@
 package cuploader.frames;
 
 import cuploader.Data;
+import cuploader.LocalizationChangedListener;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,6 +24,9 @@ public class FAbout extends javax.swing.JFrame {
         
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
+        ReloadBundle rb = new ReloadBundle();
+        Data.settings.addLocalizationChangedListener(rb);
+        addWindowListener(rb);
     }
 
     @SuppressWarnings("unchecked")
@@ -162,6 +167,32 @@ public class FAbout extends javax.swing.JFrame {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bProgramSiteActionPerformed
+
+    private class ReloadBundle implements LocalizationChangedListener, WindowListener {
+      @Override
+      public void localizationChanged(java.util.Locale loc) {
+          Logger.getLogger(FAbout.class.getName()).log(Level.INFO, "Reloading messages");
+          bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages", loc);
+          lInfo.setText("<html><body>VicuñaUploader " + Data.version + "<br>" + Data.date + "</body></html>");
+          setTitle(bundle.getString("help-about")); // NOI18N
+          jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help-about"))); // NOI18N
+          jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("about-used"))); // NOI18N
+          bProgramSite.setText(bundle.getString("about-site")); // NOI18N
+          bCheckUpdate.setText(bundle.getString("about-checkupdate")); // NOI18N
+      }
+      public void    windowActivated(java.awt.event.WindowEvent e) {}
+      public void    windowClosed(java.awt.event.WindowEvent e) {
+        Logger.getLogger(FAbout.class.getName()).log(Level.FINEST, "FAbout closed");
+        Data.settings.removeLocalizationChangedListener(this);
+        removeWindowListener(this);
+      }
+      public void    windowClosing(java.awt.event.WindowEvent e) {}
+      public void    windowDeactivated(java.awt.event.WindowEvent e) {}
+      public void    windowDeiconified(java.awt.event.WindowEvent e) {}
+      public void    windowIconified(java.awt.event.WindowEvent e) {}
+      public void    windowOpened(java.awt.event.WindowEvent e) {}
+  }
+
     
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton bCheckUpdate;

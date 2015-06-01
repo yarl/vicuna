@@ -13,6 +13,7 @@ import java.util.Locale;
  * @author Pawel
  * @author saper
  */
+@com.thoughtworks.xstream.annotations.XStreamAlias("settings")
 public class Settings {
     private transient PropertyChangeSupport propchange;
 
@@ -75,10 +76,10 @@ public class Settings {
     public int coorZoom = 0;
 
     //OTHER
-    public Locale lang;
+    private Locale lang;
 
     public Settings() {
-        this.propchange = new PropertyChangeSupport(this);
+        propchange = new PropertyChangeSupport(this);
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-en"), "{{en|%TEXT%}}", true));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-de"), "{{de|%TEXT%}}", true));
         quickTemplates.add(new QuickTemplate(Data.text("file-wiki-fr"), "{{fr|%TEXT%}}", true));
@@ -96,6 +97,18 @@ public class Settings {
         propchange.firePropertyChange("checkDataBaseLag", old, n);
     }
 
+    public Locale getLang() {
+        return lang;
+    }
+    public void setLang(Locale l) {
+        if (propchange == null) {
+          propchange = new PropertyChangeSupport(this);
+        }
+        Locale old = lang;
+        lang = l;
+        propchange.firePropertyChange("lang", old, l);
+    }
+
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (propchange == null) {
           propchange = new PropertyChangeSupport(this);
@@ -108,5 +121,39 @@ public class Settings {
           propchange = new PropertyChangeSupport(this);
         }
         propchange.removePropertyChangeListener(listener);
+    }
+
+    public void addLocalizationChangedListener(LocalizationChangedListener listener) {
+        propchange.addPropertyChangeListener(new LocalizationChangedBridge(listener));
+    } 
+
+    public void removeLocalizationChangedListener(LocalizationChangedListener listener) {
+        for (PropertyChangeListener p : propchange.getPropertyChangeListeners()) {
+            if (p instanceof LocalizationChangedBridge) {
+               if (((LocalizationChangedBridge)p).supports(listener)) {
+                  propchange.removePropertyChangeListener(p);
+               }
+              }
+        }
+    }
+
+    /**
+     * Read after the object is de-serialized, also by XStream
+     * Useful to fill in empty fields
+     */
+    private Object readResolve() {
+        java.util.logging.Logger.getLogger(Settings.class.getName())
+          .log(java.util.logging.Level.FINER, "readResolve() called");
+        propchange = new PropertyChangeSupport(this);
+        initializeLocale();
+        return this;
+    }
+
+    public void initializeLocale() {
+        if (lang == null) {
+           lang = Locale.getDefault();
+        } else {
+           Locale.setDefault(lang);
+        }
     }
 }

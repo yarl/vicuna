@@ -31,6 +31,8 @@ import java.beans.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.Map.Entry;
@@ -57,11 +59,18 @@ public final class Main extends javax.swing.JFrame
   Data data;
   ServerMonitor monitor;
 
+  public final static String UPDATE_URL = "http://yarl.github.io/vicuna/download/latest.jar";
+  public final static String HOMEPAGE_URL = "http://yarl.github.io/vicuna/";
+
   public Main(Data data) {
 
     this.data = data;
 
-    int hello = readSettings();
+    Boolean sayHello = readSettings();
+    Data.settings.initializeLocale();
+    Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Data.settings.getLang());
+
+    Data.initializeQuickTemplates();
     addWindowListener(exit);
 
     setComponentOrientation(Data.getComponentOrientation());
@@ -81,20 +90,16 @@ public final class Main extends javax.swing.JFrame
 
     monitor = new ServerMonitor(lServerStatus);
     Data.settings.addPropertyChangeListener(monitor);
-    data.addPropertyChangeListener(monitor);
+    Data.addPropertyChangeListener(monitor);
 
-    data.addPropertyChangeListener(this); // login, logout events
-    if (hello == 1) {
-      JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
-    } else if (hello == 2) {
-      File f = new File("autoupdate-session.xml");
-      if (f.exists()) {
-        loadSessionFile(f);
-        JOptionPane.showMessageDialog(rootPane, Data.text("hello-loadsession"));
-        f.delete();
-      } else {
-        JOptionPane.showMessageDialog(rootPane, Data.text("hello-newsession"));
-      }
+    Data.addPropertyChangeListener(this); // login, logout events
+    Data.settings.addPropertyChangeListener(this); // lang event
+    if (sayHello) { 
+      java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+          JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
+        }
+      });
     }
   }
 
@@ -1095,45 +1100,25 @@ public final class Main extends javax.swing.JFrame
    *
    * @return true if exist
    */
-  private int readSettings() {
+  private Boolean readSettings() {
     Data.settings = new Settings();
 
-    int i = 0;
     try {
       String text = readFile("settings.vicuna");
 
       if (!text.isEmpty()) {
         XStream xstream = new XStream(new DomDriver());
-        xstream.alias("settings", Settings.class);
-        xstream.alias("template", cuploader.QuickTemplate.class);
-        xstream.alias("source", cuploader.DescSource.class);
+        xstream.processAnnotations(cuploader.Settings.class);
+        xstream.processAnnotations(cuploader.QuickTemplate.class);
+        xstream.processAnnotations(cuploader.DescSource.class);
         Data.settings = (Settings) xstream.fromXML(text);
-        if (Data.settings.lang == null) {
-          Data.settings.lang = getLocale();
-        }
+      } else {
+        return true;
       }
     } catch (IOException ex) {
-      setDefaultLang();
-      i = 2;
+      error("Could not understand the settings file", ex);
     }
-    if (Data.settings.lang == null) {
-      setDefaultLang();
-      i = 1;
-    }
-
-    /* new field added */
-    if (Data.settings.permission == null) {
-      Data.settings.permission = "";
-    }
-    Locale.setDefault(Data.settings.lang);
-    Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Data.settings.lang);
-    Data.refreshQuickTemplates();
-    return i;
-  }
-
-  private void setDefaultLang() {
-    Locale loc = getLocale();
-    Data.settings.lang = loc;
+    return false;
   }
 
   /**
@@ -1147,7 +1132,7 @@ public final class Main extends javax.swing.JFrame
     JRadioButtonMenuItem item = new JRadioButtonMenuItem(name);
     item.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
-        changeLang(locale);
+        Data.settings.setLang(locale);
       }
     });
     gLang.add(item);
@@ -1214,19 +1199,23 @@ public final class Main extends javax.swing.JFrame
         int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>).</body></html>",
                 Data.text("about-checkupdate"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, o, o[0]);
         if (n == 0) {
-          new FDownload(this);
+          try {
+            new FDownload(this, new URL(UPDATE_URL));
+          } catch (MalformedURLException ex) {
+            error("Cannot download: <" + UPDATE_URL + ">", ex);
+          }
         } else if (n == 1) {
           try {
-            Desktop.getDesktop().browse(new URI("http://yarl.github.io/vicuna/"));
+            Desktop.getDesktop().browse(new URI(HOMEPAGE_URL));
           } catch (URISyntaxException ex) {
-            error(null, ex);
+            error("Cannot navigate to the home page: <" + HOMEPAGE_URL + ">", ex);
           } catch (IOException ex) {
-            error(null, ex);
+            error("Cannot navigate to the home page: <" + HOMEPAGE_URL + ">", ex);
           }
         }
       }
     } catch (IOException ex) {
-      error(null, ex);
+      error("Cannot check for the new version", ex);
     }
   }
 
@@ -1282,9 +1271,9 @@ public final class Main extends javax.swing.JFrame
   private boolean saveSessionFile2(File f) {
     try {
       XStream xstream = new XStream(new DomDriver("UTF-8"));
-      xstream.alias("settings", cuploader.Settings.class);
-      xstream.alias("template", cuploader.QuickTemplate.class);
-      xstream.alias("source", cuploader.DescSource.class);
+      xstream.processAnnotations(cuploader.Settings.class);
+      xstream.processAnnotations(cuploader.QuickTemplate.class);
+      xstream.processAnnotations(cuploader.DescSource.class);
       xstream.registerConverter(new MapEntryConverter());
 
       String xml = xstream.toXML(settings);
@@ -1525,9 +1514,9 @@ class Comment {
       
       if (!settings.isEmpty()) {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
-        xstream.alias("settings", Settings.class);
-        xstream.alias("template", cuploader.QuickTemplate.class);
-        xstream.alias("source", cuploader.DescSource.class);
+        xstream.processAnnotations(cuploader.Settings.class);
+        xstream.processAnnotations(cuploader.QuickTemplate.class);
+        xstream.processAnnotations(cuploader.DescSource.class);
         Data.settings = (Settings) xstream.fromXML(settings);
       }
       
@@ -1562,151 +1551,6 @@ class Comment {
     return true;
   }
   
-  /**
-   * Reads session from XML file.
-   *
-   * @param f source file
-   */
-  public void loadSessionFile(File f) {
-    try {
-      SAXParserFactory factory = SAXParserFactory.newInstance();
-      SAXParser saxParser = factory.newSAXParser();
-
-      final ArrayList<File> fPath = new ArrayList<File>();
-      final ArrayList<Boolean> fEdit = new ArrayList<Boolean>();
-      final ArrayList<Boolean> fUpload = new ArrayList<Boolean>();
-      final ArrayList<String> fName = new ArrayList<String>();
-      final ArrayList<String> fDate = new ArrayList<String>();
-      final ArrayList<String> fDesc = new ArrayList<String>();
-      final ArrayList<String> fCoor = new ArrayList<String>();
-      final ArrayList<String> fCats = new ArrayList<String>();
-
-      DefaultHandler handler = new DefaultHandler() {
-        String tag = "";
-        TreeMap<String, String> attr;
-
-        @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-          String text;
-          tag = qName;
-          attr = new TreeMap<String, String>();
-
-          if (attributes.getLength() > 0) {
-            for (int i = 0; i < attributes.getLength(); ++i) {
-              attr.put(attributes.getLocalName(i), attributes.getValue(i));
-            }
-
-            if (tag.equals("license")) {
-              Data.settings.license = Integer.parseInt(attr.get("id"));
-              text = attr.get("custom").equals("null") ? "" : attr.get("custom");
-              Data.licensesTemplates.set(Data.licensesTemplates.size() - 1, text.replace("amp;", "&"));
-
-              if (attr.get("attribution") != null) {
-                text = attr.get("attribution").equals("null") ? "" : attr.get("attribution");
-                Data.settings.attribution = text.replace("amp;", "&");
-              }
-            } else if (tag.equals("gallery")) {
-              if (attr.get("create") != null) {
-                Data.settings.createGallery = Boolean.parseBoolean(attr.get("create"));
-              }
-              if (attr.get("header") != null) {
-                Data.settings.galleryHeader = Integer.parseInt(attr.get("header"));
-              }
-
-              if (attr.get("page") != null) {
-                text = attr.get("page").equals("null") ? "" : attr.get("page");
-                Data.settings.galleryPage = text.replace("amp;", "&");
-              }
-              if (attr.get("width") != null) {
-                Data.settings.galleryWidth = Integer.parseInt(attr.get("width"));
-              }
-              if (attr.get("ontop") != null) {
-                Data.settings.galleryOnTop = Boolean.parseBoolean(attr.get("ontop"));
-              }
-            } else if (tag.equals("other")) {
-              if (attr.get("read_exif_hour") != null) {
-                Data.settings.readExifHour = Boolean.parseBoolean(attr.get("read_exif_hour"));
-              }
-              if (attr.get("rename_after_upload") != null) {
-                Data.settings.renameAfterUpload = Boolean.parseBoolean(attr.get("rename_after_upload"));
-              }
-              if (attr.get("load_subdirectory") != null) {
-                Data.settings.loadSubdirectory = Boolean.parseBoolean(attr.get("load_subdirectory"));
-              }
-              if (attr.get("server_monitor_enabled") != null) {
-                Data.settings.setServerMonitorEnabled(Boolean.parseBoolean(attr.get("server_monitor_enabled")));
-              }
-              if (attr.get("ask_quit") != null) {
-                Data.settings.askQuit = Boolean.parseBoolean(attr.get("ask_quit"));
-              }
-              if (attr.get("file_desc_dource") != null) {
-                Data.settings.fileDescSource = Integer.parseInt(attr.get("file_desc_dource"));
-              }
-              if (attr.get("file_desc_path") != null) {
-                text = attr.get("file_desc_path").equals("null") ? "" : attr.get("file_desc_path");
-                Data.settings.fileDescPath = text.replace("amp;", "&");
-              }
-            } else if (tag.equals("file")) {
-              fPath.add(new File(attr.get("path").replace("amp;", "&")));
-              fEdit.add(Boolean.parseBoolean(attr.get("edit")));
-              fUpload.add(Boolean.parseBoolean(attr.get("upload")));
-            }
-          }
-        }
-
-        @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
-        }
-
-        @Override
-        public void characters(char ch[], int start, int length) throws SAXException {
-          String text = new String(ch, start, length);
-          text = text.equals("null") ? "" : text;
-          //System.out.println("\tTag: " + tag + ", wartość: " + text);
-          if (tag.equals("server")) {
-            Data.settings.server = text;
-          } else if (tag.equals("user")) {
-            Data.settings.username = text.replace("amp;", "&");
-          } else if (tag.equals("author")) {
-            Data.settings.author = text.replace("amp;", "&");
-          } else if (tag.equals("source")) {
-            Data.settings.source = text.replace("amp;", "&");
-          } else if (tag.equals("extra_text")) {
-            Data.settings.extraText = text.replace("amp;", "&");
-          } else if (tag.equals("categories")) {
-            Data.settings.categories = text.replace("amp;", "&");
-          } else if (tag.equals("name")) {
-            fName.add(text.replace("amp;", "&"));
-          } else if (tag.equals("date")) {
-            fDate.add(text.replace("amp;", "&"));
-          } else if (tag.equals("desc")) {
-            fDesc.add(text.replace("amp;", "&").replace("\\n", "\n"));
-          } else if (tag.equals("coor")) {
-            fCoor.add(text);
-          } else if (tag.equals("cats")) {
-            fCats.add(text.replace("amp;", "&"));
-          }
-        }
-
-      };
-      saxParser.parse(f, handler);
-      /* new field added */
-      if (Data.settings.permission == null) {
-        Data.settings.permission = "";
-      }
-      new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
-      lStartInfo.setVisible(false);
-      mEdit.setEnabled(true);
-      mFileUploadSelect.setEnabled(true);
-      mUpload.setEnabled(true);
-
-    } catch (Exception ex) {
-      JOptionPane.showMessageDialog(rootPane, Data.text("session-error") + " " + ex.getLocalizedMessage(), Data.text("session-load"), JOptionPane.ERROR_MESSAGE, null);
-      error(null, ex);
-    }
-  }
-    //</editor-fold>
-
   /**
    * Reads directory and/or files to upload, send list of files to 'loading
    * frame'.
@@ -1803,11 +1647,12 @@ class Comment {
     Data.settings.windowPosition = getLocation();
     Data.settings.windowSize = getSize();
     Data.saveSettings();
+    Data.destroyQuickTemplates();
     try {
       Thread.sleep(500);
     } catch (InterruptedException ex) {
     }
-    System.exit(0);
+    dispose();
   }
 
   void Restart() {
@@ -1841,8 +1686,7 @@ class Comment {
    *
    * @param lang target locale
    */
-  void changeLang(Locale lang) {
-    Data.settings.lang = lang;
+  private void changeLang(Locale lang) {
     Data.saveSettings();
 
     Object[] o = {Data.text("button-restart"), Data.text("button-ok")};
@@ -1955,13 +1799,19 @@ class Comment {
   // End of variables declaration//GEN-END:variables
 
   public void propertyChange(PropertyChangeEvent evt) {
-    java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.INFO, evt.getPropertyName(), "propertyChange");
+    java.util.logging.Logger.getLogger(Main.class.getName())
+      .log(java.util.logging.Level.FINEST, "property changed: <" + evt.getPropertyName() + ">", evt);
     if (evt.getPropertyName() == "loggedIn") {
       if ((Boolean)evt.getNewValue()) {
         displayHelloMessage();
       } else {
         userLoggedOff();
       } 
+    }
+    if (evt.getPropertyName() == "first-time") {
+    }
+    if (evt.getPropertyName() == "lang") {
+      //changeLang((Locale)evt.getNewValue());
     }
   }
 
