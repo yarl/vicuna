@@ -74,6 +74,7 @@ public class Data implements Serializable {
     public static JPopupMenu mQuickTemplates = new JPopupMenu();
     
     public Data() {
+        icenses.add("Creative Commons BY-SA 4.0");         licensesTemplates.add("{{cc-by-sa 4.0|%ATTRIB%}}");
         licenses.add("Creative Commons BY-SA 3.0");         licensesTemplates.add("{{cc-by-sa 3.0|%ATTRIB%}}");
         licenses.add("Creative Commons BY 3.0");            licensesTemplates.add("{{cc-by 3.0|%ATTRIB%}}");
         licenses.add("Creative Commons Zero 1.0");          licensesTemplates.add("{{cc-zero}}");
