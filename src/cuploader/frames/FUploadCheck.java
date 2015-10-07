@@ -24,6 +24,8 @@ public class FUploadCheck extends javax.swing.JFrame {
     
     boolean locNames = true;
     boolean locNamesDupe = true;
+    
+    String blacklistRegexp;
             
     public FUploadCheck(Data data) {
         this.data = data;
@@ -39,6 +41,8 @@ public class FUploadCheck extends javax.swing.JFrame {
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
         
+        blacklistRegexp = fetchBlacklist();
+
         files = loadFiles();
         startCheck();
     }
@@ -71,102 +75,111 @@ public class FUploadCheck extends javax.swing.JFrame {
         return list;
     }
     
-    /**
-     * Checks if filename is correct to upload
-     * @param name name of file to upload (with extention)
-     * @return i18n string with error, empty string if everything is OK
-     */
-    public static String checkFile(String name) {
-      //System.out.println("Checking: " + name);
-      
-      //check IMG* / DSCF* names
-      //@todo: add https://commons.wikimedia.org/wiki/MediaWiki:Filename-prefix-blacklist
-      Pattern pattern = Pattern.compile("^(DSCF|IMG|P|)[0-9 _-]*\\..{3,4}$");
-      Matcher match = pattern.matcher(name.intern());
-      if(match.matches()) {
-          return "uploadcheck-error-dscf";
-      }
-      
-      //check unique names at PC
-      int names = 0;
-      for(PFile f : Data.getFiles())
-        if(f.getName().equals(name)) ++names;
-      if(names > 1)
-        return "uploadcheck-error-dupe";
-      
-      //check unique names on internet
-      try {
-        Wiki wiki = (Data.wiki == null ? new Wiki("commons.wikimedia.org") : Data.wiki);
-        wiki.setUserAgent("VicunaUploader/" + Data.version + " (https://github.com/yarl/vicuna)");
-        if(wiki.isPageExist(name))
-          return "uploadcheck-error-dupe";
-      } catch (IOException ex) {
-        Logger.getLogger(FUploadCheck.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      return "";
+    private String fetchBlacklist() {
+        String regexp = "";
+        try {
+            // TODO: replace with Data.settings.server after checking behaviour when there is no local blacklist on wiki
+            String prefixes = new Wiki("commons.wikimedia.org").getPageText("MediaWiki:Filename-prefix-blacklist");
+            String[] prefixesList = prefixes.replaceAll("(?m)#.*", "").trim().split("\\s+");
+            for (String prefix : prefixesList) {
+                regexp += prefix + "|";
+            }
+            if(regexp.endsWith("|")) {
+                regexp = regexp.substring(0, regexp.length() - 1);
+            } 
+            regexp = "^(" + regexp + ").*";
+        } catch (IOException ex) {
+        }
+        return regexp;
+    }
+
+    private void checkIfExists(PFile file) {
+        String name = file.getComponent(Elem.NAME);
+        String ext = file.getComponent(Elem.EXT);
+
+        boolean[] exists = new boolean[1];
+        try {
+            exists = new Wiki(Data.settings.server).exists("File:" + name + "." + ext);
+        } catch (IOException ex) {
+        }
+
+        if (exists[0]) {
+            model.addRow(new Object[]{name, Data.text("uploadcheck-error-exists")});
+        }
+    }
+
+    private void checkPrefixBlacklist(PFile file) {
+        String name = file.getComponent(Elem.NAME);
+
+        if (name.matches(blacklistRegexp)) {
+            model.addRow(new Object[]{name, Data.text("uploadcheck-error-dscf")});
+        }
+    }
+
+    private void checkGPS(PFile file) {
+        String name = file.getComponent(Elem.NAME);
+        if (file.getComponent(Elem.COOR).isEmpty()) {
+            model.addRow(new Object[]{name, Data.text("uploadcheck-error-gps")});
+        }
+    }
+
+    private void checkUniqueNames(PFile file) {
+        String name = file.getComponent(Elem.NAME);
+        String ext = file.getComponent(Elem.EXT);
+
+        Integer count = 0;
+
+        for (String fileName : files) {
+            if (fileName.equals(name + "." + ext)) {
+                count++;
+            }
+        }
+
+        if (count > 1) {
+            model.addRow(new Object[]{name, Data.text("uploadcheck-error-dupe")});
+        }
     }
     
     private void startCheck() {
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                String raport = "";
-                
-                //check IMG* / DSCF* names
-                tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-
-                Pattern pattern = Pattern.compile("^(DSCF|IMG|P|)[0-9 _-]*\\..{3,4}$");
-                Matcher match;
-
-                for(String name : files) {
-                    match = pattern.matcher(name.intern());
-                    if(match.matches()) {
-                        ++problems;
-                        model.addRow(new Object[]{name, Data.text("uploadcheck-error-dscf")});
-                    }
-                }
-                
-                //check unique names at PC
-                int i = 0;
-                for(i=0; i<files.size(); ++i) {
-                    for(int j=0; j<i; ++j) {
-                        if(files.get(j).equals(files.get(i))) {
-                            ++problems;
-                            model.addRow(new Object[]{files.get(i), Data.text("uploadcheck-error-dupe")});
+                for (PFile file : Data.getFiles()) {
+                    if (file.toUpload) {
+                        if(Data.settings.checkPrefixBlacklist) {
+                            checkPrefixBlacklist(file);
+                        }
+                        
+                        if(Data.settings.checkIfExists) {
+                            checkIfExists(file);
+                        }
+                        
+                        if(Data.settings.checkGPS) {
+                            checkGPS(file);
+                        }
+                        
+                        if(Data.settings.checkUniqueNames) {
+                            checkUniqueNames(file);
                         }
                     }
                 }
-
-                //check unique names on internet
-                tProgress.setText(Data.text("uploadcheck-check-server") + "...");
-                //tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
-                //tServer.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-                try {
-                    for(String name : files) {
-                        boolean info = Data.wiki.isPageExist(name);
-                        if(info) {
-                            ++problems;
-                            model.addRow(new Object[]{name, Data.text("uploadcheck-error-exists")});
-                        }
-                    }
-                } catch (IOException ex) {}
 
                 //summary
-                if(problems>0) {
+                if (model.getRowCount() > 0) {
                     tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
-                    tProgress.setText(Data.text("uploadcheck-errors") + ": " + problems);
+                    tProgress.setText(Data.text("uploadcheck-errors") + ": " + model.getRowCount());
                     bUpload.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/exclamation.png")));
                     bUpload.setEnabled(true);
                 } else {
                     tProgress.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/tick.png")));
                     tProgress.setText(Data.text("uploadcheck-ok"));
                     bUpload.setEnabled(true);
-                    bUpload.requestFocus();  
+                    bUpload.requestFocus();
                 }
                 stopCheck();
             }
         };
-        
+
         Thread t = new Thread(run);
         t.setName("FUploadCheck");
         t.start();
@@ -219,7 +232,7 @@ public class FUploadCheck extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         tProgress.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
-        tProgress.setText(bundle.getString("uploadcheck-check-names") + "...");
+        tProgress.setText(bundle.getString("uploadcheck-checks-running") + "...");
 
         jTable1.setModel(model);
         jScrollPane2.setViewportView(jTable1);

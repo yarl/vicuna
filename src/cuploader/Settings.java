@@ -64,6 +64,12 @@ public class Settings {
 
     public String defaultDir = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
 
+    //Validation
+    public boolean checkPrefixBlacklist = true;
+    public boolean checkIfExists = true;
+    public boolean checkGPS = false;
+    public boolean checkUniqueNames = true;
+ 
     //WINDOW POSITION
     public Dimension windowSize;
     public Point windowPosition;

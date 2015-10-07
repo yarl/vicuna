@@ -116,7 +116,7 @@
               <Image iconType="3" name="/cuploader/resources/-spacer.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="bundle.getString(&quot;uploadcheck-check-names&quot;) + &quot;...&quot;" type="code"/>
+              <Connection code="bundle.getString(&quot;uploadcheck-checks-running&quot;) + &quot;...&quot;" type="code"/>
             </Property>
           </Properties>
         </Component>
