@@ -8,7 +8,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import cuploader.Data;
-import cuploader.Data.Elem;
 import static cuploader.Data.fSettings;
 import static cuploader.Data.settings;
 import cuploader.FileFilters;
@@ -37,21 +36,8 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.wikipedia.Wiki;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 public final class Main extends javax.swing.JFrame
     implements DropTargetListener, PropertyChangeListener {
@@ -361,7 +347,7 @@ public final class Main extends javax.swing.JFrame
 
     lServerStatus.setHorizontalAlignment(Data.getOrientation(false));
     lServerStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/status-offline.png"))); // NOI18N
-    lServerStatus.setText(Data.text("server-status"));
+    lServerStatus.setText(bundle.getString("server-status")); // NOI18N
     lServerStatus.setHorizontalTextPosition(Data.getOrientation(true));
 
     javax.swing.GroupLayout pUserInfoLayout = new javax.swing.GroupLayout(pUserInfo);
@@ -552,7 +538,7 @@ public final class Main extends javax.swing.JFrame
     mFile.add(mSaveSession);
 
     mCleanSession.setComponentOrientation(getComponentOrientation());
-    mCleanSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, java.awt.event.InputEvent.CTRL_MASK));
+    mCleanSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
     mCleanSession.setText(bundle.getString("session-clear")); // NOI18N
     mCleanSession.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
