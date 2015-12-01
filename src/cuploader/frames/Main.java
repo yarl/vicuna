@@ -36,6 +36,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import org.wikipedia.Wiki;
 
@@ -1267,12 +1268,16 @@ public final class Main extends javax.swing.JFrame
 
       try {
         OutputStream outputStream = new FileOutputStream(f);
-        Writer writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
+        Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
         xstream.toXML(settings, writer);
         xstream.toXML(Data.getFilesXML(), writer);
         
         return true;
       } catch (FileNotFoundException e) {
+        JOptionPane.showMessageDialog(fSettings, e.getMessage());
+        System.err.println("Error: " + e.getMessage());
+        return false;
+      } catch (UnsupportedEncodingException e) {
         JOptionPane.showMessageDialog(fSettings, e.getMessage());
         System.err.println("Error: " + e.getMessage());
         return false;
