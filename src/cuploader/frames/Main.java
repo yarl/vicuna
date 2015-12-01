@@ -1248,7 +1248,7 @@ public final class Main extends javax.swing.JFrame
           file = new File(file.getAbsoluteFile() + "");
           file.createNewFile();
           //boolean result = SaveSession(file);
-          boolean result = saveSessionFile2(file);
+          boolean result = saveSessionFile(file);
           if (result) {
             JOptionPane.showMessageDialog(rootPane, Data.text("session-save-success"), Data.text("session-save"), JOptionPane.INFORMATION_MESSAGE);
           }
@@ -1259,7 +1259,7 @@ public final class Main extends javax.swing.JFrame
       } else {
         int dialog = JOptionPane.showConfirmDialog(rootPane, Data.text("session-save-exist"));
         if (dialog == 0) {
-          boolean result = saveSessionFile2(file);
+          boolean result = saveSessionFile(file);
           if (result) {
             JOptionPane.showMessageDialog(rootPane, Data.text("session-save-success"));
           }
@@ -1268,7 +1268,7 @@ public final class Main extends javax.swing.JFrame
     }
   }
 
-  private boolean saveSessionFile2(File f) {
+  private boolean saveSessionFile(File f) {
     try {
       XStream xstream = new XStream(new DomDriver("UTF-8"));
       xstream.processAnnotations(cuploader.Settings.class);
@@ -1280,11 +1280,6 @@ public final class Main extends javax.swing.JFrame
       xml += xstream.toXML(Data.getFilesXML());
 
       try {
-        //FileWriter fstream = new FileWriter(f.getAbsolutePath());
-        //BufferedWriter out = new BufferedWriter(fstream);
-        //out.write(xml);
-        //out.close();
-        
         OutputStream outputStream = new FileOutputStream(f);
         Writer writer = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
         xstream.toXML(settings, writer);
@@ -1297,170 +1292,6 @@ public final class Main extends javax.swing.JFrame
         return false;
       }
     } catch (HeadlessException ex) {
-      error(null, ex);
-      return false;
-    }
-  }
-
-  /**
-   * *
-   * Saves session into XML file.
-   *
-   * @param f destination file
-   * @return true if OK
-   */
-  public boolean saveSessionFile(File f) {
-    try {
-      DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-      String text;
-
-      // SETTINGS
-      Document doc = docBuilder.newDocument();
-      Element root = doc.createElement("session");
-      doc.appendChild(root);
-
-      Element elem = doc.createElement("server");
-      elem.appendChild(doc.createTextNode(Data.settings.server));
-      root.appendChild(elem);
-      elem = doc.createElement("user");
-      text = Data.settings.username.isEmpty() ? "null" : Data.settings.username;
-      elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-      root.appendChild(elem);
-      elem = doc.createElement("author");
-      text = Data.settings.author.isEmpty() ? "null" : Data.settings.author;
-      elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-      root.appendChild(elem);
-      elem = doc.createElement("source");
-      text = Data.settings.source.isEmpty() ? "null" : Data.settings.source;
-      elem.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-      root.appendChild(elem);
-
-      Element license = doc.createElement("license");
-      root.appendChild(license);
-
-      Attr id = doc.createAttribute("id");
-      id.setValue(Data.settings.license + "");
-      license.setAttributeNode(id);
-      Attr custom = doc.createAttribute("custom");
-      text = Data.licensesTemplates.get(Data.licensesTemplates.size() - 1).isEmpty() ? "null" : Data.licensesTemplates.get(Data.licensesTemplates.size() - 1);
-      custom.setValue(text);
-      license.setAttributeNode(custom);
-      Attr attributon = doc.createAttribute("attribution");
-      text = Data.settings.attribution.isEmpty() ? "null" : Data.settings.attribution;
-      attributon.setValue(text.replace("&", "amp;"));
-      license.setAttributeNode(attributon);
-
-      Element gallery = doc.createElement("gallery");
-      root.appendChild(gallery);
-
-      Attr create = doc.createAttribute("create");
-      create.setValue(Data.settings.createGallery + "");
-      gallery.setAttributeNode(create);
-      Attr page = doc.createAttribute("page");
-      text = Data.settings.galleryPage.isEmpty() ? "null" : Data.settings.galleryPage;
-      page.setValue(text.replace("&", "amp;"));
-      gallery.setAttributeNode(page);
-      Attr header = doc.createAttribute("header");
-      header.setValue(Data.settings.galleryHeader + "");
-      gallery.setAttributeNode(header);
-      Attr width = doc.createAttribute("width");
-      width.setValue(Data.settings.galleryWidth + "");
-      gallery.setAttributeNode(width);
-      Attr ontop = doc.createAttribute("ontop");
-      ontop.setValue(Data.settings.galleryOnTop + "");
-      gallery.setAttributeNode(ontop);
-
-      Element other = doc.createElement("other");
-      root.appendChild(other);
-
-      Attr attr = doc.createAttribute("read_exif_hour");
-      attr.setValue(Data.settings.readExifHour + "");
-      other.setAttributeNode(attr);
-      attr = doc.createAttribute("rename_after_upload");
-      attr.setValue(Data.settings.renameAfterUpload + "");
-      other.setAttributeNode(attr);
-      attr = doc.createAttribute("load_subdirectory");
-      attr.setValue(Data.settings.loadSubdirectory + "");
-      other.setAttributeNode(attr);
-      attr = doc.createAttribute("server_monitor_enabled");
-      attr.setValue(Data.settings.isServerMonitorEnabled() + "");
-      other.setAttributeNode(attr);
-      attr = doc.createAttribute("ask_quit");
-      attr.setValue(Data.settings.askQuit + "");
-      other.setAttributeNode(attr);
-      attr = doc.createAttribute("file_desc_dource");
-      attr.setValue(Data.settings.fileDescSource + "");
-      other.setAttributeNode(attr);
-      attr = doc.createAttribute("file_desc_path");
-      text = Data.settings.fileDescPath.isEmpty() ? "null" : Data.settings.fileDescPath;
-      attr.setValue(text.replace("&", "amp;"));
-      other.setAttributeNode(attr);
-
-      Element categories = doc.createElement("categories");
-      text = Data.settings.categories.isEmpty() ? "null" : Data.settings.categories;
-      categories.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-      root.appendChild(categories);
-
-      Element extra_text = doc.createElement("extra_text");
-      text = Data.settings.extraText.isEmpty() ? "null" : Data.settings.extraText;
-      extra_text.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-      root.appendChild(extra_text);
-
-      // FILES
-      for (PFile i : Data.getFiles()) {
-        Element file = doc.createElement("file");
-        //server.appendChild(doc.createTextNode(Data.settings.server));
-        root.appendChild(file);
-
-        Attr path = doc.createAttribute("path");
-        path.setValue(i.file.getAbsolutePath().replace("&", "amp;"));
-        file.setAttributeNode(path);
-        Attr upload = doc.createAttribute("upload");
-        upload.setValue(i.toUpload + "");
-        file.setAttributeNode(upload);
-        Attr edit = doc.createAttribute("edit");
-        edit.setValue(i.toEdit + "");
-        file.setAttributeNode(edit);
-
-        Element name = doc.createElement("name");
-        text = i.getComponent(Elem.NAME).isEmpty() ? "null" : i.getComponent(Elem.NAME);
-        name.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-        file.appendChild(name);
-
-        Element date2 = doc.createElement("date");
-        text = i.getComponent(Elem.DATE).isEmpty() ? "null" : i.getComponent(Elem.DATE);
-        date2.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-        file.appendChild(date2);
-
-        Element desc = doc.createElement("desc");
-        text = i.getComponent(Elem.DESC).isEmpty() ? "null" : i.getComponent(Elem.DESC);
-        desc.appendChild(doc.createTextNode(text.replace("&", "amp;").replace("\n", "\\n")));
-        file.appendChild(desc);
-
-        Element coor = doc.createElement("coor");
-        text = i.getComponent(Elem.COOR).isEmpty() ? "null" : i.getComponent(Elem.COOR);
-        coor.appendChild(doc.createTextNode(text));
-        file.appendChild(coor);
-
-        Element cats = doc.createElement("cats");
-        text = i.getComponent(Elem.CATS).isEmpty() ? "null" : i.getComponent(Elem.CATS);
-        cats.appendChild(doc.createTextNode(text.replace("&", "amp;")));
-        file.appendChild(cats);
-      }
-
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      Transformer transformer = transformerFactory.newTransformer();
-      DOMSource source = new DOMSource(doc);
-      StreamResult result = new StreamResult(f);
-      // StreamResult result = new StreamResult(System.out);
-      transformer.transform(source, result);
-      return true;
-    } catch (ParserConfigurationException ex) {
-      error(null, ex);
-      return false;
-    } catch (TransformerException ex) {
       error(null, ex);
       return false;
     }

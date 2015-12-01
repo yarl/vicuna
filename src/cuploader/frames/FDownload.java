@@ -43,15 +43,13 @@ public final class FDownload extends javax.swing.JFrame {
             public void run() {
                 try {
                     //frame.setState(Frame.ICONIFIED);
-                  frame.dispose();
+                    frame.dispose();
                     
                     final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
                     final File currentJar = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
                     /* is it a jar file? */
                     if(currentJar.getName().endsWith(".jar")) {
-                        //frame.saveSessionFile(new File(currentJar.getParentFile() + File.separator + "autoupdate-session.xml"));
-                        
                         String path = currentJar.getAbsolutePath();
                         //JOptionPane.showMessageDialog(frame, "Path: " + path);
                         download(downloadURL, path);

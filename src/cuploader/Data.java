@@ -81,7 +81,7 @@ public class Data implements Serializable {
         licenses.add(text("license-gfdl-cc-by-sa-3"));      licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by-sa 3.0|%ATTRIB%}}");
         licenses.add(text("license-gfdl-cc-by-3"));         licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by 3.0|%ATTRIB%}}");
         licenses.add(text("license-other"));                licensesTemplates.add("");
-        
+      
         
         propchange = new PropertyChangeSupport(this);
     }
