@@ -2,16 +2,17 @@
 _ultimate tool for upload files to Wikimedia Commons and other Wikimedia projects_
 
 ## Usage
-For manual, take a look at [project wiki](https://github.com/yarl/vicuna/wiki) and [website](http://yarl.github.io/vicuna). 
+For manual, take a look at [project wiki](https://github.com/yarl/vicuna/wiki) and [website](http://yarl.github.io/vicuna).
 
 ## Building
-You will find latest Vicuna in `dist` directory.
+You will find latest Vicuna in `store` directory.
 
 If you want to run program from source code using latest translations from TranslateWiki, build it using [Ant](https://ant.apache.org/). Type commands below in console:
 
 ```
-util\ascii
-ant package-for-store
+git clone https://github.com/yarl/vicuna.git
+cd vicuna
+ant -Dplatforms.JDK_1.6.home=$JAVA_HOME package-for-store
 java -jar store/vicuna.jar
 ```
 
