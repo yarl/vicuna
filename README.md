@@ -4,17 +4,22 @@ _ultimate tool for upload files to Wikimedia Commons and other Wikimedia project
 ## Usage
 For manual, take a look at [project wiki](https://github.com/yarl/vicuna/wiki) and [website](http://yarl.github.io/vicuna).
 
-## Building
-You will find latest Vicuna in `store` directory.
-
-If you want to run program from source code using latest translations from TranslateWiki, build it using [Ant](https://ant.apache.org/). Type commands below in console:
+## Build and Run
+Program is being written using [NetBeans IDE](https://netbeans.org/) and [Apache Ant](https://ant.apache.org/) is used for building. In order to download and build source code, do following:
 
 ```
 git clone https://github.com/yarl/vicuna.git
 cd vicuna
-ant -Dplatforms.JDK_1.6.home=$JAVA_HOME package-for-store
+ant package-for-store
+```
+You will find compiled `.jar` file in `store` directory.
+
+```
 java -jar store/vicuna.jar
 ```
+
+## Contribute
+Feel free to fork and suggest changes. However, please do not send pull requests with radical changes without prior discussion. Also, changes should work on NetBeans (especially project building and Form Designer).
 
 ## License
 ```
