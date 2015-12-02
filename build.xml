@@ -1,5 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- You may freely edit this file. See commented blocks below for --><!-- some examples of how to customize the build. --><!-- (If you delete it and reopen the project it will be recreated.) --><!-- By default, only the Clean and Build commands use this build script. --><!-- Commands such as Run, Debug, and Test only use this build script if --><!-- the Compile on Save feature is turned off for the project. --><!-- You can turn off the Compile on Save (or Deploy on Save) setting --><!-- in the project's Project Properties dialog box.--><project name="Upload" default="default" basedir=".">
-    <description>Builds, tests, and runs the project Upload.</description>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="vicuna" default="default" basedir=".">
+    <description>Builds, tests, and runs the project vicuna.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
@@ -42,15 +51,14 @@
       -init-macrodef-junit:     defines macro for junit execution
       -init-macrodef-debug:     defines macro for class debugging
       -init-macrodef-java:      defines macro for class execution
-      -do-jar-with-manifest:    JAR building (if you are using a manifest)
-      -do-jar-without-manifest: JAR building (if you are not using a manifest)
+      -do-jar:                  JAR building
       run:                      execution of project 
       -javadoc-build:           Javadoc generation
       test-report:              JUnit report generation
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="Upload-impl.jar">
+        <target name="run" depends="vicuna-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
@@ -62,41 +70,41 @@
     nbproject/build-impl.xml file. 
 
     -->
-    <target name="package-for-store" depends="jar">
+	
+	<target name="package-for-store" depends="jar">
+		<!-- Change the value of this property to be the name of your JAR,
+				minus the .jar extension. It should not have spaces.
+				<property name="store.jar.name" value="MyJarName"/>
+		-->
+		<property name="store.jar.name" value="vicuna"/>
 
-    <!-- Change the value of this property to be the name of your JAR,
-            minus the .jar extension. It should not have spaces.
-            <property name="store.jar.name" value="MyJarName"/>
-    -->
-    <property name="store.jar.name" value="vicuna"/>
+		<!-- don't edit below this line -->
 
-    <!-- don't edit below this line -->
+		<property name="store.dir" value="store"/>
+		<property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
 
-    <property name="store.dir" value="store"/>
-    <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
+		<echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
 
-    <echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
+		<delete dir="${store.dir}"/>
+		<mkdir dir="${store.dir}"/>
 
-    <delete dir="${store.dir}"/>
-    <mkdir dir="${store.dir}"/>
+		<jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
+			<zipgroupfileset dir="${dist.dir}" includes="*.jar"/>
+			<zipgroupfileset dir="lib" includes="*.jar"/>
 
-    <jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
-        <zipgroupfileset dir="${dist.dir}" includes="*.jar"/>
-        <zipgroupfileset dir="lib" includes="*.jar"/>
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}"/>
+			</manifest>
+		</jar>
 
-        <manifest>
-            <attribute name="Main-Class" value="${main.class}"/>
-        </manifest>
-    </jar>
+		<zip destfile="${store.jar}">
+			<zipfileset src="${store.dir}/temp_final.jar"
+			excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+		</zip>
 
-    <zip destfile="${store.jar}">
-        <zipfileset src="${store.dir}/temp_final.jar"
-        excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
-    </zip>
+		<delete file="${store.dir}/temp_final.jar"/>
 
-    <delete file="${store.dir}/temp_final.jar"/>
-
-    <property name="resources.dir" value="src/cuploader/text"/>
-    <property name="target.resources.dir" value="src/cuploader/textok"/>
-</target>
+		<property name="resources.dir" value="src/cuploader/text"/>
+		<property name="target.resources.dir" value="src/cuploader/textok"/>
+	</target>
 </project>
