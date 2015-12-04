@@ -496,6 +496,7 @@ public final class Main extends javax.swing.JFrame
     jToolBar4.setFloatable(false);
     jToolBar4.setRollover(true);
 
+    bUpload.setBackground(new java.awt.Color(255, 255, 255));
     bUpload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/drive-upload-24.png"))); // NOI18N
     bUpload.setToolTipText(bundle.getString("upload")); // NOI18N
     bUpload.setBorderPainted(false);
