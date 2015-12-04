@@ -310,6 +310,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
       }
     });
 
+    Panel.setBackground(new java.awt.Color(255, 255, 255));
     Panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 5, 5));
     Panel.setName(""); // NOI18N
     Panel.setOpaque(false);
@@ -1224,7 +1225,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             toEdit = mode;
             if(mode) {
                 Panel.setOpaque(true);
-                Panel.setBackground(new Color(220,220,220));
+                Panel.setBackground(new Color(245,245,245));
                 ++Data.filesEdit;
             } else {
                 Panel.setOpaque(false);
