@@ -624,6 +624,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="bLoadFiles">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/folder-import.png"/>
                 </Property>
@@ -642,6 +645,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="bLoadSession">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/blue-folder-open.png"/>
                 </Property>
@@ -659,6 +665,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="bSaveSession">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/disk-black-24.png"/>
                 </Property>
@@ -678,6 +687,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="bFileEditSelected">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/image-edit-24.png"/>
                 </Property>
@@ -695,6 +707,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="bView">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/card-address-img-24.png"/>
                 </Property>
@@ -714,6 +729,9 @@
         </Container>
         <Container class="javax.swing.JScrollPane" name="pFilesScroll">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                 <TitledBorder title="Files">
@@ -804,6 +822,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="bLogin">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/user-24.png"/>
                 </Property>
@@ -826,6 +847,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="bSettings">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/switch-24.png"/>
                 </Property>
@@ -843,6 +867,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="bAbout">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/cuploader/resources/color-swatch-24.png"/>
                 </Property>
