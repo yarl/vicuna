@@ -12,7 +12,6 @@ import cuploader.frames.FCoord;
 import cuploader.frames.FInfo;
 import cuploader.frames.FFileEdit;
 import cuploader.frames.FUpload;
-import cuploader.frames.FUploadCheck;
 import cuploader.frames.Main;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -33,7 +32,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.event.UndoableEditEvent;
@@ -86,6 +84,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         String name = file.getName();
         tName.setText(name.substring(0, name.lastIndexOf('.')));
         readEXIF();
+        selectToUpload(true);
         //generateThumbnail();
     }
     
