@@ -156,7 +156,8 @@ public class FCoord extends javax.swing.JFrame {
           setMapPosition(new ImmutableCoordinate(fileCoord.getLat(), fileCoord.getLon()), 2);
           DecimalFormat df = new DecimalFormat("#.######");
           GeoPosition coordinate = mapViewer.getCenterPosition();
-          tCoor.setText(df.format(coordinate.getLatitude()) + ";" + df.format(coordinate.getLongitude()));
+          tCoor.setText(df.format(coordinate.getLatitude()).replace(",", ".")
+                  + ";" + df.format(coordinate.getLongitude()).replace(",", "."));
         } else if (Data.settings.coor != null && Data.settings.coorZoom != 0) {
           setMapPosition(Data.settings.coor, Data.settings.coorZoom);
         }

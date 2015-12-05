@@ -73,14 +73,14 @@ public class Coord {
         int M = (int)((Math.abs(lat)-D)*60.0);
         double S = (((Math.abs(lat)-D)*60.0)-M)*60.0;//(Math.floor((lat-D)*60.0)-M)*60.0;
         
-        text[0] = D + "° " + M + "\' " + df.format(S) + "\" ";        
+        text[0] = D + "° " + M + "\' " + df.format(S).replace(",", ".") + "\" ";        
         text[0] += (lat<0) ? "S" : "N";
 
         D = (int)Math.abs(lon);
         M = (int)((Math.abs(lon)-D)*60.0);
         S = (((Math.abs(lon)-D)*60.0)-M)*60.0;
         
-        text[1] = D + "° " + M + "\' " + df.format(S) + "\" ";
+        text[1] = D + "° " + M + "\' " + df.format(S).replace(",", ".") + "\" ";
         text[1] += (lon<0) ? "W" : "E";
         
         return text;       
@@ -96,7 +96,7 @@ public class Coord {
     
     public String getLat() {
         DecimalFormat df = new DecimalFormat("#.######");
-        return df.format(lat);
+        return df.format(lat).replace(",", ".");
     }
     
     public double getLatDouble() {
@@ -105,7 +105,7 @@ public class Coord {
     
     public String getLon() {
         DecimalFormat df = new DecimalFormat("#.######");
-        return df.format(lon);
+        return df.format(lon).replace(",", ".");
     }
     
     public double getLonDouble() {
@@ -113,6 +113,6 @@ public class Coord {
     }
     
     public String getHeading() {
-        return heading == null ? "" : heading;
+        return heading == null ? "" : heading.replace(",", ".");
     }
 }
