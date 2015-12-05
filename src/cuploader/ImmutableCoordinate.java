@@ -10,8 +10,8 @@ public class ImmutableCoordinate {
   }
 
   public ImmutableCoordinate(String latitude, String longitude) {
-    this.latitude = Double.parseDouble(latitude);
-    this.longitude = Double.parseDouble(longitude);
+    this.latitude = Double.parseDouble(latitude.replace(",", "."));
+    this.longitude = Double.parseDouble(longitude.replace(",", "."));
   }
   
   public double getLat() {
