@@ -1146,7 +1146,7 @@ public final class Main extends javax.swing.JFrame
       String text = readFile("settings.vicuna");
 
       if (!text.isEmpty()) {
-        XStream xstream = new XStream(new DomDriver());
+        XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.processAnnotations(cuploader.Settings.class);
         xstream.processAnnotations(cuploader.QuickTemplate.class);
         xstream.processAnnotations(cuploader.DescSource.class);
@@ -1319,17 +1319,12 @@ public final class Main extends javax.swing.JFrame
       xml += xstream.toXML(Data.getFilesXML());
 
       try {
-        OutputStream outputStream = new FileOutputStream(f);
-        Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
+        Writer writer = new OutputStreamWriter(new FileOutputStream(f), Charset.forName("UTF-8"));
         xstream.toXML(settings, writer);
         xstream.toXML(Data.getFilesXML(), writer);
-        
+
         return true;
       } catch (FileNotFoundException e) {
-        JOptionPane.showMessageDialog(fSettings, e.getMessage());
-        System.err.println("Error: " + e.getMessage());
-        return false;
-      } catch (UnsupportedEncodingException e) {
         JOptionPane.showMessageDialog(fSettings, e.getMessage());
         System.err.println("Error: " + e.getMessage());
         return false;

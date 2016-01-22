@@ -14,7 +14,6 @@ import javax.swing.*;
 public final class FFileLoading extends javax.swing.JFrame {
     private ArrayList<File> files = null;   
     private volatile boolean stopRq = false;
-    private double start, sum = 0.0;
     
     ArrayList<Boolean> fEdit = null;
     ArrayList<Boolean> fUpload = null;
@@ -90,70 +89,81 @@ public final class FFileLoading extends javax.swing.JFrame {
         
         startRead(true);
     }
-            
-    private void startRead(final boolean isLoadingSession) {
-        if(isLoadingSession) {
-            Data.getFiles().clear();
-            Main.pFiles.removeAll();
-            Main.pFiles.repaint();
-        }
-  
-        Progress.setMinimum(0);
-        Progress.setMaximum(files.size());
-        
-        Runnable run = new Runnable() {
-            @Override
-            public void run() {
-                Progress.setIndeterminate(false);
-                DecimalFormat df = new DecimalFormat("#.##");
-                
-                int i = 0;
-                for(File file : files) {
-                    if(!stopRq) {
-                        start = System.nanoTime(); 
-                        lName.setText(bundle.getString("loading") + " " + (i+1) + " / " + files.size() + ": " + file.getName() + 
-                                " (" + df.format(9.5367e-7*file.length()) + " MiB)");
-                        lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-                        
-                        PFile f;
-                        if(isLoadingSession) {
-                          if(sessionFiles==null)
-                            f = new PFile(file, Data.getFiles().size(), fUpload.get(i), fEdit.get(i), fName.get(i), fDesc.get(i),
-                                                  fDate.get(i), fCats.get(i), fCoor.get(i));
-                          else
-                            f = new PFile(file, Data.getFiles().size(), false, false, sessionFiles.get(i).get("name"),
-                                    sessionFiles.get(i).get("desc"), sessionFiles.get(i).get("date"), sessionFiles.get(i).get("cats"), "");
-                        } else
-                            f = new PFile(file, Data.getFiles().size());
-                        
-                        Data.addPanel(f);
-                        Progress.setValue(i+1);
-                        ++i;
-                        double end = ((System.nanoTime()-start)/1000.0/1000.0/1000.0);
-                        sum += end;
-                        //System.out.println(file.getName() + ": " + end);
-                    }
-                }
-                Progress.setIndeterminate(true);
-                stopRead();
-                
-                for(PFile file : Data.getFiles()) {
-                  file.generateThumbnail();
-                }
-            }
-        };
-        
          
-        Thread t = new Thread(run);
-        t.setName("FFileLoading");
-        t.start();
+    private void setLoadingText(int i, final File file) {
+      DecimalFormat df = new DecimalFormat("#.##");
+      lName.setText(bundle.getString("loading") + " " + (i + 1) + " / " + files.size()
+              + ": " + file.getName()
+              + " (" + df.format(9.5367e-7 * file.length()) + " MiB)");
+      lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
+    }
+    
+    private void clearSession() {
+      Data.getFiles().clear();
+      Main.pFiles.removeAll();
+      Main.pFiles.repaint();
+    }
+    
+    private void startRead(final boolean isLoadingSession) {
+      if (isLoadingSession) {
+        clearSession();
+      }
+
+      Progress.setMinimum(0);
+      Progress.setMaximum(files.size());
+
+      Runnable run = new Runnable() {
+        @Override
+        public void run() {
+          Progress.setIndeterminate(false);
+
+          int i = 0;
+          int filesAlready = Data.getFiles().size();
+          for (File file : files) {
+            if (!stopRq) {
+              setLoadingText(i, file);
+
+              PFile f;
+              if (isLoadingSession) {
+                if (sessionFiles == null) {
+                  f = new PFile(file, Data.getFiles().size(), fUpload.get(i),
+                          fEdit.get(i), fName.get(i), fDesc.get(i),
+                          fDate.get(i), fCats.get(i), fCoor.get(i));
+                } else {
+                  f = new PFile(file, Data.getFiles().size(), false, false,
+                          sessionFiles.get(i).get("name"),
+                          sessionFiles.get(i).get("desc"),
+                          sessionFiles.get(i).get("date"),
+                          sessionFiles.get(i).get("cats"), "");
+                }
+              } else {
+                f = new PFile(file, Data.getFiles().size());
+              }
+
+              Data.addPanel(f);
+              Progress.setValue(i + 1);
+              ++i;
+            }
+          }
+          Progress.setIndeterminate(true);
+          stopRead();
+          
+          for (int j = filesAlready; j < Data.getFiles().size(); j++) {
+            PFile file = Data.getFiles().get(j);
+            file.generateThumbnail();
+          }
+        }
+      };
+
+      Thread t = new Thread(run);
+      t.setName("FFileLoading");
+      t.start();
     }
     
     private void stopRead() {
-        Data.isLoadSession=false;
-        stopRq = true;
-        //System.out.println("Łącznie: " + sum + ", średnio: " + sum/files.size());
-        dispose();
+      Data.isLoadSession = false;
+      stopRq = true;
+      dispose();
     }
     
     @SuppressWarnings("unchecked")

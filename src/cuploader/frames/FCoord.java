@@ -21,18 +21,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
-import org.jxmapviewer.painter.CompoundPainter;
 
 public class FCoord extends javax.swing.JFrame {
     private int number;
     private boolean multiEdit;
     private JPanel map;
     private JXMapViewer mapViewer = new JXMapViewer();
-
+        
     private JXMapViewer initMap() {
 
         TileFactoryInfo info = new OSMTileFactoryInfo();
@@ -83,7 +85,7 @@ public class FCoord extends javax.swing.JFrame {
         mapViewer.setZoom(coorZoom);
         mapViewer.setAddressLocation(position);
     }
-
+    
     private static class MapMarkerListener implements Painter<JXMapViewer>, MouseListener {
 
         private final FCoord fCoord;
@@ -99,10 +101,11 @@ public class FCoord extends javax.swing.JFrame {
                 Color fillColor = new Color(128, 192, 255, 128);
                 Color frameColor = new Color(0, 0, 255, 128);
                 Point point = fCoord.getPoint(coordinate);
-                int squareSize = 10;
-                int x = point.x - squareSize / 2;
-                int y = point.y - squareSize / 2;
-                Rectangle rc = new Rectangle(x, y, squareSize, squareSize);
+                int size = 10;
+                int x = point.x - size / 2;
+                int y = point.y - size / 2;
+
+                Shape rc = new Ellipse2D.Float(x, y, size, size);
                 g.setColor(frameColor);
                 g.draw(rc);
                 g.setColor(fillColor);
@@ -112,7 +115,12 @@ public class FCoord extends javax.swing.JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                DecimalFormat df = new DecimalFormat("#.######", DecimalFormatSymbols.getInstance(Locale.US));
+                coordinate = fCoord.getMapPosition(e.getPoint());
+                fCoord.tCoor.setText(df.format(coordinate.getLat()) + ";" + df.format(coordinate.getLon()));
+                fCoord.mapViewer.repaint();
+            }
         }
 
         @Override
@@ -121,13 +129,8 @@ public class FCoord extends javax.swing.JFrame {
         }
 
         @Override
-        public void mouseReleased(MouseEvent evt) {
-            if (evt.getButton() == MouseEvent.BUTTON1) {
-                DecimalFormat df = new DecimalFormat("#.######");
-                coordinate = fCoord.getMapPosition(evt.getPoint());
-                fCoord.tCoor.setText(df.format(coordinate.getLat()) + ";" + df.format(coordinate.getLon()));
-                fCoord.mapViewer.repaint();
-            }
+        public void mouseReleased(MouseEvent e) {
+
         }
 
         @Override
@@ -153,11 +156,10 @@ public class FCoord extends javax.swing.JFrame {
         
         if(!multiEdit && fileCoord != null) {          
           setMapPosition(new ImmutableCoordinate(fileCoord.getLat(), fileCoord.getLon()), 2);
-          DecimalFormat df = new DecimalFormat("#.######");
+          DecimalFormat df = new DecimalFormat("#.######", DecimalFormatSymbols.getInstance(Locale.US));
           GeoPosition coordinate = mapViewer.getCenterPosition();
           tCoor.setText(df.format(coordinate.getLatitude()) + ";" + df.format(coordinate.getLongitude()));
         } else if (Data.settings.coor != null && Data.settings.coorZoom != 0) {
-          System.out.println("b");
           setMapPosition(Data.settings.coor, Data.settings.coorZoom);
         }
         setVisible(true);

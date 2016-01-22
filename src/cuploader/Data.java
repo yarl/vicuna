@@ -9,8 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.*;
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -194,25 +198,22 @@ public class Data implements Serializable {
      * 
      */
     public static void saveSettings() {
+      try {
+        XStream xstream = new XStream(new DomDriver("UTF-8"));
+        xstream.processAnnotations(cuploader.Settings.class);
+        xstream.processAnnotations(cuploader.QuickTemplate.class);
+        xstream.processAnnotations(cuploader.DescSource.class);
+
         try {
-            XStream xstream = new XStream(new DomDriver());
-            xstream.processAnnotations(cuploader.Settings.class);
-            xstream.processAnnotations(cuploader.QuickTemplate.class);
-            xstream.processAnnotations(cuploader.DescSource.class);
-            String xml = xstream.toXML(settings);
-            
-            try{
-                FileWriter fstream = new FileWriter("settings.vicuna");
-                BufferedWriter out = new BufferedWriter(fstream);
-                out.write(xml);
-                out.close();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(fSettings, e.getMessage());
-                System.err.println("Error: " + e.getMessage());
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+          Writer writer = new OutputStreamWriter(new FileOutputStream("settings.vicuna"), Charset.forName("UTF-8"));
+          xstream.toXML(settings, writer);
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(fSettings, e.getMessage());
+          System.err.println("Error: " + e.getMessage());
         }
+      } catch (Exception ex) {
+        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
     
     public static int getOrientation(boolean isImage) {
