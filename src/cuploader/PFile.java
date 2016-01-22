@@ -344,7 +344,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
       }
     });
 
-    tName.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+    tName.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
     tName.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2), javax.swing.BorderFactory.createEmptyBorder(0, 3, 0, 3)));
     tName.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusGained(java.awt.event.FocusEvent evt) {
@@ -371,7 +371,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     });
     jScrollPane1.setViewportView(tDesc);
 
-    tDate.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+    tDate.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
     tDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     tDate.addFocusListener(new java.awt.event.FocusAdapter() {
       public void focusGained(java.awt.event.FocusEvent evt) {
@@ -379,7 +379,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
       }
     });
 
-    tCategories.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+    tCategories.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
     tCategories.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     tCategories.setMinimumSize(new java.awt.Dimension(4, 24));
     tCategories.setPreferredSize(new java.awt.Dimension(4, 24));
@@ -467,7 +467,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
       }
     });
 
-    lFilename.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+    lFilename.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
     lFilename.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/document.png"))); // NOI18N
     lFilename.setText(file.getName());
     lFilename.setMaximumSize(new Dimension((int)(Panel.getWidth()*0.15), 16));
@@ -515,7 +515,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
       }
     });
 
-    lDirectory.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+    lDirectory.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
     lDirectory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-horizontal-open.png"))); // NOI18N
     lDirectory.setText(file.getParent());
     lDirectory.setToolTipText(file.getParent());
@@ -636,7 +636,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(cUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
+          .addComponent(Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
         .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
@@ -911,11 +911,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }//GEN-LAST:event_tDescFocusGained
 
     private void tNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tNameFocusLost
-        tName.setBorder(borderBlur);
+        //tName.setBorder(borderBlur);
     }//GEN-LAST:event_tNameFocusLost
 
     private void tNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tNameFocusGained
-        tName.setBorder(borderFocus);
+        //tName.setBorder(borderFocus);
         Main.lHelp.setText("<html>" + bundle.getString("help-filename") + "</html>");
     }//GEN-LAST:event_tNameFocusGained
 
