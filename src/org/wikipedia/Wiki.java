@@ -6402,6 +6402,8 @@ public class Wiki implements Serializable
             if (headerName.equals("Set-Cookie"))
             {
                 String cookie = u.getHeaderField(i);
+                if(cookie.contains("=deleted")) continue;
+                
                 cookie = cookie.substring(0, cookie.indexOf(';'));
                 String name = cookie.substring(0, cookie.indexOf('='));
                 String value = cookie.substring(cookie.indexOf('=') + 1, cookie.length());
