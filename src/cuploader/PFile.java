@@ -332,6 +332,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     tThumb.setBackground(new java.awt.Color(230, 230, 230));
     tThumb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     tThumb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/arrow-circle.png"))); // NOI18N
+    tThumb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     tThumb.setFocusable(false);
     tThumb.setMaximumSize(new java.awt.Dimension(150, 100));
     tThumb.setMinimumSize(new java.awt.Dimension(150, 100));
@@ -406,6 +407,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
 
     tCoor.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
     tCoor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/-spacer.png"))); // NOI18N
+    tCoor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     tCoor.setPreferredSize(new java.awt.Dimension(34, 20));
     tCoor.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -438,6 +440,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bCopyDescUp.setToolTipText(bundle.getString("file-copyabove")); // NOI18N
     bCopyDescUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     bCopyDescUp.setContentAreaFilled(false);
+    bCopyDescUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     bCopyDescUp.setFocusable(false);
     bCopyDescUp.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -450,6 +453,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bCopyDescDown.setToolTipText(bundle.getString("file-copybelow")); // NOI18N
     bCopyDescDown.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     bCopyDescDown.setContentAreaFilled(false);
+    bCopyDescDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     bCopyDescDown.setFocusable(false);
     bCopyDescDown.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -460,6 +464,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bTools.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/gear.png"))); // NOI18N
     bTools.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     bTools.setContentAreaFilled(false);
+    bTools.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     bTools.setFocusable(false);
     bTools.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -483,6 +488,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bOpenFile.setToolTipText(bundle.getString("file-openfile")); // NOI18N
     bOpenFile.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     bOpenFile.setContentAreaFilled(false);
+    bOpenFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     bOpenFile.setFocusable(false);
     bOpenFile.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -495,6 +501,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bOpenDir.setToolTipText(bundle.getString("file-opendir")); // NOI18N
     bOpenDir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     bOpenDir.setContentAreaFilled(false);
+    bOpenDir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     bOpenDir.setFocusable(false);
     bOpenDir.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -507,6 +514,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bOpenMap.setToolTipText(Data.text("file-coord")); // NOI18N
     bOpenMap.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     bOpenMap.setContentAreaFilled(false);
+    bOpenMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     bOpenMap.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/map-bw.png"))); // NOI18N
     bOpenMap.setFocusable(false);
     bOpenMap.addActionListener(new java.awt.event.ActionListener() {
@@ -532,6 +540,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bDesc.setToolTipText(Data.text("file-wikicode")); // NOI18N
     bDesc.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230), 2));
     bDesc.setContentAreaFilled(false);
+    bDesc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     bDesc.setFocusable(false);
     bDesc.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -613,6 +622,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     cUpload.setBackground(new java.awt.Color(255, 204, 153));
     cUpload.setToolTipText(bundle.getString("file-select")); // NOI18N
     cUpload.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+    cUpload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     cUpload.setFocusable(false);
     cUpload.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     cUpload.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
