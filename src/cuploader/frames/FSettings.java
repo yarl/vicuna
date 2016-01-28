@@ -4,6 +4,7 @@ import cuploader.Data;
 import cuploader.FileFilters;
 import cuploader.PFile;
 import cuploader.QuickTemplate;
+import cuploader.Settings;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
@@ -13,8 +14,10 @@ import javax.swing.table.DefaultTableModel;
 public class FSettings extends javax.swing.JFrame {
     private QuickTemplatesModel model = new QuickTemplatesModel();    
     DefaultTableModel dm = new DefaultTableModel();
-    PFile exampleFile = new PFile(new File("Exmaple.jpg"), 0, false, false, "example-file.jpg", "Example description.", "2014-08-25", "Eiffel Tower in 2012", "");
-       
+    
+    PFile exampleFile = new PFile(new File("Example file.jpg"), -1, false, false, "example-file.jpg", "Example file description.", "2016-01-01", "Example file category", "");
+    Settings previewSettings = new Settings();
+    
     public FSettings() {
 
         initComponents();
@@ -87,6 +90,7 @@ public class FSettings extends javax.swing.JFrame {
         
         pDefault.setVisible(false);
         tUploadSummary.setVisible(false);
+        renderPreview();
     }
 
     @SuppressWarnings("unchecked")
@@ -175,7 +179,6 @@ public class FSettings extends javax.swing.JFrame {
     lDesc = new javax.swing.JLabel();
     jScrollPane1 = new javax.swing.JScrollPane();
     tDesc = new javax.swing.JTextArea();
-    bPreview = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
@@ -201,8 +204,19 @@ public class FSettings extends javax.swing.JFrame {
     });
 
     tLicense.setEnabled(false);
+    tLicense.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyReleased(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
 
     lAttrib.setText(bundle.getString("settings-attribution")); // NOI18N
+
+    tAttrib.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyReleased(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
 
     javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
     jPanel7.setLayout(jPanel7Layout);
@@ -252,10 +266,20 @@ public class FSettings extends javax.swing.JFrame {
     });
 
     tOtherAuthor.setEnabled(false);
+    tOtherAuthor.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyReleased(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
 
     lSource.setText(bundle.getString("settings-source")); // NOI18N
 
     tSource.setEnabled(false);
+    tSource.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyReleased(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
 
     javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
     jPanel8.setLayout(jPanel8Layout);
@@ -267,12 +291,12 @@ public class FSettings extends javax.swing.JFrame {
           .addGroup(jPanel8Layout.createSequentialGroup()
             .addComponent(rOtherAuthor)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(tOtherAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(tOtherAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
           .addComponent(rOwnWork, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(tSource)
-          .addComponent(lSource, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
+          .addComponent(lSource, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
         .addContainerGap())
     );
     jPanel8Layout.setVerticalGroup(
@@ -293,13 +317,36 @@ public class FSettings extends javax.swing.JFrame {
 
     lCategories.setText(bundle.getString("file-cats")); // NOI18N
 
+    tCategories.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyReleased(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
+
     lExtraText.setText(bundle.getString("settings-extratext")); // NOI18N
+
+    tExtraTextScroll.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyPressed(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
 
     tExtraText.setColumns(20);
     tExtraText.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
     tExtraText.setRows(5);
     tExtraText.setComponentPopupMenu(Data.mQuickTemplates);
+    tExtraText.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyReleased(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
     tExtraTextScroll.setViewportView(tExtraText);
+
+    tPermission.addKeyListener(new java.awt.event.KeyAdapter() {
+      public void keyReleased(java.awt.event.KeyEvent evt) {
+        renderPreview(evt);
+      }
+    });
 
     lPermission.setText(bundle.getString("settings-permission")); // NOI18N
 
@@ -352,12 +399,12 @@ public class FSettings extends javax.swing.JFrame {
       jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel12Layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
         .addContainerGap())
     );
     jPanel12Layout.setVerticalGroup(
       jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
+      .addGroup(jPanel12Layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(jScrollPane3)
         .addContainerGap())
@@ -372,7 +419,7 @@ public class FSettings extends javax.swing.JFrame {
         .addGroup(pFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
           .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addContainerGap())
@@ -607,7 +654,7 @@ public class FSettings extends javax.swing.JFrame {
               .addComponent(tGalleryWidth)
               .addComponent(tGalleryHeader, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
               .addComponent(tGalleryPage)))
-          .addComponent(cCreateGallery, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
+          .addComponent(cCreateGallery, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE))
         .addContainerGap())
     );
     jPanel10Layout.setVerticalGroup(
@@ -646,7 +693,7 @@ public class FSettings extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(tPositionTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(tPositionBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+          .addComponent(tPositionBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
         .addContainerGap())
     );
     jPanel11Layout.setVerticalGroup(
@@ -664,10 +711,10 @@ public class FSettings extends javax.swing.JFrame {
     pGalleryLayout.setHorizontalGroup(
       pGalleryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(pGalleryLayout.createSequentialGroup()
-        .addGap(10, 10, 10)
-        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap()
+        .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addContainerGap())
     );
     pGalleryLayout.setVerticalGroup(
@@ -706,7 +753,7 @@ public class FSettings extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(cReadHour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(cLoadSubdirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
+          .addComponent(cLoadSubdirectory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(jPanel1Layout.createSequentialGroup()
             .addComponent(tDefaultDir)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -750,7 +797,7 @@ public class FSettings extends javax.swing.JFrame {
               .addComponent(cRenameAfterUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
               .addComponent(cServerMonitorEnabled, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
               .addComponent(cAskQuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGap(0, 152, Short.MAX_VALUE))
+            .addGap(0, 64, Short.MAX_VALUE))
           .addComponent(tUploadSummary))
         .addContainerGap())
     );
@@ -870,11 +917,11 @@ public class FSettings extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(pProgramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(pProgramLayout.createSequentialGroup()
-            .addGroup(pProgramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addGroup(pProgramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
               .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
               .addComponent(pDefault, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
           .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
@@ -895,13 +942,6 @@ public class FSettings extends javax.swing.JFrame {
 
     jTabbedPane1.addTab(bundle.getString("settings-program"), new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/application.png")), pProgram); // NOI18N
 
-    bPreview.setText("Preview");
-    bPreview.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        bPreviewActionPerformed(evt);
-      }
-    });
-
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
@@ -912,8 +952,6 @@ public class FSettings extends javax.swing.JFrame {
           .addComponent(jTabbedPane1)
           .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addGap(0, 0, Short.MAX_VALUE)
-            .addComponent(bPreview)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(bSave)))
         .addContainerGap())
     );
@@ -923,9 +961,7 @@ public class FSettings extends javax.swing.JFrame {
         .addContainerGap()
         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(bSave)
-          .addComponent(bPreview))
+        .addComponent(bSave)
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
@@ -955,22 +991,22 @@ public class FSettings extends javax.swing.JFrame {
     private void rOwnWorkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rOwnWorkActionPerformed
         tOtherAuthor.setEnabled(false);
         tSource.setEnabled(false);
+        renderPreview();
     }//GEN-LAST:event_rOwnWorkActionPerformed
 
     private void rOtherAuthorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rOtherAuthorActionPerformed
         tOtherAuthor.setEnabled(true);
         tSource.setEnabled(true);
+        renderPreview();
     }//GEN-LAST:event_rOtherAuthorActionPerformed
 
     private void cLicenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cLicenseActionPerformed
-        boolean b;
-        if(cLicense.getSelectedIndex() == (Data.licenses.size() - 1)) b = true;
-        else b = false;
-        
+        boolean b = cLicense.getSelectedIndex() == (Data.licenses.size() - 1);
         tLicense.setEnabled(b);
         
         b = Data.licensesTemplates.get(cLicense.getSelectedIndex()).contains("cc-by");
         tAttrib.setEnabled(b);
+        renderPreview();
     }//GEN-LAST:event_cLicenseActionPerformed
 
     private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
@@ -1025,19 +1061,37 @@ public class FSettings extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_bDefaultDirActionPerformed
 
-  private void bPreviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPreviewActionPerformed
-   saveSettings();
-   tWikiCode.setText(FUpload.getUploadText(exampleFile, Data.settings));
-  }//GEN-LAST:event_bPreviewActionPerformed
+  private void renderPreview(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_renderPreview
+    renderPreview();
+  }//GEN-LAST:event_renderPreview
 
+  private void renderPreview() {
+    previewSettings.author = rOtherAuthor.isSelected() ? tOtherAuthor.getText() : "own";
+    previewSettings.source = tSource.getText();
+    previewSettings.permission = tPermission.getText();
+
+    previewSettings.license = cLicense.getSelectedIndex();
+    if (cLicense.getSelectedIndex() == Data.licenses.size() - 1) {
+        Data.licensesTemplates.set(Data.licenses.size() - 1, tLicense.getText());
+        previewSettings.licenseCustom = tLicense.getText();
+    }
+    
+    if (tAttrib.getText() == null ? previewSettings.attribution != null : !tAttrib.getText().equals(previewSettings.attribution)) {
+      previewSettings.attribution = tAttrib.getText();
+    }
+    previewSettings.categories = tCategories.getText();
+    if (previewSettings.extraText == null ? tExtraText.getText() != null : !previewSettings.extraText.equals(tExtraText.getText())) {
+      previewSettings.extraText = tExtraText.getText();
+    }
+
+    tWikiCode.setText(FUpload.getUploadText(exampleFile, previewSettings));
+  }
+  
   private void saveSettings() {
     //GENERAL
     //author
-    if(rOtherAuthor.isSelected() && !"".equals(tOtherAuthor.getText())) Data.settings.author = tOtherAuthor.getText();
-        else Data.settings.author = "own";
-    //source
+    Data.settings.author = rOtherAuthor.isSelected() ? tOtherAuthor.getText() : "own";
     Data.settings.source = tSource.getText();
-    //permission
     Data.settings.permission = tPermission.getText();
     //license
     if(cLicense.getSelectedIndex() == Data.licenses.size()-1) {
@@ -1094,7 +1148,6 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JButton bAdd;
   private javax.swing.JButton bDefaultDir;
   private javax.swing.JButton bDelete;
-  private javax.swing.JButton bPreview;
   private javax.swing.JButton bSave;
   private javax.swing.JButton bSetFileDesc;
   private javax.swing.JCheckBox cAskQuit;
