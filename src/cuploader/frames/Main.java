@@ -210,7 +210,7 @@ public final class Main extends javax.swing.JFrame
     jToolBar1.setComponentOrientation(getComponentOrientation());
     jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
     jToolBar1.setFloatable(false);
-    jToolBar1.setRollover(true);
+    jToolBar1.setBorderPainted(false);
 
     bLoadFiles.setBackground(new java.awt.Color(255, 255, 255));
     bLoadFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/folder-import.png"))); // NOI18N
@@ -572,8 +572,6 @@ public final class Main extends javax.swing.JFrame
     );
 
     mMenu.setComponentOrientation(getComponentOrientation());
-    mMenu.setBackground(new java.awt.Color(230, 230, 230));
-    mMenu.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
     mMenu.setBorderPainted(false);
 
     mFile.setComponentOrientation(getComponentOrientation());

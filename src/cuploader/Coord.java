@@ -19,15 +19,11 @@ public class Coord {
     }
     
     public Coord(String[] lat, String NS, String[] lon, String EW) {
-        if(NS.equals("N"))
-            this.lat = Double.parseDouble(lat[0]) + (Double.parseDouble(lat[1])/60.0) + (Double.parseDouble(lat[2])/3600.0);
-        if(NS.equals("S"))
-            this.lat = -1 * (Double.parseDouble(lat[0]) + (Double.parseDouble(lat[1])/60.0) + (Double.parseDouble(lat[2])/3600.0));
-        if(EW.equals("E"))
-            this.lon = Double.parseDouble(lon[0]) + (Double.parseDouble(lon[1])/60.0) + (Double.parseDouble(lon[2])/3600.0);
-        if(EW.equals("W")) {
-            this.lon = -1 * (Double.parseDouble(lon[0]) + (Double.parseDouble(lon[1])/60.0) + (Double.parseDouble(lon[2])/3600.0));
-        }
+        this.lat = Math.abs(Double.parseDouble(lat[0])) + (Double.parseDouble(lat[1])/60.0) + (Double.parseDouble(lat[2])/3600.0);
+        this.lon = Math.abs(Double.parseDouble(lon[0])) + (Double.parseDouble(lon[1])/60.0) + (Double.parseDouble(lon[2])/3600.0);
+        
+        if(NS.equals("S")) this.lat = -1 * this.lat;
+        if(EW.equals("W")) this.lon = -1 * this.lon;
     }
     
     public Coord(String[] lat, String NS, String[] lon, String EW, String heading) {

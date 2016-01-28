@@ -56,14 +56,6 @@
     </Component>
     <Menu class="javax.swing.JMenuBar" name="mMenu">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="e6" green="e6" red="e6" type="rgb"/>
-        </Property>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-            <EmptyBorder/>
-          </Border>
-        </Property>
         <Property name="borderPainted" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
@@ -614,7 +606,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="floatable" type="boolean" value="false"/>
-            <Property name="rollover" type="boolean" value="true"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jToolBar1.setComponentOrientation(getComponentOrientation());"/>
