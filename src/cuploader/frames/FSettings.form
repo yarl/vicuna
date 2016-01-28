@@ -41,8 +41,6 @@
                   <Component id="jTabbedPane1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="bPreview" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="bSave" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -56,10 +54,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTabbedPane1" min="-2" pref="441" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bSave" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bPreview" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="bSave" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -108,7 +103,7 @@
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="jPanel9" max="32767" attributes="0"/>
                           <Component id="jPanel7" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jPanel8" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel12" max="32767" attributes="0"/>
@@ -198,6 +193,9 @@
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lAttrib">
                   <Properties>
@@ -207,6 +205,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="tAttrib">
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -230,14 +231,14 @@
                               <Group type="102" attributes="0">
                                   <Component id="rOtherAuthor" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="tOtherAuthor" min="-2" pref="241" max="-2" attributes="0"/>
+                                  <Component id="tOtherAuthor" min="-2" pref="164" max="-2" attributes="0"/>
                               </Group>
                               <Component id="rOwnWork" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="tSource" max="32767" attributes="0"/>
-                              <Component id="lSource" pref="139" max="32767" attributes="0"/>
+                              <Component id="lSource" pref="160" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -290,6 +291,9 @@
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lSource">
                   <Properties>
@@ -302,6 +306,9 @@
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -368,6 +375,9 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="tCategories">
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lExtraText">
                   <Properties>
@@ -377,6 +387,9 @@
                   </Properties>
                 </Component>
                 <Container class="javax.swing.JScrollPane" name="tExtraTextScroll">
+                  <Events>
+                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                   </AuxValues>
@@ -394,10 +407,16 @@
                           <Connection code="Data.mQuickTemplates" type="code"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
                 <Component class="javax.swing.JTextField" name="tPermission">
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="renderPreview"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lPermission">
                   <Properties>
@@ -422,14 +441,14 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane3" pref="251" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="307" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jScrollPane3" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -804,11 +823,11 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="jPanel10" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel11" max="32767" attributes="0"/>
+                      <Component id="jPanel10" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -857,7 +876,7 @@
                                       <Component id="tGalleryPage" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="cCreateGallery" pref="392" max="32767" attributes="0"/>
+                              <Component id="cCreateGallery" pref="486" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -965,7 +984,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="tPositionTop" max="32767" attributes="0"/>
-                              <Component id="tPositionBottom" pref="272" max="32767" attributes="0"/>
+                              <Component id="tPositionBottom" pref="178" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1029,12 +1048,12 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jPanel1" max="32767" attributes="0"/>
                                   <Component id="pDefault" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jPanel2" max="32767" attributes="0"/>
+                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jPanel3" max="32767" attributes="0"/>
                       </Group>
@@ -1080,7 +1099,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="cReadHour" alignment="0" max="32767" attributes="1"/>
-                              <Component id="cLoadSubdirectory" alignment="0" pref="303" max="32767" attributes="0"/>
+                              <Component id="cLoadSubdirectory" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="tDefaultDir" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -1171,7 +1190,7 @@
                                       <Component id="cServerMonitorEnabled" max="32767" attributes="0"/>
                                       <Component id="cAskQuit" max="32767" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="0" pref="152" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="64" max="32767" attributes="0"/>
                               </Group>
                               <Component id="tUploadSummary" max="32767" attributes="0"/>
                           </Group>
@@ -1404,13 +1423,5 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="bPreview">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Preview"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bPreviewActionPerformed"/>
-      </Events>
-    </Component>
   </SubComponents>
 </Form>

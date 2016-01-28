@@ -104,6 +104,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.file = file;
         this.number = number;
         
+        if(number < 0) {
+          cathintStop = true;
+        }
+        
         initComponents();
         addUndo();
         addKeyListener(this);
@@ -1183,7 +1187,6 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         }
     }
     
-    public String getName() { return tName.getText(); };
     public String getExt() { return ext; };
     
     public void setAsUploaded() {
