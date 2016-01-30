@@ -16,6 +16,8 @@ import cuploader.Settings;
 import cuploader.ServerMonitor;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -38,6 +40,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.border.Border;
 import org.wikipedia.Wiki;
 
 public final class Main extends javax.swing.JFrame
@@ -64,11 +67,14 @@ public final class Main extends javax.swing.JFrame
     initComponents();
     initLangMenu();
 
-    new DropTarget(pFiles, this);
+    new DropTarget(pFilesContainer, this);
     pFilesScroll.getVerticalScrollBar().setUnitIncrement(16);
     mEdit.setEnabled(false);
     mFileUploadSelect.setEnabled(false);
     mUpload.setEnabled(false);
+    
+    dropInfo.setFont(new java.awt.Font("Tahoma", Font.BOLD, 18));
+    dropInfo.setForeground(new Color(230, 230, 230));
 
     //show
     setLocationRelativeTo(null);
@@ -82,7 +88,8 @@ public final class Main extends javax.swing.JFrame
     Data.addPropertyChangeListener(this); // login, logout events
     Data.settings.addPropertyChangeListener(this); // lang event
     if (sayHello) { 
-      java.awt.EventQueue.invokeLater(new Runnable() {
+      EventQueue.invokeLater(new Runnable() {
+        @Override
         public void run() {
           JOptionPane.showMessageDialog(rootPane, Data.text("hello"));
         }
@@ -110,9 +117,6 @@ public final class Main extends javax.swing.JFrame
     jSeparator7 = new javax.swing.JToolBar.Separator();
     bFileEditSelected = new javax.swing.JButton();
     bView = new javax.swing.JButton();
-    pFilesScroll = new javax.swing.JScrollPane();
-    pFiles = new javax.swing.JPanel();
-    lStartInfo = new javax.swing.JLabel();
     jToolBar2 = new javax.swing.JToolBar();
     bLogin = new javax.swing.JButton();
     jSeparator8 = new javax.swing.JToolBar.Separator();
@@ -134,6 +138,10 @@ public final class Main extends javax.swing.JFrame
     jToolBar4 = new javax.swing.JToolBar();
     bUpload = new javax.swing.JButton();
     lFileUpload = new javax.swing.JLabel();
+    pFilesContainer = new javax.swing.JPanel();
+    pFilesScroll = new javax.swing.JScrollPane();
+    pFiles = new javax.swing.JPanel();
+    lStartInfo = new javax.swing.JLabel();
     mMenu = new javax.swing.JMenuBar();
     mFile = new javax.swing.JMenu();
     mLoadFiles = new javax.swing.JMenuItem();
@@ -282,31 +290,6 @@ public final class Main extends javax.swing.JFrame
       }
     });
     jToolBar1.add(bView);
-
-    pFilesScroll.setComponentOrientation(getComponentOrientation());
-    pFilesScroll.setBackground(new java.awt.Color(255, 255, 255));
-    pFilesScroll.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230)), bundle.getString("files"))); // NOI18N
-    pFilesScroll.setAutoscrolls(true);
-    pFilesScroll.setMinimumSize(new java.awt.Dimension(100, 100));
-    pFilesScroll.setPreferredSize(new java.awt.Dimension(100, 100));
-
-    pFiles.setBackground(new java.awt.Color(255, 255, 255));
-    pFiles.setMinimumSize(new java.awt.Dimension(300, 56));
-    pFiles.setLayout(new java.awt.GridBagLayout());
-
-    lStartInfo.setHorizontalAlignment(Data.getOrientation(false));
-    lStartInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
-    lStartInfo.setText(bundle.getString("start-info")); // NOI18N
-    lStartInfo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
-    lStartInfo.setHorizontalTextPosition(Data.getOrientation(true));
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
-    pFiles.add(lStartInfo, gridBagConstraints);
-
-    pFilesScroll.setViewportView(pFiles);
 
     jToolBar2.setComponentOrientation(getComponentOrientation());
     jToolBar2.setBackground(new java.awt.Color(255, 255, 255));
@@ -483,7 +466,7 @@ public final class Main extends javax.swing.JFrame
       pHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(pHelpLayout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+        .addComponent(lHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addContainerGap())
     );
 
@@ -530,16 +513,55 @@ public final class Main extends javax.swing.JFrame
         .addComponent(jToolBar4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
+    pFilesContainer.setBackground(new java.awt.Color(255, 255, 255));
+    pFilesContainer.setLayout(new java.awt.GridBagLayout());
+
+    pFilesScroll.setComponentOrientation(getComponentOrientation());
+    pFilesScroll.setBackground(new java.awt.Color(255, 255, 255));
+    pFilesScroll.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 230, 230)), bundle.getString("files"))); // NOI18N
+    pFilesScroll.setAutoscrolls(true);
+    pFilesScroll.setMinimumSize(new java.awt.Dimension(100, 100));
+    pFilesScroll.setPreferredSize(new java.awt.Dimension(100, 100));
+
+    pFiles.setBackground(new java.awt.Color(255, 255, 255));
+    pFiles.setMinimumSize(new java.awt.Dimension(300, 56));
+    pFiles.setLayout(new java.awt.GridBagLayout());
+
+    lStartInfo.setHorizontalAlignment(Data.getOrientation(false));
+    lStartInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/light-bulb.png"))); // NOI18N
+    lStartInfo.setText(bundle.getString("start-info")); // NOI18N
+    lStartInfo.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    lStartInfo.setHorizontalTextPosition(Data.getOrientation(true));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+    pFiles.add(lStartInfo, gridBagConstraints);
+
+    pFilesScroll.setViewportView(pFiles);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.ipadx = 583;
+    gridBagConstraints.ipady = 395;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    pFilesContainer.add(pFilesScroll, gridBagConstraints);
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-          .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE))
+            .addComponent(pFilesContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -559,7 +581,6 @@ public final class Main extends javax.swing.JFrame
           .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(pFilesScroll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(jPanel1Layout.createSequentialGroup()
             .addComponent(pUserInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -567,7 +588,8 @@ public final class Main extends javax.swing.JFrame
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(pHelp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(pUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addComponent(pUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(pFilesContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         .addContainerGap())
     );
 
@@ -1675,12 +1697,16 @@ class Comment {
   private javax.swing.JRadioButtonMenuItem mViewToUpload1;
   private javax.swing.JPanel pDesc;
   public static javax.swing.JPanel pFiles;
+  private javax.swing.JPanel pFilesContainer;
   private javax.swing.JScrollPane pFilesScroll;
   private javax.swing.JPanel pHelp;
   private javax.swing.JPanel pUpload;
   private javax.swing.JPanel pUserInfo;
   // End of variables declaration//GEN-END:variables
 
+  private JLabel dropInfo = new JLabel(Data.text("start-dropinfo"));
+  
+  @Override
   public void propertyChange(PropertyChangeEvent evt) {
     java.util.logging.Logger.getLogger(Main.class.getName())
       .log(java.util.logging.Level.FINEST, "property changed: <" + evt.getPropertyName() + ">", evt);
@@ -1710,7 +1736,7 @@ class Comment {
     lUserInfo.setForeground(new Color(102, 102, 102));
     mLogin.setText(Data.text("login"));
   }
-
+  
   /**
    * Drag & drop
    *
@@ -1719,6 +1745,11 @@ class Comment {
    */
   @Override
   public void dragEnter(DropTargetDragEvent dtde) {
+    pFilesContainer.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),
+            BorderFactory.createLineBorder(new Color(230, 230, 230), 5)));
+    
+    pFilesContainer.add(dropInfo);
+    pFilesScroll.setVisible(false);
   }
 
   @Override
@@ -1727,10 +1758,16 @@ class Comment {
 
   @Override
   public void dropActionChanged(DropTargetDragEvent dtde) {
+    pFilesContainer.setBorder(BorderFactory.createEmptyBorder());
+    pFilesContainer.remove(dropInfo);
+    pFilesScroll.setVisible(true);
   }
 
   @Override
   public void dragExit(DropTargetEvent dte) {
+    pFilesContainer.setBorder(BorderFactory.createEmptyBorder());
+    pFilesContainer.remove(dropInfo);
+    pFilesScroll.setVisible(true);
   }
 
   public ArrayList<File> array;
@@ -1750,6 +1787,9 @@ class Comment {
 
   @Override
   public void drop(DropTargetDropEvent dtde) {
+    pFilesContainer.setBorder(BorderFactory.createEmptyBorder());
+    pFilesContainer.remove(dropInfo);
+    pFilesScroll.setVisible(true);
     try {
       Transferable tr = dtde.getTransferable();
       DataFlavor[] flavors = tr.getTransferDataFlavors();
