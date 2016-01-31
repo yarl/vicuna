@@ -1,9 +1,11 @@
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages.properties src\cuploader\text\messages.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ar.properties src\cuploader\text\messages_ar.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ast.properties src\cuploader\text\messages_ast.properties
+native2ascii -encoding utf8 src\cuploader\text_utf8\messages_azb.properties src\cuploader\text\messages_azb.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_be.properties src\cuploader\text\messages_be.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_bn.properties src\cuploader\text\messages_bn.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_br.properties src\cuploader\text\messages_br.properties
+native2ascii -encoding utf8 src\cuploader\text_utf8\messages_bs.properties src\cuploader\text\messages_bs.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ca.properties src\cuploader\text\messages_ca.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_cs_CZ.properties src\cuploader\text\messages_cs_CZ.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_da.properties src\cuploader\text\messages_da.properties
@@ -29,6 +31,7 @@ native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ko.properties src\c
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ksh.properties src\cuploader\text\messages_ksh.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ku-latn.properties src\cuploader\text\messages_ku-latn.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_lb.properties src\cuploader\text\messages_lb.properties
+native2ascii -encoding utf8 src\cuploader\text_utf8\messages_lki.properties src\cuploader\text\messages_lki.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_lt.properties src\cuploader\text\messages_lt.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_mk.properties src\cuploader\text\messages_mk.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ml.properties src\cuploader\text\messages_ml.properties
