@@ -1202,9 +1202,11 @@ public final class Main extends javax.swing.JFrame
     addLangMenu(Locale.ENGLISH, "english (en)");
     addLangMenu(new Locale("ar"), "العربية (ar)");
     addLangMenu(new Locale("ast"), "asturianu (ast)");
+    addLangMenu(new Locale("azb"), "ۆرکجه (azb)");
     addLangMenu(new Locale("be"), "беларуская (be)");
     addLangMenu(new Locale("bn"), "বাংলা (bn)");
     addLangMenu(new Locale("br"), "brezhoneg (br)");
+    addLangMenu(new Locale("bs"), "bosanski (bs)");
     addLangMenu(new Locale("ca"), "català (ca)");
     addLangMenu(new Locale("cs", "CZ"), "česky (cs)");
     addLangMenu(new Locale("da"), "dansk (da)");
@@ -1230,6 +1232,7 @@ public final class Main extends javax.swing.JFrame
     addLangMenu(new Locale("ksh"), "Ripoarisch (ksh)");
     addLangMenu(new Locale("ku-latn"), "Kurdî (latînî) (ku-latn)");
     addLangMenu(new Locale("lb"), "Lëtzebuergesch (lb)");
+    addLangMenu(new Locale("lki"), "لەکی‎ (lki)");
     addLangMenu(new Locale("lt"), "lietuvių (lt)");
     addLangMenu(new Locale("mk"), "македонски (mk)");
     addLangMenu(new Locale("ml"), "മലയാളം (ml)");
