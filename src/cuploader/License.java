@@ -2,6 +2,7 @@ package cuploader;
 
 public enum License {
 
+    CC_BY_SA_4("Creative Commons BY-SA 4.0", "{{cc-by-sa-4.0|%ATTRIB%}}"),
     CC_BY_SA_3("Creative Commons BY-SA 3.0", "{{cc-by-sa-3.0|%ATTRIB%}}"),
     CC_BY_3("Creative Commons BY 3.0", "{{cc-by-3.0|%ATTRIB%}}"),
     CC_ZERO_1("Creative Commons Zero 1.0", "{{cc-zero}}"),
