@@ -173,14 +173,7 @@ public class FUpload extends javax.swing.JFrame {
       if(settings.author.equals("own")) desc += "\n* Source: own work\n* Author: [[user:" + settings.username + "|]]";
       else desc += "\n* Source: " + settings.source + "\n* Author: " + settings.author;
 
-      if(settings.license == 6) {
-          desc += settings.licenseCustom;
-      } else {
-          String license_ = Data.licensesTemplates.get(settings.license);
-          if(settings.attribution.isEmpty()) license_ = license_.replace("|%ATTRIB%", "");
-          else license_ = license_.replace("%ATTRIB%", settings.attribution);
-          desc += license_;
-      }
+      desc += settings.getLicenseString();
       if(!settings.extraText.isEmpty()) desc += "\n" + settings.extraText;
 
       desc += getUploadCategories(file.getComponent(Elem.CATS), settings.categories); //categories
@@ -205,14 +198,7 @@ public class FUpload extends javax.swing.JFrame {
 
       desc += "\n\n=={{int:license-header}}==\n";
 
-      if(settings.license == 6) {
-          desc += settings.licenseCustom;
-      } else {
-          String license_ = Data.licensesTemplates.get(settings.license);
-          if(settings.attribution.isEmpty()) license_ = license_.replace("|%ATTRIB%", "");
-          else license_ = license_.replace("%ATTRIB%", settings.attribution);
-          desc += license_;
-      }
+      desc += settings.getLicenseString();
       if(!settings.extraText.isEmpty()) desc += "\n" + settings.extraText;
 
       desc += getUploadCategories(file.getComponent(Elem.CATS), settings.categories); //categories
@@ -252,15 +238,7 @@ public class FUpload extends javax.swing.JFrame {
       desc = desc.replace("%USER%", settings.username);
       desc = desc.replace("%DATE%", file.getComponent(Elem.DATE));
 
-      if(settings.license == 6) {
-          desc = desc.replace("%LICENSE%", settings.licenseCustom);
-      } else {
-          String license_ = Data.licensesTemplates.get(settings.license);
-          license_ = settings.attribution.isEmpty() ?
-                  license_.replace("%ATTRIB%", "") :
-                  license_.replace("%ATTRIB%", settings.attribution);
-          desc = desc.replace("%LICENSE%", license_);
-      }
+      desc = desc.replace("%LICENSE%", settings.getLicenseString());
 
       desc = desc.replace("%CATEGORIES%", getUploadCategories(file.getComponent(Elem.CATS), settings.categories));
 
