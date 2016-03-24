@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.converters.enums.EnumConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -11,6 +12,7 @@ import cuploader.Data;
 import static cuploader.Data.fSettings;
 import static cuploader.Data.settings;
 import cuploader.FileFilters;
+import cuploader.License;
 import cuploader.PFile;
 import cuploader.Settings;
 import cuploader.ServerMonitor;
@@ -1167,6 +1169,7 @@ public final class Main extends javax.swing.JFrame
 
       if (!text.isEmpty()) {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
+        xstream.registerConverter(new MigrateOldLicense());
         xstream.processAnnotations(cuploader.Settings.class);
         xstream.processAnnotations(cuploader.QuickTemplate.class);
         xstream.processAnnotations(cuploader.DescSource.class);
@@ -1178,6 +1181,37 @@ public final class Main extends javax.swing.JFrame
       error("Could not understand the settings file", ex);
     }
     return false;
+  }
+
+  static class MigrateOldLicense extends EnumConverter {
+    @Override
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+      try {
+        return super.unmarshal(reader, context);
+      } catch (IllegalArgumentException e) {
+        switch (Integer.parseInt(reader.getValue())) {
+          case 1:
+            return License.CC_BY_3;
+          case 2:
+            return License.CC_ZERO_1;
+          case 3:
+            return License.GFDL_CC_BY_SA_ALL;
+          case 4:
+            return License.GFDL_CC_BY_SA_3;
+          case 5:
+            return License.GFDL_CC_BY_3;
+          case 6:
+            return License.OTHER;
+          default:
+            return License.CC_BY_SA_3;
+        }
+      }
+    }
+
+    @Override
+    public boolean canConvert(Class type) {
+      return License.class.equals(type);
+    }
   }
 
   /**

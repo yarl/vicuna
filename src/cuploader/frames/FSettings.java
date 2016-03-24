@@ -2,6 +2,7 @@ package cuploader.frames;
 
 import cuploader.Data;
 import cuploader.FileFilters;
+import cuploader.License;
 import cuploader.PFile;
 import cuploader.QuickTemplate;
 import cuploader.Settings;
@@ -35,17 +36,12 @@ public class FSettings extends javax.swing.JFrame {
         tSource.setText(Data.settings.source);
         tPermission.setText(Data.settings.permission);
         
-        String[] lic = new String[Data.licenses.size()];
-        for(int i=0;i<Data.licenses.size();++i)
-            lic[i] = Data.licenses.get(i);
-        cLicense.setModel(new DefaultComboBoxModel(lic));
-        
-        if(Data.settings.license == Data.licenses.size()-1) {
-            cLicense.setSelectedIndex(Data.licenses.size()-1);
+        cLicense.setModel(new DefaultComboBoxModel(License.values()));
+
+        cLicense.setSelectedItem(Data.settings.license);
+        if(Data.settings.license == License.OTHER) {
             tLicense.setEditable(true);
-            tLicense.setText(Data.settings.licenseCustom/*Data.licensesTemplates.get(Data.licenses.size()-1)*/);
-        } else {
-            cLicense.setSelectedIndex(Data.settings.license);
+            tLicense.setText(Data.settings.licenseCustom);
         }
 
         tAttrib.setText(Data.settings.attribution);
@@ -1001,11 +997,9 @@ public class FSettings extends javax.swing.JFrame {
     }//GEN-LAST:event_rOtherAuthorActionPerformed
 
     private void cLicenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cLicenseActionPerformed
-        boolean b = cLicense.getSelectedIndex() == (Data.licenses.size() - 1);
-        tLicense.setEnabled(b);
+        tLicense.setEnabled(cLicense.getSelectedItem() == License.OTHER);
         
-        b = Data.licensesTemplates.get(cLicense.getSelectedIndex()).contains("cc-by");
-        tAttrib.setEnabled(b);
+        tAttrib.setEnabled(((License) cLicense.getSelectedItem()).getTemplate().contains("cc-by"));
         renderPreview();
     }//GEN-LAST:event_cLicenseActionPerformed
 
@@ -1070,9 +1064,8 @@ public class FSettings extends javax.swing.JFrame {
     previewSettings.source = tSource.getText();
     previewSettings.permission = tPermission.getText();
 
-    previewSettings.license = cLicense.getSelectedIndex();
-    if (cLicense.getSelectedIndex() == Data.licenses.size() - 1) {
-        Data.licensesTemplates.set(Data.licenses.size() - 1, tLicense.getText());
+    previewSettings.license = (License) cLicense.getSelectedItem();
+    if (previewSettings.license == License.OTHER) {
         previewSettings.licenseCustom = tLicense.getText();
     }
     
@@ -1094,14 +1087,13 @@ public class FSettings extends javax.swing.JFrame {
     Data.settings.source = tSource.getText();
     Data.settings.permission = tPermission.getText();
     //license
-    if(cLicense.getSelectedIndex() == Data.licenses.size()-1) {
+    if(cLicense.getSelectedItem() == License.OTHER) {
         if(!tLicense.getText().equals("")) {
-            Data.licensesTemplates.set(Data.licenses.size()-1, tLicense.getText());
             Data.settings.licenseCustom = tLicense.getText();
-            Data.settings.license = Data.licenses.size()-1;
+            Data.settings.license = License.OTHER;
         }
     } else 
-        Data.settings.license = cLicense.getSelectedIndex();
+        Data.settings.license = (License) cLicense.getSelectedItem();
     //attrib
     if(tAttrib.getText() == null ? Data.settings.attribution != null : !tAttrib.getText().equals(Data.settings.attribution)) 
         Data.settings.attribution = tAttrib.getText();

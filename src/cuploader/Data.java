@@ -69,24 +69,11 @@ public class Data implements Serializable {
     //counters
     public static int filesUpload = 0;
     public static int filesEdit = 0;
-    
-    //licenses
-    public static ArrayList<String> licenses = new ArrayList<String>();
-    public static ArrayList<String> licensesTemplates = new ArrayList<String>();
-    
+
     //quick templates
     public static JPopupMenu mQuickTemplates = new JPopupMenu();
     
     public Data() {
-        licenses.add("Creative Commons BY-SA 3.0");         licensesTemplates.add("{{cc-by-sa-3.0|%ATTRIB%}}");
-        licenses.add("Creative Commons BY 3.0");            licensesTemplates.add("{{cc-by-3.0|%ATTRIB%}}");
-        licenses.add("Creative Commons Zero 1.0");          licensesTemplates.add("{{cc-zero}}");
-        licenses.add(text("license-gfdl-cc-by-sa-all"));    licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by-sa-all|%ATTRIB%}}");
-        licenses.add(text("license-gfdl-cc-by-sa-3"));      licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by-sa 3.0|%ATTRIB%}}");
-        licenses.add(text("license-gfdl-cc-by-3"));         licensesTemplates.add("{{GFDL|migration=redundant}}{{cc-by 3.0|%ATTRIB%}}");
-        licenses.add(text("license-other"));                licensesTemplates.add("");
-      
-        
         propchange = new PropertyChangeSupport(this);
     }
 

@@ -1,9 +1,10 @@
 package cuploader;
 
-import javax.swing.*;
-
-import java.awt.*;
-import java.beans.*;
+import javax.swing.JFileChooser;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -29,7 +30,7 @@ public class Settings {
     public String author = "own";
     public String source = "";
     public String permission = "";
-    public int license = 0;
+    public License license = License.CC_BY_SA_3;
     public String licenseCustom = "";
     public String attribution = "";
     public String categories = "";
@@ -160,6 +161,16 @@ public class Settings {
            lang = Locale.getDefault();
         } else {
            Locale.setDefault(lang);
+        }
+    }
+
+    public String getLicenseString() {
+        if (License.OTHER.equals(license)) {
+            return licenseCustom;
+        } else if (attribution.isEmpty()) {
+            return license.getTemplate().replace("|%ATTRIB%", "");
+        } else {
+            return license.getTemplate().replace("%ATTRIB%", attribution);
         }
     }
 }
