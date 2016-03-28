@@ -1283,6 +1283,7 @@ public final class Main extends javax.swing.JFrame
     addLangMenu(new Locale("pt", "PT"), "português (pt)");
     addLangMenu(new Locale("ru"), "русский (ru)");
     addLangMenu(new Locale("sa"), "संस्कृतम् (tr)");
+    addLangMenu(new Locale("sk"), "slovenčina (sk)");
     addLangMenu(new Locale("sr-ec"), "српски (ћирилица)‎ (sr-ec)");
     addLangMenu(new Locale("sv", "SE"), "svenska (sv)");
     addLangMenu(new Locale("sw"), "Kiswahili (sw)");

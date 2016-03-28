@@ -48,6 +48,7 @@ native2ascii -encoding utf8 src\cuploader\text_utf8\messages_pt_BR.properties sr
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_pt_PT.properties src\cuploader\text\messages_pt_PT.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_ru.properties src\cuploader\text\messages_ru.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_sa.properties src\cuploader\text\messages_sa.properties
+native2ascii -encoding utf8 src\cuploader\text_utf8\messages_sk.properties src\cuploader\text\messages_sk.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_sr-ec.properties src\cuploader\text\messages_sr-ec.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_sv_SE.properties src\cuploader\text\messages_sv_SE.properties
 native2ascii -encoding utf8 src\cuploader\text_utf8\messages_sw.properties src\cuploader\text\messages_sw.properties
