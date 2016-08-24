@@ -57,6 +57,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     int rotateThumb = 0;    //rotate thumbnail
     FInfo fExif;            // subwindow exif
     public FCoord fCoord;   // subwindow coordinates
+    boolean ready = false;
     
     //info
     public File file;
@@ -83,9 +84,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         this.number = number;
         
         initComponents();
+	ready = true;
         addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
+	ready = true;
         
         String name = file.getName();
         tName.setText(name.substring(0, name.lastIndexOf('.')));
@@ -109,6 +112,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         }
         
         initComponents();
+	ready = true;
         addUndo();
         addKeyListener(this);
         TransferFocus.patch(tDesc);
@@ -1137,7 +1141,9 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     
     @Override
     public void setName(String text) {
-        tName.setText(text);
+	if (ready) {
+            tName.setText(text);
+	};
     }
     
     public void setDate(String text) {
@@ -1187,6 +1193,15 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         }
     }
     
+    @Override
+    public String getName() { 
+	if (ready) {
+		return tName.getText();
+	} else {
+		return "";
+	}
+    };
+
     public String getExt() { return ext; };
     
     public void setAsUploaded() {
