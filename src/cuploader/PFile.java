@@ -91,14 +91,13 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         String name = file.getName();
         tName.setText(name.substring(0, name.lastIndexOf('.')));
         readEXIF();
-		readIPTC();
+        readIPTC();
         selectToUpload(true);
         //generateThumbnail();
         
         PromptSupport.setPrompt(bundle.getString("file-name"), tName);
         PromptSupport.setPrompt(bundle.getString("file-date"), tDate);
         PromptSupport.setPrompt(bundle.getString("file-desc"), tDesc);
-		
         PromptSupport.setPrompt(bundle.getString("file-cats"), tCategories);
         //PromptSupport.setFocusBehavior(PromptSupport.FocusBehavior.HIDE_PROMPT, tName);
     }
@@ -991,25 +990,20 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     }
     
     /**
-     * Reads caption from file ITPC
-     */	
-	private void readIPTC()
-	{
-		try 
-		{
+    * Reads caption from file ITPC
+    */	
+    private void readIPTC(){
+        try {
             Directory directory = ImageMetadataReader.readMetadata(file).getDirectory(IptcDirectory.class);
-            if(directory != null && directory.containsTag(IptcDirectory.TAG_CAPTION)) 
-			{
-				tDesc.setText(directory.getDescription(IptcDirectory.TAG_CAPTION));
-			}
-		}
-		catch (ImageProcessingException ex) 
-		{
+            if(directory != null && directory.containsTag(IptcDirectory.TAG_CAPTION)) {
+                tDesc.setText(directory.getDescription(IptcDirectory.TAG_CAPTION));
+            }
+        }
+        catch (ImageProcessingException ex) {
         } 
-		catch (IOException ex) 
-		{
-		}
-	}
+        catch (IOException ex) {
+        }
+    }
     /**
      * Reads info from file EXIF (date, gps, rotation)
      */
