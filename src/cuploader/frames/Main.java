@@ -954,7 +954,7 @@ public final class Main extends javax.swing.JFrame
 
       if (ch.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
         File[] selected = ch.getSelectedFiles();
-        ArrayList<File> files = new ArrayList<File>();
+        files = new ArrayList<File>();
 
         for (File f : selected) {
           if (Data.settings.loadSubdirectory) {
@@ -1808,16 +1808,16 @@ class Comment {
     pFilesScroll.setVisible(true);
   }
 
-  public ArrayList<File> array;
+  public ArrayList<File> files;
 
   public void addToArray(File f) {
     if (f.isFile()) {
-      array.add(f);
+      files.add(f);
     }
 
     if (f.isDirectory()) {
-      File[] files = f.listFiles();
-      for (File fi : files) {
+      File[] filesDir = f.listFiles();
+      for (File fi : filesDir) {
         addToArray(fi);
       }
     }
@@ -1835,7 +1835,7 @@ class Comment {
         //System.out.println("Possible flavor: " + flavors[i].getMimeType());
         if (flavors[i].isFlavorJavaFileListType()) {
           dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-          array = new ArrayList<File>();
+          files = new ArrayList<File>();
           @SuppressWarnings("unchecked")
           List<File> list = (List<File>) tr.getTransferData(flavors[i]);
 
@@ -1844,14 +1844,14 @@ class Comment {
               addToArray(f);
             } else {
               if (f.isDirectory()) {
-                array.addAll(Arrays.asList(f.listFiles()));
+                files.addAll(Arrays.asList(f.listFiles()));
               }
               if (f.isFile()) {
-                array.add(f);
+                files.add(f);
               }
             }
           }
-          addImages(array);
+          addImages(files);
           dtde.dropComplete(true);
           return;
         } else if (flavors[i].isRepresentationClassInputStream()) {
