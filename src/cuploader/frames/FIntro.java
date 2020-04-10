@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.util.List;
 import javax.swing.UIManager;
 import org.wikipedia.Wiki;
 
@@ -208,7 +209,8 @@ public class FIntro extends javax.swing.JFrame {
    */
   private boolean checkVersion() {
     try {
-      String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+      List<String> pages = List.of("User:Yarl/VicunaUploader/version");
+      String v = Wiki.newSession("commons.wikimedia.org").getPageText(pages).get(0).trim();
       if (Double.parseDouble(v) > Double.parseDouble(Data.version) || forcedUpdateURL() != null) {
         bUpdate.setVisible(true);
         bDownload.setVisible(true);

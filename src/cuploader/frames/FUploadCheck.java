@@ -6,6 +6,7 @@ import cuploader.PFile;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import org.wikipedia.Wiki;
@@ -75,7 +76,8 @@ public class FUploadCheck extends javax.swing.JFrame {
         String regexp = "";
         try {
             // TODO: replace with Data.settings.server after checking behaviour when there is no local blacklist on wiki
-            String prefixes = new Wiki("commons.wikimedia.org").getPageText("MediaWiki:Filename-prefix-blacklist");
+            List<String> pages = List.of("MediaWiki:Filename-prefix-blacklist");
+            String prefixes = Wiki.newSession("commons.wikimedia.org").getPageText(pages).get(0);
             String[] prefixesList = prefixes.replaceAll("(?m)#.*", "").trim().split("\\s+");
             for (String prefix : prefixesList) {
                 regexp += prefix + "|";
@@ -95,7 +97,7 @@ public class FUploadCheck extends javax.swing.JFrame {
 
         boolean[] exists = new boolean[1];
         try {
-            exists = new Wiki(Data.settings.server).exists("File:" + name + "." + ext);
+            exists = Wiki.newSession(Data.settings.server).exists(List.of("File:" + name + "." + ext));
         } catch (IOException ex) {
         }
 

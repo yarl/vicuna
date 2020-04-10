@@ -88,12 +88,12 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
           //commons
           if (rCommons.isSelected()) {
             Data.settings.server = "commons.wikimedia.org";
-            Data.settings.protocol = "https";
+            Data.settings.protocol = "https://";
             Data.settings.path = "/w";
           } //sister projects
           else if (rWikimedia.isSelected()) {
             Data.settings.server = tPrefix.getText() + "." + cServer.getSelectedItem().toString();
-            Data.settings.protocol = "https";
+            Data.settings.protocol = "https://";
             Data.settings.path = "/w";
           }
         } //sth else
@@ -103,8 +103,7 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
           Data.settings.path = tPath.getText();
         }
 
-        w = new Wiki(Data.settings.server, Data.settings.path);
-        w.setHttp(Data.settings.protocol);
+        w = Wiki.newSession(Data.settings.server, Data.settings.path, Data.settings.protocol);
         w.setUserAgent("VicunaUploader/" + Data.version + " (https://github.com/yarl/vicuna)");
 
 

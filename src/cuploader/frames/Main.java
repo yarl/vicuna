@@ -1305,7 +1305,8 @@ public final class Main extends javax.swing.JFrame
 
   private void checkVersion() {
     try {
-      String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+      List<String> pages = List.of("User:Yarl/VicunaUploader/version");
+      String v = Wiki.newSession("commons.wikimedia.org").getPageText(pages).get(0).trim();
       if (Double.parseDouble(v) > Double.parseDouble(Data.version)) {
         Object[] o = {Data.text("button-autoupdate"), Data.text("button-download"), Data.text("button-cancel")};
         int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>).</body></html>",
