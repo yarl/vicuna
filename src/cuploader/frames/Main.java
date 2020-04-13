@@ -1389,9 +1389,6 @@ public final class Main extends javax.swing.JFrame
       xstream.processAnnotations(cuploader.DescSource.class);
       xstream.registerConverter(new MapEntryConverter());
 
-      String xml = xstream.toXML(settings);
-      xml += xstream.toXML(Data.getFilesXML());
-
       try {
         Writer writer = new OutputStreamWriter(new FileOutputStream(f), Charset.forName("UTF-8"));
         xstream.toXML(settings, writer);
