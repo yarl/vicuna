@@ -1360,7 +1360,6 @@ public final class Main extends javax.swing.JFrame
         try {
           file = new File(file.getAbsoluteFile() + "");
           file.createNewFile();
-          //boolean result = SaveSession(file);
           boolean result = saveSessionFile(file);
           if (result) {
             JOptionPane.showMessageDialog(rootPane, Data.text("session-save-success"), Data.text("session-save"), JOptionPane.INFORMATION_MESSAGE);
@@ -1448,10 +1447,6 @@ class Comment {
       String settings = text.substring(0,stop);
       String files = text.substring(stop);
       
-      //System.out.println(settings);
-      //System.out.println(" ");
-      //System.out.println(files);
-      
       if (!settings.isEmpty()) {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
         xstream.processAnnotations(cuploader.Settings.class);
@@ -1467,14 +1462,8 @@ class Comment {
         try {
           @SuppressWarnings("unchecked")
           ArrayList<Map<String,String>> elements = (ArrayList<Map<String,String>>) xstream.fromXML(files);
-          //System.out.println(elements);
           new FFileLoading(elements, true);
           
-          //new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
-          //lStartInfo.setVisible(false);
-          //mEdit.setEnabled(true);
-          //mFileUploadSelect.setEnabled(true);
-          //mUpload.setEnabled(true);
         } catch (ClassCastException ex) {
           error("Bad session file format", ex);
           return false;
