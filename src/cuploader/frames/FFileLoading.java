@@ -1,7 +1,11 @@
 package cuploader.frames;
 
+import cuploader.Coord;
 import cuploader.Data;
+import cuploader.ImmutableCoordinate;
 import cuploader.PFile;
+import cuploader.SessionFile;
+import cuploader.SessionList;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -12,7 +16,7 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 
 public final class FFileLoading extends javax.swing.JFrame {
-    private ArrayList<File> files = null;   
+    private ArrayList<File> files = new ArrayList<File>();
     private volatile boolean stopRq = false;
     
     ArrayList<Boolean> fEdit = null;
@@ -23,7 +27,7 @@ public final class FFileLoading extends javax.swing.JFrame {
     ArrayList<String> fCoor = null;
     ArrayList<String> fCats = null;
     
-    private ArrayList<Map<String,String>> sessionFiles;
+    private SessionList sessionList = null;
     
     public FFileLoading(ArrayList<File> fPath, ArrayList<Boolean> fEdit, ArrayList<Boolean> fUpload, ArrayList<String> fName, 
             ArrayList<String> fDate, ArrayList<String> fDesc, ArrayList<String> fCoor, ArrayList<String> fCats) {
@@ -67,15 +71,14 @@ public final class FFileLoading extends javax.swing.JFrame {
         startRead(false);
     }
     
-    public FFileLoading(ArrayList<Map<String, String>> files_, boolean hack) {
-        this.sessionFiles = files_;
+    public FFileLoading(SessionList sessionList) {
+        this.sessionList = sessionList;
         
-        files = new ArrayList<File>();
-        for(Map<String, String> m : files_) {
-          File f = new File(m.get("path"));
+        for(SessionFile sessionFile : sessionList.getSessionFiles()) {
+          File f = new File(sessionFile.getPath());
           files.add(f);
         }
-        
+
         initComponents();
         setLocationRelativeTo(null);
         
@@ -125,16 +128,20 @@ public final class FFileLoading extends javax.swing.JFrame {
 
               PFile f;
               if (isLoadingSession) {
-                if (sessionFiles == null) {
+                if (sessionList == null) {
                   f = new PFile(file, Data.getFiles().size(), fUpload.get(i),
                           fEdit.get(i), fName.get(i), fDesc.get(i),
                           fDate.get(i), fCats.get(i), fCoor.get(i));
                 } else {
+                  SessionFile sessionFile = sessionList.getSessionFiles().get(i);
+                  ImmutableCoordinate coordinate = sessionFile.getCoordinate();
+                  Coord coord = new Coord(coordinate.getLat(), coordinate.getLon());
                   f = new PFile(file, Data.getFiles().size(), false, false,
-                          sessionFiles.get(i).get("name"),
-                          sessionFiles.get(i).get("desc"),
-                          sessionFiles.get(i).get("date"),
-                          sessionFiles.get(i).get("cats"), "");
+                          sessionFile.getName(),
+                          sessionFile.getDesc(),
+                          sessionFile.getDate(),
+                          sessionFile.getCats(),
+                          coord.getDecimal());
                 }
               } else {
                 f = new PFile(file, Data.getFiles().size());

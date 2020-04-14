@@ -3,6 +3,7 @@ package cuploader;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import cuploader.frames.*;
+import cuploader.SessionList;
 import java.awt.ComponentOrientation;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
@@ -165,11 +166,11 @@ public class Data implements Serializable {
         return files;
     }
     
-    public static ArrayList<Map<String, String>> getFilesXML() {
-      ArrayList<Map<String, String>> list = new ArrayList<Map<String,String>>();
-      for(PFile file : files)
-        list.add(file.returnData());
-      return list;
+    public static SessionList getFilesForXML() {
+       SessionList sessionList = new SessionList();
+       for(PFile file : files)
+         sessionList.addSessionFile(file.returnData());
+       return sessionList;
     }
 
     public static int getFirstFileEdit() {
