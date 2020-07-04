@@ -181,7 +181,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     bDesc = new javax.swing.JButton();
     cUpload = new javax.swing.JCheckBox();
 
-    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
     mSelectToUpload.setText(bundle.getString("file-context-selectupload")); // NOI18N
     mSelectToUpload.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1295,7 +1295,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
   private javax.swing.JLabel tSize;
   private javax.swing.JLabel tThumb;
   // End of variables declaration//GEN-END:variables
-    ResourceBundle bundle = ResourceBundle.getBundle("cuploader/text/messages");
+    ResourceBundle bundle = ResourceBundle.getBundle("cuploader.text.messages");
 
     /**
      * Convenience method that returns a scaled instance of the

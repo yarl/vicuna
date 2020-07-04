@@ -72,7 +72,7 @@ public class FIntro extends javax.swing.JFrame {
         tStatus.setText("Initializing...");
 
         bUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cuploader/resources/tick.png"))); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
         bUpdate.setText(bundle.getString("button-autoupdate")); // NOI18N
         bUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -13,7 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 public class FSettings extends javax.swing.JFrame {
-    private QuickTemplatesModel model = new QuickTemplatesModel();    
+    private final QuickTemplatesModel model = new QuickTemplatesModel();
     DefaultTableModel dm = new DefaultTableModel();
     
     PFile exampleFile = new PFile(new File("Example file.jpg"), -1, false, false, "example-file.jpg", "Example file description.", "2016-01-01", "Example file category", "");
@@ -36,7 +36,7 @@ public class FSettings extends javax.swing.JFrame {
         tSource.setText(Data.settings.source);
         tPermission.setText(Data.settings.permission);
         
-        cLicense.setModel(new DefaultComboBoxModel(License.values()));
+        cLicense.setModel(new DefaultComboBoxModel<License>(License.values()));
 
         cLicense.setSelectedItem(Data.settings.license);
         if(Data.settings.license == License.OTHER) {
@@ -100,7 +100,7 @@ public class FSettings extends javax.swing.JFrame {
     jTabbedPane1 = new javax.swing.JTabbedPane();
     pFile = new javax.swing.JPanel();
     jPanel7 = new javax.swing.JPanel();
-    cLicense = new javax.swing.JComboBox();
+    cLicense = new javax.swing.JComboBox<>();
     tLicense = new javax.swing.JTextField();
     lAttrib = new javax.swing.JLabel();
     tAttrib = new javax.swing.JTextField();
@@ -143,7 +143,7 @@ public class FSettings extends javax.swing.JFrame {
     jPanel10 = new javax.swing.JPanel();
     lGalleryWidth = new javax.swing.JLabel();
     tGalleryWidth = new javax.swing.JSpinner();
-    tGalleryHeader = new javax.swing.JComboBox();
+    tGalleryHeader = new javax.swing.JComboBox<String>();
     lGalleryHeader = new javax.swing.JLabel();
     lGalleryPage = new javax.swing.JLabel();
     tGalleryPage = new javax.swing.JTextField();
@@ -164,7 +164,7 @@ public class FSettings extends javax.swing.JFrame {
     cAskQuit = new javax.swing.JCheckBox();
     tUploadSummary = new javax.swing.JTextField();
     jPanel3 = new javax.swing.JPanel();
-    cFileDescSource = new javax.swing.JComboBox();
+    cFileDescSource = new javax.swing.JComboBox<String>();
     lFileDescSource = new javax.swing.JLabel();
     bSetFileDesc = new javax.swing.JButton();
     tFileDesc = new javax.swing.JTextField();
@@ -177,7 +177,7 @@ public class FSettings extends javax.swing.JFrame {
     tDesc = new javax.swing.JTextArea();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
     setTitle(bundle.getString("settings")); // NOI18N
     setResizable(false);
 
@@ -511,7 +511,7 @@ public class FSettings extends javax.swing.JFrame {
     tNumFormat.setText(Data.settings.numFormat);
 
     lNumFormat.setText(bundle.getString("fileedit-num-format")); // NOI18N
-    lNumFormat.setToolTipText("<html>" + java.util.ResourceBundle.getBundle("cuploader/text/messages").getString("fileedit-num-format-tooltip") + "</html>");
+    lNumFormat.setToolTipText("<html>" + java.util.ResourceBundle.getBundle("cuploader.text.messages").getString("fileedit-num-format-tooltip") + "</html>");
 
     lDigits.setText(bundle.getString("fileedit-num-digits")); // NOI18N
 
@@ -618,7 +618,7 @@ public class FSettings extends javax.swing.JFrame {
 
     tGalleryWidth.setValue(200);
 
-    tGalleryHeader.setModel(new javax.swing.DefaultComboBoxModel(new String[] { bundle.getString("settings-gallery-uploaddate"), bundle.getString("settings-gallery-ask")}));
+    tGalleryHeader.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { bundle.getString("settings-gallery-uploaddate"), bundle.getString("settings-gallery-ask")}));
 
     lGalleryHeader.setLabelFor(tGalleryHeader);
     lGalleryHeader.setText(bundle.getString("settings-gallery-header")); // NOI18N
@@ -813,7 +813,7 @@ public class FSettings extends javax.swing.JFrame {
 
     jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("settings-advanced"))); // NOI18N
 
-    cFileDescSource.setModel(new javax.swing.DefaultComboBoxModel(new String[] { bundle.getString("settings-program-descfile-program"), bundle.getString("settings-program-descfile-ext")}));
+    cFileDescSource.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { bundle.getString("settings-program-descfile-program"), bundle.getString("settings-program-descfile-ext")}));
 
     lFileDescSource.setText(bundle.getString("settings-program-descfile")); // NOI18N
 
@@ -1144,8 +1144,8 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JButton bSetFileDesc;
   private javax.swing.JCheckBox cAskQuit;
   private javax.swing.JCheckBox cCreateGallery;
-  private javax.swing.JComboBox cFileDescSource;
-  private javax.swing.JComboBox cLicense;
+  private JComboBox<String> cFileDescSource;
+  private JComboBox<License> cLicense;
   private javax.swing.JCheckBox cLoadSubdirectory;
   private javax.swing.JCheckBox cReadHour;
   private javax.swing.JCheckBox cRenameAfterUpload;
@@ -1206,7 +1206,7 @@ public class FSettings extends javax.swing.JFrame {
   private javax.swing.JTextArea tExtraText;
   private javax.swing.JScrollPane tExtraTextScroll;
   private javax.swing.JTextField tFileDesc;
-  private javax.swing.JComboBox tGalleryHeader;
+  private JComboBox<String> tGalleryHeader;
   private javax.swing.JTextField tGalleryPage;
   private javax.swing.JSpinner tGalleryWidth;
   private javax.swing.JTextField tLicense;

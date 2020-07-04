@@ -136,7 +136,7 @@ public final class FDownload extends javax.swing.JFrame {
 
         Progress.setIndeterminate(true);
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
         lName.setText(bundle.getString("download-init")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

@@ -37,7 +37,7 @@ public class Data implements Serializable {
     public enum Elem { NAME, EXT, DATE, COOR, DESC, CATS; }
     
     //text
-    public static ResourceBundle text = ResourceBundle.getBundle("cuploader/text/messages", Locale.ENGLISH);
+    public static ResourceBundle text = ResourceBundle.getBundle("cuploader.text.messages", Locale.ENGLISH);
     public static String text(String s){
         return text.getString(s);
     }

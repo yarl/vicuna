@@ -212,7 +212,7 @@ public class FUploadCheck extends javax.swing.JFrame {
         bFix = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
         setTitle(bundle.getString("upload-uploading")); // NOI18N
         setResizable(false);
 
