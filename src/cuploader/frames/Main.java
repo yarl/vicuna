@@ -1,8 +1,6 @@
 package cuploader.frames;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.enums.EnumConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -14,6 +12,8 @@ import static cuploader.Data.settings;
 import cuploader.FileFilters;
 import cuploader.License;
 import cuploader.PFile;
+import cuploader.SessionFile;
+import cuploader.SessionList;
 import cuploader.Settings;
 import cuploader.ServerMonitor;
 import java.awt.Color;
@@ -1305,7 +1305,8 @@ public final class Main extends javax.swing.JFrame
 
   private void checkVersion() {
     try {
-      String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+      List<String> pages = List.of("User:Yarl/VicunaUploader/version");
+      String v = Wiki.newSession("commons.wikimedia.org").getPageText(pages).get(0).trim();
       if (Double.parseDouble(v) > Double.parseDouble(Data.version)) {
         Object[] o = {Data.text("button-autoupdate"), Data.text("button-download"), Data.text("button-cancel")};
         int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>).</body></html>",
@@ -1359,7 +1360,6 @@ public final class Main extends javax.swing.JFrame
         try {
           file = new File(file.getAbsoluteFile() + "");
           file.createNewFile();
-          //boolean result = SaveSession(file);
           boolean result = saveSessionFile(file);
           if (result) {
             JOptionPane.showMessageDialog(rootPane, Data.text("session-save-success"), Data.text("session-save"), JOptionPane.INFORMATION_MESSAGE);
@@ -1386,15 +1386,13 @@ public final class Main extends javax.swing.JFrame
       xstream.processAnnotations(cuploader.Settings.class);
       xstream.processAnnotations(cuploader.QuickTemplate.class);
       xstream.processAnnotations(cuploader.DescSource.class);
-      xstream.registerConverter(new MapEntryConverter());
-
-      String xml = xstream.toXML(settings);
-      xml += xstream.toXML(Data.getFilesXML());
+      xstream.processAnnotations(cuploader.SessionFile.class);
+      xstream.processAnnotations(cuploader.SessionList.class);
 
       try {
         Writer writer = new OutputStreamWriter(new FileOutputStream(f), Charset.forName("UTF-8"));
         xstream.toXML(settings, writer);
-        xstream.toXML(Data.getFilesXML(), writer);
+        xstream.toXML(Data.getFilesForXML(), writer);
 
         return true;
       } catch (FileNotFoundException e) {
@@ -1446,13 +1444,9 @@ class Comment {
   private boolean loadSessionFile2(File f) {
     try {
       String text = readFile(f.getAbsolutePath());
-      int stop = text.indexOf("<list>");
+      int stop = text.indexOf("<sessionList>");
       String settings = text.substring(0,stop);
       String files = text.substring(stop);
-      
-      //System.out.println(settings);
-      //System.out.println(" ");
-      //System.out.println(files);
       
       if (!settings.isEmpty()) {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
@@ -1464,19 +1458,13 @@ class Comment {
       
       if (!files.isEmpty()) {
         XStream xstream = new XStream(new DomDriver("UTF-8"));
-        xstream.registerConverter(new MapEntryConverter());
+        xstream.processAnnotations(cuploader.SessionList.class);
+        xstream.processAnnotations(cuploader.SessionFile.class);
 
         try {
-          @SuppressWarnings("unchecked")
-          ArrayList<Map<String,String>> elements = (ArrayList<Map<String,String>>) xstream.fromXML(files);
-          //System.out.println(elements);
-          new FFileLoading(elements, true);
+          SessionList sessionList = (SessionList) xstream.fromXML(files);
+          new FFileLoading(sessionList);
           
-          //new FFileLoading(fPath, fEdit, fUpload, fName, fDate, fDesc, fCoor, fCats);
-          //lStartInfo.setVisible(false);
-          //mEdit.setEnabled(true);
-          //mFileUploadSelect.setEnabled(true);
-          //mUpload.setEnabled(true);
         } catch (ClassCastException ex) {
           error("Bad session file format", ex);
           return false;
@@ -1873,33 +1861,4 @@ class Comment {
   protected static java.util.logging.Logger Log = java.util.logging.Logger.getLogger(Main.class.getName());
 
   static final long serialVersionUID = -4314089010092936678L;
-}
-
-class MapEntryConverter implements Converter {
-  
-  @SuppressWarnings("rawtypes")
-  public boolean canConvert(Class clazz) {
-    return AbstractMap.class.isAssignableFrom(clazz);
-  }
-  
-  public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
-    @SuppressWarnings("unchecked")
-    AbstractMap<String, String> map = (AbstractMap<String, String>) value;
-    for (Entry<String, String> entry : map.entrySet()) {
-      writer.startNode(entry.getKey().toString());
-      writer.setValue(entry.getValue().toString());
-      writer.endNode();
-    }
-  }
-  
-  public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-    Map<String, String> map = new HashMap<String, String>();
-
-    while (reader.hasMoreChildren()) {
-      reader.moveDown();
-      map.put(reader.getNodeName(), reader.getValue());
-      reader.moveUp();
-    }
-    return map;
-  }
 }

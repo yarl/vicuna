@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import javax.security.auth.login.CredentialException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.security.auth.login.LoginException;
@@ -361,8 +362,9 @@ public class FUpload extends javax.swing.JFrame {
                     //System.out.println(desc);
                     //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
 
-                    try { 
-                        boolean fileExist = wiki.isPageExist(name);
+                    try {
+                        List<String> pages = List.of(name);
+                        boolean fileExist = wiki.exists(pages)[0];
                         if(!fileExist) wiki.upload(file.file, name, desc, "VicuñaUploader " + Data.version);
                         
                         if(set.createGallery) gallery += "File:" + name + "|" + file.getComponent(Elem.DESC).replaceAll("\n", "") + "\n";
@@ -404,7 +406,8 @@ public class FUpload extends javax.swing.JFrame {
                     header = "?";
                 try {
                     if(set.galleryOnTop) {
-                        String pageText = wiki.getPageText("User:"+set.username+"/"+set.galleryPage);
+                        List<String> pages = List.of("User:"+set.username+"/"+set.galleryPage);
+                        String pageText = wiki.getPageText(pages).get(0);
                         String output = "== " + header + " ==\n\n" + gallery + "\n\n" + pageText;
                         wiki.edit("User:"+set.username+"/"+set.galleryPage, output, header);
                     } else

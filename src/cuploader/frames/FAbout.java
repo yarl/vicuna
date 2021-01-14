@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ResourceBundle;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -136,7 +137,8 @@ public class FAbout extends javax.swing.JFrame {
 
     private void bCheckUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCheckUpdateActionPerformed
         try {
-            String v = new Wiki("commons.wikimedia.org").getPageText("User:Yarl/VicunaUploader/version").trim();
+            List<String> pages = List.of("User:Yarl/VicunaUploader/version");
+            String v = Wiki.newSession("commons.wikimedia.org").getPageText(pages).get(0).trim();
             if(Double.parseDouble(v)>Double.parseDouble(Data.version)) {
                 Object[] o = {bundle.getString("button-download"), bundle.getString("button-cancel")};
                 int n = JOptionPane.showOptionDialog(rootPane, "<html><body>" + bundle.getString("about-checkupdate-text") + " (<b>" + v + "</b>). " + bundle.getString("about-checkupdate-download") + "</body></html>", bundle.getString("about-checkupdate"), 

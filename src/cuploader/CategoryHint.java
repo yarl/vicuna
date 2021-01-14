@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -23,7 +24,7 @@ import org.wikipedia.Wiki;
 public class CategoryHint extends Thread {    
     JPopupMenu mCatHint;
     JTextField tCategories;
-    Wiki wiki = new Wiki(Data.settings.server);
+    Wiki wiki = Wiki.newSession(Data.settings.server);
     
     final ArrayList<JMenu> list = new ArrayList<JMenu>();
     final ArrayList<Boolean> listBool = new ArrayList<Boolean>();
@@ -107,7 +108,7 @@ public class CategoryHint extends Thread {
             
             try {
                 //get list
-                String[] listPages = wiki.listPages("Category:"+text, null, Wiki.CATEGORY_NAMESPACE);
+                String[] listPages = wiki.listPages("Category:"+text, null, Wiki.CATEGORY_NAMESPACE).toArray(new String[0]);
 
                 //remove loading
                 mCatHint.removeAll();
@@ -213,7 +214,7 @@ public class CategoryHint extends Thread {
 
             //subcategories
             try {
-                categoryMembers = wiki.getCategoryMembers(category.getText(), Wiki.CATEGORY_NAMESPACE);
+                categoryMembers = wiki.getCategoryMembers(category.getText(), Wiki.CATEGORY_NAMESPACE).toArray(new String[0]);
             } catch (IOException ex) {
                 Logger.getLogger(CategoryHint.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -240,7 +241,8 @@ public class CategoryHint extends Thread {
 
             //supcategories
             try {
-                categoryMembers = wiki.getCategories("Category:"+category.getText());
+                List<String> categories = List.of("Category:"+category.getText());
+                categoryMembers = wiki.getCategories(categories, null, false).get(0).toArray(String[]::new);
             } catch (IOException ex) {
                 Logger.getLogger(CategoryHint.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -30,7 +30,7 @@ public class ServerMonitor implements Runnable, PropertyChangeListener {
   public void run() {
     while (!Thread.interrupted()) {
         try {
-          int lag;
+          double lag;
           if (Data.wiki != null && Data.isLoggedIn()) {
             debug("Got wiki, logged in");
             lag = Data.wiki.getCurrentDatabaseLag();

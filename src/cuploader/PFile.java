@@ -67,15 +67,17 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private final Border borderFocus = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(52, 123, 255), 2), BorderFactory.createEmptyBorder(0, 3, 0, 3));
     private final Border borderBlur = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(230, 230, 230), 2), BorderFactory.createEmptyBorder(0, 3, 0, 3));
     
-    public Map<String, String> returnData() {
-      Map<String, String> map = new HashMap<String, String>();
-        map.put("name", tName.getText());
-        map.put("path", file.getAbsolutePath());
-        map.put("desc", tDesc.getText());
-        map.put("date", tDate.getText());
-        map.put("cats", tCategories.getText());
-        //map.put("coor", coor.getDecimal());
-      return map;
+    public SessionFile returnData() {
+      ImmutableCoordinate coorToExport = new ImmutableCoordinate(coor.getLatDouble(), coor.getLonDouble());
+      SessionFile sessionFile = new SessionFile(
+        tDate.getText(),        // date
+        file.getAbsolutePath(), // path
+        tCategories.getText(),  // cats
+        tName.getText(),        // name
+        coorToExport,           // coordinates
+        tDesc.getText()         // desc
+      );
+      return sessionFile;
     }
     
     public PFile(File file, int number) {  
