@@ -60,7 +60,7 @@ public final class Main extends javax.swing.JFrame
 
     Boolean sayHello = readSettings();
     Data.settings.initializeLocale();
-    Data.text = java.util.ResourceBundle.getBundle("cuploader/text/messages", Data.settings.getLang());
+    Data.text = java.util.ResourceBundle.getBundle("cuploader.text.messages", Data.settings.getLang());
 
     Data.initializeQuickTemplates();
     addWindowListener(exit);
@@ -182,7 +182,7 @@ public final class Main extends javax.swing.JFrame
 
     gView.add(mViewAll1);
     mViewAll1.setSelected(true);
-    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
     mViewAll1.setText(bundle.getString("view-all")); // NOI18N
     mViewAll1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
