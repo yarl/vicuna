@@ -5,7 +5,7 @@ _ultimate tool for upload files to Wikimedia Commons and other Wikimedia project
 For manual, take a look at [project wiki](https://github.com/yarl/vicuna/wiki) and [website](https://yarl.github.io/vicuna).
 
 ## Build and Run
-Program is being written using any IDE (NetBeans preffered) you want and [Gradle](https://gradle.org/) is used for building. In order to download and build source code, do following:
+Program is being written using any IDE (NetBeans preferred) you want and [Gradle](https://gradle.org/) is used for building. In order to download and build source code, do following:
 
 ```
 git clone https://github.com/yarl/vicuna.git
