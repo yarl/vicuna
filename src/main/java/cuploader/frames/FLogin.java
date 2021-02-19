@@ -195,7 +195,7 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
         lTextInfo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
         setTitle(bundle.getString("login-loggingin")); // NOI18N
         setResizable(false);
 
@@ -451,7 +451,7 @@ public class FLogin extends javax.swing.JFrame implements WindowListener {
     private javax.swing.JTextField tServer;
     // End of variables declaration//GEN-END:variables
 
-  ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
+  ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages");
   KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
   Action escapeAction = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {

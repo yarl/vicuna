@@ -1,7 +1,4 @@
 build
-store
-dist
 .vicuna-settings
 settings.vicuna
-nbproject\private
-/nbproject/private/
+.gradle

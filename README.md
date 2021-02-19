@@ -2,39 +2,32 @@
 _ultimate tool for upload files to Wikimedia Commons and other Wikimedia projects_
 
 ## Usage
-For manual, take a look at [project wiki](https://github.com/yarl/vicuna/wiki) and [website](http://yarl.github.io/vicuna).
+For manual, take a look at [project wiki](https://github.com/yarl/vicuna/wiki) and [website](https://yarl.github.io/vicuna).
 
 ## Build and Run
-Program is being written using [NetBeans IDE](https://netbeans.org/) and [Apache Ant](https://ant.apache.org/) is used for building. In order to download and build source code, do following:
+Program is being written using any IDE (NetBeans preffered) you want and [Gradle](https://gradle.org/) is used for building. In order to download and build source code, do following:
 
 ```
 git clone https://github.com/yarl/vicuna.git
 cd vicuna
-ant package-for-store
+./gradlew build
 ```
-You will find compiled `.jar` file in `store` directory.
+You will find distribution tar and zip `build/distributions` directory.
 
 ```
-java -jar store/vicuna.jar
+cd build/distributions/
+unzip cuploader.zip
+./cuploader/bin/cuploader
+```
+
+If you want to just run local build:
+
+```
+./gradlew run
 ```
 
 ## Contribute
 Feel free to fork and suggest changes. However, please do not send pull requests with radical changes without prior discussion. Also, changes should work on NetBeans (especially project building and Form Designer).
-
-### wiki-java library
-
-Create org-wikipedia-Wiki.jar file:
-```
-git clone https://github.com/MER-C/wiki-java.git
-cd wiki-java
-mkdir -p org-wikipedia-Wiki/org/wikipedia
-cp src/org/wikipedia/Wiki.java org-wikipedia-Wiki/org/wikipedia/
-javac org-wikipedia-Wiki/org/wikipedia/Wiki.java
-cd org-wikipedia-Wiki
-jar cfv org-wikipedia-Wiki-`git rev-parse --verify HEAD --short=6`.jar -C org-wikipedia-Wiki/ .
-```
-
-Copy jar file to lib directory.
 
 ## License
 ```

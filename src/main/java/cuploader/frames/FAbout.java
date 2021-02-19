@@ -42,7 +42,7 @@ public class FAbout extends javax.swing.JFrame {
     bCheckUpdate = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
     setTitle(bundle.getString("help-about")); // NOI18N
     setResizable(false);
 
@@ -174,7 +174,7 @@ public class FAbout extends javax.swing.JFrame {
       @Override
       public void localizationChanged(java.util.Locale loc) {
           Logger.getLogger(FAbout.class.getName()).log(Level.INFO, "Reloading messages");
-          bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages", loc);
+          bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages", loc);
           lInfo.setText("<html><body>VicuñaUploader " + Data.version + "<br>" + Data.date + "</body></html>");
           setTitle(bundle.getString("help-about")); // NOI18N
           jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("help-about"))); // NOI18N
@@ -205,7 +205,7 @@ public class FAbout extends javax.swing.JFrame {
   private javax.swing.JLabel lInfo;
   // End of variables declaration//GEN-END:variables
     
-    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
+    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages");
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {

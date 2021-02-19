@@ -66,7 +66,7 @@ public class FFileEdit extends javax.swing.JFrame {
         bApply = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages"); // NOI18N
         setTitle(bundle.getString("fileedit")); // NOI18N
         setResizable(false);
 
@@ -135,7 +135,7 @@ public class FFileEdit extends javax.swing.JFrame {
         });
 
         lNumFormat.setText(bundle.getString("fileedit-num-format")); // NOI18N
-        lNumFormat.setToolTipText("<html>" + java.util.ResourceBundle.getBundle("cuploader/text/messages").getString("fileedit-num-format-tooltip") + "</html>");
+        lNumFormat.setToolTipText("<html>" + java.util.ResourceBundle.getBundle("cuploader.text.messages").getString("fileedit-num-format-tooltip") + "</html>");
 
         tNumFormat.setText(Data.settings.numFormat);
         tNumFormat.setEnabled(false);
@@ -555,7 +555,7 @@ public class FFileEdit extends javax.swing.JFrame {
     private javax.swing.JSpinner tNumStart;
     // End of variables declaration//GEN-END:variables
 
-    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader/text/messages");
+    ResourceBundle bundle = java.util.ResourceBundle.getBundle("cuploader.text.messages");
     KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
     Action escapeAction = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
