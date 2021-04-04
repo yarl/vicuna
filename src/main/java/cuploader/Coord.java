@@ -107,7 +107,7 @@ public class Coord {
     }
     
     public double getLonDouble() {
-      return lat;
+      return lon;
     }
     
     public String getHeading() {
