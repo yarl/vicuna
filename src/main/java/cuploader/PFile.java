@@ -68,7 +68,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     private final Border borderBlur = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(230, 230, 230), 2), BorderFactory.createEmptyBorder(0, 3, 0, 3));
     
     public SessionFile returnData() {
-      ImmutableCoordinate coorToExport = new ImmutableCoordinate(coor.getLatDouble(), coor.getLonDouble());
+      ImmutableCoordinate coorToExport = null;
+      if (coor != null) {
+        coorToExport = new ImmutableCoordinate(coor.getLatDouble(), coor.getLonDouble());
+      }
       SessionFile sessionFile = new SessionFile(
         tDate.getText(),        // date
         file.getAbsolutePath(), // path
