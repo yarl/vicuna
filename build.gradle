@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     // This dependency is used by the application.
-    implementation 'com.thoughtworks.xstream:xstream:1.4.15'
+    implementation 'com.thoughtworks.xstream:xstream:1.4.16'
     // TODO Update
     implementation 'com.drewnoakes:metadata-extractor:2.6.2'
     implementation 'org.swinglabs.swingx:swingx-all:1.6.5-1'
@@ -37,6 +37,7 @@ application {
     // Define the main class for the application.
     mainClassName = 'cuploader.frames.FIntro'
     applicationName = 'vicuna'
+    applicationDefaultJvmArgs = ["--add-opens", "java.desktop/java.awt=ALL-UNNAMED"]
 }
 
 java {
