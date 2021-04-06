@@ -37,6 +37,7 @@ application {
     // Define the main class for the application.
     mainClassName = 'cuploader.frames.FIntro'
     applicationName = 'vicuna'
+    applicationDefaultJvmArgs = ["--add-opens", "java.desktop/java.awt=ALL-UNNAMED"]
 }
 
 java {
