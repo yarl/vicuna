@@ -40,6 +40,12 @@ public class Coord {
         this.lat = lat;
         this.lon = lon;
     }
+
+    public Coord(String decimal) {
+      String[] s = decimal.split(";");
+      this.lat = Double.parseDouble(s[0]);
+      this.lon = Double.parseDouble(s[1]);
+    }
     
     public void setHeading(String heading) {
       this.heading = heading == null ? "" : heading;
