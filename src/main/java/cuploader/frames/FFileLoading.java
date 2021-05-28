@@ -138,6 +138,9 @@ public final class FFileLoading extends javax.swing.JFrame {
                   Coord coord = null;
                   if (coordinate != null) {
                     coord = new Coord(coordinate.getLat(), coordinate.getLon());
+                    if (!coordinate.getHeading().isEmpty()) {
+                       coord.setHeading(coordinate.getHeading());
+                    }
                   }
                   f = new PFile(file, Data.getFiles().size(), false, false,
                           sessionFile.getName(),

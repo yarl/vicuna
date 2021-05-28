@@ -70,7 +70,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     public SessionFile returnData() {
       ImmutableCoordinate coorToExport = null;
       if (coor != null) {
-        coorToExport = new ImmutableCoordinate(coor.getLatDouble(), coor.getLonDouble());
+        coorToExport = new ImmutableCoordinate(
+          coor.getLatDouble(),
+          coor.getLonDouble(),
+          coor.getHeading()
+        );
       }
       SessionFile sessionFile = new SessionFile(
         tDate.getText(),        // date
