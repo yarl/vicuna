@@ -131,13 +131,13 @@ public final class FFileLoading extends javax.swing.JFrame {
                 if (sessionList == null) {
                   f = new PFile(file, Data.getFiles().size(), fUpload.get(i),
                           fEdit.get(i), fName.get(i), fDesc.get(i),
-                          fDate.get(i), fCats.get(i), fCoor.get(i));
+                          fDate.get(i), fCats.get(i), new Coord(fCoor.get(i)));
                 } else {
                   SessionFile sessionFile = sessionList.getSessionFiles().get(i);
                   ImmutableCoordinate coordinate = sessionFile.getCoordinate();
-                  String coord = "";
+                  Coord coord = null;
                   if (coordinate != null) {
-                    coord = new Coord(coordinate.getLat(), coordinate.getLon()).getDecimal();
+                    coord = new Coord(coordinate.getLat(), coordinate.getLon());
                   }
                   f = new PFile(file, Data.getFiles().size(), false, false,
                           sessionFile.getName(),
