@@ -18,7 +18,6 @@ repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
-    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -28,7 +27,7 @@ dependencies {
     implementation 'com.drewnoakes:metadata-extractor:2.6.2'
     implementation 'org.swinglabs.swingx:swingx-all:1.6.5-1'
     implementation 'org.jxmapviewer:jxmapviewer2:2.6'
-    implementation 'com.github.MER-C:wiki-java:0.37'
+    implementation files('lib/org-wikipedia-Wiki-59708d.jar')
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13'

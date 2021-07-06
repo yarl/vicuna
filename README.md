@@ -26,6 +26,17 @@ If you want to just run local build:
 ./gradlew run
 ```
 
+Create org-wikipedia-Wiki.jar file:
+```
+git clone https://github.com/MER-C/wiki-java.git
+cd wiki-java
+mkdir -p org-wikipedia-Wiki/org/wikipedia
+cp src/org/wikipedia/Wiki.java org-wikipedia-Wiki/org/wikipedia/
+javac org-wikipedia-Wiki/org/wikipedia/Wiki.java
+cd org-wikipedia-Wiki
+jar cfv org-wikipedia-Wiki-`git rev-parse --verify HEAD --short=6`.jar -C org-wikipedia-Wiki/ .
+```
+
 ## Contribute
 Feel free to fork and suggest changes. However, please do not send pull requests with radical changes without prior discussion. Also, changes should work on NetBeans (especially project building and Form Designer).
 
