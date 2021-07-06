@@ -1233,6 +1233,9 @@ public final class Main extends javax.swing.JFrame
         Data.settings.setLang(locale);
       }
     });
+    if (locale.getLanguage().equals(Data.settings.getLang().getLanguage())) {
+      item.setSelected(true);
+    }
     gLang.add(item);
     mLang.add(item);
   }
