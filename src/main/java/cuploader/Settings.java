@@ -87,9 +87,9 @@ public class Settings {
 
     public Settings() {
         propchange = new PropertyChangeSupport(this);
-        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-en"), "{{en|%TEXT%}}", true));
-        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-de"), "{{de|%TEXT%}}", true));
-        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-fr"), "{{fr|%TEXT%}}", true));
+        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-en"), "{{en|1=%TEXT%}}", true));
+        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-de"), "{{de|1=%TEXT%}}", true));
+        quickTemplates.add(new QuickTemplate(Data.text("file-wiki-fr"), "{{fr|1=%TEXT%}}", true));
     }
 
     public boolean isServerMonitorEnabled() {
