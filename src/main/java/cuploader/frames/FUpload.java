@@ -196,6 +196,7 @@ public class FUpload extends javax.swing.JFrame {
           desc += "|heading:" + file.coor.getHeading();
         desc += "}}";
       }
+      desc += "\n{{VicuñaUploader}}";
 
       desc += "\n\n=={{int:license-header}}==\n";
 
