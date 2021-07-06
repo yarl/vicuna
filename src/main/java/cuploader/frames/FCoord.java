@@ -64,7 +64,7 @@ public class FCoord extends javax.swing.JFrame {
         GeoPosition centerPosition = mapViewer.getCenterPosition();
         double latitude = centerPosition.getLatitude();
         double longitude = centerPosition.getLongitude();
-        return new ImmutableCoordinate(latitude, longitude);
+        return new ImmutableCoordinate(latitude, longitude, "");
     }
 
     private Point getPoint(ImmutableCoordinate coordinate) {
@@ -77,7 +77,7 @@ public class FCoord extends javax.swing.JFrame {
 
     private ImmutableCoordinate getMapPosition(Point point) {
         GeoPosition position = mapViewer.convertPointToGeoPosition(point);
-        return new ImmutableCoordinate(position.getLatitude(), position.getLongitude());
+        return new ImmutableCoordinate(position.getLatitude(), position.getLongitude(), "");
     }
 
     private void setMapPosition(ImmutableCoordinate coor, int coorZoom) {
@@ -155,7 +155,7 @@ public class FCoord extends javax.swing.JFrame {
         Coord fileCoord = Data.getFiles().get(number).coor;
         
         if(!multiEdit && fileCoord != null) {          
-          setMapPosition(new ImmutableCoordinate(fileCoord.getLat(), fileCoord.getLon()), 2);
+          setMapPosition(new ImmutableCoordinate(fileCoord.getLat(), fileCoord.getLon(), ""), 2);
           DecimalFormat df = new DecimalFormat("#.######", DecimalFormatSymbols.getInstance(Locale.US));
           GeoPosition coordinate = mapViewer.getCenterPosition();
           tCoor.setText(df.format(coordinate.getLatitude()) + ";" + df.format(coordinate.getLongitude()));

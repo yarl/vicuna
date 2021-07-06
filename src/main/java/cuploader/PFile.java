@@ -70,7 +70,11 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
     public SessionFile returnData() {
       ImmutableCoordinate coorToExport = null;
       if (coor != null) {
-        coorToExport = new ImmutableCoordinate(coor.getLatDouble(), coor.getLonDouble());
+        coorToExport = new ImmutableCoordinate(
+          coor.getLatDouble(),
+          coor.getLonDouble(),
+          coor.getHeading()
+        );
       }
       SessionFile sessionFile = new SessionFile(
         tDate.getText(),        // date
@@ -105,7 +109,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         //PromptSupport.setFocusBehavior(PromptSupport.FocusBehavior.HIDE_PROMPT, tName);
     }
     
-    public PFile(File file, int number, boolean toUpload, boolean toEdit, String name, String desc, String date, String cats, String coor) {  
+    public PFile(File file, int number, boolean toUpload, boolean toEdit, String name, String desc, String date, String cats, Coord coor) {
         this.file = file;
         this.number = number;
         
@@ -127,11 +131,10 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         selectToEdit(toEdit);
         selectToUpload(toUpload);
         
-        if(!coor.contains(";"))
+        if(coor == null)
             resetCoordinates();
         else {
-            String[] s = coor.split(";");
-            this.coor = new Coord(s[0], s[1]);
+            this.coor = coor;
             setCoordinates(this.coor);
         }
         
