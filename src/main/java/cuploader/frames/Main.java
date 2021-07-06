@@ -958,7 +958,7 @@ public final class Main extends javax.swing.JFrame
 
         for (File f : selected) {
           if (Data.settings.loadSubdirectory) {
-            addToArray(f);
+            addToArray(files, f);
           } else {
             if (f.isDirectory()) files.addAll(Arrays.asList(f.listFiles()));
             if (f.isFile()) files.add(f);
@@ -1801,9 +1801,7 @@ class Comment {
     pFilesScroll.setVisible(true);
   }
 
-  public ArrayList<File> array;
-
-  public void addToArray(File f) {
+  public void addToArray(ArrayList<File> array, File f) {
     if (f.isFile()) {
       array.add(f);
     }
@@ -1811,7 +1809,7 @@ class Comment {
     if (f.isDirectory()) {
       File[] files = f.listFiles();
       for (File fi : files) {
-        addToArray(fi);
+        addToArray(array, fi);
       }
     }
   }
@@ -1828,13 +1826,13 @@ class Comment {
         //System.out.println("Possible flavor: " + flavors[i].getMimeType());
         if (flavors[i].isFlavorJavaFileListType()) {
           dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-          array = new ArrayList<File>();
+          ArrayList<File> array = new ArrayList<File>();
           @SuppressWarnings("unchecked")
           List<File> list = (List<File>) tr.getTransferData(flavors[i]);
 
           for (File f : list) {
             if (Data.settings.loadSubdirectory) {
-              addToArray(f);
+              addToArray(array, f);
             } else {
               if (f.isDirectory()) {
                 array.addAll(Arrays.asList(f.listFiles()));
