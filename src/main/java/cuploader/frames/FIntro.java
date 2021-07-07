@@ -4,6 +4,7 @@ import cuploader.Data;
 import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -221,6 +222,8 @@ public class FIntro extends javax.swing.JFrame {
         tStatus.setText("<html><body>" + Data.text("about-checkupdate-text") + " (<b>" + v + "</b>).</body></html>");
         return true;
       } else return false;
+    } catch (UncheckedIOException ex) {
+      error("Cannot check for the new version", ex);
     } catch (IOException ex) {
       error("Cannot check for the new version", ex);
     }
