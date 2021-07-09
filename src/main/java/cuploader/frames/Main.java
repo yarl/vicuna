@@ -1171,9 +1171,9 @@ public final class Main extends javax.swing.JFrame
         XStream xstream = new XStream(new DomDriver("UTF-8"));
         XStream.setupDefaultSecurity(xstream);
         xstream.allowTypesByWildcard(new String[] {
-		Main.class.getPackageName() + ".**",
-		cuploader.Settings.class.getPackageName() + ".**"
-	});
+          Main.class.getPackageName() + ".**",
+          cuploader.Settings.class.getPackageName() + ".**"
+        });
         xstream.registerConverter(new MigrateOldLicense());
         xstream.processAnnotations(cuploader.Settings.class);
         xstream.processAnnotations(cuploader.QuickTemplate.class);

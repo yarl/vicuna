@@ -1058,7 +1058,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
      * @see <a href="http://dzone.com/snippets/java-rotate-90%C3%A2%C2%B090%C3%A2%C2%B0">Java - Rotate -90 deg</a>
      */
     public BufferedImage rotateThumbnail(Image imageToRotate, int angle) {
-	Image rotatedImage = new BufferedImage(imageToRotate.getHeight(null), imageToRotate.getWidth(null), BufferedImage.TYPE_INT_ARGB);
+        Image rotatedImage = new BufferedImage(imageToRotate.getHeight(null), imageToRotate.getWidth(null), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) rotatedImage.getGraphics();
         if(angle==1) {
             g2d.rotate(Math.toRadians(90.0));
@@ -1069,8 +1069,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             g2d.drawImage(imageToRotate, (int)(-rotatedImage.getWidth(null)*1.5), 0, null);
         }
         g2d.dispose();
-	
-	return (BufferedImage)rotatedImage;
+
+        return (BufferedImage)rotatedImage;
     }
 
     /**
