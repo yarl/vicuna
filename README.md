@@ -57,6 +57,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
+## Contributors
+```
+Florian Straub
+Michal Josef Špaček
+```
+
 ### External libs used
 
 - [wiki-java](https://github.com/MER-C/wiki-java) (AGPLv3+ / GPLv3+)
