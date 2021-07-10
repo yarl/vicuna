@@ -61,6 +61,7 @@ limitations under the License.
 ```
 Florian Straub
 Michal Josef Špaček
+Nicolas Raoul
 ```
 
 ### External libs used
