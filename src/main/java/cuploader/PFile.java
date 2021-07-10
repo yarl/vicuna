@@ -77,13 +77,15 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
           coor.getHeading()
         );
       }
+      boolean selected = cUpload.isSelected() ? true : false;
       SessionFile sessionFile = new SessionFile(
         tDate.getText(),        // date
         file.getAbsolutePath(), // path
         tCategories.getText(),  // cats
         tName.getText(),        // name
         coorToExport,           // coordinates
-        tDesc.getText()         // desc
+        tDesc.getText(),        // desc
+        selected                // selected
       );
       return sessionFile;
     }
@@ -111,7 +113,7 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
         //PromptSupport.setFocusBehavior(PromptSupport.FocusBehavior.HIDE_PROMPT, tName);
     }
     
-    public PFile(File file, int number, boolean toUpload, boolean toEdit, String name, String desc, String date, String cats, Coord coor) {
+    public PFile(File file, int number, boolean toUpload, boolean toEdit, String name, String desc, String date, String cats, Coord coor, boolean selected) {
         this.file = file;
         this.number = number;
         
@@ -139,6 +141,8 @@ public final class PFile extends javax.swing.JPanel implements KeyListener {
             this.coor = coor;
             setCoordinates(this.coor);
         }
+
+        selectToUpload(selected);
         
         //generateThumbnail();
     }

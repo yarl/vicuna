@@ -15,9 +15,10 @@ public class SessionFile {
     public String name = null;
     public ImmutableCoordinate coor = null;
     public String desc = null;
+    public boolean selected = false;
 
     public SessionFile(String date, String path, String cats, String name,
-        ImmutableCoordinate coor, String desc) {
+        ImmutableCoordinate coor, String desc, boolean selected) {
 
         this.date = date;
         this.path = path;
@@ -25,6 +26,7 @@ public class SessionFile {
         this.name = name;
         this.coor = coor;
         this.desc = desc;
+        this.selected = selected;
     }
 
     public String getDate() {
@@ -49,5 +51,9 @@ public class SessionFile {
 
     public String getDesc() {
         return this.desc;
+    }
+
+    public boolean getSelected() {
+        return this.selected;
     }
 }
