@@ -280,7 +280,6 @@ public class FUpload extends javax.swing.JFrame {
             if(b && cat[j].matches(".*\\w.*"))
                 text += "[[Category:" + cat[j] + "]]\n";
         }
-        text += "[[Category:Uploaded with VicuñaUploader]]";
         
         return text;
     }
