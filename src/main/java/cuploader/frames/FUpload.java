@@ -338,7 +338,6 @@ public class FUpload extends javax.swing.JFrame {
                     header = df.format(cal.getTime());
                 } else
                     header = "?";
-                //gallery += "==" + header + "==\n<gallery>\n";
                 gallery += "<gallery widths=" + set.galleryWidth + ">\n";
             } else
                 lGallery.setEnabled(false);
@@ -357,10 +356,6 @@ public class FUpload extends javax.swing.JFrame {
 
                     lName.setText(Data.text("upload-uploading") + " " + (i+1) + " / " + toUpload + ": " + name + "...");
                     lName.setIcon(new ImageIcon(getClass().getResource("/cuploader/resources/ui-progress-bar-indeterminate.gif")));
-
-                    //upload test
-                    //System.out.println(desc);
-                    //try { Thread.sleep(2000); } catch (InterruptedException ex) {}
 
                     try {
                         List<String> pages = List.of(name);
@@ -443,7 +438,6 @@ public class FUpload extends javax.swing.JFrame {
             if(!file.editable)
                 file.lockPanel(false);
         Main.bLogin.setEnabled(true);
-        //setVisible(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
