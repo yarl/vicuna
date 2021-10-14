@@ -108,7 +108,7 @@ public class CategoryHint extends Thread {
             
             try {
                 //get list
-                String[] listPages = wiki.listPages("Category:"+text, null, Wiki.CATEGORY_NAMESPACE).toArray(new String[0]);
+                String[] listPages = wiki.listPages(text, null, Wiki.CATEGORY_NAMESPACE).toArray(new String[0]);
 
                 //remove loading
                 mCatHint.removeAll();
