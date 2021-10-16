@@ -33,7 +33,6 @@ cd wiki-java
 mkdir -p org-wikipedia-Wiki/org/wikipedia
 cp src/org/wikipedia/Wiki.java org-wikipedia-Wiki/org/wikipedia/
 javac org-wikipedia-Wiki/org/wikipedia/Wiki.java
-cd org-wikipedia-Wiki
 jar cfv org-wikipedia-Wiki-`git rev-parse --verify HEAD --short=6`.jar -C org-wikipedia-Wiki/ .
 ```
 
