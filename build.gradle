@@ -25,7 +25,7 @@ dependencies {
     implementation 'com.drewnoakes:metadata-extractor:2.6.2'
     implementation 'org.swinglabs.swingx:swingx-all:1.6.5-1'
     implementation 'org.jxmapviewer:jxmapviewer2:2.6'
-    implementation files('lib/org-wikipedia-Wiki-099d4f.jar')
+    implementation files('lib/org-wikipedia-Wiki-39f68b.jar')
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13'
