@@ -26,7 +26,7 @@ If you want to just run local build:
 ./gradlew run
 ```
 
-Create org-wikipedia-Wiki.jar file:
+Create org-wikipedia-Wiki.jar file (be careful, we need class file in Java 11 version):
 ```
 git clone https://github.com/MER-C/wiki-java.git
 cd wiki-java
