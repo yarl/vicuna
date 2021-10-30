@@ -28,7 +28,7 @@ public class FIntro extends javax.swing.JFrame {
     bDownload.setVisible(false);
     bCancel.setVisible(false);
     
-    Data.version = "1.25";
+    Data.version = "1.26";
     Data.date = "";
     
     Runnable run = new Runnable() {
