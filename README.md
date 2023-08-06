@@ -16,8 +16,8 @@ You will find distribution tar and zip `build/distributions` directory.
 
 ```
 cd build/distributions/
-unzip cuploader.zip
-./cuploader/bin/cuploader
+unzip vicuna.zip
+./vicuna/bin/vicuna
 ```
 
 If you want to just run local build:
